@@ -37,15 +37,15 @@ class TestMiniCorpus(unittest.TestCase):
 
     def test_loads_pages_and_manifest(self):
         corpus = Corpus(self.root)
-        self.assertEqual(corpus.manifest["pages_total"], 7)
-        self.assertEqual(len(corpus.pages), 7)
-        self.assertEqual(corpus.manifest["pages_by_version"]["8.0"], 5)
+        self.assertEqual(corpus.manifest["pages_total"], 8)
+        self.assertEqual(len(corpus.pages), 8)
+        self.assertEqual(corpus.manifest["pages_by_version"]["8.0"], 6)
 
     def test_integrity_ok_on_fresh_corpus(self):
         corpus = Corpus(self.root)
         report = corpus.verify()
         self.assertTrue(report["ok"], report["failed"])
-        self.assertEqual(report["checked"], 7)
+        self.assertEqual(report["checked"], 8)
 
     def test_detects_a_corrupted_page(self):
         """Cas limite : fichier de corpus corrompu."""
