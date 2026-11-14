@@ -1,0 +1,48 @@
+PREUVE (b) — MEME COMMANDE AVEC LE CORPUS PRESENT : 0 SKIP
+Date : 14/11/2026
+
+Copie de travail : /work/preuves/clone-avec-corpus
+Origine           : git clone /work/qnx-portmap   (commit d8afe9c)
+Le corpus fige y a ete copie tel quel, sans reecriture :
+    $ cp -a /work/qnx-portmap-corpus-local/corpus /work/preuves/clone-avec-corpus/corpus
+    $ du -sh /work/preuves/clone-avec-corpus/corpus
+    50M     /work/preuves/clone-avec-corpus/corpus
+    $ ls /work/preuves/clone-avec-corpus/corpus
+    MANIFEST.json
+    NOTICE
+    SHA256SUMS
+    index
+    pages
+
+Commande :
+    cd /work/preuves/clone-avec-corpus
+    python3 -m unittest discover -s tests -t .
+
+Sortie complete :
+    .................qnx-portmap: corpus introuvable : /tmp/qxpm-cli-g869ybcj/absent
+      repertoire recherche : /tmp/qxpm-cli-g869ybcj/absent
+      solutions : QX_PORTMAP_CORPUS=/chemin/vers/corpus qnx-portmap ...
+                  qnx-portmap --corpus /chemin/vers/corpus ...
+    .qnx-portmap: aucun symbole donne (argument, --file ou --stdin)
+    ........................................................................
+    ----------------------------------------------------------------------
+    Ran 90 tests in 6.354s
+
+    OK
+
+Code de sortie : 0
+
+Bilan : 90 tests, 90 PASSES, 0 SKIP, code de sortie 0.
+Les deux messages sur stderr sont la sortie attendue des tests de la ligne de
+commande (corpus absent, aucun symbole donne) : ce ne sont pas des erreurs.
+
+Comparaison des deux executions :
+
+  copie                 tests   passes   skips   echecs   code de sortie
+  sans corpus             90       72      18        0        0
+  avec corpus             90       90       0        0        0
+
+Les 18 tests sautes dans la premiere copie sont exactement ceux que la
+copie avec corpus execute : le corpus n'est la cause d'aucun echec, il
+debloque 18 verifications supplementaires (integrite des 3 426 pages,
+empreintes, index, comportement sur le corpus fige).

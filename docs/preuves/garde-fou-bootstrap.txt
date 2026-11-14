@@ -1,0 +1,27 @@
+GARDE-FOUS DU SCRIPT DE RECONSTRUCTION (scripts/bootstrap_corpus.sh)
+Date : 14/11/2026
+
+Le script ne doit JAMAIS ecrire dans le corpus fige. Deux refus le garantissent.
+
+Commande (garde 1) :
+    cd /work/preuves/clone-sans-corpus
+    bash scripts/bootstrap_corpus.sh --out corpus-fresh
+
+Sortie reelle :
+    bootstrap_corpus: refus : /work/preuves/clone-sans-corpus/corpus-fresh contient deja un corpus fige.
+      Utilisez --force pour l'ecraser, ou choisissez un autre --out.
+    code de sortie : 1
+
+Commande (garde 2) :
+    mkdir -p /tmp/faux-fige && echo "archive figee de test" > /tmp/faux-fige/CORPUS-FIGE.txt
+    bash scripts/bootstrap_corpus.sh --out /tmp/faux-fige/corpus-test
+
+Sortie reelle :
+    bootstrap_corpus: refus : /tmp/faux-fige/corpus-test est dans un corpus fige (/tmp/faux-fige/CORPUS-FIGE.txt).
+    code de sortie : 1
+
+Dans les deux cas, aucune page n'est telechargee et aucun fichier n'est ecrit :
+le script sort avant le moindre appel reseau.
+
+Le corpus fige lui-meme (archive locale du slot) peut etre utilise comme
+cible de la garde 2 : il porte CORPUS-FIGE.txt.

@@ -236,6 +236,12 @@ python3 tools/contre_epreuve.py
 Les 10 contre-epreuves sont concluantes (`10 / 10`, code de sortie 0) ; la sortie
 complete est conservee dans `docs/contre-epreuve-rouge.txt`.
 
+Sur l'arbre **sans** corpus, 9 des 10 regles restent contre-prouvees (`9 / 9`,
+code de sortie 0) : la regle "integrite du corpus fige livre" porte sur les
+3 426 pages, donc sur le corpus lui-meme ; sans lui, il n'y a rien a corrompre
+et le test correspondant est saute. Les deux executions sont dans
+`docs/contre-epreuve-rouge.txt`.
+
 ## Corpus QNX : non distribue
 
 > **the QNX documentation is not redistributed; it is downloaded from the official site on demand**
@@ -327,22 +333,52 @@ L'empreinte SHA-256 de **chaque page** est dans `index/pages.jsonl` :
 ### Controle anti-fuite
 
 `scripts/controle_fuite_corpus.py` verifie que l'arbre publiable ne contient
-aucune page de la documentation QNX : comparaison des SHA-256 de chaque
-fichier publie avec la liste des SHA-256 des 3 426 pages, de chaque objet git
-du depot, et recouvrement ligne a ligne. Resultat attendu : **0
-correspondance**.
+aucune page de la documentation QNX. Il fait six controles :
+
+1. SHA-256 de chaque fichier publie compare aux SHA-256 des 3 426 pages et aux
+   SHA-256 des fichiers stockes dans le corpus ;
+2. contenu decompresse de chaque fichier gzip de l'arbre ;
+3. chaque objet git du depot (contenu brut et contenu decompresse) ;
+4. lignes de l'arbre identiques mot pour mot a une ligne du corpus ;
+5. plus longue sous-chaine commune, fichier par fichier (fragments) ;
+6. budget de copie : **aucun fichier ne doit contenir plus de 4 000 octets de
+   texte QNX verbatim**.
+
+Resultat mesure le 14/11/2026 : **0 correspondance**, et le fichier qui
+contient le plus de texte QNX verbatim en compte 633 octets (le mini corpus
+recompose dans `tests/helpers.py`). La sortie complete est dans
+`docs/preuves/d-controle-fuite-corpus.txt`.
 
 ```bash
 python3 scripts/controle_fuite_corpus.py --tree . \
     --corpus /chemin/vers/corpus
 ```
 
+Le controle est complet (bout en bout, environ 3 minutes : il decompresse et
+compare 350 Mo de documentation).
+
 `MANIFESTE-PUBLIE.txt` (a la racine) liste, pour chaque fichier publiable, le
 chemin, la taille et le SHA-256 ; il se regenere avec :
 
 ```bash
-python3 scripts/manifeste_publie.py
+python3 scripts/manifeste_publie.py            # regenere le manifeste
+python3 scripts/manifeste_publie.py --check    # verifie qu'il est a jour
 ```
+
+### Preuves
+
+Les preuves du 14/11/2026 (commande et sortie reelle pour chacune) sont dans
+`docs/preuves/` :
+
+| Fichier | Preuve |
+|---|---|
+| `a-tests-sans-corpus.txt` | 90 tests sur une copie **sans** corpus : 72 passent, 18 sont sautes, code de sortie 0 |
+| `b-tests-avec-corpus.txt` | la meme commande **avec** le corpus : 90 tests, 0 saut, code de sortie 0 |
+| `c-contre-epreuve-rouge-sans-corpus.txt` | contre-epreuve ROUGE sans le corpus : 9/9 concluantes, 1 regle non testable |
+| `d-controle-fuite-corpus.txt` | controle anti-fuite : 0 correspondance |
+| `e-fresh-sans-corpus.txt` | `--fresh --fresh-max-pages 3` sur la copie sans corpus : code de sortie 0, corpus fige inchange |
+| `f-manifeste-publie.txt` | `MANIFESTE-PUBLIE.txt` : nombre de fichiers, taille totale, 3 plus gros fichiers |
+| `garde-fou-bootstrap.txt` | le script de reconstruction refuse d'ecrire dans un corpus fige |
 
 ## Sources
 

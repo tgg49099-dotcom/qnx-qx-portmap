@@ -39,7 +39,8 @@ import subprocess
 import sys
 import time
 
-IGNORED_DIRS = (".git", "__pycache__", "build", "dist", ".pylocal", ".npm")
+IGNORED_DIRS = (".git", "__pycache__", "build", "dist", ".pylocal", ".npm",
+                "qnx_portmap.egg-info")
 IGNORED_SUFFIX = (".pyc", ".pyo")
 LINE_MIN = 40          # longueur minimale d'une ligne retenue comme verbatim
 COPY_BUDGET = 4000     # octets de texte QNX verbatim maximum par fichier

@@ -1,0 +1,50 @@
+PREUVE (c) — CONTRE-EPREUVE ROUGE SANS LE CORPUS
+Date : 14/11/2026
+
+Copie de travail : /work/preuves/clone-sans-corpus
+Origine           : git clone /work/qnx-portmap   (commit d8afe9c)
+Aucun corpus dans la copie.
+
+Commande :
+    cd /work/preuves/clone-sans-corpus
+    python3 tools/contre_epreuve.py
+
+Sortie reelle :
+    Contre-epreuve ROUGE de QX PORTMAP
+    On casse une regle a la fois ; le test charge doit echouer.
+
+    frontiere de mot dans la recherche de citation             test rouge OK
+        FAIL: test_respects_word_boundaries (tests.test_extract.TestSentencesWith.test_respects_word_boundaries)
+    verification du SHA-256 des pages du corpus                test rouge OK
+        FAIL: test_detects_a_corrupted_page (tests.test_corpus.TestMiniCorpus.test_detects_a_corrupted_page)
+    verification du fichier SHA256SUMS                         test rouge OK
+        FAIL: test_detects_a_corrupted_sha256sums_file (tests.test_corpus.TestMiniCorpus.test_detects_a_corrupted_sha256sums_file)
+    lecture du tableau "described elsewhere" de l'index        test rouge OK
+        FAIL: test_described_elsewhere_symbol (tests.test_classify.TestClassification.test_described_elsewhere_symbol)
+    extraction de la section Description                       test rouge OK
+        FAIL: test_description_is_the_description_section_not_the_library_one (tests.test_extract.TestParseTopicPage.test_description_is_the_description_section_not_the_library_one)
+    statut inconnu pour un symbole hors corpus                 test rouge OK
+        FAIL: test_unknown_symbol (tests.test_classify.TestClassification.test_unknown_symbol)
+    deduplication de la liste de symboles                      test rouge OK
+        FAIL: test_duplicate_symbol_is_reported_once (tests.test_classify.TestClassification.test_duplicate_symbol_is_reported_once)
+    integrite du corpus fige livre                             non testable : corpus absent
+    la mention en prose ne vaut que pour un nom qui ressemble a une API test rouge OK
+        FAIL: test_english_word_mentioned_in_prose_is_not_a_symbol (tests.test_classify.TestClassification.test_english_word_mentioned_in_prose_is_not_a_symbol)
+    detection des symboles cites en gras                       test rouge OK
+        FAIL: test_symbol_cited_in_bold (tests.test_classify.TestClassification.test_symbol_cited_in_bold)
+
+    Depot propre apres contre-epreuve : oui
+
+    9 / 9 contre-epreuves concluantes
+    regle non testable ici (corpus absent) : integrite du corpus fige livre
+
+Code de sortie : 0
+
+Bilan : 9 des 10 regles restent contre-prouvees sans le corpus. La regle non
+testable ("integrite du corpus fige livre") porte sur les 3 426 pages du
+corpus : sans corpus, il n'y a rien a corrompre, et le test correspondant est
+saute. Elle est contre-prouvee des que le corpus est present : voir la
+section 1 de docs/contre-epreuve-rouge.txt (10/10, meme jour, meme commit).
+
+La sortie complete des deux executions est conservee dans
+docs/contre-epreuve-rouge.txt.

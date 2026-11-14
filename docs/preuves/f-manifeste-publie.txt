@@ -1,0 +1,28 @@
+PREUVE (f) — MANIFESTE-PUBLIE.txt
+Date : 14/11/2026
+
+Le manifeste liste chaque fichier publiable du depot : chemin, taille en
+octets, SHA-256. Il est regenere apres chaque changement de l'arbre
+publiable.
+
+Commandes :
+    cd /work/qnx-portmap
+    python3 scripts/manifeste_publie.py            # regenere le manifeste
+    python3 scripts/manifeste_publie.py --check    # verifie qu'il est a jour
+
+Chiffres du manifeste (arbre publiable complet, manifeste lui-meme exclu
+de sa propre liste) :
+
+    nombre de fichiers  : 54
+    taille totale       : 231056 octets
+    les 3 plus gros fichiers :
+          21283 octets  README.md
+          16525 octets  tests/helpers.py
+          16267 octets  scripts/controle_fuite_corpus.py
+
+Le manifeste complet (chemin, taille et SHA-256 de chaque fichier) est
+MANIFESTE-PUBLIE.txt, a la racine du depot.
+
+Ces chiffres sont ceux du manifeste au commit de la preuve : le fichier
+MANIFESTE-PUBLIE.txt est regenere apres chaque changement, la commande
+--check permet de le verifier.

@@ -1,0 +1,61 @@
+CONTROLE ANTI-FUITE DU CORPUS QNX
+  date              : 2026-11-14 07:45:42
+  arbre publiable   : /work/qnx-portmap
+  corpus de ref.    : /work/qnx-portmap-corpus-local/corpus
+  pages de reference: 3426 (empreintes de contenu)
+  fichiers stockes  : 3427 (empreintes gzip)
+
+1. SHA-256 des fichiers de l'arbre publiable
+   fichiers analyses          : 55 (232861 octets)
+   correspondances page QNX   : 0
+   correspondances fichier    : 0
+
+2. Contenu decompresse des fichiers gzip de l'arbre
+   correspondances page QNX   : 0
+
+3. Objets git du depot publiable
+   objets blob                : 80
+   correspondances            : 0
+
+4. Recouvrement ligne a ligne (lignes de 40 caracteres ou plus)
+   lignes distinctes du corpus : 108427
+   fichiers avec lignes identiques : 8
+   lignes identiques au corpus     : 12
+     tests/fixtures/f01-abort.txt                    1 ligne(s)   133 octet(s)
+     tests/fixtures/f02-abort.txt                    1 ligne(s)   258 octet(s)
+     tests/fixtures/f03-abort.txt                    2 ligne(s)   357 octet(s)
+     tests/fixtures/f05-accept.txt                   1 ligne(s)   166 octet(s)
+     tests/fixtures/f06-bzero.txt                    1 ligne(s)   133 octet(s)
+     tests/fixtures/f07-rw_interrupt.txt             1 ligne(s)   177 octet(s)
+     tests/fixtures/f08-prose.txt                    2 ligne(s)   220 octet(s)
+     tests/fixtures/f09-_smalloc.txt                 3 ligne(s)   212 octet(s)
+
+5. Recouvrement par fragments (plus longue sous-chaine commune)
+   texte du corpus             : 350127068 caracteres
+   fichiers dont le contenu entier est dans le corpus : 0
+   fichiers analyses fragment par fragment            : 15
+   octets de texte QNX verbatim (fragments) total    : 4573
+     tests/fixtures/f01-abort.txt                     133 octet(s), plus long fragment   133 octet(s)
+     tests/fixtures/f02-abort.txt                     258 octet(s), plus long fragment   258 octet(s)
+     tests/fixtures/f03-abort.txt                     357 octet(s), plus long fragment   226 octet(s)
+     tests/fixtures/f04-abort.txt                     531 octet(s), plus long fragment   531 octet(s)
+     tests/fixtures/f05-accept.txt                    166 octet(s), plus long fragment   166 octet(s)
+     tests/fixtures/f06-bzero.txt                     133 octet(s), plus long fragment   133 octet(s)
+     tests/fixtures/f07-rw_interrupt.txt              177 octet(s), plus long fragment   177 octet(s)
+     tests/fixtures/f08-prose.txt                     220 octet(s), plus long fragment   146 octet(s)
+     tests/fixtures/f09-_smalloc.txt                  212 octet(s), plus long fragment    77 octet(s)
+     tests/fixtures/f10-getprotobyname_r.txt           84 octet(s), plus long fragment    84 octet(s)
+     tests/fixtures/f11-errno.txt                     436 octet(s), plus long fragment   436 octet(s)
+     tests/fixtures/f12-bzero.txt                     458 octet(s), plus long fragment   458 octet(s)
+     tests/helpers.py                                 633 octet(s), plus long fragment    77 octet(s)
+     tests/test_extract.py                            612 octet(s), plus long fragment    79 octet(s)
+     tests/test_fixtures.py                           163 octet(s), plus long fragment    57 octet(s)
+
+6. Budget de copie (4000 octets de texte QNX verbatim par fichier)
+   fichiers avec du texte verbatim QNX : 15
+   octets verbatim QNX dans l'arbre   : 4573
+   fichiers au-dessus du budget        : 0
+
+RESULTAT : 0 correspondance. L'arbre publiable ne contient aucune
+           page de la documentation QNX.
+Duree du controle : 175.8 s
