@@ -20,12 +20,26 @@ INDEX_PREFIX = "lib-"
 
 
 def default_corpus_dir():
-    """Repertoire du corpus : variable d'environnement, sinon valeur livree."""
+    """Repertoire du corpus.
+
+    Ordre de recherche :
+      1. la variable d'environnement ``QX_PORTMAP_CORPUS`` ;
+      2. le repertoire ``corpus/`` livre a cote du paquet (depot) ;
+      3. le repertoire ``corpus/`` du repertoire courant (installation
+         dans un site-packages, usage depuis la racine du depot).
+    """
     env = os.environ.get(DEFAULT_CORPUS_ENV)
     if env:
         return os.path.abspath(env)
     here = os.path.dirname(os.path.abspath(__file__))
-    return os.path.abspath(os.path.join(here, os.pardir, "corpus"))
+    candidates = [
+        os.path.abspath(os.path.join(here, os.pardir, "corpus")),
+        os.path.abspath(os.path.join(os.getcwd(), "corpus")),
+    ]
+    for cand in candidates:
+        if os.path.isfile(os.path.join(cand, "MANIFEST.json")):
+            return cand
+    return candidates[0]
 
 
 class CorpusError(Exception):

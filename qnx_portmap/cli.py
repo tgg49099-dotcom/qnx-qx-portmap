@@ -107,6 +107,11 @@ def main(argv=None):
         corpus = Corpus(corpus_dir)
     except CorpusError as exc:
         sys.stderr.write("qnx-portmap: %s\n" % exc)
+        if not os.path.isfile(os.path.join(corpus_dir, "MANIFEST.json")):
+            sys.stderr.write("  repertoire recherche : %s\n" % corpus_dir)
+            sys.stderr.write("  solutions : QX_PORTMAP_CORPUS=/chemin/vers/corpus "
+                             "qnx-portmap ...\n"
+                             "              qnx-portmap --corpus /chemin/vers/corpus ...\n")
         return 2
 
     if args.verify_corpus:

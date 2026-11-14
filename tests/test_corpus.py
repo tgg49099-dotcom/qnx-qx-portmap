@@ -5,7 +5,7 @@ import shutil
 import tempfile
 import unittest
 
-from qnx_portmap.corpus import Corpus, CorpusError, read_symbols
+from qnx_portmap.corpus import (Corpus, CorpusError, default_corpus_dir, read_symbols)
 
 from .helpers import build_mini_corpus
 
@@ -99,6 +99,29 @@ class TestMiniCorpus(unittest.TestCase):
                                 "com.qnx.doc.neutrino.lib_ref/topic/f/frob.html")
         self.assertIsNotNone(page)
         self.assertIn("Frob the widget", corpus.text(page))
+
+
+class TestCorpusLocation(unittest.TestCase):
+    """Ou l'outil cherche le corpus fige."""
+
+    def setUp(self):
+        self.old = os.environ.get("QX_PORTMAP_CORPUS")
+
+    def tearDown(self):
+        if self.old is None:
+            os.environ.pop("QX_PORTMAP_CORPUS", None)
+        else:
+            os.environ["QX_PORTMAP_CORPUS"] = self.old
+
+    def test_env_var_has_priority(self):
+        os.environ["QX_PORTMAP_CORPUS"] = "/tmp/corpus-de-test"
+        self.assertEqual(default_corpus_dir(), "/tmp/corpus-de-test")
+
+    def test_repo_corpus_is_found_without_env_var(self):
+        os.environ.pop("QX_PORTMAP_CORPUS", None)
+        path = default_corpus_dir()
+        self.assertTrue(os.path.isfile(os.path.join(path, "MANIFEST.json")),
+                        "corpus introuvable dans : %s" % path)
 
 
 if __name__ == "__main__":

@@ -28,8 +28,8 @@ chaque page.
 - **Aucun acces SDP n'est requis.** Ni QNX SDP, ni compilateur, ni carte cible,
   ni compte QNX, ni jeton d'API, ni acces root. L'outil ne compile rien et ne
   s'execute pas sur cible : il lit de la documentation.
-- **Le corpus fige** (50 Mo compresses) est livre dans le depot. Il est
-  verifiable : `qnx-portmap --verify-corpus`.
+- **Le corpus fige** (44,9 Mo compresses, 3 430 fichiers) est livre dans le
+  depot, sous `corpus/`. Il est verifiable : `qnx-portmap --verify-corpus`.
 - Pour reconstruire le corpus depuis le web (`--fresh`), il faut seulement un
   acces reseau a `https://www.qnx.com/developers/docs/`.
 
@@ -44,6 +44,19 @@ pipx install .
 
 # ou sans rien installer
 python3 -m qnx_portmap --help
+```
+
+L'outil cherche le corpus fige dans cet ordre :
+
+1. la variable d'environnement `QX_PORTMAP_CORPUS` ;
+2. le repertoire `corpus/` du depot (a cote du paquet) ;
+3. le repertoire `corpus/` du repertoire courant.
+
+Si le corpus est ailleurs, on le designe explicitement :
+
+```bash
+QX_PORTMAP_CORPUS=/chemin/vers/corpus qnx-portmap abort
+qnx-portmap --corpus /chemin/vers/corpus abort
 ```
 
 ## Utilisation
@@ -139,12 +152,38 @@ inconnu du corpus - l'outil le dit au lieu d'inventer une reponse.
 ## Tests
 
 ```bash
-python3 -m unittest discover -s tests -t .     # 65 tests, aucune dependance
+python3 -m unittest discover -s tests -t .     # 68 tests, aucune dependance
 ```
 
 Les tests couvrent le corpus fige (integrite SHA-256 de chaque page) et les cas
 limites de la mission : symbole absent, symbole decrit ailleurs, symbole cite
-en gras, symbole duplique, liste vide, fichier de corpus corrompu.
+en gras, symbole duplique, liste vide, fichier de corpus corrompu. Un test
+verifie aussi que **l'exemple de sortie du README est la sortie reelle** de la
+commande ecrite juste au-dessus.
+
+### Contre-epreuve ROUGE
+
+Un test qui passe toujours ne teste rien. `tools/contre_epreuve.py` casse
+volontairement une regle du code a la fois et verifie que le test charge
+devient **rouge**, puis restaure le depot :
+
+```bash
+python3 tools/contre_epreuve.py
+```
+
+| Regle cassee | Test qui doit devenir rouge |
+|---|---|
+| frontiere de mot dans la recherche de citation | `test_respects_word_boundaries` |
+| verification du SHA-256 des pages du corpus | `test_detects_a_corrupted_page` |
+| verification du fichier `SHA256SUMS` | `test_detects_a_corrupted_sha256sums_file` |
+| lecture du tableau "described elsewhere" de l'index | `test_described_elsewhere_symbol` |
+| extraction de la section Description | `test_description_is_the_description_section_not_the_library_one` |
+| statut inconnu pour un symbole hors corpus | `test_unknown_symbol` |
+| deduplication de la liste de symboles | `test_duplicate_symbol_is_reported_once` |
+| integrite du corpus fige livre | `test_every_page_matches_its_sha256` |
+
+Les 8 contre-epreuves sont concluantes (`8 / 8`, code de sortie 0) ; la sortie
+complete est conservee dans `docs/contre-epreuve-rouge.txt`.
 
 ## Le corpus fige
 
@@ -169,6 +208,20 @@ Les pages sont compressees en gzip **telles qu'elles ont ete telechargees** le
 
 Le corpus a ete fige avec `tools/build_corpus.py`, qui est deterministe :
 a cache identique, corpus identique.
+
+Le corpus est **fige par un commit git local** (pas de remote, pas de push) :
+
+| Element | Valeur |
+|---|---|
+| Commit qui fige le corpus | `6a2c442` |
+| Fichiers | 3 430 |
+| Taille | 44 942 705 octets (44,9 Mo) |
+| SHA-256 de `corpus/SHA256SUMS` | `e312cea466329a76053be0160911cf378ffb1c6ea80050a66c66186ca0023efd` |
+| SHA-256 de `corpus/MANIFEST.json` | `df762fecc0b67c7f5dd7116ae38daf080b8159843dd9dbf6abcf8971e692b3fc` |
+| SHA-256 de `corpus/index/pages.jsonl` | `292185a3cf9bd615f3709d5c52cac54cb87129ad9a5d08f4055a896bfe5d5595` |
+
+L'empreinte SHA-256 de **chaque page** est dans `index/pages.jsonl` :
+`qnx-portmap --verify-corpus` les recalcule toutes (3 426 pages, ~2 s).
 
 ## Sources
 
