@@ -82,13 +82,13 @@ BREAKS = [
 
     ("la mention en prose ne vaut que pour un nom qui ressemble a une API",
      "qnx_portmap/classify.py",
-     '                if not call_form and not self._is_api_name(sym):\n'
-     '                    # mention en prose : on ne retient que les symboles dont le\n'
-     '                    # nom ressemble a un nom d\'API. Un mot anglais rencontre\n'
-     '                    # dans une phrase ("argument", "current") n\'est pas un\n'
-     '                    # symbole QNX : le dire serait faux.\n'
+     '                if not self._is_api_name(sym):\n'
+     '                    # Un mot anglais rencontre dans une phrase ("argument",\n'
+     '                    # "current") ou un nom de parametre suivi de "(" dans un\n'
+     '                    # extrait de code n\'est pas un symbole QNX : l\'annoncer\n'
+     '                    # comme "decrit ailleurs" serait faux.\n'
      '                    continue',
-     '                if not call_form and not self._is_api_name(sym):\n'
+     '                if not self._is_api_name(sym):\n'
      '                    # regle cassee volontairement : la mention en prose est\n'
      '                    # acceptee quel que soit le nom\n'
      '                    pass',
