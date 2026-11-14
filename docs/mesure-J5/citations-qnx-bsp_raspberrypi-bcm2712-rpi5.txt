@@ -1,0 +1,186 @@
+# Citations des 20 symboles mesures dans qnx/bsp_raspberrypi-bcm2712-rpi5
+# depot     : https://github.com/qnx/bsp_raspberrypi-bcm2712-rpi5
+# commit    : 573dda1a1ca387551e5413eeb84db5a4721e5ce3 (2026-01-19)
+# sous-dossier retenu : (depot entier)
+# consultee le : 2026-11-14
+# Extraits courts (une a trois lignes) de la documentation QNX 8.0, avec l'URL de la page source et son empreinte SHA-256 : voir LICENCE-DOCS-QNX.md.
+
+--- in32 ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 76 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/in32.html
+# sha256 de la page source : 52fd92e3fc91cffc278e1d43ee0bbdc8463556abb527b381579c321a20d8fef5
+# citation : Read a 32-bit value from a port
+
+--- ENDIAN_BE32 ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 20 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/e/endian_be32.html
+# sha256 de la page source : 862b23e0cff76c86056c0f003cca6d9c0d448aa3ed6f3b0127cca71b976b6dee
+# citation : Return a big-endian 32-bit value in native format
+
+--- atomic_set ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 20 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/atomic_set.html
+# sha256 de la page source : 0dba614063aa5dd72773722b7693423bce0e70be382e5d88a3dbb2c3c1740cab
+# citation : Safely set bits in a variable ( QNX OS )
+
+--- mmap_device_memory ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 16 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mmap_device_memory.html
+# sha256 de la page source : ffd3343ca7889950d7517265d6eb61db105908509ca99fa8d404b09f87ff0346
+# citation : Map a device's physical memory into a process's address space
+
+--- atomic_clr ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 15 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/atomic_clr.html
+# sha256 de la page source : ba5cfe6d9cf30f83cf95cbc488158c4911490741d9420fcfa0df812d3fdedb37
+# citation : Safely clear bits in a variable ( QNX OS )
+
+--- hwi_tag_find ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 13 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/h/hwi_tag_find.html
+# sha256 de la page source : b1e1761376708aa037865e48adae28fb2536ea41fe68f92f477bcb060357e148
+# citation : Locate a specific instance of the named tag for a device
+
+--- munmap_device_memory ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 13 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/munmap_device_memory.html
+# sha256 de la page source : f3ff83efae0775e54cf925bfaef06817144f8ba53d4d00fcfdf16967e913772f
+# citation : Unmap previously mapped addresses
+
+--- UNALIGNED_RET32 ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 9 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/u/unaligned_ret32.html
+# sha256 de la page source : e637f8f2d1cdf8b0bb692091ca871abb77402a81fe244d4525f690d4cfeca280
+# citation : Access a misaligned 32-bit value safely
+
+--- hwi_tag2off ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 9 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/h/hwi_tag2off.html
+# sha256 de la page source : f476fc22f86367277506acd2d11e118b9dac9544357d51b33dae833097fe6a20
+# citation : Return the offset from the start of the hwinfo area of the system page
+
+--- hwi_find_item ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 8 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/h/hwi_find_item.html
+# sha256 de la page source : 8443c6623e26669d883ad9393efc122fff81c76a37c70796dd75256f7deb7f44
+# citation : Find an item in the hwinfo structure
+
+--- pthread_sleepon_lock ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 8 fois dans le depot
+# statut   : absent (etat J4 : non_resolu, etat J5 : non_resolu)
+# source   : index C Library Reference 7.1
+# page     : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/p/pthread_sleepon_lock.html
+# sha256 de la page source : 8f47fc9125b3343d857b740317151570472b1666ce7a97946591e5328547e88b
+# citation : Lock the pthread_sleepon* functions
+
+--- pthread_sleepon_unlock ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 8 fois dans le depot
+# statut   : absent (etat J4 : non_resolu, etat J5 : non_resolu)
+# source   : index C Library Reference 7.1
+# page     : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/p/pthread_sleepon_unlock.html
+# sha256 de la page source : f8250699a0c87c83df8f66ef1d3970045918e9235c6904e98e790149150df06d
+# citation : Unlock the pthread_sleepon*() functions
+
+--- ENDIAN_BE16 ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 6 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/e/endian_be16.html
+# sha256 de la page source : 8bd3bd12bcf7ae97cae96516dd216dcdf61f4688d012c8d59410b656bb3f94ab
+# citation : Return a big-endian 16-bit value in native format
+
+--- MsgSendPulse ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 6 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/msgsendpulse.html
+# sha256 de la page source : 7d46e9e9fca2528d2858b6999219eeb2297c600249fe6ad31509ffc79e83fb85
+# citation : Send a pulse to a process
+
+--- in8 ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 6 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/in8.html
+# sha256 de la page source : 390c807411348e2007cb70980a508bb8f15d3d5f41b738f0876a57e3d90ccee1
+# citation : Read an 8-bit value from a port
+
+--- out8 ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 6 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/o/out8.html
+# sha256 de la page source : a55b7914b30540767903b9bc6b5da1522bb14786066c3e028f5fd2574e3b436a
+# citation : Write an 8-bit value to a port
+
+--- ChannelCreate ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 5 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/c/channelcreate.html
+# sha256 de la page source : e1c83f6a6a974281438aea1f051954a58d9993313909e8c81216e3f5b8eb5af6
+# citation : Create a communications channel
+
+--- InterruptUnmask ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 5 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptunmask.html
+# sha256 de la page source : 97b3ec9904663c1470ffe014472ea63ac4b0932a9fdac1fee5035d1013ef3692
+# citation : Enable a hardware interrupt
+
+--- in16 ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 5 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/in16.html
+# sha256 de la page source : 003496351215a9bcc63fd8e39fffb30a325c3422a5abacaab769ae855fb56bcc
+# citation : Read a 16-bit value from a port
+
+--- out16 ---
+# depot    : qnx/bsp_raspberrypi-bcm2712-rpi5
+# appele 5 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/o/out16.html
+# sha256 de la page source : c271e5bc6e8f072738aeae95526d737a90b950332bda4dd271f318d3242268db
+# citation : Write a 16-bit value to a port

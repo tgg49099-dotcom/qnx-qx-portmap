@@ -1,0 +1,430 @@
+PREUVE ROUGE -> VERT DE LA MESURE J5
+===========================
+
+But : prouver que le taux J5 publie (96 %) n'est pas un chiffre maquille, et que le test echoue bien sur l'etat d'avant (93 %).
+Les sorties ci-dessous sont reelles.
+
+Fichiers concernes :
+  tools/mesure_j5.py              (la regle J5)
+  docs/mesure-J5/mesure-J5.json   (la donnee publiee)
+  docs/mesure-J5.md               (le chiffre publie)
+  docs/mesure-J5/citations-*.txt  (les citations)
+
+Commande de test : python3 -B -m unittest tests.test_mesure_j5 -v
+Corpus : QX_PORTMAP_CORPUS=/work/qnx-portmap-corpus-local/corpus
+
+------------------------------------------------------------------------
+ETAPE 1 - l'etat d'AVANT : la regle J5 n'est pas appliquee.
+          La mesure retombe sur la regle J4 (3 symboles
+          'decrit ailleurs'), les artefacts publies passent a
+          93 %, et le test doit echouer (ROUGE).
+------------------------------------------------------------------------
+
+SHA-256 de tools/mesure_j5.py avant la manipulation :
+  c6c46e8d3a329cd0c06535d8d74b335037cd8ac45c1b4d52c0ae54d12ebe1b8e
+
+Ligne cassee dans tools/mesure_j5.py :
+  - resolution = (resoudre_page(corpus, res) if res.status == ELSEWHERE
+                      else None)
+  + resolution = None  # regle J5 desactivee (preuve ROUGE)
+
+Regeneration des artefacts J5 dans l'etat d'avant :
+corpus : /work/qnx-portmap-corpus-local/corpus (3426 pages)
+echantillon J4 : 100 symboles, 5 depots
+echantillon rederive des clones : 100 symboles - identique a J4 : OUI
+
+mesure J5 (meme echantillon que J4) :
+  resolu et cite       :  93
+  decrit ailleurs      :   3
+  non resolu           :   4
+  TAUX J5              :  93.0 %  (93 / 100)
+  (mesure J4 datee     :  93.0 %)
+  par famille :
+    specifiques a QNX       85 /  91  ( 93.4 %)
+    standards C/POSIX        8 /   9  ( 88.9 %)
+
+  conversions J5 : 0
+
+ecrit : docs/mesure-J5.md
+ecrit : docs/mesure-J5/citations-vocho-openqnx.txt (785 octets de citation)
+ecrit : docs/mesure-J5/citations-qnx-bsp_raspberrypi-bcm2712-rpi5.txt (785 octets de citation)
+ecrit : docs/mesure-J5/citations-varghes-Raspberry-QNX.txt (974 octets de citation)
+ecrit : docs/mesure-J5/citations-qnx-qnx-posix-publish-subscribe.txt (795 octets de citation)
+ecrit : docs/mesure-J5/citations-qnx-socketcan.txt (939 octets de citation)
+ecrit : docs/mesure-J5/mesure-J5.json
+>>> RC = 0
+
+test_cent_symbols_et_vingt_par_depot (tests.test_mesure_j5.TestEchantillonJ5.test_cent_symbols_et_vingt_par_depot) ... ok
+test_echantillon_identique_a_j4 (tests.test_mesure_j5.TestEchantillonJ5.test_echantillon_identique_a_j4)
+Memes 100 symboles, meme ordre, meme depot, meme nombre d'appels. ... ok
+test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_du_markdown_vaut_le_taux_calcule) ... ok
+test_le_taux_publie_est_96_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_96_pour_cent)
+Le but de la tranche J5 : 96 symboles resolus et cites sur 100. ... FAIL
+test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j5.TestEchantillonJ5.test_les_etats_sont_exclusifs_et_complets) ... ok
+test_les_pages_de_citations_contiennent_chaque_symbole_resolu (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_contiennent_chaque_symbole_resolu) ... ok
+test_les_pages_des_trois_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_trois_convertis_sont_des_livres_qnx)
+Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD. ... FAIL
+test_les_quatre_absents_restent_absents (tests.test_mesure_j5.TestEchantillonJ5.test_les_quatre_absents_restent_absents) ... ok
+test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256) ... FAIL
+test_plus_aucun_symbole_decrit_ailleurs (tests.test_mesure_j5.TestEchantillonJ5.test_plus_aucun_symbole_decrit_ailleurs) ... FAIL
+test_seul_les_trois_symboles_convertis_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seul_les_trois_symboles_convertis_ont_change_d_etat)
+Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4. ... FAIL
+test_un_taux_sur_zero_leve_une_erreur (tests.test_mesure_j5.TestEchantillonJ5.test_un_taux_sur_zero_leve_une_erreur) ... ok
+test_la_citation_vient_de_la_page_citee (tests.test_mesure_j5.TestMesureReproductible.test_la_citation_vient_de_la_page_citee)
+La citation publiee est bien un extrait de la page citee. ... FAIL
+test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j5.TestMesureReproductible.test_le_taux_recalcule_vaut_le_taux_publie) ... FAIL
+test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256 (tests.test_mesure_j5.TestMesureReproductible.test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256) ... FAIL
+test_les_statuts_de_l_outil_sont_inchanges (tests.test_mesure_j5.TestMesureReproductible.test_les_statuts_de_l_outil_sont_inchanges)
+J5 ne touche pas l'outil : les statuts sont ceux de J4. ... ok
+test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j5.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main) ... FAIL
+test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j5.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test) ... FAIL
+
+======================================================================
+FAIL: test_le_taux_publie_est_96_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_96_pour_cent)
+Le but de la tranche J5 : 96 symboles resolus et cites sur 100.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 146, in test_le_taux_publie_est_96_pour_cent
+    self.assertEqual(compte_resolu(self.data), 96)
+AssertionError: 93 != 96
+
+======================================================================
+FAIL: test_les_pages_des_trois_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_trois_convertis_sont_des_livres_qnx)
+Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 211, in test_les_pages_des_trois_convertis_sont_des_livres_qnx
+    self.assertIsNotNone(rec["resolution_j5"],
+AssertionError: unexpectedly None : InterruptAttach : aucune resolution J5
+
+======================================================================
+FAIL: test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 191, in test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256
+    self.assertEqual(rec["etat"], RESOLU, symbole)
+AssertionError: 'resolu_mais_decrit_ailleurs' != 'resolu_et_cite'
+- resolu_mais_decrit_ailleurs
++ resolu_et_cite
+ : InterruptAttach
+
+======================================================================
+FAIL: test_plus_aucun_symbole_decrit_ailleurs (tests.test_mesure_j5.TestEchantillonJ5.test_plus_aucun_symbole_decrit_ailleurs)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 155, in test_plus_aucun_symbole_decrit_ailleurs
+    self.assertNotEqual(rec["etat"], AILLEURS,
+AssertionError: 'resolu_mais_decrit_ailleurs' == 'resolu_mais_decrit_ailleurs' : InterruptAttach est encore 'decrit ailleurs'
+
+======================================================================
+FAIL: test_seul_les_trois_symboles_convertis_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seul_les_trois_symboles_convertis_ont_change_d_etat)
+Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 171, in test_seul_les_trois_symboles_convertis_ont_change_d_etat
+    self.assertEqual(sorted(changes), sorted(CONVERTIS),
+AssertionError: Lists differ: [] != ['InterruptAttach', 'if_freenameindex', 'setsockopt']
+
+Second list contains 3 additional elements.
+First extra element 0:
+'InterruptAttach'
+
+- []
++ ['InterruptAttach', 'if_freenameindex', 'setsockopt'] : les seuls symboles qui peuvent changer d'etat en J5 sont ('InterruptAttach', 'if_freenameindex', 'setsockopt')
+
+======================================================================
+FAIL: test_la_citation_vient_de_la_page_citee (tests.test_mesure_j5.TestMesureReproductible.test_la_citation_vient_de_la_page_citee)
+La citation publiee est bien un extrait de la page citee.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 338, in test_la_citation_vient_de_la_page_citee
+    self.assertIsNotNone(page, symbole)
+AssertionError: unexpectedly None : if_freenameindex
+
+======================================================================
+FAIL: test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j5.TestMesureReproductible.test_le_taux_recalcule_vaut_le_taux_publie)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 306, in test_le_taux_recalcule_vaut_le_taux_publie
+    self.assertEqual(mesure.taux(records), TAUX_J5)
+AssertionError: 93.0 != 96.0
+
+======================================================================
+FAIL: test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256 (tests.test_mesure_j5.TestMesureReproductible.test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 322, in test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256
+    self.assertIsNotNone(page,
+AssertionError: unexpectedly None : if_freenameindex : page absente du corpus fige (https://man.freebsd.org/cgi/man.cgi?query=if_freenameindex&manpath=FreeBSD+14.4-RELEASE+and+Ports)
+
+======================================================================
+FAIL: test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j5.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 274, in test_le_taux_du_script_egale_le_taux_compte_a_la_main
+    self.assertAlmostEqual(calcule, a_la_main, places=6,
+AssertionError: 70.0 != 90.0 within 6 places (20.0 difference) : le taux du script (70.0) n'est pas celui compte a la main (90.0)
+
+======================================================================
+FAIL: test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j5.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 282, in test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test
+    self.assertEqual(par_symbole[symbole]["etat"], etat,
+AssertionError: 'resolu_mais_decrit_ailleurs' != 'resolu_et_cite'
+- resolu_mais_decrit_ailleurs
++ resolu_et_cite
+ : etat publie incorrect pour InterruptAttach
+
+----------------------------------------------------------------------
+Ran 18 tests in 1.758s
+
+FAILED (failures=10)
+>>> RC = 1 (attendu : different de 0, le test est ROUGE)
+
+SHA-256 de tools/mesure_j5.py apres restauration :
+  c6c46e8d3a329cd0c06535d8d74b335037cd8ac45c1b4d52c0ae54d12ebe1b8e
+  identique a l'empreinte d'avant la manipulation : oui
+
+------------------------------------------------------------------------
+ETAPE 2 - la donnee publiee est cassee : la conversion
+          'InterruptAttach' est remise a 'decrit ailleurs'.
+------------------------------------------------------------------------
+
+Regeneration des artefacts J5 avec la regle J5 (etat correct) :
+corpus : /work/qnx-portmap-corpus-local/corpus (3426 pages)
+echantillon J4 : 100 symboles, 5 depots
+echantillon rederive des clones : 100 symboles - identique a J4 : OUI
+
+mesure J5 (meme echantillon que J4) :
+  resolu et cite       :  96
+  decrit ailleurs      :   0
+  non resolu           :   4
+  TAUX J5              :  96.0 %  (96 / 100)
+  (mesure J4 datee     :  93.0 %)
+  par famille :
+    specifiques a QNX       87 /  91  ( 95.6 %)
+    standards C/POSIX        9 /   9  (100.0 %)
+
+  conversions J5 : 3
+    InterruptAttach    -> com.qnx.doc.qnxsdp.migration / kernel.html  (sha256 a3b329c6f9a04bdd...)
+    if_freenameindex   -> com.qnx.doc.neutrino.io_sock / socket_api.html  (sha256 23dca276b71539a2...)
+    setsockopt         -> com.qnx.doc.neutrino.io_sock / socket_api.html  (sha256 23dca276b71539a2...)
+
+ecrit : docs/mesure-J5.md
+ecrit : docs/mesure-J5/citations-vocho-openqnx.txt (785 octets de citation)
+ecrit : docs/mesure-J5/citations-qnx-bsp_raspberrypi-bcm2712-rpi5.txt (785 octets de citation)
+ecrit : docs/mesure-J5/citations-varghes-Raspberry-QNX.txt (974 octets de citation)
+ecrit : docs/mesure-J5/citations-qnx-qnx-posix-publish-subscribe.txt (795 octets de citation)
+ecrit : docs/mesure-J5/citations-qnx-socketcan.txt (1129 octets de citation)
+ecrit : docs/mesure-J5/mesure-J5.json
+>>> RC = 0
+
+SHA-256 de docs/mesure-J5/mesure-J5.json avant la manipulation :
+  54548e0e6ac7cb65b1c3286051fc8e178f26f5cc80296b3e70ef371f4d9e3869
+
+Donnee cassee : symbole 'InterruptAttach', etat passe de
+  'resolu_et_cite' a 'resolu_mais_decrit_ailleurs'.
+
+test_cent_symbols_et_vingt_par_depot (tests.test_mesure_j5.TestEchantillonJ5.test_cent_symbols_et_vingt_par_depot) ... ok
+test_echantillon_identique_a_j4 (tests.test_mesure_j5.TestEchantillonJ5.test_echantillon_identique_a_j4)
+Memes 100 symboles, meme ordre, meme depot, meme nombre d'appels. ... ok
+test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_du_markdown_vaut_le_taux_calcule) ... FAIL
+test_le_taux_publie_est_96_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_96_pour_cent)
+Le but de la tranche J5 : 96 symboles resolus et cites sur 100. ... FAIL
+test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j5.TestEchantillonJ5.test_les_etats_sont_exclusifs_et_complets) ... FAIL
+test_les_pages_de_citations_contiennent_chaque_symbole_resolu (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_contiennent_chaque_symbole_resolu) ... ok
+test_les_pages_des_trois_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_trois_convertis_sont_des_livres_qnx)
+Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD. ... FAIL
+test_les_quatre_absents_restent_absents (tests.test_mesure_j5.TestEchantillonJ5.test_les_quatre_absents_restent_absents) ... ok
+test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256) ... FAIL
+test_plus_aucun_symbole_decrit_ailleurs (tests.test_mesure_j5.TestEchantillonJ5.test_plus_aucun_symbole_decrit_ailleurs) ... FAIL
+test_seul_les_trois_symboles_convertis_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seul_les_trois_symboles_convertis_ont_change_d_etat)
+Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4. ... FAIL
+test_un_taux_sur_zero_leve_une_erreur (tests.test_mesure_j5.TestEchantillonJ5.test_un_taux_sur_zero_leve_une_erreur) ... ok
+test_la_citation_vient_de_la_page_citee (tests.test_mesure_j5.TestMesureReproductible.test_la_citation_vient_de_la_page_citee)
+La citation publiee est bien un extrait de la page citee. ... ok
+test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j5.TestMesureReproductible.test_le_taux_recalcule_vaut_le_taux_publie) ... ok
+test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256 (tests.test_mesure_j5.TestMesureReproductible.test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256) ... ok
+test_les_statuts_de_l_outil_sont_inchanges (tests.test_mesure_j5.TestMesureReproductible.test_les_statuts_de_l_outil_sont_inchanges)
+J5 ne touche pas l'outil : les statuts sont ceux de J4. ... ok
+test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j5.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main) ... FAIL
+test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j5.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test) ... FAIL
+
+======================================================================
+FAIL: test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_du_markdown_vaut_le_taux_calcule)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 228, in test_le_taux_du_markdown_vaut_le_taux_calcule
+    self.assertEqual(taux_md, int(round(calcule)),
+AssertionError: 96 != 95 : le taux du Markdown ne vaut pas le taux calcule sur les donnees publiees
+
+======================================================================
+FAIL: test_le_taux_publie_est_96_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_96_pour_cent)
+Le but de la tranche J5 : 96 symboles resolus et cites sur 100.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 146, in test_le_taux_publie_est_96_pour_cent
+    self.assertEqual(compte_resolu(self.data), 96)
+AssertionError: 95 != 96
+
+======================================================================
+FAIL: test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j5.TestEchantillonJ5.test_les_etats_sont_exclusifs_et_complets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 140, in test_les_etats_sont_exclusifs_et_complets
+    self.assertEqual(compte.get(RESOLU, 0), publie[RESOLU])
+AssertionError: 95 != 96
+
+======================================================================
+FAIL: test_les_pages_des_trois_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_trois_convertis_sont_des_livres_qnx)
+Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 211, in test_les_pages_des_trois_convertis_sont_des_livres_qnx
+    self.assertIsNotNone(rec["resolution_j5"],
+AssertionError: unexpectedly None : InterruptAttach : aucune resolution J5
+
+======================================================================
+FAIL: test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 191, in test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256
+    self.assertEqual(rec["etat"], RESOLU, symbole)
+AssertionError: 'resolu_mais_decrit_ailleurs' != 'resolu_et_cite'
+- resolu_mais_decrit_ailleurs
++ resolu_et_cite
+ : InterruptAttach
+
+======================================================================
+FAIL: test_plus_aucun_symbole_decrit_ailleurs (tests.test_mesure_j5.TestEchantillonJ5.test_plus_aucun_symbole_decrit_ailleurs)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 155, in test_plus_aucun_symbole_decrit_ailleurs
+    self.assertNotEqual(rec["etat"], AILLEURS,
+AssertionError: 'resolu_mais_decrit_ailleurs' == 'resolu_mais_decrit_ailleurs' : InterruptAttach est encore 'decrit ailleurs'
+
+======================================================================
+FAIL: test_seul_les_trois_symboles_convertis_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seul_les_trois_symboles_convertis_ont_change_d_etat)
+Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 171, in test_seul_les_trois_symboles_convertis_ont_change_d_etat
+    self.assertEqual(sorted(changes), sorted(CONVERTIS),
+AssertionError: Lists differ: ['if_freenameindex', 'setsockopt'] != ['InterruptAttach', 'if_freenameindex', 'setsockopt']
+
+First differing element 0:
+'if_freenameindex'
+'InterruptAttach'
+
+Second list contains 1 additional elements.
+First extra element 2:
+'setsockopt'
+
+- ['if_freenameindex', 'setsockopt']
++ ['InterruptAttach', 'if_freenameindex', 'setsockopt']
+?  +++++++++++++++++++
+ : les seuls symboles qui peuvent changer d'etat en J5 sont ('InterruptAttach', 'if_freenameindex', 'setsockopt')
+
+======================================================================
+FAIL: test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j5.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 274, in test_le_taux_du_script_egale_le_taux_compte_a_la_main
+    self.assertAlmostEqual(calcule, a_la_main, places=6,
+AssertionError: 80.0 != 90.0 within 6 places (10.0 difference) : le taux du script (80.0) n'est pas celui compte a la main (90.0)
+
+======================================================================
+FAIL: test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j5.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 282, in test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test
+    self.assertEqual(par_symbole[symbole]["etat"], etat,
+AssertionError: 'resolu_mais_decrit_ailleurs' != 'resolu_et_cite'
+- resolu_mais_decrit_ailleurs
++ resolu_et_cite
+ : etat publie incorrect pour InterruptAttach
+
+----------------------------------------------------------------------
+Ran 18 tests in 1.732s
+
+FAILED (failures=9)
+>>> RC = 1 (attendu : different de 0, le test est ROUGE)
+
+Regeneration des artefacts (donnee restauree) :
+corpus : /work/qnx-portmap-corpus-local/corpus (3426 pages)
+echantillon J4 : 100 symboles, 5 depots
+echantillon rederive des clones : 100 symboles - identique a J4 : OUI
+
+mesure J5 (meme echantillon que J4) :
+  resolu et cite       :  96
+  decrit ailleurs      :   0
+  non resolu           :   4
+  TAUX J5              :  96.0 %  (96 / 100)
+  (mesure J4 datee     :  93.0 %)
+  par famille :
+    specifiques a QNX       87 /  91  ( 95.6 %)
+    standards C/POSIX        9 /   9  (100.0 %)
+
+  conversions J5 : 3
+    InterruptAttach    -> com.qnx.doc.qnxsdp.migration / kernel.html  (sha256 a3b329c6f9a04bdd...)
+    if_freenameindex   -> com.qnx.doc.neutrino.io_sock / socket_api.html  (sha256 23dca276b71539a2...)
+    setsockopt         -> com.qnx.doc.neutrino.io_sock / socket_api.html  (sha256 23dca276b71539a2...)
+
+ecrit : docs/mesure-J5.md
+ecrit : docs/mesure-J5/citations-vocho-openqnx.txt (785 octets de citation)
+ecrit : docs/mesure-J5/citations-qnx-bsp_raspberrypi-bcm2712-rpi5.txt (785 octets de citation)
+ecrit : docs/mesure-J5/citations-varghes-Raspberry-QNX.txt (974 octets de citation)
+ecrit : docs/mesure-J5/citations-qnx-qnx-posix-publish-subscribe.txt (795 octets de citation)
+ecrit : docs/mesure-J5/citations-qnx-socketcan.txt (1129 octets de citation)
+ecrit : docs/mesure-J5/mesure-J5.json
+>>> RC = 0
+
+SHA-256 de docs/mesure-J5/mesure-J5.json apres restauration :
+  54548e0e6ac7cb65b1c3286051fc8e178f26f5cc80296b3e70ef371f4d9e3869
+  identique a l'empreinte d'avant la manipulation : oui
+
+------------------------------------------------------------------------
+ETAPE 3 - restauration : le test repasse au VERT.
+------------------------------------------------------------------------
+
+SHA-256 de tools/mesure_j5.py : c6c46e8d3a329cd0c06535d8d74b335037cd8ac45c1b4d52c0ae54d12ebe1b8e
+SHA-256 de docs/mesure-J5/mesure-J5.json : 54548e0e6ac7cb65b1c3286051fc8e178f26f5cc80296b3e70ef371f4d9e3869
+
+test_cent_symbols_et_vingt_par_depot (tests.test_mesure_j5.TestEchantillonJ5.test_cent_symbols_et_vingt_par_depot) ... ok
+test_echantillon_identique_a_j4 (tests.test_mesure_j5.TestEchantillonJ5.test_echantillon_identique_a_j4)
+Memes 100 symboles, meme ordre, meme depot, meme nombre d'appels. ... ok
+test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_du_markdown_vaut_le_taux_calcule) ... ok
+test_le_taux_publie_est_96_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_96_pour_cent)
+Le but de la tranche J5 : 96 symboles resolus et cites sur 100. ... ok
+test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j5.TestEchantillonJ5.test_les_etats_sont_exclusifs_et_complets) ... ok
+test_les_pages_de_citations_contiennent_chaque_symbole_resolu (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_contiennent_chaque_symbole_resolu) ... ok
+test_les_pages_des_trois_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_trois_convertis_sont_des_livres_qnx)
+Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD. ... ok
+test_les_quatre_absents_restent_absents (tests.test_mesure_j5.TestEchantillonJ5.test_les_quatre_absents_restent_absents) ... ok
+test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256) ... ok
+test_plus_aucun_symbole_decrit_ailleurs (tests.test_mesure_j5.TestEchantillonJ5.test_plus_aucun_symbole_decrit_ailleurs) ... ok
+test_seul_les_trois_symboles_convertis_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seul_les_trois_symboles_convertis_ont_change_d_etat)
+Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4. ... ok
+test_un_taux_sur_zero_leve_une_erreur (tests.test_mesure_j5.TestEchantillonJ5.test_un_taux_sur_zero_leve_une_erreur) ... ok
+test_la_citation_vient_de_la_page_citee (tests.test_mesure_j5.TestMesureReproductible.test_la_citation_vient_de_la_page_citee)
+La citation publiee est bien un extrait de la page citee. ... ok
+test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j5.TestMesureReproductible.test_le_taux_recalcule_vaut_le_taux_publie) ... ok
+test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256 (tests.test_mesure_j5.TestMesureReproductible.test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256) ... ok
+test_les_statuts_de_l_outil_sont_inchanges (tests.test_mesure_j5.TestMesureReproductible.test_les_statuts_de_l_outil_sont_inchanges)
+J5 ne touche pas l'outil : les statuts sont ceux de J4. ... ok
+test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j5.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main) ... ok
+test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j5.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 1.689s
+
+OK
+>>> RC = 0 (attendu : 0, le test est VERT)
+
+========================================================================
+RESULTAT : la mesure est ROUGE sur l'etat d'avant (93 %) et
+quand la donnee publiee est cassee, et VERTE quand la regle J5
+est appliquee et la donnee restauree. Les deux etats ont ete
+observes dans ce transcript.
+========================================================================

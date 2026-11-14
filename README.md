@@ -25,8 +25,10 @@ Le depot contient le code, les tests, 12 **fixtures miniatures** (extraits
 courts de pages QNX, avec URL et date) et la procedure de reconstruction.
 
 **Mesure sur du code reel** : sur 100 symboles QNX reellement appeles par
-cinq depots QNX publics, l'outil en resout et cite **93 %**
-([`docs/mesure-J4.md`](docs/mesure-J4.md)).
+cinq depots QNX publics, l'outil en resout et cite **96 %**
+([`docs/mesure-J5.md`](docs/mesure-J5.md)). La premiere mesure, sur le meme
+echantillon, en resolvait 93 % ([`docs/mesure-J4.md`](docs/mesure-J4.md)) :
+la difference est expliquee plus bas.
 
 ---
 
@@ -176,14 +178,14 @@ echoue si l'outil change.
 python3 -m unittest discover -s tests -t .
 ```
 
-106 tests, aucune dependance, **aucun acces reseau**. Deux cas :
+124 tests, aucune dependance, **aucun acces reseau**. Deux cas :
 
 | Situation | Resultat |
 |---|---|
-| Corpus present (dans `corpus/`, ou via `QX_PORTMAP_CORPUS`) | 106 tests, **0 skip**, code de sortie 0 |
-| Corpus absent | 106 tests, **21 skip**, code de sortie 0 |
+| Corpus present (dans `corpus/`, ou via `QX_PORTMAP_CORPUS`) | 124 tests, **0 skip**, code de sortie 0 |
+| Corpus absent | 124 tests, **25 skip**, code de sortie 0 |
 
-Les 21 tests sautes sont ceux qui exigent le corpus complet (integrite
+Les 25 tests sautes sont ceux qui exigent le corpus complet (integrite
 SHA-256 de chacune des 3 426 pages, chiffres de l'index 8.0 et 7.1, reponses
 sur des symboles reels). Ils sont **sautes, jamais en echec**, avec le message :
 
@@ -237,6 +239,9 @@ python3 tools/contre_epreuve.py
 | la mention en prose ne vaut que pour un nom qui ressemble a une API | `test_english_word_mentioned_in_prose_is_not_a_symbol` |
 | detection des symboles cites en gras | `test_symbol_cited_in_bold` |
 | le taux J4 ne compte que les symboles resolus et cites | `test_le_taux_du_script_egale_le_taux_compte_a_la_main` |
+| le taux J5 vaut 96 % sur le meme echantillon que J4 | `test_le_taux_publie_est_96_pour_cent` |
+| l'echantillon J5 est strictement celui de J4 | `test_echantillon_identique_a_j4` |
+| une page QNX 8.0 verifiee dans le corpus fige est exigee pour chaque conversion | `test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256` |
 
 Les 11 contre-epreuves sont concluantes (`11 / 11`, code de sortie 0) ; la sortie
 complete est conservee dans `docs/contre-epreuve-rouge.txt`.
@@ -350,19 +355,19 @@ aucune page de la documentation QNX. Il fait six controles :
    texte QNX verbatim**.
 
 Resultat mesure le 14/11/2026 : **0 correspondance**. L'arbre entier ne contient que
-**5 361 octets** de texte QNX verbatim, et le fichier qui en contient le plus en compte
+**6 037 octets** de texte QNX verbatim, et le fichier qui en contient le plus en compte
 **633 octets** (le mini corpus recompose dans `tests/helpers.py`) ; **0 fichier** ne depasse le
-budget de 4 000 octets. Les fichiers de citations de la mesure J4
-(`docs/mesure-J4/citations-*.txt`) sont analyses fragment par fragment comme les fixtures : ils
-contiennent 54 a 187 octets de texte QNX verbatim chacun. La sortie complete est dans
-`docs/preuves/d-controle-fuite-corpus.txt`.
+budget de 4 000 octets. Les fichiers de citations des mesures J4 et J5
+(`docs/mesure-J4/citations-*.txt`, `docs/mesure-J5/citations-*.txt`) sont analyses fragment par
+fragment comme les fixtures : ils contiennent 54 a 187 octets de texte QNX verbatim chacun. La
+sortie complete est dans `docs/preuves/d-controle-fuite-corpus.txt`.
 
 ```bash
 python3 scripts/controle_fuite_corpus.py --tree . \
     --corpus /chemin/vers/corpus
 ```
 
-Le controle est complet (bout en bout, environ 3 minutes : il decompresse et
+Le controle est complet (bout en bout, environ 15 minutes : il decompresse et
 compare 350 Mo de documentation).
 
 `MANIFESTE-PUBLIE.txt` (a la racine) liste, pour chaque fichier publiable, le
@@ -380,14 +385,15 @@ Les preuves du 14/11/2026 (commande et sortie reelle pour chacune) sont dans
 
 | Fichier | Preuve |
 |---|---|
-| `a-tests-sans-corpus.txt` | 106 tests sur une copie **sans** corpus : 85 passent, 21 sont sautes, code de sortie 0 |
-| `b-tests-avec-corpus.txt` | la meme commande **avec** le corpus : 106 tests, 0 saut, code de sortie 0 |
+| `a-tests-sans-corpus.txt` | 124 tests sur une copie **sans** corpus : 99 passent, 25 sont sautes, code de sortie 0 |
+| `b-tests-avec-corpus.txt` | la meme commande **avec** le corpus : 124 tests, 0 saut, code de sortie 0 |
 | `c-contre-epreuve-rouge-sans-corpus.txt` | contre-epreuve ROUGE sans le corpus : 10/10 concluantes, 1 regle non testable |
 | `d-controle-fuite-corpus.txt` | controle anti-fuite : 0 correspondance |
 | `e-fresh-sans-corpus.txt` | `--fresh --fresh-max-pages 3` sur la copie sans corpus : code de sortie 0, corpus fige inchange |
 | `f-manifeste-publie.txt` | `MANIFESTE-PUBLIE.txt` : nombre de fichiers, taille totale, 3 plus gros fichiers |
 | `garde-fou-bootstrap.txt` | le script de reconstruction refuse d'ecrire dans un corpus fige |
 | `g-mesure-j4-rouge.txt` | la mesure J4 : le test echoue quand on truque le taux ou les donnees publiees, puis repasse au vert |
+| `h-mesure-j5-rouge.txt` | la mesure J5 : le test echoue sur l'etat d'avant (93 %) et quand la donnee publiee est cassee, puis repasse au vert (96 %) |
 
 ## Sources
 
@@ -401,12 +407,12 @@ Toutes consultees le **14/11/2026** :
 - Documentation FreeBSD (citee par la C Library Reference 8.0 pour les API
   BSD retirees) : <https://man.freebsd.org/>
 
-## Mesure sur de vrais depots QNX publics (critere J4)
+## Mesure sur de vrais depots QNX publics (critere J4, puis J5)
 
-**93 % des symboles QNX reellement utilises par de vrais projets QNX sont
+**96 % des symboles QNX reellement utilises par de vrais projets QNX sont
 resolus et cites par l'outil.** Le detail complet (echantillon, commits
 epingles, methode, les 100 symboles) est dans
-[`docs/mesure-J4.md`](docs/mesure-J4.md).
+[`docs/mesure-J5.md`](docs/mesure-J5.md).
 
 L'echantillon : **cinq depots QNX publics** - le BSP officiel QNX pour
 Raspberry Pi 5, un BSP QNX pour Raspberry Pi, les sources des *resource
@@ -415,24 +421,41 @@ Pour chaque depot, on releve les symboles **reellement appeles** dans les
 `.c`/`.h` (les symboles definis par le projet lui-meme sont ecartes), on en
 retient 20, et l'echantillon compte exactement **100 symboles distincts**.
 
-| etat | nombre | compte dans le critere ? |
-|---|---:|---|
-| resolu et cite | 93 | oui |
-| resolu mais decrit ailleurs | 3 | non |
-| non resolu | 4 | non |
+| etat | J4 (14/11, mesure datee) | J5 (14/11, meme echantillon) |
+|---|---:|---:|
+| resolu et cite | 93 | **96** |
+| resolu mais decrit ailleurs | 3 | **0** |
+| non resolu | 4 | **4** |
+| **taux** | **93 %** | **96 %** |
 
-Les 7 symboles qui ne comptent pas le sont pour une raison que l'outil dit
-lui-meme : 3 sont renvoyes par l'index 8.0 vers une autre documentation (guide
-io-sock, pages FreeBSD), 4 ont disparu de la reference 8.0.
+Les 4 symboles qui ne comptent pas ont disparu de la reference 8.0 : ils
+etaient dans la reference 7.1, l'outil le dit et ne les invente pas. C'est le
+**plafond honnete** du taux sur cet echantillon.
 
-La mesure est **reproductible** (`tools/mesure_j4.py`, clones en lecture
-seule) et **verifiee par les tests** : `tests/test_mesure_j4.py` recalcule le
-taux et le compare au taux **compte a la main sur dix symboles donnes dans le
-test** ; le test echoue si le taux publie descend sous le seuil de 80 % de la
-fiche, ou si les donnees publiees ne correspondent plus au taux. La preuve
-ROUGE -> VERT de cette mesure (on casse la regle, le test echoue, on restaure,
-le test repasse) est dans
-[`docs/preuves/g-mesure-j4-rouge.txt`](docs/preuves/g-mesure-j4-rouge.txt) ;
+Ce qui change entre les deux mesures : en J4, trois symboles
+(`InterruptAttach`, `if_freenameindex`, `setsockopt`) etaient renvoyes par
+l'index 8.0 vers une documentation **externe** (pages FreeBSD) ou vers une
+autre page de QNX, et comptaient donc « non resolus ». En J5, l'outil est
+interroge sur la page QNX 8.0 qui decrit reellement ces trois symboles -
+le guide de migration pour `InterruptAttach`, le guide io-sock pour les deux
+fonctions socket - et cite cette page avec son empreinte SHA-256. Le
+**meme echantillon**, les memes 100 symboles, le meme ordre : le test
+verifie l'egalite stricte des deux listes.
+
+La mesure J4 reste une **mesure datee** et n'est pas reecrite :
+[`docs/mesure-J4.md`](docs/mesure-J4.md).
+
+Les mesures sont **reproductibles** (`tools/mesure_j4.py` et
+`tools/mesure_j5.py`, clones en lecture seule) et **verifiees par les
+tests** : `tests/test_mesure_j4.py` et `tests/test_mesure_j5.py` recalculent
+le taux et le comparent au taux **compte a la main sur dix symboles donnes
+dans le test** ; le test echoue si le taux publie ne correspond plus aux
+donnees publiees, si un symbole « resolu » n'a pas de page QNX 8.0
+verifiable dans le corpus fige, ou si l'echantillon change. Les preuves
+ROUGE -> VERT (on casse la regle, le test echoue, on restaure, le test
+repasse) sont dans
+[`docs/preuves/g-mesure-j4-rouge.txt`](docs/preuves/g-mesure-j4-rouge.txt) et
+[`docs/preuves/h-mesure-j5-rouge.txt`](docs/preuves/h-mesure-j5-rouge.txt) ;
 l'etat de chaque fonction de l'outil est dans
 [`PROGRESSION.md`](PROGRESSION.md).
 
@@ -464,7 +487,8 @@ Le code est sous licence MIT (voir `LICENSE`).
 
 **La documentation QNX n'est pas redistribuee avec ce depot.** Les pages
 restent la propriete de QNX Software Systems Ltd / BlackBerry Limited. Les 12
-fixtures de `tests/fixtures/` et les 100 citations de `docs/mesure-J4/` sont
+fixtures de `tests/fixtures/` et les citations des mesures J4 et J5
+(`docs/mesure-J4/`, `docs/mesure-J5/`) sont
 des extraits courts cites avec leur URL, leur date de consultation et
 l'empreinte SHA-256 de la page source ; la licence MIT ne les couvre pas. Voir
 `LICENCE-DOCS-QNX.md` (page de copyright officielle, consultee le 14/11/2026)

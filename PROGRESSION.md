@@ -50,6 +50,10 @@ Ce fichier est la carte de l'outil. Il est mis a jour a chaque cycle, avant le r
 | `controle_fuite_corpus.py` | Controle anti-fuite : aucune page QNX dans l'arbre publiable (7 controles) | fait | `docs/preuves/d-controle-fuite-corpus.txt` |
 | `manifeste_publie.py` | Regenere `MANIFESTE-PUBLIE.txt` (fichiers et octets publies) | fait | `docs/preuves/f-manifeste-publie.txt` |
 | `make_fixtures.py` | Fabrique les 12 extraits de test depuis le corpus | fait | `tests/test_fixtures.py::TestFixtureInvariants::test_every_excerpt_is_verbatim_and_not_empty` |
+| `mesure_j5.resoudre_page` | Cherche la page exacte du livre QNX 8.0 qui decrit un symbole « decrit ailleurs » (verifiee dans le corpus fige) | fait | `tests/test_mesure_j5.py::TestMesureReproductible::test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256` |
+| `mesure_j5.etat_j5` | Etat J5 : « resolu et cite » des que la page QNX 8.0 qui decrit le symbole est verifiee | fait | `tests/test_mesure_j5.py::TestEchantillonJ5::test_le_taux_publie_est_96_pour_cent` |
+| `mesure_j5.measure` / `.taux` / `.resume` | Rejoue la mesure J5 sur le meme echantillon que J4 et calcule le taux | fait | `tests/test_mesure_j5.py::TestMesureReproductible::test_le_taux_recalcule_vaut_le_taux_publie` |
+| `mesure_j5.comparer_echantillons` | Verifie que l'echantillon rederive des 5 depots epingles est **strictement** celui de la mesure J4 | fait | `tests/test_mesure_j5.py::TestEchantillonJ5::test_echantillon_identique_a_j4` |
 
 ## 3. Ce qui reste a faire (vu par la fiche, pas par moi)
 
@@ -94,3 +98,42 @@ appartient a la mere ; **aucune fonction nouvelle n'a ete ajoutee ce cycle**.
 2. **J5** (dans la fiche) : etendre la classification aux appels systeme du `user_guide` — uniquement
    si la mere le demande ; le critere J5 de la fiche dit de reporter si le gain est faible.
 3. Ne rien publier ni pousser sans validation : ni depot public, ni video, ni compte, ni soumission.
+
+---
+
+## Avance de ce cycle (14/11/2026, tranche J5 de la mere)
+
+**Le taux de resolution passe de 93/100 a 96/100 sur le MEME echantillon**, et le
+changement est prouve par un test ROUGE puis VERT.
+
+Ce qui a ete construit et teste (rien dans `qnx_portmap/` n'a ete modifie) :
+
+- `tools/mesure_j5.py` — le harnais de la mesure J5 : lit l'echantillon publie par la mesure J4,
+  rejoue la classification sur le corpus fige, et pour un symbole « decrit ailleurs » cherche la
+  **page exacte du livre QNX 8.0 qui le decrit** (candidates : les renvois de l'index 8.0, la page
+  trouvee dans le corpus, les pages du guide de migration), la verifie dans le corpus fige et cite
+  son empreinte SHA-256 ;
+- `tests/test_mesure_j5.py` — 18 tests : l'echantillon J5 est **strictement** celui de J4 (memes
+  100 symboles, meme ordre), le taux compte a la main sur 10 symboles vaut 90 %, seuls les 3
+  symboles convertis ont change d'etat, chaque page citee est dans le corpus fige avec la bonne
+  empreinte, et la citation publiee est bien extraite de la page citee ;
+- `docs/mesure-J5.md` + `docs/mesure-J5/` — les 100 symboles, les 5 fichiers de citations, le
+  JSON public ;
+- `docs/preuves/h-mesure-j5-rouge.txt` — la preuve ROUGE -> VERT (sur l'etat d'avant : 10 echecs,
+  RC 1 ; donnee publiee cassee : 9 echecs, RC 1 ; restauration : `Ran 18 tests ... OK`, RC 0) ;
+- `scripts/controle_fuite_corpus.py` — les fichiers de citations de J5 sont desormais analyses
+  fragment par fragment comme ceux de J4 ;
+- `README.md` — chiffres remis a jour (124 tests, J5 = 96 %, J4 = 93 % date).
+
+Resultat : **J5 = 96 % (96/100)** sur le meme echantillon que J4 (93 %). Les 3 conversions :
+
+| symbole | avant (J4) | apres (J5) | livre QNX 8.0 cite |
+|---|---|---|---|
+| `InterruptAttach` | decrit ailleurs | resolu et cite | guide de migration, `kernel.html` |
+| `if_freenameindex` | decrit ailleurs | resolu et cite | guide io-sock, `socket_api.html` |
+| `setsockopt` | decrit ailleurs | resolu et cite | guide io-sock, `socket_api.html` |
+
+Les 4 symboles absents de la 8.0 (`ND_NODE_CMP`, `pthread_sleepon_lock`,
+`pthread_sleepon_unlock`, `fcfgopen`) **restent absents** : le plafond honnete du taux sur cet
+echantillon est **96/100**. Aucune fonction nouvelle n'a ete ajoutee a l'outil ; le J5 de la fiche
+(extension aux appels systeme) reste `prevu`, c'est une autre chose.
