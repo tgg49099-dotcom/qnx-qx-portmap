@@ -6,22 +6,35 @@ une, et verifie que le test charge echoue. Un test qui passe toujours ne
 teste rien.
 
 Ce fichier conserve la sortie reelle des deux executions du 14/11/2026 sur
-l'arbre publiable (commit d8afe9c) :
+l'arbre publiable (commit 15b782a) :
 
-  1. avec le corpus fige present  -> 10 / 10 contre-epreuves concluantes
-  2. sans le corpus fige          ->  9 / 9 contre-epreuves concluantes,
+  1. avec le corpus fige present  -> 11 / 11 contre-epreuves concluantes
+  2. sans le corpus fige          -> 10 / 10 contre-epreuves concluantes,
                                      1 regle non testable (corpus absent)
 
 Commande dans les deux cas :
     python3 tools/contre_epreuve.py
 Code de sortie : 0 dans les deux cas.
 
+Les 11 regles cassee une par une :
+  1. frontiere de mot dans la recherche de citation
+  2. verification du SHA-256 des pages du corpus
+  3. verification du fichier SHA256SUMS
+  4. lecture du tableau "described elsewhere" de l'index
+  5. extraction de la section Description
+  6. statut inconnu pour un symbole hors corpus
+  7. deduplication de la liste de symboles
+  8. integrite du corpus fige livre
+  9. la mention en prose ne vaut que pour un nom qui ressemble a une API
+ 10. detection des symboles cites en gras
+ 11. le taux J4 ne compte que les symboles resolus et cites
+
 
 1. AVEC LE CORPUS FIGE (copie /work/preuves/clone-avec-corpus)
 ---------------------------------------------------------------
 
 Depot : /work/preuves/clone-avec-corpus (git clone de /work/qnx-portmap,
-commit d8afe9c), corpus fige copie dans ./corpus.
+commit 15b782a), corpus fige copie dans ./corpus.
 
 Contre-epreuve ROUGE de QX PORTMAP
 On casse une regle a la fois ; le test charge doit echouer.
@@ -46,22 +59,18 @@ la mention en prose ne vaut que pour un nom qui ressemble a une API test rouge O
     FAIL: test_english_word_mentioned_in_prose_is_not_a_symbol (tests.test_classify.TestClassification.test_english_word_mentioned_in_prose_is_not_a_symbol)
 detection des symboles cites en gras                       test rouge OK
     FAIL: test_symbol_cited_in_bold (tests.test_classify.TestClassification.test_symbol_cited_in_bold)
+le taux J4 ne compte que les symboles resolus et cites     test rouge OK
+    FAIL: test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j4.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main)
 
 Depot propre apres contre-epreuve : oui
 
-10 / 10 contre-epreuves concluantes
-
-Le corpus fige n'a pas bouge apres la contre-epreuve (la 10e regle altere
-un octet d'une page compressee pour prouver que le test la detecte, puis le
-fichier est restaure octet pour octet) :
-    e312cea466329a76053be0160911cf378ffb1c6ea80050a66c66186ca0023efd  corpus/SHA256SUMS
-
+11 / 11 contre-epreuves concluantes
 
 2. SANS LE CORPUS FIGE (copie /work/preuves/clone-sans-corpus)
----------------------------------------------------------------
+--------------------------------------------------------------
 
 Depot : /work/preuves/clone-sans-corpus (git clone de /work/qnx-portmap,
-commit d8afe9c), aucun corpus dans la copie.
+commit 15b782a), aucun corpus dans la copie.
 
 Contre-epreuve ROUGE de QX PORTMAP
 On casse une regle a la fois ; le test charge doit echouer.
@@ -85,23 +94,17 @@ la mention en prose ne vaut que pour un nom qui ressemble a une API test rouge O
     FAIL: test_english_word_mentioned_in_prose_is_not_a_symbol (tests.test_classify.TestClassification.test_english_word_mentioned_in_prose_is_not_a_symbol)
 detection des symboles cites en gras                       test rouge OK
     FAIL: test_symbol_cited_in_bold (tests.test_classify.TestClassification.test_symbol_cited_in_bold)
+le taux J4 ne compte que les symboles resolus et cites     test rouge OK
+    FAIL: test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j4.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main)
 
 Depot propre apres contre-epreuve : oui
 
-9 / 9 contre-epreuves concluantes
+10 / 10 contre-epreuves concluantes
 regle non testable ici (corpus absent) : integrite du corpus fige livre
-
-Bilan : sur l'arbre publiable, sans le corpus, 9 des 10 regles restent
-contre-prouvees. La dixieme (integrite du corpus fige livre) porte par
-nature sur les 3 426 pages du corpus : sans lui, il n'y a rien a corrompre,
-le test correspondant est saute. Elle reste contre-prouvee des que le corpus
-est present (execution 1 ci-dessus, 10/10), et elle est couverte par le
-controle anti-fuite de l'arbre publiable.
-
 
 3. HISTORIQUE
 -------------
 
-Execution du 14/11/2026 sur le commit 7f037ae, a l'epoque ou le corpus etait
-encore dans le depot (10/10 contre-epreuves concluantes, corpus fige
-livre). Conservée pour memoire ; la reference courante est ci-dessus.
+Les executions du 14/11/2026 sur les commits precedents (10/10 avec corpus,
+9/9 sans) portaient sur 10 regles : la 11e (le taux J4) n'existait pas encore.
+La reference courante est ci-dessus.

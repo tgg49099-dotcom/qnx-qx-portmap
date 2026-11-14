@@ -1,57 +1,40 @@
-PREUVE (e) — RECONSTRUCTION SUR LA COPIE SANS CORPUS, CORPUS FIGE INCHANGE
+PREUVE (e) - MODE --FRESH (RECONSTRUCTION DEPUIS qnx.com) SUR LA COPIE SANS CORPUS
 Date : 14/11/2026
 
 Copie de travail : /work/preuves/clone-sans-corpus
-Origine           : git clone /work/qnx-portmap   (commit d8afe9c)
-Aucun corpus dans la copie ; le corpus fige reste dans l'archive locale
-/work/qnx-portmap-corpus-local/corpus.
+Origine           : git clone /work/qnx-portmap   (commit 15b782a)
 
-AVANT — empreinte du corpus fige :
-    $ sha256sum /work/qnx-portmap-corpus-local/corpus/SHA256SUMS
-    e312cea466329a76053be0160911cf378ffb1c6ea80050a66c66186ca0023efd  /work/qnx-portmap-corpus-local/corpus/SHA256SUMS
+But : montrer que le mode reseau fonctionne (il n'est jamais utilise par
+defaut) et qu'il n'ecrit pas dans le corpus fige : il ecrit dans un
+repertoire separe, `corpus-fresh`.
 
 Commande :
     cd /work/preuves/clone-sans-corpus
-    python3 -m qnx_portmap --fresh --fresh-max-pages 3 --fresh-only
+    python3 -m qnx_portmap --fresh --fresh-max-pages 3 --fresh-only --fresh-out corpus-fresh2
 
-Sortie reelle (28,6 s) :
-    qnx-portmap: rechargement en ligne du corpus vers /work/preuves/clone-sans-corpus/corpus-fresh
-      version 8.0
-        com.qnx.doc.neutrino.lib_ref               3 pages
-        com.qnx.doc.neutrino.io_sock               3 pages
-        com.qnx.doc.neutrino.user_guide            3 pages
-        com.qnx.doc.neutrino.sys_arch              3 pages
-        com.qnx.doc.neutrino.building              3 pages
-        com.qnx.doc.neutrino.technotes             3 pages
-        com.qnx.doc.qnxsdp.migration               3 pages
-        com.qnx.doc.system.tuning                  3 pages
-      version 7.1
-        com.qnx.doc.neutrino.lib_ref               3 pages
-    qnx-portmap: corpus reconstruit : 27 pages
+Sortie reelle :
+qnx-portmap: rechargement en ligne du corpus vers corpus-fresh2
+  version 8.0
+    com.qnx.doc.neutrino.lib_ref               3 pages
+    com.qnx.doc.neutrino.io_sock               3 pages
+    com.qnx.doc.neutrino.user_guide            3 pages
+    com.qnx.doc.neutrino.sys_arch              3 pages
+    com.qnx.doc.neutrino.building              3 pages
+    com.qnx.doc.neutrino.technotes             3 pages
+    com.qnx.doc.qnxsdp.migration               3 pages
+    com.qnx.doc.system.tuning                  3 pages
+  version 7.1
+    com.qnx.doc.neutrino.lib_ref               3 pages
+qnx-portmap: corpus reconstruit : 27 pages
 
 Code de sortie : 0
 
-Le corpus reconstruit est ecrit dans ./corpus-fresh (jamais dans le corpus
-fige) et il est verifie page par page :
-    $ python3 -m qnx_portmap --corpus corpus-fresh --verify-corpus
-    corpus : /work/preuves/clone-sans-corpus/corpus-fresh
-    pages verifiees : 27
-    SHA-256 des pages : OK
-    SHA256SUMS : OK (55 fichiers)
-    RC=0
+Apres l'execution :
+    $ ls /work/preuves/clone-sans-corpus/corpus
+    ls: cannot access '/work/preuves/clone-sans-corpus/corpus': No such file or directory
+    $ du -sh /work/preuves/clone-sans-corpus/corpus-fresh2
+    1,5M    /work/preuves/clone-sans-corpus/corpus-fresh2
 
-APRES — empreinte du corpus fige :
-    $ sha256sum /work/qnx-portmap-corpus-local/corpus/SHA256SUMS
-    e312cea466329a76053be0160911cf378ffb1c6ea80050a66c66186ca0023efd  /work/qnx-portmap-corpus-local/corpus/SHA256SUMS
-
-Comparaison des deux empreintes : IDENTIQUES.
-Le corpus fige n'a pas bouge d'un octet.
-
-Comparaison avec le SHA256SUMS du corpus reconstruit (different, c'est
-attendu : ce sont 27 pages et non 3 426) :
-    1a62eb5872b9941a57c246234c7b045575d8092379d16694d66f53d0c7d9d316  corpus-fresh/SHA256SUMS
-
-Le script equivalent, `bash scripts/bootstrap_corpus.sh --out corpus-downloaded`,
-fait la meme chose avec un delai de 1,0 s entre les requetes et un journal
-`download.log` ; il refuse d'ecrire dans un repertoire protege par
-CORPUS-FIGE.txt (voir la sortie du refus dans docs/preuves/).
+Le corpus fige de l'arbre publiable n'a pas ete touche. Les 3 pages par livre
+suffisent a prouver que le chemin reseau fonctionne ; la mesure J4, elle,
+tourne sur le corpus fige complet.

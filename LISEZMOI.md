@@ -37,6 +37,7 @@ Le depot est **publiable** : il ne contient plus la documentation QNX.
 | `tools/` | construction du corpus, fixtures, contre-epreuve ROUGE, mesure J4 | ~60 Ko |
 | `scripts/` | bootstrap du corpus, manifeste publie, controle anti-fuite | ~30 Ko |
 | `docs/` | contre-epreuve ROUGE, demonstration, preuves, mesure J4 | ~80 Ko |
+| `PROGRESSION.md` | une ligne par fonction de l'outil (etat + test qui la prouve) | ~9 Ko |
 | `MANIFESTE-PUBLIE.txt` | chemin, taille et SHA-256 de chaque fichier publiable | ~5 Ko |
 | `corpus/` | **absent du depot** — reconstruit a la demande, voir ci-dessous | 0 |
 

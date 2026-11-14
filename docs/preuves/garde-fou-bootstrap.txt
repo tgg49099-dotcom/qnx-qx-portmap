@@ -8,8 +8,8 @@ Commande (garde 1) :
     bash scripts/bootstrap_corpus.sh --out corpus-fresh
 
 Sortie reelle :
-    bootstrap_corpus: refus : /work/preuves/clone-sans-corpus/corpus-fresh contient deja un corpus fige.
-      Utilisez --force pour l'ecraser, ou choisissez un autre --out.
+bootstrap_corpus: refus : /work/preuves/clone-sans-corpus/corpus-fresh contient deja un corpus fige.
+  Utilisez --force pour l'ecraser, ou choisissez un autre --out.
     code de sortie : 1
 
 Commande (garde 2) :
@@ -17,11 +17,12 @@ Commande (garde 2) :
     bash scripts/bootstrap_corpus.sh --out /tmp/faux-fige/corpus-test
 
 Sortie reelle :
-    bootstrap_corpus: refus : /tmp/faux-fige/corpus-test est dans un corpus fige (/tmp/faux-fige/CORPUS-FIGE.txt).
+bootstrap_corpus: refus : /tmp/faux-fige/corpus-test est dans un corpus fige (/tmp/faux-fige/CORPUS-FIGE.txt).
     code de sortie : 1
 
-Dans les deux cas, aucune page n'est telechargee et aucun fichier n'est ecrit :
-le script sort avant le moindre appel reseau.
+Dans les deux cas, aucune page n'est telechargee et aucun fichier n'est ecrit
+(le repertoire vide peut etre cree, mais il reste vide) : le script sort avant
+le moindre appel reseau.
 
 Le corpus fige lui-meme (archive locale du slot) peut etre utilise comme
 cible de la garde 2 : il porte CORPUS-FIGE.txt.

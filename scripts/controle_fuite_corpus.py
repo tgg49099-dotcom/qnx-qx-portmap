@@ -49,7 +49,11 @@ COPY_BUDGET = 4000     # octets de texte QNX verbatim maximum par fichier
 # n'est identique a une ligne du corpus.
 QNX_MARKERS = ("<article", "role=\"treeitem\"", "apiname", "varname",
                "<var class", "<span class")
-FRAGMENT_DIRS = ("tests/fixtures",)
+# Dossiers dont chaque fichier est analyse fragment par fragment, meme
+# s'il ne porte aucune balise Oxygen : les extraits de test et les fichiers
+# de citations de la mesure J4 (docs/mesure-J4/citations-*.txt) contiennent
+# du texte QNX sans balisage.
+FRAGMENT_DIRS = ("tests/fixtures", "docs/mesure-J4")
 
 
 def sha256_bytes(data):

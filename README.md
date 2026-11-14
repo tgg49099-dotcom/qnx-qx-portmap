@@ -349,9 +349,12 @@ aucune page de la documentation QNX. Il fait six controles :
 6. budget de copie : **aucun fichier ne doit contenir plus de 4 000 octets de
    texte QNX verbatim**.
 
-Resultat mesure le 14/11/2026 : **0 correspondance**, et le fichier qui
-contient le plus de texte QNX verbatim en compte 633 octets (le mini corpus
-recompose dans `tests/helpers.py`). La sortie complete est dans
+Resultat mesure le 14/11/2026 : **0 correspondance**. L'arbre entier ne contient que
+**5 361 octets** de texte QNX verbatim, et le fichier qui en contient le plus en compte
+**633 octets** (le mini corpus recompose dans `tests/helpers.py`) ; **0 fichier** ne depasse le
+budget de 4 000 octets. Les fichiers de citations de la mesure J4
+(`docs/mesure-J4/citations-*.txt`) sont analyses fragment par fragment comme les fixtures : ils
+contiennent 54 a 187 octets de texte QNX verbatim chacun. La sortie complete est dans
 `docs/preuves/d-controle-fuite-corpus.txt`.
 
 ```bash
@@ -426,7 +429,12 @@ La mesure est **reproductible** (`tools/mesure_j4.py`, clones en lecture
 seule) et **verifiee par les tests** : `tests/test_mesure_j4.py` recalcule le
 taux et le compare au taux **compte a la main sur dix symboles donnes dans le
 test** ; le test echoue si le taux publie descend sous le seuil de 80 % de la
-fiche, ou si les donnees publiees ne correspondent plus au taux.
+fiche, ou si les donnees publiees ne correspondent plus au taux. La preuve
+ROUGE -> VERT de cette mesure (on casse la regle, le test echoue, on restaure,
+le test repasse) est dans
+[`docs/preuves/g-mesure-j4-rouge.txt`](docs/preuves/g-mesure-j4-rouge.txt) ;
+l'etat de chaque fonction de l'outil est dans
+[`PROGRESSION.md`](PROGRESSION.md).
 
 ## Limites
 

@@ -1,8 +1,8 @@
-PREUVE (a) — SUITE DE TESTS SUR UNE COPIE DE L'ARBRE PUBLIABLE SANS LE CORPUS
+PREUVE (a) - SUITE DE TESTS SUR UNE COPIE DE L'ARBRE PUBLIABLE SANS LE CORPUS
 Date : 14/11/2026
 
 Copie de travail : /work/preuves/clone-sans-corpus
-Origine           : git clone /work/qnx-portmap   (commit d8afe9c)
+Origine           : git clone /work/qnx-portmap   (commit 15b782a)
 Le corpus n'est pas dans la copie :
     $ ls /work/preuves/clone-sans-corpus/corpus
     ls: cannot access '/work/preuves/clone-sans-corpus/corpus': No such file or directory
@@ -12,33 +12,29 @@ Commande :
     python3 -m unittest discover -s tests -t .
 
 Sortie complete :
-    .................qnx-portmap: corpus introuvable : /tmp/qxpm-cli-blcqi0d2/absent
-      repertoire recherche : /tmp/qxpm-cli-blcqi0d2/absent
-      solutions : QX_PORTMAP_CORPUS=/chemin/vers/corpus qnx-portmap ...
-                  qnx-portmap --corpus /chemin/vers/corpus ...
-    .qnx-portmap: aucun symbole donne (argument, --file ou --stdin)
-    ......s................................................sssssssssssssssss
-    ----------------------------------------------------------------------
-    Ran 90 tests in 0.074s
+.................qnx-portmap: corpus introuvable : /tmp/qxpm-cli-xdj9magn/absent
+  repertoire recherche : /tmp/qxpm-cli-xdj9magn/absent
+  solutions : QX_PORTMAP_CORPUS=/chemin/vers/corpus qnx-portmap ...
+              qnx-portmap --corpus /chemin/vers/corpus ...
+.qnx-portmap: aucun symbole donne (argument, --file ou --stdin)
+......s................................................ssssssssssssssss.......sss......s
+----------------------------------------------------------------------
+Ran 106 tests in 0.080s
 
-    OK (skipped=18)
+OK (skipped=21)
 
-Code de sortie : 0
+Les 21 tests sautes sont exactement ceux qui ont besoin du corpus complet
+(integrite des 3 426 pages, empreintes SHA-256, index 7.1 / 8.0, mesure J4
+rejouee). Aucun echec.
 
-Bilan : 90 tests, dont 72 PASSES et 18 SKIP (jamais un echec), code de sortie 0.
-Les 18 tests sautes sont ceux qui exigent le corpus complet ; ils le disent
-par le message "corpus absent : lancer scripts/bootstrap_corpus.sh" :
-  - 16 tests de tests/test_frozen_corpus.py (integrite et comportement sur le
-    corpus fige),
-  - 1 test de tests/test_corpus.py ("Si le corpus est present, l'outil le
-    trouve sans variable d'env."),
-  - 1 test de tests/test_readme.py ("test_readme_shows_the_real_output").
-Les 21 tests des fixtures miniatures (tests/test_fixtures.py) passent :
+Controle complementaire sur les extraits reels de documentation QNX :
     $ cd /work/preuves/clone-sans-corpus
     $ python3 -m unittest tests.test_fixtures
-    ----------------------------------------------------------------------
-    Ran 21 tests in 0.020s
+.....................
+----------------------------------------------------------------------
+Ran 21 tests in 0.017s
 
-    OK
+OK
+
 Ils prouvent que l'outil fonctionne sur de la documentation QNX reelle meme
 sans le corpus complet.
