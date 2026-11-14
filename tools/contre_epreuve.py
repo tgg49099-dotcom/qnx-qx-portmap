@@ -16,7 +16,6 @@ import os
 import shutil
 import subprocess
 import sys
-import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -78,6 +77,7 @@ BREAKS = [
     ("integrite du corpus fige livre",
      "corpus/pages/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html.gz",
      None,                       # corruption binaire, traite a part
+     None,
      "tests.test_frozen_corpus.TestFrozenCorpus.test_every_page_matches_its_sha256"),
 ]
 
@@ -88,6 +88,19 @@ def sh(cmd, cwd=ROOT):
 
 def restore(path):
     sh(["git", "checkout", "--", path])
+
+
+def clean_pycache():
+    """Supprime les bytecodes caches.
+
+    Sans cela, Python peut reutiliser un .pyc compiles avant la casse : le
+    fichier source etant modifie dans la meme seconde et avec la meme taille
+    que la version precedente, le bytecode reutilise masque la casse, et le
+    test passerait alors que la regle cassee n'a jamais ete executee.
+    """
+    for sub in ("qnx_portmap", "tests", "tools", ""):
+        d = os.path.join(ROOT, sub, "__pycache__") if sub else os.path.join(ROOT, "__pycache__")
+        shutil.rmtree(d, ignore_errors=True)
 
 
 def main():
@@ -115,12 +128,14 @@ def main():
                 continue
             with open(full, "w", encoding="utf-8") as fh:
                 fh.write(text.replace(before, after, 1))
-        proc = sh([sys.executable, "-m", "unittest", test])
+        clean_pycache()
+        proc = sh([sys.executable, "-B", "-m", "unittest", test])
         restore(path)
+        clean_pycache()
         red = proc.returncode != 0
         detail = ""
         for line in (proc.stderr or "").splitlines():
-            if line.startswith(("FAIL:", "AssertionError", "Error")):
+            if line.startswith(("FAIL:", "ERROR:", "AssertionError", "Error")):
                 detail = line.strip()
                 break
         results.append((name, test, ("ECHEC ATTENDU" if red else "PAS D'ECHEC (!!)"),

@@ -59,11 +59,20 @@ class TestClassification(unittest.TestCase):
         self.assertEqual(res.citation, "Gone since 8.0")
 
     def test_described_elsewhere_symbol(self):
-        """Cas limite : symbole decrit ailleurs (renvoi d'index)."""
+        """Cas limite : symbole decrit ailleurs (renvoi d'index).
+
+        Le renvoi de l'index ("The following are described elsewhere") prime
+        sur une simple mention dans le corps d'une page : la citation doit
+        venir de la table de l'index, pas du parcours du corpus.
+        """
         res = self.classify_one("vanish")
         self.assertEqual(res.status, ELSEWHERE)
         self.assertIn("user guide", res.citation)
         self.assertTrue(res.url.endswith("neutrino.user_guide/topic/vanish.html"), res.url)
+        # la source de la citation est bien la table "described elsewhere"
+        self.assertIn("described elsewhere", res.citation_source)
+        # une mention trouvee par parcours du corpus aurait un autre type
+        self.assertEqual(res.citation_kind, "")
 
     def test_symbol_cited_in_bold(self):
         """Cas limite : symbole cite en gras dans une page de la 8.0."""
