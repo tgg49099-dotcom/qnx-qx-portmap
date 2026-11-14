@@ -1,0 +1,83 @@
+CORPUS DE DOCUMENTATION QNX — NON PUBLIE
+========================================
+
+Date de decision : 14/11/2026.
+
+1. CE QUI N'EST PAS DANS CE DEPOT
+---------------------------------
+Le corpus de documentation QNX (3 426 pages HTML officielles, versions 8.0 et
+7.1, 44 942 705 octets compresses) n'est PAS dans ce depot, et n'est pas
+redistribue.
+
+La documentation QNX est (c) QNX Software Systems Ltd / BlackBerry Limited.
+La page officielle de copyright de la documentation QNX 8.0, consultee le
+14/11/2026, indique que l'information de licence de chaque fichier se trouve
+dans le QNX Software Center, derriere un compte myQNX ; elle ne donne aucune
+autorisation de redistribuer les pages de documentation :
+
+  https://www.qnx.com/developers/docs/8.0/com.qnx.doc.copyright/topic/coverpage.html
+  (consulte le 14/11/2026)
+
+Aucune demande d'autorisation n'est en cours : le corpus n'est pas publie.
+
+Ce que ce depot contient a la place :
+  - le CODE de l'outil (licence MIT, voir LICENSE et LICENCE-DOCS-QNX.md) ;
+  - les TESTS, y compris 12 FIXTURES MINIATURES (extraits courts de 1 a 3
+    lignes de pages QNX, avec URL source et date de consultation) dans
+    tests/fixtures/ ;
+  - la PROCEDURE de reconstruction du corpus (scripts/bootstrap_corpus.sh) ;
+  - le controle anti-fuite (scripts/controle_fuite_corpus.py).
+
+2. OU EST LE CORPUS FIGE
+------------------------
+Dans l'archive locale du slot, hors de l'arbre publiable :
+
+  /work/qnx-portmap-corpus-local/corpus/
+
+Cette archive n'est pas un depot public et ne sera jamais pousse. Elle porte
+le fichier CORPUS-FIGE.txt (ancrage, empreintes, procedure). L'archive est
+elle-meme un depot git local : l'arbre du corpus y est identique, bit pour
+bit, a celui du commit d'origine 6a2c442.
+
+  sha256 de corpus/SHA256SUMS :
+  e312cea466329a76053be0160911cf378ffb1c6ea80050a66c66186ca0023efd
+
+L'historique git de CE depot a ete purge de tout blob de documentation QNX
+le 14/11/2026 (git filter-branch + gc). On peut le verifier :
+
+  git -C . log --all --oneline -- corpus      # aucune sortie
+  git -C . rev-list --objects --all | grep -c corpus/   # 0
+  python3 scripts/controle_fuite_corpus.py --tree . \
+      --corpus /work/qnx-portmap-corpus-local/corpus
+
+3. COMMENT RECONSTRUIRE LE CORPUS
+----------------------------------
+  bash scripts/bootstrap_corpus.sh --out corpus-downloaded
+
+Le script telecharge la documentation depuis le site officiel
+(https://www.qnx.com/developers/docs/), avec un delai entre les requetes
+(1,0 s par defaut), journalise chaque page telechargee dans
+<out>/download.log, puis construit le corpus avec le meme outil que le
+corpus fige (tools/build_corpus.py).
+
+Le script REFUSE d'ecrire dans un corpus deja fige, et dans tout repertoire
+place sous une archive portant le marqueur CORPUS-FIGE.txt.
+
+Temps mesure le 14/11/2026 : 27 pages en 53 s avec un delai de 1,0 s
+(soit environ 2 s par page, requete comprise). Pour les 3 426 pages du corpus
+complet, il faut compter environ 1 h 55 a ce rythme.
+
+Pour utiliser le corpus reconstruit :
+
+  QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
+
+4. CE QUE L'OUTIL FAIT SANS CORPUS
+----------------------------------
+Le mode par defaut est hors ligne : sans corpus, l'outil ne peut rien
+classer et le dit clairement (code de sortie 2). Les tests qui exigent le
+corpus complet sont alors SAUTES (jamais en echec) avec le message :
+
+  corpus absent : lancer scripts/bootstrap_corpus.sh
+
+Les tests qui s'appuient sur les fixtures miniatures, eux, passent toujours :
+ils prouvent que l'outil fonctionne sur de la documentation QNX reelle.

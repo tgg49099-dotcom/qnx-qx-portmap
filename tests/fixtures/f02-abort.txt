@@ -1,0 +1,10 @@
+# fixture f02 : shortdesc
+# source : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
+# consulte le : 2026-11-14
+# livre : com.qnx.doc.neutrino.lib_ref
+# topic : a/abort.html
+# sha256 de la page source : 92e329997dc1bd54c42552c89a519169e773a47c5a2467100a4cc6488449985e
+# symbole attendu : abort
+# lignes de l'extrait : 1
+
+<div class="- topic/body reference/refbody body refbody"><p class="- topic/shortdesc shortdesc"><em class="+ topic/ph hi-d/i ph i">Raise the <span class="+ topic/keyword xml-d/const keyword const">SIGABRT</span> signal to terminate program execution</em></p>

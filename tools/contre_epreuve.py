@@ -2,14 +2,20 @@
 """Contre-epreuve ROUGE : casser une regle, montrer que le test echoue.
 
 Un test qui passe toujours ne teste rien. Ce script casse volontairement
-huit regles du code, une par une, et verifie que le test charge de la
+dix regles du code, une par une, et verifie que le test charge de la
 detester. Il restaure le depot a chaque etape (restauration par git).
+
+Neuf regles se testent sans le corpus complet (elles s'appuient sur le
+corpus miniature reconstruit a partir des fixtures). La dixieme verifie
+l'integrite du corpus fige livre : elle n'est testable que si le corpus
+est present dans le depot ; sinon elle est signalee comme non testable
+et n'est pas comptee dans le total.
 
 Usage :
     python3 tools/contre_epreuve.py
 
 Sortie : un tableau "regle cassee -> test -> echec observe".
-Code de sortie : 0 si toutes les contre-epreuves sont concluantes.
+Code de sortie : 0 si toutes les contre-epreuves testables sont concluantes.
 """
 
 import os
@@ -107,8 +113,18 @@ def sh(cmd, cwd=ROOT):
     return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
 
 
-def restore(path):
-    sh(["git", "checkout", "--", path])
+def restore(path, original=None):
+    """Remet le fichier dans son etat initial.
+
+    On ecrit directement les octets d'origine : le corpus fige n'est pas
+    suivi par git dans l'arbre publiable, `git checkout` ne pourrait donc
+    pas le restaurer.
+    """
+    if original is not None:
+        with open(path, "wb") as fh:
+            fh.write(original)
+    else:
+        sh(["git", "checkout", "--", path])
 
 
 def clean_pycache():
@@ -135,12 +151,18 @@ def main():
     results = []
     for name, path, before, after, test in BREAKS:
         full = os.path.join(ROOT, path)
+        original = None
         if before is None:
             # corruption binaire d'une page du corpus fige : on altere un octet
             # au milieu du flux compresse, ce qui change le contenu
             # decompresse et donc son empreinte SHA-256
+            if not os.path.isfile(full):
+                results.append((name, test, "NON TESTABLE (corpus absent)", ""))
+                print("%-58s %s" % (name, "non testable : corpus absent"))
+                continue
             with open(full, "rb") as fh:
-                data = bytearray(fh.read())
+                original = fh.read()
+            data = bytearray(original)
             mid = len(data) // 2
             data[mid] ^= 0xFF
             with open(full, "wb") as fh:
@@ -148,16 +170,17 @@ def main():
         else:
             with open(full, encoding="utf-8") as fh:
                 text = fh.read()
+            original = text.encode("utf-8")
             if before not in text:
                 sys.stderr.write("contre_epreuve: motif introuvable dans %s\n" % path)
-                restore(path)
+                restore(path, original)
                 results.append((name, test, "MOTIF INTROUVABLE"))
                 continue
             with open(full, "w", encoding="utf-8") as fh:
                 fh.write(text.replace(before, after, 1))
         clean_pycache()
         proc = sh([sys.executable, "-B", "-m", "unittest", test])
-        restore(path)
+        restore(path, original)
         clean_pycache()
         red = proc.returncode != 0
         detail = ""
@@ -177,9 +200,14 @@ def main():
           % ("oui" if not final.stdout.strip() else "NON"))
     if final.stdout.strip():
         print(final.stdout)
-    bad = [r for r in results if r[2] != "ECHEC ATTENDU"]
+    bad = [r for r in results
+           if r[2] != "ECHEC ATTENDU" and not r[2].startswith("NON TESTABLE")]
+    tested = [r for r in results if r[2] == "ECHEC ATTENDU"]
+    untestable = [r for r in results if r[2].startswith("NON TESTABLE")]
     print("\n%d / %d contre-epreuves concluantes"
-          % (len(results) - len(bad), len(results)))
+          % (len(tested), len(tested) + len(bad)))
+    for name, _test, _status, _detail in untestable:
+        print("regle non testable ici (corpus absent) : %s" % name)
     return 0 if not bad and not final.stdout.strip() else 1
 
 

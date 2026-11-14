@@ -1,0 +1,12 @@
+# fixture f03 : description
+# source : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
+# consulte le : 2026-11-14
+# livre : com.qnx.doc.neutrino.lib_ref
+# topic : a/abort.html
+# sha256 de la page source : 92e329997dc1bd54c42552c89a519169e773a47c5a2467100a4cc6488449985e
+# symbole attendu : abort
+# lignes de l'extrait : 3
+
+The <span class="+ topic/keyword pr-d/apiname keyword apiname">abort()</span> function causes abnormal process termination to occur
+by means of the function call
+<a class="- topic/xref xref" href="../r/raise.html" title="Generate a signal"><span class="+ topic/keyword pr-d/apiname keyword apiname">raise</span>(<span class="+ topic/keyword xml-d/const keyword const">SIGABRT</span>)</a>,

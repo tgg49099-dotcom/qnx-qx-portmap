@@ -1,0 +1,12 @@
+# fixture f09 : migration
+# source : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/c_apps.html
+# consulte le : 2026-11-14
+# livre : com.qnx.doc.qnxsdp.migration
+# topic : c_apps.html
+# sha256 de la page source : 1612452124b5a0cde937dc88fc708141b268739d500037aa8bbbc1d708aa79e4
+# symbole attendu : _smalloc
+# lignes de l'extrait : 3
+
+                                <li class="- topic/li li">The following functions have been removed from
+                                                <span class="+ topic/ph sw-d/filepath ph filepath">libc</span>:
+                                                <span class="+ topic/keyword pr-d/apiname keyword apiname">_smalloc()</span>,

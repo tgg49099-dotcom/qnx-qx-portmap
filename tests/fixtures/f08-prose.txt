@@ -1,0 +1,11 @@
+# fixture f08 : prose
+# source : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.user_guide/topic/glossary.html
+# consulte le : 2026-11-14
+# livre : com.qnx.doc.neutrino.user_guide
+# topic : glossary.html
+# sha256 de la page source : b06e6a42c7289b87766711e92ed385f66d30c030c91d37aaea93ca00655d0ab1
+# symbole attendu : (aucun)
+# lignes de l'extrait : 2
+
+  <p class="- topic/p p">Changing a bit from a 0 state into a 1 state can be
+    accomplished only by erasing the <em class="+ topic/ph hi-d/i ph i">entire</em> device, setting <em class="+ topic/ph hi-d/i ph i">all</em> of the

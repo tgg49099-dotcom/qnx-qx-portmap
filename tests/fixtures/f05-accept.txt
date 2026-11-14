@@ -1,0 +1,10 @@
+# fixture f05 : index-elsewhere
+# source : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/lib-a.html
+# consulte le : 2026-11-14
+# livre : com.qnx.doc.neutrino.lib_ref
+# topic : lib-a.html
+# sha256 de la page source : 6405726420322eeb450579c9496183414667d7369ec362310b43541ad1a02160
+# symbole attendu : accept
+# lignes de l'extrait : 1
+
+    <td class="- topic/entry entry colsep-1 rowsep-0" headers="lib-a__entry__1"><span class="+ topic/keyword pr-d/apiname keyword apiname">accept(), accept4()</span></td>

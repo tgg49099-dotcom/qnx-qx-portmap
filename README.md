@@ -16,8 +16,13 @@ L'outil produit aussi une **liste de travail de mise a niveau** : les symboles a
 traiter, classes par priorite, avec pour chacun la page a lire.
 
 **Par defaut, aucun acces reseau.** L'outil lit un corpus de documentation QNX
-fige dans le depot (3 426 pages, 7.1 et 8.0), avec l'empreinte SHA-256 de
-chaque page.
+fige, local (3 426 pages, 7.1 et 8.0), avec l'empreinte SHA-256 de chaque page.
+
+**La documentation QNX n'est pas redistribuee avec ce depot.** Le corpus se
+reconstruit a la demande depuis le site officiel QNX, avec une commande et un
+journal de telechargement ; voir [Corpus QNX](#corpus-qnx--non-distribue).
+Le depot contient le code, les tests, 12 **fixtures miniatures** (extraits
+courts de pages QNX, avec URL et date) et la procedure de reconstruction.
 
 ---
 
@@ -28,10 +33,13 @@ chaque page.
 - **Aucun acces SDP n'est requis.** Ni QNX SDP, ni compilateur, ni carte cible,
   ni compte QNX, ni jeton d'API, ni acces root. L'outil ne compile rien et ne
   s'execute pas sur cible : il lit de la documentation.
-- **Le corpus fige** (44,9 Mo compresses, 3 430 fichiers) est livre dans le
-  depot, sous `corpus/`. Il est verifiable : `qnx-portmap --verify-corpus`.
-- Pour reconstruire le corpus depuis le web (`--fresh`), il faut seulement un
-  acces reseau a `https://www.qnx.com/developers/docs/`.
+- **Le corpus n'est pas livre avec le depot.** La documentation QNX est (c) QNX
+  Software Systems Ltd / BlackBerry Limited et n'est pas redistribuable : voir
+  `LICENCE-DOCS-QNX.md` et `CORPUS-NON-PUBLIE.txt`. Il se reconstruit avec une
+  seule commande, qui demande un acces reseau a
+  `https://www.qnx.com/developers/docs/` :
+  `bash scripts/bootstrap_corpus.sh --out corpus-downloaded`.
+- Le corpus reconstruit est verifiable : `qnx-portmap --verify-corpus`.
 
 ## Installation
 
@@ -52,12 +60,16 @@ L'outil cherche le corpus fige dans cet ordre :
 2. le repertoire `corpus/` du depot (a cote du paquet) ;
 3. le repertoire `corpus/` du repertoire courant.
 
-Si le corpus est ailleurs, on le designe explicitement :
+Le depot **ne contient pas** de repertoire `corpus/` : apres avoir reconstruit
+le corpus (voir plus bas), on le designate explicitement :
 
 ```bash
 QX_PORTMAP_CORPUS=/chemin/vers/corpus qnx-portmap abort
 qnx-portmap --corpus /chemin/vers/corpus abort
 ```
+
+Sans corpus, l'outil ne devine rien : il affiche `corpus introuvable` et
+sort avec le code 2.
 
 ## Utilisation
 
@@ -98,7 +110,7 @@ Sortie reelle :
 
 ```
 QX PORTMAP - etat des symboles QNX dans la documentation 8.0
-corpus fige : /work/qnx-portmap/corpus
+corpus fige : <CORPUS>
 pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
 
   abort                        documente
@@ -149,17 +161,54 @@ Les quatre statuts apparaissent dans la meme sortie : `abort` est documente,
 io-sock), `bzero` a disparu de la 8.0, et `zzz_fonction_inexistante` est
 inconnu du corpus - l'outil le dit au lieu d'inventer une reponse.
 
+`<CORPUS>` designe le repertoire du corpus utilise pour la commande
+(`QX_PORTMAP_CORPUS=...`) : le chemin depend de la machine. Ce bloc est
+compare ligne a ligne a la sortie reelle par `tests/test_readme.py`, qui
+echoue si l'outil change.
+
 ## Tests
 
 ```bash
-python3 -m unittest discover -s tests -t .     # 69 tests, aucune dependance
+python3 -m unittest discover -s tests -t .
 ```
 
-Les tests couvrent le corpus fige (integrite SHA-256 de chaque page) et les cas
-limites de la mission : symbole absent, symbole decrit ailleurs, symbole cite
-en gras, symbole duplique, liste vide, fichier de corpus corrompu. Un test
-verifie aussi que **l'exemple de sortie du README est la sortie reelle** de la
-commande ecrite juste au-dessus.
+90 tests, aucune dependance, **aucun acces reseau**. Deux cas :
+
+| Situation | Resultat |
+|---|---|
+| Corpus present (dans `corpus/`, ou via `QX_PORTMAP_CORPUS`) | 90 tests, **0 skip**, code de sortie 0 |
+| Corpus absent | 90 tests, **18 skip**, code de sortie 0 |
+
+Les 18 tests sautes sont ceux qui exigent le corpus complet (integrite
+SHA-256 de chacune des 3 426 pages, chiffres de l'index 8.0 et 7.1, reponses
+sur des symboles reels). Ils sont **sautes, jamais en echec**, avec le message :
+
+```
+corpus absent : lancer scripts/bootstrap_corpus.sh
+```
+
+Les 72 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
+`tests/test_fixtures.py` travaillent sur les **fixtures miniatures** : 12
+extraits courts (1 a 3 lignes) de pages QNX reelles, ranges dans
+`tests/fixtures/`, avec l'URL source, la date de consultation et l'empreinte
+SHA-256 de la page complete dont l'extrait est tire. Ces tests reconstruisent
+un petit corpus a partir de ces extraits et font tourner le vrai
+classificateur dessus : `abort` est documente, `errno` est une variable,
+`accept` est decrit ailleurs, `bzero` a disparu, `rw_interrupt` est cite en
+gras, `getprotobyname_r` est appele dans un autre livre, `_smalloc` est cite
+par le guide de migration, et le mot anglais `entire` n'est **pas** annonce
+comme un symbole.
+
+Les tests couvrent aussi les cas limites de la mission : symbole absent,
+symbole decrit ailleurs, symbole cite en gras, symbole duplique, liste vide,
+fichier de corpus corrompu. Un test verifie aussi que **l'exemple de sortie
+du README est la sortie reelle** de la commande ecrite juste au-dessus.
+
+Pour tout lancer avec le corpus complet :
+
+```bash
+QX_PORTMAP_CORPUS=/chemin/vers/corpus python3 -m unittest discover -s tests -t .
+```
 
 ### Contre-epreuve ROUGE
 
@@ -187,13 +236,62 @@ python3 tools/contre_epreuve.py
 Les 10 contre-epreuves sont concluantes (`10 / 10`, code de sortie 0) ; la sortie
 complete est conservee dans `docs/contre-epreuve-rouge.txt`.
 
-## Le corpus fige
+## Corpus QNX : non distribue
+
+> **the QNX documentation is not redistributed; it is downloaded from the official site on demand**
+
+La documentation QNX est (c) QNX Software Systems Ltd / BlackBerry Limited. La
+page officielle de copyright de la documentation 8.0 (consultee le 14/11/2026)
+indique que l'information de licence de chaque fichier se trouve dans le QNX
+Software Center, derriere un compte myQNX ; elle ne donne aucune autorisation
+de redistribuer les pages :
+
+<https://www.qnx.com/developers/docs/8.0/com.qnx.doc.copyright/topic/coverpage.html>
+
+Le depot public livre donc **le code (MIT), les tests, 12 fixtures miniatures
+et la procedure de reconstruction**, mais pas les 3 426 pages.
+
+### Reconstruction : la commande exacte
+
+```bash
+bash scripts/bootstrap_corpus.sh --out corpus-downloaded
+```
+
+Le script :
+
+1. telecharge la documentation depuis `https://www.qnx.com/developers/docs/`
+   (versions 8.0 et 7.1, 9 livres), avec un **delai de 1,0 s entre les
+   requetes** (le serveur est respecte) ;
+2. **journalise chaque page telechargee** dans `corpus-downloaded/download.log`
+   (date, statut, URL, taille, SHA-256) ;
+3. construit le corpus avec le meme outil que le corpus fige
+   (`tools/build_corpus.py`, deterministe : a cache identique, corpus
+   identique) ;
+4. **refuse d'ecrire dans un corpus deja fige** (et dans tout repertoire
+   place sous une archive portant le marqueur `CORPUS-FIGE.txt`).
+
+**Temps mesure** le 14/11/2026, avec un delai de 1,0 s : **27 pages en 53 s**
+(soit environ 2 s par page, requete comprise), 0 echec. Pour le corpus complet
+de 3 426 pages, il faut compter **environ 1 h 55** a ce rythme. La commande
+s'arrete a tout moment : `--max-pages N` limite le nombre de pages par livre
+(utile pour un essai).
+
+```bash
+# essai rapide (3 pages par livre)
+bash scripts/bootstrap_corpus.sh --out /tmp/essai --max-pages 3 --delay 1.0
+
+# utiliser le corpus reconstruit
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
+```
+
+### Structure du corpus
 
 ```
-corpus/
+corpus-downloaded/
   MANIFEST.json        metadonnees, comptes par livre et par version, sources
   SHA256SUMS           empreinte SHA-256 de chaque fichier stocke
-  NOTICE               avis de droit de copie (voir plus bas)
+  NOTICE               avis de droit de copie
+  download.log         journal de telechargement (une ligne par page)
   index/pages.jsonl    une ligne par page : URL, livre, sujet, SHA-256, taille
   pages/8.0/<livre>/topic/<sujet>.html.gz
   pages/7.1/<livre>/topic/<sujet>.html.gz
@@ -208,14 +306,15 @@ Les pages sont compressees en gzip **telles qu'elles ont ete telechargees** le
 14/11/2026 ; l'empreinte SHA-256 des octets originaux est inscrite dans
 `index/pages.jsonl` et verifiee par `qnx-portmap --verify-corpus`.
 
-Le corpus a ete fige avec `tools/build_corpus.py`, qui est deterministe :
-a cache identique, corpus identique.
+### Le corpus fige d'origine (archive locale, non publiee)
 
-Le corpus est **fige par un commit git local** (pas de remote, pas de push) :
+Le corpus utilise pour developper l'outil est conserve dans une archive
+locale, hors de ce depot, avec son ancrage :
 
 | Element | Valeur |
 |---|---|
-| Commit qui fige le corpus | `6a2c442` |
+| Commit d'origine qui fige le corpus | `6a2c442` |
+| Arbre git du corpus a ce commit | `a80c34bbe7873514ee031e6ea746c1157ece8393` |
 | Fichiers | 3 430 |
 | Taille | 44 942 705 octets (44,9 Mo) |
 | SHA-256 de `corpus/SHA256SUMS` | `e312cea466329a76053be0160911cf378ffb1c6ea80050a66c66186ca0023efd` |
@@ -224,6 +323,26 @@ Le corpus est **fige par un commit git local** (pas de remote, pas de push) :
 
 L'empreinte SHA-256 de **chaque page** est dans `index/pages.jsonl` :
 `qnx-portmap --verify-corpus` les recalcule toutes (3 426 pages, ~2 s).
+
+### Controle anti-fuite
+
+`scripts/controle_fuite_corpus.py` verifie que l'arbre publiable ne contient
+aucune page de la documentation QNX : comparaison des SHA-256 de chaque
+fichier publie avec la liste des SHA-256 des 3 426 pages, de chaque objet git
+du depot, et recouvrement ligne a ligne. Resultat attendu : **0
+correspondance**.
+
+```bash
+python3 scripts/controle_fuite_corpus.py --tree . \
+    --corpus /chemin/vers/corpus
+```
+
+`MANIFESTE-PUBLIE.txt` (a la racine) liste, pour chaque fichier publiable, le
+chemin, la taille et le SHA-256 ; il se regenere avec :
+
+```bash
+python3 scripts/manifeste_publie.py
+```
 
 ## Sources
 
@@ -263,12 +382,12 @@ Toutes consultees le **14/11/2026** :
 
 Le code est sous licence MIT (voir `LICENSE`).
 
-**Les pages de documentation QNX du repertoire `corpus/` ne sont pas
-couvertes par cette licence** : elles restent la propriete de QNX Software
-Systems Ltd / BlackBerry Limited (voir `corpus/NOTICE`). Avant toute
-publication du depot, il faut soit livrer le code sans le repertoire
-`corpus/` (l'utilisateur lance `qnx-portmap --fresh` une fois), soit obtenir
-une autorisation de redistribution.
+**La documentation QNX n'est pas redistribuee avec ce depot.** Les pages
+restent la propriete de QNX Software Systems Ltd / BlackBerry Limited. Les 12
+fixtures de `tests/fixtures/` sont des extraits de 1 a 3 lignes cites avec leur
+URL et leur date de consultation ; la licence MIT ne les couvre pas. Voir
+`LICENCE-DOCS-QNX.md` (page de copyright officielle, consultee le 14/11/2026)
+et `CORPUS-NON-PUBLIE.txt`.
 
 ## Comment le statut est decide
 

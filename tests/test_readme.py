@@ -13,6 +13,8 @@ from contextlib import redirect_stdout
 from qnx_portmap.cli import main
 from qnx_portmap.corpus import default_corpus_dir
 
+from .helpers import CORPUS_ABSENT_MSG
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 README = os.path.join(ROOT, "README.md")
 SYMBOLS = ["abort", "accept", "bzero", "zzz_fonction_inexistante"]
@@ -39,7 +41,7 @@ def readme_example_output():
 
 
 @unittest.skipUnless(os.path.isfile(os.path.join(default_corpus_dir(), "MANIFEST.json")),
-                     "corpus fige absent")
+                     CORPUS_ABSENT_MSG)
 class TestReadmeExample(unittest.TestCase):
     def test_readme_shows_the_real_output(self):
         expected = readme_example_output()

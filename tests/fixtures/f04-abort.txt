@@ -1,0 +1,10 @@
+# fixture f04 : index-nav
+# source : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/lib-a.html
+# consulte le : 2026-11-14
+# livre : com.qnx.doc.neutrino.lib_ref
+# topic : lib-a.html
+# sha256 de la page source : 6405726420322eeb450579c9496183414667d7369ec362310b43541ad1a02160
+# symbole attendu : abort
+# lignes de l'extrait : 1
+
+<li role="treeitem"><div data-tocid="abort-d114126e57830" class="topicref" data-id="abort" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../com.qnx.doc.neutrino.lib_ref/topic/a/abort.html" id="abort-d114126e57830-link"><span class="keyword apiname">abort()</span></a><div class="wh-tooltip"><p class="shortdesc"><em class="ph i">Raise the <span class="+ topic/keyword xml-d/const keyword const">SIGABRT</span> signal to terminate program execution</em></p></div></div></div></li>

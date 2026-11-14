@@ -3,5 +3,6 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+corpus/
 corpus-fresh/
-corpus/cache/
+corpus-downloaded/

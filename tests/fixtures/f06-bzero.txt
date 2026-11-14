@@ -1,0 +1,10 @@
+# fixture f06 : h1
+# source : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
+# consulte le : 2026-11-14
+# livre : com.qnx.doc.neutrino.lib_ref
+# topic : b/bzero.html
+# sha256 de la page source : ef2fabe3610642e68c809fcc2fd5e0f808db9b2f71aff0bc314ee1632fd975c1
+# symbole attendu : bzero
+# lignes de l'extrait : 1
+
+<h1 class="- topic/title title topictitle1" id="bzero"><span class="+ topic/keyword pr-d/apiname keyword apiname">bzero()</span></h1>

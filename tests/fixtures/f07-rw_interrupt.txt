@@ -1,0 +1,10 @@
+# fixture f07 : bold
+# source : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.building/topic/callouts/callout_rwstorage.html
+# consulte le : 2026-11-14
+# livre : com.qnx.doc.neutrino.building
+# topic : callouts/callout_rwstorage.html
+# sha256 de la page source : b7be91454b3d84ff96cbc3d26afdfc6798af515c7e98595cc643a8c29fd154fe
+# symbole attendu : rw_interrupt
+# lignes de l'extrait : 1
+
+<pre class="+ topic/pre pr-d/codeblock pre codeblock"><code>CALLOUT_START(interrupt_mask_my_board, <strong class="+ topic/ph hi-d/b ph b">rw_interrupt</strong>, patch_interrupt)

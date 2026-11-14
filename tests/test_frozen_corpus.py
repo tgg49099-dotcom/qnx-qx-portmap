@@ -12,6 +12,8 @@ import unittest
 from qnx_portmap.classify import (ABSENT, Classifier, DOCUMENTED, ELSEWHERE, UNKNOWN)
 from qnx_portmap.corpus import Corpus, default_corpus_dir
 
+from .helpers import CORPUS_ABSENT_MSG
+
 CORPUS_DIR = os.environ.get("QX_PORTMAP_CORPUS") or default_corpus_dir()
 
 
@@ -19,7 +21,7 @@ def corpus_available():
     return os.path.isfile(os.path.join(CORPUS_DIR, "MANIFEST.json"))
 
 
-@unittest.skipUnless(corpus_available(), "corpus fige absent")
+@unittest.skipUnless(corpus_available(), CORPUS_ABSENT_MSG)
 class TestFrozenCorpus(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

@@ -1,0 +1,10 @@
+# fixture f11 : index-nav
+# source : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/lib-e.html
+# consulte le : 2026-11-14
+# livre : com.qnx.doc.neutrino.lib_ref
+# topic : lib-e.html
+# sha256 de la page source : 938057fd9a72f228bbd59a52e636cf751e06e92d53311f0a3ccf38234db22c8b
+# symbole attendu : errno
+# lignes de l'extrait : 1
+
+<li role="treeitem"><div data-tocid="errno-d114126e61487" class="topicref" data-id="errno" data-state="leaf"><span role="button" class="wh-expand-btn"></span><div class="title"><a href="../../com.qnx.doc.neutrino.lib_ref/topic/e/errno.html" id="errno-d114126e61487-link"><var class="keyword varname">errno</var></a><div class="wh-tooltip"><p class="shortdesc"><em class="ph i">Thread-local error variable</em></p></div></div></div></li>

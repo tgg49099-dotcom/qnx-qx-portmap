@@ -1,0 +1,10 @@
+# fixture f10 : mention
+# source : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
+# consulte le : 2026-11-14
+# livre : com.qnx.doc.neutrino.io_sock
+# topic : socket_api.html
+# sha256 de la page source : 23dca276b71539a24c75005afae436ac89e2c22eba78c77ce628cf62282910f0
+# symbole attendu : getprotobyname_r
+# lignes de l'extrait : 1
+
+<span class="+ topic/keyword pr-d/apiname keyword apiname">getprotobyname_r()</span>
