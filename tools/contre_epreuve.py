@@ -115,9 +115,15 @@ def main():
     for name, path, before, after, test in BREAKS:
         full = os.path.join(ROOT, path)
         if before is None:
-            # corruption binaire d'une page du corpus fige
-            with open(full, "ab") as fh:
-                fh.write(b"\x00")
+            # corruption binaire d'une page du corpus fige : on altere un octet
+            # au milieu du flux compresse, ce qui change le contenu
+            # decompresse et donc son empreinte SHA-256
+            with open(full, "rb") as fh:
+                data = bytearray(fh.read())
+            mid = len(data) // 2
+            data[mid] ^= 0xFF
+            with open(full, "wb") as fh:
+                fh.write(bytes(data))
         else:
             with open(full, encoding="utf-8") as fh:
                 text = fh.read()
