@@ -1,0 +1,122 @@
+PREUVE ROUGE -> VERT DE LA MESURE J4
+===========================
+
+But : prouver que le taux J4 publie (93 %) n'est pas un chiffre maquille.
+On casse la regle, on exige que le test echoue (ROUGE), on restaure, on exige
+que le test repasse (VERT). Les sorties ci-dessous sont reelles.
+
+Fichiers concernes :
+  tools/mesure_j4.py            (la regle qui compte les symboles resolus)
+  docs/mesure-J4/mesure-J4.json (la donnee publiee)
+
+Commande de test : python3 -B -m unittest tests.test_mesure_j4
+
+------------------------------------------------------------------------
+ETAPE 1 - la regle est cassee : le taux compte aussi les symboles
+          'resolu mais decrit ailleurs' comme s'ils etaient resolus.
+------------------------------------------------------------------------
+
+Ligne cassee dans tools/mesure_j4.py :
+  -     ok = sum(1 for r in records if r["etat"] == RESOLU)
+  +     ok = sum(1 for r in records if r["etat"] in (RESOLU, AILLEURS))
+
+.......sssF..F..
+======================================================================
+FAIL: test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j4.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 106, in test_le_taux_du_script_egale_le_taux_compte_a_la_main
+    self.assertAlmostEqual(calcule, a_la_main, places=6,
+AssertionError: 90.0 != 70.0 within 6 places (20.0 difference) : le taux du script (90.0) n'est pas celui compte a la main (70.0)
+
+======================================================================
+FAIL: test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j4.TestTauxPublie.test_le_taux_du_markdown_vaut_le_taux_calcule)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 200, in test_le_taux_du_markdown_vaut_le_taux_calcule
+    self.assertEqual(taux_md, int(round(calcule)),
+AssertionError: 93 != 96 : le taux du Markdown ne vaut pas le taux calcule sur les donnees publiees
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.013s
+
+FAILED (failures=2, skipped=3)
+
+>>> RC = 1 (attendu : different de 0, le test est ROUGE)
+
+------------------------------------------------------------------------
+ETAPE 2 - la donnee publiee est cassee : 'resmgr_attach' est marque
+          'non_resolu' dans le JSON public, alors qu'il est resolu.
+------------------------------------------------------------------------
+
+Donnee cassee : symbole 'resmgr_attach', etat passe de
+  'resolu_et_cite' a 'non_resolu'.
+
+....F..sssFF.F..
+======================================================================
+FAIL: test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j4.TestEchantillon.test_les_etats_sont_exclusifs_et_complets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 157, in test_les_etats_sont_exclusifs_et_complets
+    self.assertEqual(compte.get(RESOLU, 0), publie[RESOLU])
+AssertionError: 92 != 93
+
+======================================================================
+FAIL: test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j4.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 106, in test_le_taux_du_script_egale_le_taux_compte_a_la_main
+    self.assertAlmostEqual(calcule, a_la_main, places=6,
+AssertionError: 60.0 != 70.0 within 6 places (10.0 difference) : le taux du script (60.0) n'est pas celui compte a la main (70.0)
+
+======================================================================
+FAIL: test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j4.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 114, in test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test
+    self.assertEqual(par_symbole[symbole]["etat"], etat,
+AssertionError: 'non_resolu' != 'resolu_et_cite'
+- non_resolu
++ resolu_et_cite
+ : etat publie incorrect pour resmgr_attach
+
+======================================================================
+FAIL: test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j4.TestTauxPublie.test_le_taux_du_markdown_vaut_le_taux_calcule)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 200, in test_le_taux_du_markdown_vaut_le_taux_calcule
+    self.assertEqual(taux_md, int(round(calcule)),
+AssertionError: 93 != 92 : le taux du Markdown ne vaut pas le taux calcule sur les donnees publiees
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.014s
+
+FAILED (failures=4, skipped=3)
+
+>>> RC = 1 (attendu : different de 0, le test est ROUGE)
+
+------------------------------------------------------------------------
+ETAPE 3 - restauration : le test repasse au VERT.
+------------------------------------------------------------------------
+
+SHA-256 de tools/mesure_j4.py : c7381bb4fd13f50eb824747693b6d37caab36f1d13d22447e0887b184526cf29
+  identique a l'empreinte d'avant la manipulation : oui
+SHA-256 de docs/mesure-J4/mesure-J4.json : 6b89513e173c5edceb9931171c6e0d229f2d97a39bbd770930a89d3a6f51d413
+  identique a l'empreinte d'avant la manipulation : oui
+
+.......sss......
+----------------------------------------------------------------------
+Ran 16 tests in 0.012s
+
+OK (skipped=3)
+
+>>> RC = 0 (attendu : 0, le test est VERT)
+
+========================================================================
+RESULTAT : la mesure est ROUGE quand la regle ou la donnee est cassee,
+et VERTE quand tout est restaure. Les deux etats ont ete observes
+dans ce transcript : RC 1 et RC 1 en rouge, RC 0 en vert.
+
+La regle cassee ici est aussi la 11e contre-epreuve du script
+tools/contre_epreuve.py : casser le taux doit faire echouer le test.
+========================================================================

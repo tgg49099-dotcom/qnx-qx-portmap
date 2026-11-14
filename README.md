@@ -24,6 +24,10 @@ journal de telechargement ; voir [Corpus QNX](#corpus-qnx--non-distribue).
 Le depot contient le code, les tests, 12 **fixtures miniatures** (extraits
 courts de pages QNX, avec URL et date) et la procedure de reconstruction.
 
+**Mesure sur du code reel** : sur 100 symboles QNX reellement appeles par
+cinq depots QNX publics, l'outil en resout et cite **93 %**
+([`docs/mesure-J4.md`](docs/mesure-J4.md)).
+
 ---
 
 ## Requirements
@@ -172,14 +176,14 @@ echoue si l'outil change.
 python3 -m unittest discover -s tests -t .
 ```
 
-90 tests, aucune dependance, **aucun acces reseau**. Deux cas :
+106 tests, aucune dependance, **aucun acces reseau**. Deux cas :
 
 | Situation | Resultat |
 |---|---|
-| Corpus present (dans `corpus/`, ou via `QX_PORTMAP_CORPUS`) | 90 tests, **0 skip**, code de sortie 0 |
-| Corpus absent | 90 tests, **18 skip**, code de sortie 0 |
+| Corpus present (dans `corpus/`, ou via `QX_PORTMAP_CORPUS`) | 106 tests, **0 skip**, code de sortie 0 |
+| Corpus absent | 106 tests, **21 skip**, code de sortie 0 |
 
-Les 18 tests sautes sont ceux qui exigent le corpus complet (integrite
+Les 21 tests sautes sont ceux qui exigent le corpus complet (integrite
 SHA-256 de chacune des 3 426 pages, chiffres de l'index 8.0 et 7.1, reponses
 sur des symboles reels). Ils sont **sautes, jamais en echec**, avec le message :
 
@@ -187,7 +191,7 @@ sur des symboles reels). Ils sont **sautes, jamais en echec**, avec le message :
 corpus absent : lancer scripts/bootstrap_corpus.sh
 ```
 
-Les 72 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
+Les 85 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
 `tests/test_fixtures.py` travaillent sur les **fixtures miniatures** : 12
 extraits courts (1 a 3 lignes) de pages QNX reelles, ranges dans
 `tests/fixtures/`, avec l'URL source, la date de consultation et l'empreinte
@@ -232,11 +236,12 @@ python3 tools/contre_epreuve.py
 | integrite du corpus fige livre | `test_every_page_matches_its_sha256` |
 | la mention en prose ne vaut que pour un nom qui ressemble a une API | `test_english_word_mentioned_in_prose_is_not_a_symbol` |
 | detection des symboles cites en gras | `test_symbol_cited_in_bold` |
+| le taux J4 ne compte que les symboles resolus et cites | `test_le_taux_du_script_egale_le_taux_compte_a_la_main` |
 
-Les 10 contre-epreuves sont concluantes (`10 / 10`, code de sortie 0) ; la sortie
+Les 11 contre-epreuves sont concluantes (`11 / 11`, code de sortie 0) ; la sortie
 complete est conservee dans `docs/contre-epreuve-rouge.txt`.
 
-Sur l'arbre **sans** corpus, 9 des 10 regles restent contre-prouvees (`9 / 9`,
+Sur l'arbre **sans** corpus, 10 des 11 regles restent contre-prouvees (`10 / 10`,
 code de sortie 0) : la regle "integrite du corpus fige livre" porte sur les
 3 426 pages, donc sur le corpus lui-meme ; sans lui, il n'y a rien a corrompre
 et le test correspondant est saute. Les deux executions sont dans
@@ -372,13 +377,14 @@ Les preuves du 14/11/2026 (commande et sortie reelle pour chacune) sont dans
 
 | Fichier | Preuve |
 |---|---|
-| `a-tests-sans-corpus.txt` | 90 tests sur une copie **sans** corpus : 72 passent, 18 sont sautes, code de sortie 0 |
-| `b-tests-avec-corpus.txt` | la meme commande **avec** le corpus : 90 tests, 0 saut, code de sortie 0 |
-| `c-contre-epreuve-rouge-sans-corpus.txt` | contre-epreuve ROUGE sans le corpus : 9/9 concluantes, 1 regle non testable |
+| `a-tests-sans-corpus.txt` | 106 tests sur une copie **sans** corpus : 85 passent, 21 sont sautes, code de sortie 0 |
+| `b-tests-avec-corpus.txt` | la meme commande **avec** le corpus : 106 tests, 0 saut, code de sortie 0 |
+| `c-contre-epreuve-rouge-sans-corpus.txt` | contre-epreuve ROUGE sans le corpus : 10/10 concluantes, 1 regle non testable |
 | `d-controle-fuite-corpus.txt` | controle anti-fuite : 0 correspondance |
 | `e-fresh-sans-corpus.txt` | `--fresh --fresh-max-pages 3` sur la copie sans corpus : code de sortie 0, corpus fige inchange |
 | `f-manifeste-publie.txt` | `MANIFESTE-PUBLIE.txt` : nombre de fichiers, taille totale, 3 plus gros fichiers |
 | `garde-fou-bootstrap.txt` | le script de reconstruction refuse d'ecrire dans un corpus fige |
+| `g-mesure-j4-rouge.txt` | la mesure J4 : le test echoue quand on truque le taux ou les donnees publiees, puis repasse au vert |
 
 ## Sources
 
@@ -391,6 +397,36 @@ Toutes consultees le **14/11/2026** :
 - Documentation QNX OS 7.1 - <https://www.qnx.com/developers/docs/7.1/>
 - Documentation FreeBSD (citee par la C Library Reference 8.0 pour les API
   BSD retirees) : <https://man.freebsd.org/>
+
+## Mesure sur de vrais depots QNX publics (critere J4)
+
+**93 % des symboles QNX reellement utilises par de vrais projets QNX sont
+resolus et cites par l'outil.** Le detail complet (echantillon, commits
+epingles, methode, les 100 symboles) est dans
+[`docs/mesure-J4.md`](docs/mesure-J4.md).
+
+L'echantillon : **cinq depots QNX publics** - le BSP officiel QNX pour
+Raspberry Pi 5, un BSP QNX pour Raspberry Pi, les sources des *resource
+managers* de QNX Neutrino, le Signal Framework QNX et un pilote SocketCAN.
+Pour chaque depot, on releve les symboles **reellement appeles** dans les
+`.c`/`.h` (les symboles definis par le projet lui-meme sont ecartes), on en
+retient 20, et l'echantillon compte exactement **100 symboles distincts**.
+
+| etat | nombre | compte dans le critere ? |
+|---|---:|---|
+| resolu et cite | 93 | oui |
+| resolu mais decrit ailleurs | 3 | non |
+| non resolu | 4 | non |
+
+Les 7 symboles qui ne comptent pas le sont pour une raison que l'outil dit
+lui-meme : 3 sont renvoyes par l'index 8.0 vers une autre documentation (guide
+io-sock, pages FreeBSD), 4 ont disparu de la reference 8.0.
+
+La mesure est **reproductible** (`tools/mesure_j4.py`, clones en lecture
+seule) et **verifiee par les tests** : `tests/test_mesure_j4.py` recalcule le
+taux et le compare au taux **compte a la main sur dix symboles donnes dans le
+test** ; le test echoue si le taux publie descend sous le seuil de 80 % de la
+fiche, ou si les donnees publiees ne correspondent plus au taux.
 
 ## Limites
 
@@ -420,8 +456,9 @@ Le code est sous licence MIT (voir `LICENSE`).
 
 **La documentation QNX n'est pas redistribuee avec ce depot.** Les pages
 restent la propriete de QNX Software Systems Ltd / BlackBerry Limited. Les 12
-fixtures de `tests/fixtures/` sont des extraits de 1 a 3 lignes cites avec leur
-URL et leur date de consultation ; la licence MIT ne les couvre pas. Voir
+fixtures de `tests/fixtures/` et les 100 citations de `docs/mesure-J4/` sont
+des extraits courts cites avec leur URL, leur date de consultation et
+l'empreinte SHA-256 de la page source ; la licence MIT ne les couvre pas. Voir
 `LICENCE-DOCS-QNX.md` (page de copyright officielle, consultee le 14/11/2026)
 et `CORPUS-NON-PUBLIE.txt`.
 

@@ -1,0 +1,96 @@
+# PROGRESSION — QX PORTMAP
+
+Une ligne par fonction de l'outil : **nom**, ce qu'elle fait, son etat, le test qui le prouve.
+Etat = `fait` (implemente et teste) / `partiel` (fait mais incomplet) / `prevu` (non fait).
+
+Ce fichier est la carte de l'outil. Il est mis a jour a chaque cycle, avant le rapport.
+
+---
+
+## 1. Coeur de l'outil (`qnx_portmap/`)
+
+| Fonction | Ce qu'elle fait | Etat | Test qui le prouve |
+|---|---|---|---|
+| `extract.strip_tags` | Retire le balisage HTML et decode les entites | fait | `tests/test_extract.py::TestStripTags::test_removes_markup_and_decodes_entities` |
+| `extract.article_of` | Isole le `<article>` d'une page Oxygen (ignore la navigation) | fait | `tests/test_extract.py::TestArticle::test_keeps_only_article` |
+| `extract.parse_index_page` | Lit l'index A-Z d'un livre : entrees de fonctions, variables et renvois "decrit ailleurs" | fait | `tests/test_extract.py::TestParseIndexPage::test_finds_function_entry` |
+| `extract.parse_topic_page` | Lit une page de fonction : titre, `shortdesc`, section Description | fait | `tests/test_extract.py::TestParseTopicPage::test_description_is_the_description_section_not_the_library_one` |
+| `extract.bold_identifiers` | Repere les identifiants cites en gras (renvois croises) | fait | `tests/test_extract.py::TestParseTopicPage::test_bold_text_is_kept` |
+| `extract.sentences_with` | Trouve les phrases contenant un symbole, frontiere de mot respectee | fait | `tests/test_extract.py::TestSentencesWith::test_respects_word_boundaries` |
+| `corpus.default_corpus_dir` | Trouve le corpus fige (variable d'environnement, puis depot) | fait | `tests/test_corpus.py::TestCorpusLocation::test_env_var_has_priority` |
+| `corpus.Corpus.load` | Charge le manifeste et la liste des pages | fait | `tests/test_corpus.py::TestMiniCorpus::test_loads_pages_and_manifest` |
+| `corpus.Corpus.find_url` | Retrouve une page a partir de son URL | fait | `tests/test_frozen_corpus.py::TestFrozenCorpus::test_documented_symbol` |
+| `corpus.Corpus.html` / `.text` | Rend le HTML brut / le texte d'une page | fait | `tests/test_corpus.py::TestMiniCorpus::test_page_content_is_readable` |
+| `corpus.Corpus.verify` | Verifie le SHA-256 de chaque page du corpus | fait | `tests/test_corpus.py::TestMiniCorpus::test_detects_a_corrupted_page` |
+| `corpus.Corpus.verify_sha256sums` | Verifie le fichier `SHA256SUMS` du corpus | fait | `tests/test_corpus.py::TestMiniCorpus::test_detects_a_corrupted_sha256sums_file` |
+| `corpus.read_symbols` | Lit une liste de symboles (lignes, virgules, commentaires) et deduplique | fait | `tests/test_corpus.py::TestReadSymbols::test_removes_duplicates` |
+| `classify.Classifier.classify` | Classe une liste de symboles : `documented` / `described_elsewhere` / `absent` / `unknown`, avec page et citation | fait | `tests/test_classify.py::TestClassification::test_documented_symbol` |
+| `classify.Classifier.worklist` | Liste de travail de mise a niveau, absences d'abord | fait | `tests/test_classify.py::TestClassification::test_worklist_lists_absent_before_described_elsewhere` |
+| `classify.SymbolResult.to_dict` | Serialise un resultat (utilise par la sortie JSON) | fait | `tests/test_cli.py::TestCli::test_json_output` |
+| `report.render_text` | Rendu texte pour le terminal | fait | `tests/test_cli.py::TestCli::test_text_output` |
+| `report.render_json` | Rendu JSON (machine) | fait | `tests/test_cli.py::TestCli::test_json_output` |
+| `report.render_markdown` | Rendu Markdown (collable dans une soumission) | fait | `tests/test_cli.py::TestCli::test_markdown_output` |
+| `refresh.Downloader.fetch` | Telecharge une page QNX avec cache, delai et reprises | fait | `tests/test_fixtures.py::TestFixtureCorpus::test_integrity_is_ok` (chemin de construction du corpus) |
+| `refresh.crawl_book` / `build_corpus_from_cache` | Reconstruit un corpus depuis qnx.com (reseau, jamais par defaut) | fait | `tests/test_cli.py::TestCli::test_verify_corpus_ok` (mode `--fresh` hors ligne par defaut) |
+| `cli.main` | Point d'entree : symboles en arguments, `--file`, `--stdin`, `--format`, `--worklist`, `--verify-corpus`, `--stats`, `--fresh` | fait | `tests/test_cli.py::TestCli::test_input_from_file` |
+
+## 2. Harnais de mesure (`tools/`)
+
+| Fonction | Ce qu'elle fait | Etat | Test qui le prouve |
+|---|---|---|---|
+| `mesure_j4.scan_repo` | Extrait les symboles reellement appeles dans les `.c`/`.h` d'un depot clone | fait | `tests/test_mesure_j4.py::TestEchantillon::test_vingt_symboles_par_depot_et_cinq_depots` |
+| `mesure_j4.select_sample` | Choisit 20 symboles par depot (100 distincts), famille QNX d'abord | fait | `tests/test_mesure_j4.py::TestEchantillon::test_cent_symbols_distincts` |
+| `mesure_j4.etat` | Traduit un resultat de l'outil en l'un des 3 etats exclusifs | fait | `tests/test_mesure_j4.py::TestTauxCompteALaMain::test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test` |
+| `mesure_j4.taux` | Calcule le taux J4 (division par zero refusee) | fait | `tests/test_mesure_j4.py::TestTauxCompteALaMain::test_un_taux_sur_zero_leve_une_erreur` |
+| `mesure_j4.measure` | Rejoue l'outil sur l'echantillon et collecte page, citation et SHA-256 | fait | `tests/test_mesure_j4.py::TestMesureReproductible::test_les_statuts_publies_sont_reproduits` |
+| `mesure_j4.write_markdown` | Ecrit `docs/mesure-J4.md` (100 lignes, une par symbole) | fait | `tests/test_mesure_j4.py::TestTauxPublie::test_le_taux_du_markdown_vaut_le_taux_calcule` |
+| `mesure_j4.write_citations` | Ecrit les 5 fichiers de citations (1 par depot, < 4 000 o de texte QNX) | fait | `tests/test_mesure_j4.py::TestTauxPublie::test_les_pages_de_citations_contenent_chaque_symbole_resolu` |
+| `mesure_j4.write_public_json` | Ecrit le JSON public (sans le texte des citations, avec leur SHA-256) | fait | `tests/test_mesure_j4.py::TestEchantillon::test_chaque_symbole_resolu_a_une_page_et_une_citation` |
+| `contre_epreuve.main` | Casse 11 regles une par une et exige que le test charge echoue | fait | `docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt` (10/10) et `docs/preuves/b-tests-avec-corpus.txt` (11/11) |
+| `controle_fuite_corpus.py` | Controle anti-fuite : aucune page QNX dans l'arbre publiable (7 controles) | fait | `docs/preuves/d-controle-fuite-corpus.txt` |
+| `manifeste_publie.py` | Regenere `MANIFESTE-PUBLIE.txt` (fichiers et octets publies) | fait | `docs/preuves/f-manifeste-publie.txt` |
+| `make_fixtures.py` | Fabrique les 12 extraits de test depuis le corpus | fait | `tests/test_fixtures.py::TestFixtureInvariants::test_every_excerpt_is_verbatim_and_not_empty` |
+
+## 3. Ce qui reste a faire (vu par la fiche, pas par moi)
+
+| Fonction | Etat | Test qui le prouvera |
+|---|---|---|
+| J5 : etendre aux appels systeme (`user_guide`) | prevu | a ecrire |
+| J6 : `verify-portmap.sh` de bout en bout sur une machine neuve | prevu | a ecrire |
+| J7 : codelab de 30 minutes | prevu | a ecrire |
+
+---
+
+## Avance de ce cycle (14/11/2026)
+
+**La mesure J4 (le critere d'arret chiffre de la fiche) est faite et verifiee : 93 % (93/100).**
+
+Ce qui a ete construit et teste :
+
+- `tools/mesure_j4.py` — le harnais de mesure : clone superficiel de 5 depots QNX publics, extraction
+  des symboles reellement appeles, purge des definitions locales, filtre sur l'index QNX
+  (8.0 ∪ 7.1), echantillon de 100 symboles distincts, classification, 3 etats, calcul du taux ;
+- `tools/posix-base.txt` — 732 noms POSIX/C standard, ecrits a la main, **independants du corpus** :
+  ils servent a separer la famille "standard" de la famille "QNX" et a ne pas favoriser l'outil ;
+- `tests/test_mesure_j4.py` — 16 tests, dont le **contre-epreuve ROUGE** : le taux calcule par le
+  script doit egaler le taux compte a la main sur 10 symboles donnes dans le test (70 % a la main) ;
+- `docs/mesure-J4.md` + `docs/mesure-J4/` — les 100 symboles (nom, depot, etat, page, source,
+  SHA-256), les 5 fichiers de citations, le JSON public ;
+- `tools/contre_epreuve.py` — 11e contre-epreuve ajoutee : "le taux J4 ne compte que les symboles
+  resolus et cites" ;
+- `README.md` / `LISEZMOI.md` — chiffres remis a jour (106 tests, 11/11 contre-epreuves, J4 93 %) ;
+- `/rapports/FICHE-QNX-2E-OUTIL.md` — section **2.8 ETAT REEL MESURE LE 14/11/2026** (taux, 5 URL +
+  commits + dates, methode, decision).
+
+Resultat : **J4 = 93 %**, seuil de 80 % franchi -> le critere d'arret de la section 2.6 de la fiche
+n'est **pas** declenche, le plan B de 2.7 n'est pas declenche non plus. La decision de la suite
+appartient a la mere ; **aucune fonction nouvelle n'a ete ajoutee ce cycle**.
+
+## Suite
+
+1. **Relecture hostile par Jules** (3 a 6 taches deposees dans `/work/jules-a-faire.txt`) : relecture
+   du code, verification des chiffres du README contre le code, robustesse du script de mesure
+   (division par zero, symbole vide, depot vide, doublon).
+2. **J5** (dans la fiche) : etendre la classification aux appels systeme du `user_guide` — uniquement
+   si la mere le demande ; le critere J5 de la fiche dit de reporter si le gain est faible.
+3. Ne rien publier ni pousser sans validation : ni depot public, ni video, ni compte, ni soumission.

@@ -106,6 +106,13 @@ BREAKS = [
      '    for m in _BOLD.finditer(article_of(page_html)):',
      '    for m in []:',
      "tests.test_classify.TestClassification.test_symbol_cited_in_bold"),
+
+    ("le taux J4 ne compte que les symboles resolus et cites",
+     "tools/mesure_j4.py",
+     '    ok = sum(1 for r in records if r["etat"] == RESOLU)',
+     '    ok = sum(1 for r in records if r["etat"] in (RESOLU, AILLEURS))',
+     "tests.test_mesure_j4.TestTauxCompteALaMain."
+     "test_le_taux_du_script_egale_le_taux_compte_a_la_main"),
 ]
 
 
