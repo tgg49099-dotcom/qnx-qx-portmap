@@ -152,7 +152,7 @@ inconnu du corpus - l'outil le dit au lieu d'inventer une reponse.
 ## Tests
 
 ```bash
-python3 -m unittest discover -s tests -t .     # 68 tests, aucune dependance
+python3 -m unittest discover -s tests -t .     # 69 tests, aucune dependance
 ```
 
 Les tests couvrent le corpus fige (integrite SHA-256 de chaque page) et les cas
@@ -181,8 +181,10 @@ python3 tools/contre_epreuve.py
 | statut inconnu pour un symbole hors corpus | `test_unknown_symbol` |
 | deduplication de la liste de symboles | `test_duplicate_symbol_is_reported_once` |
 | integrite du corpus fige livre | `test_every_page_matches_its_sha256` |
+| la mention en prose ne vaut que pour un nom qui ressemble a une API | `test_english_word_mentioned_in_prose_is_not_a_symbol` |
+| detection des symboles cites en gras | `test_symbol_cited_in_bold` |
 
-Les 8 contre-epreuves sont concluantes (`8 / 8`, code de sortie 0) ; la sortie
+Les 10 contre-epreuves sont concluantes (`10 / 10`, code de sortie 0) ; la sortie
 complete est conservee dans `docs/contre-epreuve-rouge.txt`.
 
 ## Le corpus fige

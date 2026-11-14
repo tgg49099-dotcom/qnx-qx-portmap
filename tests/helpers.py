@@ -129,7 +129,7 @@ def build_mini_corpus(root, corrupt=None):
     # page d'un autre livre : un mot anglais rencontre en prose
     add("8.0", USER_GUIDE, "prose.html", topic_html(
         "8.0", USER_GUIDE, "prose.html", "Prose", "A page with English words",
-        "The argument of the call is checked at runtime, and the result is normal."))
+        "The argument of the call is checked at runtime, and the result is normal ( normal )."))
 
     # --- 7.1 : meme index, mais avec gone() en plus
     add("7.1", LIB_REF, "lib-a.html", index_html(

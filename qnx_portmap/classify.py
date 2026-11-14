@@ -145,8 +145,10 @@ class Classifier(object):
 
         ``call_form`` : ne retenir que les occurrences de la forme
         ``symbole(`` (appel de fonction). Sinon, n'importe quelle mention
-        avec frontiere de mot — dans ce cas, la mention n'est retenue que
-        si le symbole ressemble a un nom d'API (voir ``_is_api_name``).
+        avec frontiere de mot.
+
+        Dans les deux cas, le symbole doit ressembler a un nom d'API (voir
+        ``_is_api_name``) : sinon c'est un mot de la langue anglaise.
 
         Retourne {symbole: (page, phrase)}.
         """
@@ -177,11 +179,11 @@ class Classifier(object):
                 sentences = sentences_with(text, sym, limit=1, call_form=call_form)
                 if not sentences:
                     continue
-                if not call_form and not self._is_api_name(sym):
-                    # mention en prose : on ne retient que les symboles dont le
-                    # nom ressemble a un nom d'API. Un mot anglais rencontre
-                    # dans une phrase ("argument", "current") n'est pas un
-                    # symbole QNX : le dire serait faux.
+                if not self._is_api_name(sym):
+                    # Un mot anglais rencontre dans une phrase ("argument",
+                    # "current") ou un nom de parametre suivi de "(" dans un
+                    # extrait de code n'est pas un symbole QNX : l'annoncer
+                    # comme "decrit ailleurs" serait faux.
                     continue
                 found[sym] = (page, sentences[0])
         return found
