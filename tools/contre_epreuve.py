@@ -79,6 +79,27 @@ BREAKS = [
      None,                       # corruption binaire, traite a part
      None,
      "tests.test_frozen_corpus.TestFrozenCorpus.test_every_page_matches_its_sha256"),
+
+    ("la mention en prose ne vaut que pour un nom qui ressemble a une API",
+     "qnx_portmap/classify.py",
+     '                if not call_form and not self._is_api_name(sym):\n'
+     '                    # mention en prose : on ne retient que les symboles dont le\n'
+     '                    # nom ressemble a un nom d\'API. Un mot anglais rencontre\n'
+     '                    # dans une phrase ("argument", "current") n\'est pas un\n'
+     '                    # symbole QNX : le dire serait faux.\n'
+     '                    continue',
+     '                if not call_form and not self._is_api_name(sym):\n'
+     '                    # regle cassee volontairement : la mention en prose est\n'
+     '                    # acceptee quel que soit le nom\n'
+     '                    pass',
+     "tests.test_classify.TestClassification."
+     "test_english_word_mentioned_in_prose_is_not_a_symbol"),
+
+    ("detection des symboles cites en gras",
+     "qnx_portmap/extract.py",
+     '    for m in _BOLD.finditer(article_of(page_html)):',
+     '    for m in []:',
+     "tests.test_classify.TestClassification.test_symbol_cited_in_bold"),
 ]
 
 

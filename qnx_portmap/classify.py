@@ -22,7 +22,8 @@ Chaque reponse porte la page officielle et la citation exacte.
 import re
 
 from .corpus import LIB_REF_BOOK
-from .extract import parse_index_page, parse_topic_page, sentences_with, strip_tags
+from .extract import (bold_identifiers, parse_index_page, parse_topic_page,
+                      sentences_with, strip_tags)
 
 DOCUMENTED = "documented"
 ELSEWHERE = "described_elsewhere"
@@ -30,6 +31,11 @@ ABSENT = "absent"
 UNKNOWN = "unknown"
 
 STATUS_ORDER = {DOCUMENTED: 0, ELSEWHERE: 1, ABSENT: 2, UNKNOWN: 3}
+
+# Un nom d'API contient presque toujours une majuscule ou un tiret bas
+# (``pthread_create``, ``MSG_...``) : un mot entierement en minuscules sans
+# tiret bas ("argument", "any") est un mot anglais, pas un symbole.
+_API_SHAPED = re.compile(r"[A-Z_]")
 
 # Priorite de la liste de travail (1 = le plus urgent).
 WORKLIST_PRIORITY = {
@@ -103,6 +109,7 @@ class Classifier(object):
         self.prev_elsewhere = {}
         self._load_indexes()
         self._scan_cache = {}
+        self._bold_cache = {}
         self._migration_text = None
 
     # -- index ------------------------------------------------------------
@@ -138,7 +145,8 @@ class Classifier(object):
 
         ``call_form`` : ne retenir que les occurrences de la forme
         ``symbole(`` (appel de fonction). Sinon, n'importe quelle mention
-        avec frontiere de mot.
+        avec frontiere de mot — dans ce cas, la mention n'est retenue que
+        si le symbole ressemble a un nom d'API (voir ``_is_api_name``).
 
         Retourne {symbole: (page, phrase)}.
         """
@@ -160,15 +168,41 @@ class Classifier(object):
             text = self._article_text(page)
             if not text:
                 continue
+            bold = None
             for sym, rx in patterns.items():
                 if sym in found:
                     continue
                 if sym not in text:      # test rapide, sans expression reguliere
                     continue
                 sentences = sentences_with(text, sym, limit=1, call_form=call_form)
-                if sentences:
-                    found[sym] = (page, sentences[0])
+                if not sentences:
+                    continue
+                if not call_form and not self._is_api_name(sym):
+                    # mention en prose : on ne retient que les symboles dont le
+                    # nom ressemble a un nom d'API. Un mot anglais rencontre
+                    # dans une phrase ("argument", "current") n'est pas un
+                    # symbole QNX : le dire serait faux.
+                    continue
+                found[sym] = (page, sentences[0])
         return found
+
+    def _bold_ids(self, page):
+        """Identifiants cites en gras dans une page (cache)."""
+        key = (page.version, page.book, page.topic)
+        if key not in self._bold_cache:
+            self._bold_cache[key] = bold_identifiers(self.corpus.html(page))
+        return self._bold_cache[key]
+
+    def _is_api_name(self, sym):
+        """Le symbole ressemble-t-il a un nom d'API plutot qu'a un mot ?
+
+        Vrai si le symbole figure dans un index QNX (donc si la doc le
+        connait comme symbole) ou si son nom contient une majuscule ou un
+        tiret bas (``pthread_create``, ``MSG_NOTIFY``).
+        """
+        if sym in self.entries or sym in self.prev_entries:
+            return True
+        return bool(_API_SHAPED.search(sym))
 
     def _migration_mentions(self, symbols):
         """Symboles cites par le guide officiel de migration vers 8.0."""
@@ -248,7 +282,8 @@ class Classifier(object):
                     res.url = page.url
                     res.citation = sentence
                     res.citation_source = "%s, %s" % (page.book, page.topic)
-                    res.citation_kind = "mention"
+                    res.citation_kind = ("cite en gras" if sym in self._bold_ids(page)
+                                         else "mention")
                     res.note = ("seulement mentionne dans la documentation %s (livre %s) : "
                                 "a verifier, le symbole peut n'etre plus un appel de fonction"
                                 % (self.version, page.book))

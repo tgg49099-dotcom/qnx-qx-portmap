@@ -225,6 +225,20 @@ def parse_topic_page(page_html):
             "names": names, "bold": bold}
 
 
+def bold_identifiers(page_html):
+    """Identifiants cites en gras dans le corps de la page.
+
+    Un symbole mis en gras par la documentation officielle est une mention
+    deliberee : c'est ce qui distingue ``rw_interrupt`` (un nom d'API) de
+    ``argument`` (un mot anglais rencontre dans une phrase).
+    """
+    out = set()
+    for m in _BOLD.finditer(article_of(page_html)):
+        for name in _IDENTIFIER.findall(strip_tags(m.group(1))):
+            out.add(name)
+    return out
+
+
 def sentences_with(text, needle, limit=3, max_len=320, call_form=False):
     """Sentences de ``text`` qui contiennent ``needle`` (identifiant exact).
 

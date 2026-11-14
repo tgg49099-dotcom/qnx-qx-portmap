@@ -66,7 +66,10 @@ def render_text(results, worklist, corpus, version="8.0", previous="7.1", width=
         for extra in res.see_urls[1:]:
             out.append("    voir   : %s" % extra)
         if res.citation:
-            out.append("    citation (%s) :" % res.citation_source)
+            source = res.citation_source
+            if res.citation_kind:
+                source = "%s, %s" % (source, res.citation_kind)
+            out.append("    citation (%s) :" % source)
             out.extend(_wrap(res.citation, width - 6, "      "))
         if res.detail:
             out.append("    detail :")

@@ -116,10 +116,11 @@ def build_mini_corpus(root, corrupt=None):
         "8.0", LIB_REF, "w/widget.html", "widget", "The widget handle",
         "The widget variable holds the handle of the current widget."))
 
-    # page d'un autre livre : un symbole cite en gras
+    # page d'un autre livre : un symbole cite en gras, et qui n'existe
+    # que sous cette forme (aucun appel "nom(" dans la page)
     add("8.0", USER_GUIDE, "bold.html", topic_html(
         "8.0", USER_GUIDE, "bold.html", "Bold", "A page with a bold symbol",
-        "The <strong>bolded</strong> symbol is described here in bold."))
+        "The <strong>bold_api</strong> symbol is described here in bold."))
 
     add("8.0", USER_GUIDE, "vanish.html", topic_html(
         "8.0", USER_GUIDE, "vanish.html", "vanish", "The vanished widget",

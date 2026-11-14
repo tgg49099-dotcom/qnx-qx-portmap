@@ -125,7 +125,7 @@ pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
 
   bzero                        absent de la 8.0
     page   : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
-    citation (index C Library Reference 7.1) :
+    citation (index C Library Reference 7.1, entree d'index) :
       Set the first part of an object to null bytes
     note   : present dans la C Library Reference 7.1, absent de tout le corpus 8.0
 
@@ -280,7 +280,14 @@ une autorisation de redistribution.
 3. **Corps du corpus** : sinon, le corps de toutes les pages 8.0 est
    parcouru. Une occurrence de la forme `symbole(` donne `described_elsewhere`
    (citation `appel de fonction`) ; une simple mention en prose donne aussi
-   `described_elsewhere` (citation `mention`).
+   `described_elsewhere` (citation `mention`), **a une condition** : le
+   symbole doit ressembler a un nom d'API, c'est-a-dire figurer dans un index
+   QNX ou s'ecrire avec une majuscule ou un tiret bas (`pthread_create`,
+   `MSG_NOTIFY`). Sans cette condition, un mot anglais rencontre dans une
+   phrase (`argument`, `current`, `valid`) serait annonce comme un symbole
+   QNX, ce qui serait faux. Une mention en **gras** dans la page officielle
+   est signalee comme telle (citation `cite en gras`) : c'est une mention
+   deliberee de la documentation.
 4. **Absent** : le symbole est dans l'index 7.1 mais nulle part dans le corpus
    8.0 -> `absent`, avec sa page 7.1 et sa description.
 5. **Inconnu** : sinon -> `unknown`.

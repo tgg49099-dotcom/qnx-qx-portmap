@@ -75,14 +75,30 @@ class TestClassification(unittest.TestCase):
         self.assertEqual(res.citation_kind, "")
 
     def test_symbol_cited_in_bold(self):
-        """Cas limite : symbole cite en gras dans une page de la 8.0."""
-        res = self.classify_one("bolded")
+        """Cas limite : symbole cite en gras dans une page de la 8.0.
+
+        Le symbole n'apparait qu'en gras, jamais sous la forme "nom(" :
+        l'outil doit quand meme le trouver, et dire qu'il est cite en gras.
+        """
+        res = self.classify_one("bold_api")
         self.assertEqual(res.status, ELSEWHERE)
         self.assertTrue(res.url.endswith("neutrino.user_guide/topic/bold.html"), res.url)
-        self.assertIn("bolded", res.citation)
+        self.assertIn("bold_api", res.citation)
+        self.assertEqual(res.citation_kind, "cite en gras")
         # la citation vient bien d'un <strong> dans la page officielle
         page = self.corpus.find_url(res.url)
-        self.assertIn("<strong>bolded</strong>", self.corpus.html(page))
+        self.assertIn("<strong>bold_api</strong>", self.corpus.html(page))
+
+    def test_english_word_mentioned_in_prose_is_not_a_symbol(self):
+        """Cas limite : un mot anglais rencontre en prose n'est pas un symbole.
+
+        "argument" apparait dans une phrase de la page officielle : le
+        qualifier de "decrit ailleurs" serait faux. L'outil doit dire
+        "inconnu du corpus".
+        """
+        res = self.classify_one("argument")
+        self.assertEqual(res.status, UNKNOWN)
+        self.assertEqual(res.citation, "")
 
     def test_duplicate_symbol_is_reported_once(self):
         """Cas limite : symbole duplique dans la liste d'entree."""
