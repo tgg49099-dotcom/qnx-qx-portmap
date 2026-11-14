@@ -1,7 +1,8 @@
 Contre-epreuve ROUGE de QX PORTMAP
 Commande : python3 tools/contre_epreuve.py
 Date : 14/11/2026
-Depot : /work/qnx-portmap (git local, commit 43e4057)
+Depot : /work/qnx-portmap (git local, commit 7f037ae)
+Code de sortie : 0 (les 10 contre-epreuves sont concluantes)
 
 Contre-epreuve ROUGE de QX PORTMAP
 On casse une regle a la fois ; le test charge doit echouer.
@@ -22,7 +23,11 @@ deduplication de la liste de symboles                      test rouge OK
     FAIL: test_duplicate_symbol_is_reported_once (tests.test_classify.TestClassification.test_duplicate_symbol_is_reported_once)
 integrite du corpus fige livre                             test rouge OK
     FAIL: test_every_page_matches_its_sha256 (tests.test_frozen_corpus.TestFrozenCorpus.test_every_page_matches_its_sha256)
+la mention en prose ne vaut que pour un nom qui ressemble a une API test rouge OK
+    FAIL: test_english_word_mentioned_in_prose_is_not_a_symbol (tests.test_classify.TestClassification.test_english_word_mentioned_in_prose_is_not_a_symbol)
+detection des symboles cites en gras                       test rouge OK
+    FAIL: test_symbol_cited_in_bold (tests.test_classify.TestClassification.test_symbol_cited_in_bold)
 
 Depot propre apres contre-epreuve : oui
 
-8 / 8 contre-epreuves concluantes
+10 / 10 contre-epreuves concluantes

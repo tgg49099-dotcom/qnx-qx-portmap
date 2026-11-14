@@ -279,17 +279,17 @@ une autorisation de redistribution.
 2. **Renvois "described elsewhere"** : le tableau de la meme page d'index
    renvoie vers la documentation FreeBSD ou le guide io-sock pour un certain
    nombre de symbols -> `described_elsewhere`, avec la phrase exacte du renvoi.
-3. **Corps du corpus** : sinon, le corps de toutes les pages 8.0 est
-   parcouru. Une occurrence de la forme `symbole(` donne `described_elsewhere`
-   (citation `appel de fonction`) ; une simple mention en prose donne aussi
-   `described_elsewhere` (citation `mention`), **a une condition** : le
-   symbole doit ressembler a un nom d'API, c'est-a-dire figurer dans un index
-   QNX ou s'ecrire avec une majuscule ou un tiret bas (`pthread_create`,
-   `MSG_NOTIFY`). Sans cette condition, un mot anglais rencontre dans une
-   phrase (`argument`, `current`, `valid`) serait annonce comme un symbole
-   QNX, ce qui serait faux. Une mention en **gras** dans la page officielle
-   est signalee comme telle (citation `cite en gras`) : c'est une mention
-   deliberee de la documentation.
+3. **Corps du corpus** : sinon, le corps de toutes les pages 8.0 est parcouru
+   en **deux passes**. 1re passe : une occurrence de la forme `symbole(`.
+   2e passe : une simple mention en prose. Dans les deux passes, le symbole
+   doit **ressembler a un nom d'API** : figurer dans un index QNX, ou
+   s'ecrire avec une majuscule ou un tiret bas (`pthread_create`, `MSG_NOTIFY`).
+   Sans cette condition, un mot anglais rencontre dans une phrase (`argument`,
+   `current`, `valid`) ou un nom de parametre suivi de `(` dans un extrait de
+   code serait annonce comme un symbole QNX : ce serait faux. La citation
+   indique la nature de la rencontre : `appel de fonction` ou `mention` ; une
+   mention en **gras** dans la page officielle est signalee `cite en gras`,
+   car c'est une mention deliberee de la documentation.
 4. **Absent** : le symbole est dans l'index 7.1 mais nulle part dans le corpus
    8.0 -> `absent`, avec sa page 7.1 et sa description.
 5. **Inconnu** : sinon -> `unknown`.
