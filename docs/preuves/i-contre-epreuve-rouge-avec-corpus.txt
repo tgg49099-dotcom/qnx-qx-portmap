@@ -1,3 +1,16 @@
+PREUVE (i) - CONTRE-EPREUVE ROUGE AVEC LE CORPUS
+Date : 15/11/2026
+
+Copie de travail : /tmp/clone-avec-corpus
+Origine           : git clone /work/qnx-portmap   (commit 5653bb2e9aa1c47c79035cca9dbd495f5c4d2835)
+Le corpus fige y a ete copie tel quel, sans reecriture :
+    $ cp -a /work/qnx-portmap-corpus-local/corpus /tmp/clone-avec-corpus/corpus
+
+Commande :
+    cd /tmp/clone-avec-corpus
+    python3 tools/contre_epreuve.py
+
+Sortie reelle :
 Contre-epreuve ROUGE de QX PORTMAP
 On casse une regle a la fois ; le test charge doit echouer.
 
@@ -27,3 +40,8 @@ le taux J4 ne compte que les symboles resolus et cites     test rouge OK
 Depot propre apres contre-epreuve : oui
 
 11 / 11 contre-epreuves concluantes
+
+
+>>> RC = 0
+
+11 / 11 contre-epreuves concluantes : avec le corpus, la regle de l'integrite des 3 426 pages (empreintes SHA-256 page par page) est elle aussi contre-prouvee.

@@ -2,7 +2,7 @@ PREUVE (a) - SUITE DE TESTS SUR UNE COPIE DE L'ARBRE PUBLIABLE SANS LE CORPUS
 Date : 15/11/2026
 
 Copie de travail : /tmp/clone-sans-corpus
-Origine           : git clone /work/qnx-portmap   (commit 287fa7885eb491189d5d94759b189906dae1e56c)
+Origine           : git clone /work/qnx-portmap   (commit 5653bb2e9aa1c47c79035cca9dbd495f5c4d2835)
 Le corpus n'est pas dans la copie :
     $ ls /tmp/clone-sans-corpus/corpus
     ls: cannot access '/tmp/clone-sans-corpus/corpus': No such file or directory
@@ -35,8 +35,8 @@ test_duplicate_symbols_are_collapsed (tests.test_cli.TestCli.test_duplicate_symb
 test_input_from_file (tests.test_cli.TestCli.test_input_from_file) ... ok
 test_json_output (tests.test_cli.TestCli.test_json_output) ... ok
 test_markdown_output (tests.test_cli.TestCli.test_markdown_output) ... ok
-test_missing_corpus_returns_error (tests.test_cli.TestCli.test_missing_corpus_returns_error) ... qnx-portmap: corpus introuvable : /tmp/qxpm-cli-x2v59w2a/absent
-  repertoire recherche : /tmp/qxpm-cli-x2v59w2a/absent
+test_missing_corpus_returns_error (tests.test_cli.TestCli.test_missing_corpus_returns_error) ... qnx-portmap: corpus introuvable : /tmp/qxpm-cli-p96wg_qt/absent
+  repertoire recherche : /tmp/qxpm-cli-p96wg_qt/absent
   solutions : QX_PORTMAP_CORPUS=/chemin/vers/corpus qnx-portmap ...
               qnx-portmap --corpus /chemin/vers/corpus ...
 ok
@@ -128,21 +128,44 @@ test_vingt_symboles_par_depot_et_cinq_depots (tests.test_mesure_j4.TestEchantill
 test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j4.TestMesureReproductible.test_le_taux_recalcule_vaut_le_taux_publie) ... skipped 'corpus absent : lancer scripts/bootstrap_corpus.sh'
 test_les_pages_citees_sont_dans_le_corpus_fige (tests.test_mesure_j4.TestMesureReproductible.test_les_pages_citees_sont_dans_le_corpus_fige) ... skipped 'corpus absent : lancer scripts/bootstrap_corpus.sh'
 test_les_statuts_publies_sont_reproduits (tests.test_mesure_j4.TestMesureReproductible.test_les_statuts_publies_sont_reproduits) ... skipped 'corpus absent : lancer scripts/bootstrap_corpus.sh'
+test_chaque_note_de_l_outil_est_traduite_en_anglais (tests.test_mesure_j4.TestRapportAnglais.test_chaque_note_de_l_outil_est_traduite_en_anglais) ... ok
+test_la_liste_des_symboles_non_resolus_anglais_est_complete (tests.test_mesure_j4.TestRapportAnglais.test_la_liste_des_symboles_non_resolus_anglais_est_complete) ... ok
+test_le_chiffre_anglais_est_celui_du_json_publie (tests.test_mesure_j4.TestRapportAnglais.test_le_chiffre_anglais_est_celui_du_json_publie) ... ok
+test_le_rapport_anglais_est_celui_produit_par_l_outil (tests.test_mesure_j4.TestRapportAnglais.test_le_rapport_anglais_est_celui_produit_par_l_outil)
+Le rapport publie est celui que l'outil ecrit, octet pour octet. ... ok
+test_le_tableau_des_etats_anglais_est_celui_du_json_publie (tests.test_mesure_j4.TestRapportAnglais.test_le_tableau_des_etats_anglais_est_celui_du_json_publie) ... ok
+test_le_tableau_des_familles_anglais_est_celui_du_json_publie (tests.test_mesure_j4.TestRapportAnglais.test_le_tableau_des_familles_anglais_est_celui_du_json_publie) ... ok
+test_les_100_lignes_du_rapport_anglais_sont_celles_du_json (tests.test_mesure_j4.TestRapportAnglais.test_les_100_lignes_du_rapport_anglais_sont_celles_du_json) ... ok
+test_les_deux_versions_ont_exactement_les_memes_nombres (tests.test_mesure_j4.TestRapportAnglais.test_les_deux_versions_ont_exactement_les_memes_nombres) ... ok
 test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j4.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main) ... ok
 test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j4.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test) ... ok
 test_un_taux_sur_zero_leve_une_erreur (tests.test_mesure_j4.TestTauxCompteALaMain.test_un_taux_sur_zero_leve_une_erreur) ... ok
-test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j4.TestTauxPublie.test_le_taux_du_markdown_vaut_le_taux_calcule) ... ok
+test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j4.TestTauxPublie.test_le_taux_du_markdown_vaut_le_taux_calcule)
+Le chiffre publie doit etre celui des donnees publiees. ... ok
 test_le_taux_publie_franchit_le_seuil_j4 (tests.test_mesure_j4.TestTauxPublie.test_le_taux_publie_franchit_le_seuil_j4)
 Le critere J4 de la fiche : en dessous de 80 %, la piste change. ... ok
+test_le_texte_des_citations_est_identique_en_anglais_et_en_francais (tests.test_mesure_j4.TestTauxPublie.test_le_texte_des_citations_est_identique_en_anglais_et_en_francais)
+Les extraits QNX cites sont byte-identiques dans les deux versions. ... ok
 test_les_pages_de_citations_contenent_chaque_symbole_resolu (tests.test_mesure_j4.TestTauxPublie.test_les_pages_de_citations_contenent_chaque_symbole_resolu) ... ok
+test_les_pages_de_citations_en_et_fr_ont_les_memes_nombres (tests.test_mesure_j4.TestTauxPublie.test_les_pages_de_citations_en_et_fr_ont_les_memes_nombres)
+La traduction des etiquettes ne doit pas bouger un chiffre. ... ok
+test_les_pages_de_citations_publiees_sont_en_anglais (tests.test_mesure_j4.TestTauxPublie.test_les_pages_de_citations_publiees_sont_en_anglais)
+Aucune etiquette francaise ne doit rester dans les pages publiees. ... ok
 test_cent_symbols_et_vingt_par_depot (tests.test_mesure_j5.TestEchantillonJ5.test_cent_symbols_et_vingt_par_depot) ... ok
 test_echantillon_identique_a_j4 (tests.test_mesure_j5.TestEchantillonJ5.test_echantillon_identique_a_j4)
 Memes 100 symboles, meme ordre, meme depot, meme nombre d'appels. ... ok
-test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_du_markdown_vaut_le_taux_calcule) ... ok
+test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_du_markdown_vaut_le_taux_calcule)
+Le chiffre publie doit etre celui des donnees publiees. ... ok
 test_le_taux_publie_est_96_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_96_pour_cent)
 Le but de la tranche J5 : 96 symboles resolus et cites sur 100. ... ok
+test_le_texte_des_citations_est_identique_en_anglais_et_en_francais (tests.test_mesure_j5.TestEchantillonJ5.test_le_texte_des_citations_est_identique_en_anglais_et_en_francais)
+Les extraits QNX cites sont byte-identiques dans les deux versions. ... ok
 test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j5.TestEchantillonJ5.test_les_etats_sont_exclusifs_et_complets) ... ok
 test_les_pages_de_citations_contiennent_chaque_symbole_resolu (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_contiennent_chaque_symbole_resolu) ... ok
+test_les_pages_de_citations_en_et_fr_ont_les_memes_nombres (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_en_et_fr_ont_les_memes_nombres)
+La traduction des etiquettes ne doit pas bouger un chiffre. ... ok
+test_les_pages_de_citations_publiees_sont_en_anglais (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_publiees_sont_en_anglais)
+Aucune etiquette francaise ne doit rester dans les pages publiees. ... ok
 test_les_pages_des_trois_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_trois_convertis_sont_des_livres_qnx)
 Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD. ... ok
 test_les_quatre_absents_restent_absents (tests.test_mesure_j5.TestEchantillonJ5.test_les_quatre_absents_restent_absents) ... ok
@@ -157,16 +180,26 @@ test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j5.TestMesureRepro
 test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256 (tests.test_mesure_j5.TestMesureReproductible.test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256) ... skipped 'corpus absent : lancer scripts/bootstrap_corpus.sh'
 test_les_statuts_de_l_outil_sont_inchanges (tests.test_mesure_j5.TestMesureReproductible.test_les_statuts_de_l_outil_sont_inchanges)
 J5 ne touche pas l'outil : les statuts sont ceux de J4. ... skipped 'corpus absent : lancer scripts/bootstrap_corpus.sh'
+test_chaque_genre_de_mention_est_traduit_en_anglais (tests.test_mesure_j5.TestRapportAnglais.test_chaque_genre_de_mention_est_traduit_en_anglais) ... ok
+test_la_liste_des_absents_est_complete (tests.test_mesure_j5.TestRapportAnglais.test_la_liste_des_absents_est_complete) ... ok
+test_le_chiffre_anglais_est_celui_du_json_publie (tests.test_mesure_j5.TestRapportAnglais.test_le_chiffre_anglais_est_celui_du_json_publie) ... ok
+test_le_rapport_anglais_est_celui_produit_par_l_outil (tests.test_mesure_j5.TestRapportAnglais.test_le_rapport_anglais_est_celui_produit_par_l_outil)
+Le rapport publie est celui que l'outil ecrit, octet pour octet. ... ok
+test_le_tableau_des_conversions_est_celui_du_json_publie (tests.test_mesure_j5.TestRapportAnglais.test_le_tableau_des_conversions_est_celui_du_json_publie) ... ok
+test_le_tableau_des_etats_anglais_est_celui_du_json_publie (tests.test_mesure_j5.TestRapportAnglais.test_le_tableau_des_etats_anglais_est_celui_du_json_publie) ... ok
+test_le_tableau_des_familles_anglais_est_celui_du_json_publie (tests.test_mesure_j5.TestRapportAnglais.test_le_tableau_des_familles_anglais_est_celui_du_json_publie) ... ok
+test_les_100_lignes_du_rapport_anglais_sont_celles_du_json (tests.test_mesure_j5.TestRapportAnglais.test_les_100_lignes_du_rapport_anglais_sont_celles_du_json) ... ok
+test_les_deux_versions_ont_exactement_les_memes_nombres (tests.test_mesure_j5.TestRapportAnglais.test_les_deux_versions_ont_exactement_les_memes_nombres) ... ok
 test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j5.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main) ... ok
 test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j5.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test) ... ok
 test_readme_shows_the_real_output (tests.test_readme.TestReadmeExample.test_readme_shows_the_real_output) ... skipped 'corpus absent : lancer scripts/bootstrap_corpus.sh'
 
 ----------------------------------------------------------------------
-Ran 124 tests in 0.125s
+Ran 147 tests in 0.159s
 
 OK (skipped=25)
 
 
-Bilan : 124 tests, dont 25 sautes (les tests qui exigent le corpus complet : integrite des 3 426 pages, empreintes SHA-256, index 7.1 / 8.0, rejeu des mesures J4 et J5), 0 echec(s). Code de sortie : 0.
-Nombre de classes de test : 24.
+Bilan : 147 tests, dont 25 sautes (les tests qui exigent le corpus complet : integrite des 3 426 pages, empreintes SHA-256, index 7.1 / 8.0, rejeu des mesures J4 et J5), 0 echec(s). Code de sortie : 0.
+Nombre de classes de test : 26.
 Le test de lecture du bloc de sortie du README (tests/test_readme.py) est saute ici (pas de corpus) et **execute** dans la copie (b).

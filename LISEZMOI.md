@@ -1,4 +1,4 @@
-# QX PORTMAP - product dossier
+# QX PORTMAP - product package
 
 **Tool**: given a list of QNX symbols (functions, variables, constants), tell
 for each one its state in the official QNX 8.0 documentation - `documented`,

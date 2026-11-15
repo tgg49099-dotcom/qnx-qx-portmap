@@ -5,6 +5,12 @@ But : prouver que le taux J4 publie (93 %) n'est pas un chiffre maquille.
 On casse la regle, on exige que le test echoue (ROUGE), on restaure, on exige
 que le test repasse (VERT). Les sorties ci-dessous sont reelles.
 
+Copie de travail : /tmp/preuve-j4
+Origine           : copie de l'arbre de travail /work/qnx-portmap
+Les manipulations sont faites dans cette copie : le depot publie n'est
+jamais modifie, et chaque fichier casse est restaure puis compare a son
+empreinte SHA-256 d'avant la manipulation.
+
 Fichiers concernes :
   tools/mesure_j4.py            (la regle qui compte les symboles resolus)
   docs/mesure-J4/mesure-J4.json (la donnee publiee)
@@ -20,52 +26,106 @@ Ligne cassee dans tools/mesure_j4.py :
   -     ok = sum(1 for r in records if r["etat"] == RESOLU)
   +     ok = sum(1 for r in records if r["etat"] in (RESOLU, AILLEURS))
 
-.......sssF..F..
+
+Sortie reelle
+-------------
+
+.......sss..F.....F..F.....
+======================================================================
+FAIL: test_le_chiffre_anglais_est_celui_du_json_publie (tests.test_mesure_j4.TestRapportAnglais.test_le_chiffre_anglais_est_celui_du_json_publie)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/preuve-j4/tests/test_mesure_j4.py", line 357, in test_le_chiffre_anglais_est_celui_du_json_publie
+    self.assertEqual(taux_md, int(round(calcule)))
+AssertionError: 93 != 96
+
 ======================================================================
 FAIL: test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j4.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 106, in test_le_taux_du_script_egale_le_taux_compte_a_la_main
+  File "/tmp/preuve-j4/tests/test_mesure_j4.py", line 161, in test_le_taux_du_script_egale_le_taux_compte_a_la_main
     self.assertAlmostEqual(calcule, a_la_main, places=6,
 AssertionError: 90.0 != 70.0 within 6 places (20.0 difference) : le taux du script (90.0) n'est pas celui compte a la main (70.0)
 
 ======================================================================
 FAIL: test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j4.TestTauxPublie.test_le_taux_du_markdown_vaut_le_taux_calcule)
+Le chiffre publie doit etre celui des donnees publiees.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 200, in test_le_taux_du_markdown_vaut_le_taux_calcule
+  File "/tmp/preuve-j4/tests/test_mesure_j4.py", line 268, in test_le_taux_du_markdown_vaut_le_taux_calcule
     self.assertEqual(taux_md, int(round(calcule)),
-AssertionError: 93 != 96 : le taux du Markdown ne vaut pas le taux calcule sur les donnees publiees
+AssertionError: 93 != 96 : le taux du Markdown (docs/mesure-J4.md) ne vaut pas le taux calcule sur les donnees publiees
 
 ----------------------------------------------------------------------
-Ran 16 tests in 0.013s
+Ran 27 tests in 0.034s
 
-FAILED (failures=2, skipped=3)
+FAILED (failures=3, skipped=3)
 
 >>> RC = 1 (attendu : different de 0, le test est ROUGE)
 
+SHA-256 de tools/mesure_j4.py apres restauration :
+  1a6c0e97dabf9bf58e1aa7657ae50a2e1b708d357ac8e71c49997437fe0d1bb4
+  identique a l'empreinte d'avant la manipulation : oui
+
 ------------------------------------------------------------------------
-ETAPE 2 - la donnee publiee est cassee : 'resmgr_attach' est marque
+ETAPE 2 - la donnee publiee est cassee : le symbole 'GETIOVLEN' est marque
           'non_resolu' dans le JSON public, alors qu'il est resolu.
 ------------------------------------------------------------------------
 
-Donnee cassee : symbole 'resmgr_attach', etat passe de
-  'resolu_et_cite' a 'non_resolu'.
 
-....F..sssFF.F..
+Sortie reelle
+-------------
+
+....F..sss.FFF..F.FF.F.....
 ======================================================================
 FAIL: test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j4.TestEchantillon.test_les_etats_sont_exclusifs_et_complets)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 157, in test_les_etats_sont_exclusifs_et_complets
+  File "/tmp/preuve-j4/tests/test_mesure_j4.py", line 212, in test_les_etats_sont_exclusifs_et_complets
     self.assertEqual(compte.get(RESOLU, 0), publie[RESOLU])
 AssertionError: 92 != 93
+
+======================================================================
+FAIL: test_la_liste_des_symboles_non_resolus_anglais_est_complete (tests.test_mesure_j4.TestRapportAnglais.test_la_liste_des_symboles_non_resolus_anglais_est_complete)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/preuve-j4/tests/test_mesure_j4.py", line 417, in test_la_liste_des_symboles_non_resolus_anglais_est_complete
+    self.assertIn("`%s`" % symbole, section,
+AssertionError: '`GETIOVLEN`' not found in '\n\n- `ND_NODE_CMP` (vocho/openqnx): **absent** - present in the C Library Reference 7.1, absent from the whole 8.0 corpus\n- `pthread_sleepon_lock` (qnx/bsp_raspberrypi-bcm2712-rpi5): **absent** - present in the C Library Reference 7.1, absent from the whole 8.0 corpus\n- `pthread_sleepon_unlock` (qnx/bsp_raspberrypi-bcm2712-rpi5): **absent** - present in the C Library Reference 7.1, absent from the whole 8.0 corpus\n- `InterruptAttach` (varghes/Raspberry-QNX): **described_elsewhere** - called in the 8.0 documentation (book com.qnx.doc.qnxsdp.migration) but without a page of its own in the C Library Reference\n- `fcfgopen` (varghes/Raspberry-QNX): **absent** - present in the C Library Reference 7.1, absent from the whole 8.0 corpus\n- `if_freenameindex` (qnx/socketcan): **described_elsewhere** - described in the 8.0 documentation but without a page of its own in the C Library Reference\n- `setsockopt` (qnx/socketcan): **described_elsewhere** - described in the 8.0 documentation but without a page of its own in the C Library Reference\n\n' : GETIOVLEN n'est pas dans la liste des symboles non resolus
+
+======================================================================
+FAIL: test_le_chiffre_anglais_est_celui_du_json_publie (tests.test_mesure_j4.TestRapportAnglais.test_le_chiffre_anglais_est_celui_du_json_publie)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/preuve-j4/tests/test_mesure_j4.py", line 357, in test_le_chiffre_anglais_est_celui_du_json_publie
+    self.assertEqual(taux_md, int(round(calcule)))
+AssertionError: 93 != 92
+
+======================================================================
+FAIL: test_le_rapport_anglais_est_celui_produit_par_l_outil (tests.test_mesure_j4.TestRapportAnglais.test_le_rapport_anglais_est_celui_produit_par_l_outil)
+Le rapport publie est celui que l'outil ecrit, octet pour octet.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/preuve-j4/tests/test_mesure_j4.py", line 454, in test_le_rapport_anglais_est_celui_produit_par_l_outil
+    self.assertEqual(regenere, publie,
+AssertionError: b'# M[4482 chars]d` | not resolved | 117 | https://www.qnx.com/[27110 chars]).\n' != b'# M[4482 chars]d` | resolved and cited | 117 | https://www.qn[27041 chars]).\n' : le rapport anglais publie n'est pas celui que l'outil produit a partir des donnees publiees
+
+======================================================================
+FAIL: test_les_100_lignes_du_rapport_anglais_sont_celles_du_json (tests.test_mesure_j4.TestRapportAnglais.test_les_100_lignes_du_rapport_anglais_sont_celles_du_json)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/preuve-j4/tests/test_mesure_j4.py", line 400, in test_les_100_lignes_du_rapport_anglais_sont_celles_du_json
+    self.assertEqual(m.group("etat").strip(),
+AssertionError: 'resolved and cited' != 'not resolved'
+- resolved and cited
++ not resolved
+ : GETIOVLEN
 
 ======================================================================
 FAIL: test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j4.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 106, in test_le_taux_du_script_egale_le_taux_compte_a_la_main
+  File "/tmp/preuve-j4/tests/test_mesure_j4.py", line 161, in test_le_taux_du_script_egale_le_taux_compte_a_la_main
     self.assertAlmostEqual(calcule, a_la_main, places=6,
 AssertionError: 60.0 != 70.0 within 6 places (10.0 difference) : le taux du script (60.0) n'est pas celui compte a la main (70.0)
 
@@ -73,40 +133,47 @@ AssertionError: 60.0 != 70.0 within 6 places (10.0 difference) : le taux du scri
 FAIL: test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j4.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 114, in test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test
+  File "/tmp/preuve-j4/tests/test_mesure_j4.py", line 169, in test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test
     self.assertEqual(par_symbole[symbole]["etat"], etat,
 AssertionError: 'non_resolu' != 'resolu_et_cite'
 - non_resolu
 + resolu_et_cite
- : etat publie incorrect pour resmgr_attach
+ : etat publie incorrect pour GETIOVLEN
 
 ======================================================================
 FAIL: test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j4.TestTauxPublie.test_le_taux_du_markdown_vaut_le_taux_calcule)
+Le chiffre publie doit etre celui des donnees publiees.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 200, in test_le_taux_du_markdown_vaut_le_taux_calcule
+  File "/tmp/preuve-j4/tests/test_mesure_j4.py", line 268, in test_le_taux_du_markdown_vaut_le_taux_calcule
     self.assertEqual(taux_md, int(round(calcule)),
-AssertionError: 93 != 92 : le taux du Markdown ne vaut pas le taux calcule sur les donnees publiees
+AssertionError: 93 != 92 : le taux du Markdown (docs/mesure-J4.md) ne vaut pas le taux calcule sur les donnees publiees
 
 ----------------------------------------------------------------------
-Ran 16 tests in 0.014s
+Ran 27 tests in 0.036s
 
-FAILED (failures=4, skipped=3)
+FAILED (failures=8, skipped=3)
 
 >>> RC = 1 (attendu : different de 0, le test est ROUGE)
+
+SHA-256 de docs/mesure-J4/mesure-J4.json apres restauration :
+  6b89513e173c5edceb9931171c6e0d229f2d97a39bbd770930a89d3a6f51d413
+  identique a l'empreinte d'avant la manipulation : oui
 
 ------------------------------------------------------------------------
 ETAPE 3 - restauration : le test repasse au VERT.
 ------------------------------------------------------------------------
 
-SHA-256 de tools/mesure_j4.py : c7381bb4fd13f50eb824747693b6d37caab36f1d13d22447e0887b184526cf29
-  identique a l'empreinte d'avant la manipulation : oui
+SHA-256 de tools/mesure_j4.py : 1a6c0e97dabf9bf58e1aa7657ae50a2e1b708d357ac8e71c49997437fe0d1bb4
 SHA-256 de docs/mesure-J4/mesure-J4.json : 6b89513e173c5edceb9931171c6e0d229f2d97a39bbd770930a89d3a6f51d413
-  identique a l'empreinte d'avant la manipulation : oui
 
-.......sss......
+
+Sortie reelle
+-------------
+
+.......sss.................
 ----------------------------------------------------------------------
-Ran 16 tests in 0.012s
+Ran 27 tests in 0.034s
 
 OK (skipped=3)
 

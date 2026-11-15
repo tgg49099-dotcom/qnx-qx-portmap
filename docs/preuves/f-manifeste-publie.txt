@@ -1,5 +1,5 @@
 PREUVE (f) - MANIFESTE-PUBLIE.txt
-Date : 14/11/2026
+Date : 15/11/2026
 
 Le manifeste liste chaque fichier publiable du depot : chemin, taille en
 octets, SHA-256. Il est regenere apres chaque changement de l'arbre
@@ -12,24 +12,26 @@ Commandes :
 
 Sortie reelle de la regeneration :
     MANIFESTE-PUBLIE.txt ecrit : /work/qnx-portmap/MANIFESTE-PUBLIE.txt
-      fichiers      : 66
-      taille totale : 450595 octets
+      fichiers      : 102
+      taille totale : 1109442 octets
+      plus gros     :     76314 octets  docs/mesure-J5/mesure-J5.json
       plus gros     :     69089 octets  docs/mesure-J4/mesure-J4.json
-      plus gros     :     30669 octets  docs/mesure-J4.md
-      plus gros     :     29400 octets  tools/mesure_j4.py
+      plus gros     :     43300 octets  tools/mesure_j4.py
 
 Sortie reelle de la verification :
-    MANIFESTE-PUBLIE.txt est a jour : 66 fichiers, 450595 octets.
+    MANIFESTE-PUBLIE.txt est a jour : 102 fichiers, 1109442 octets.
+
+Code de sortie : regeneration 0, verification 0 (0 = le manifeste est a jour).
 
 Chiffres du manifeste (arbre publiable complet, manifeste lui-meme exclu
 de sa propre liste) :
 
-    nombre de fichiers  : 66
-    taille totale       : 450595 octets
+    nombre de fichiers  : 102
+    taille totale       : 1109442 octets
     les 3 plus gros fichiers :
+          76314 octets  docs/mesure-J5/mesure-J5.json
           69089 octets  docs/mesure-J4/mesure-J4.json
-          30669 octets  docs/mesure-J4.md
-          29400 octets  tools/mesure_j4.py
+          43300 octets  tools/mesure_j4.py
 
 Le manifeste complet (chemin, taille et SHA-256 de chaque fichier) est
 MANIFESTE-PUBLIE.txt, a la racine du depot.
