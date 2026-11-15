@@ -17,7 +17,8 @@ It also checks that the command writes nothing in the tree it runs on.
 
 This file is named ``verify_all_contract.py`` and not ``test_verify_all.py``
 on purpose: it is not part of the discovery of the unit test suite, so the
-number of tests published in the README (147) stays true.  It is run on its
+number of tests published in the README stays true (it is checked by
+the fourth row of the command, ``published numbers of the README``).  It is run on its
 own, with one command::
 
     python3 -m unittest tests.verify_all_contract
@@ -113,7 +114,7 @@ class TestVerifyAllContract(unittest.TestCase):
                             "the checks that could not run must never be "
                             "presented as successes")
             rows = summary_rows(out)
-            self.assertEqual(len(rows), 6)
+            self.assertEqual(len(rows), 7)
             self.assertEqual([r[1] for r in rows].count("FAILED"), 0,
                              "no check may fail on a sound tree:\n%s" % out)
 
@@ -135,6 +136,27 @@ class TestVerifyAllContract(unittest.TestCase):
                              "exactly one check must fail:\n%s" % out)
             self.assertEqual(failed[0][0], "published manifest")
             self.assertIn("VERDICT: FAILED", out)
+
+            # 5. the red run of the published numbers: the README announces
+            # one test more than the suite has -> that row fails (the
+            # manifest is regenerated so that it is the only false proof)
+            red2 = os.path.join(tmp, "red2")
+            copy_tree(red2)
+            path = os.path.join(red2, "README.md")
+            with open(path, encoding="utf-8") as handle:
+                text = handle.read()
+            match = re.search(r"Result measured on [^:]+: \*\*(\d+) tests", text)
+            self.assertIsNotNone(match)
+            text = (text[:match.start(1)] + str(int(match.group(1)) + 1)
+                    + text[match.end(1):])
+            with open(path, "w", encoding="utf-8") as handle:
+                handle.write(text)
+            subprocess.run(["python3", "-B", "scripts/manifeste_publie.py"],
+                           cwd=red2, capture_output=True, check=True)
+            code, out = run_verify_all(red2)
+            self.assertEqual(code, 1, "a false test count must fail:\n%s" % out)
+            failed = [r[0] for r in summary_rows(out) if r[1] == "FAILED"]
+            self.assertEqual(failed, ["published numbers of the README"], out)
 
 
 if __name__ == "__main__":

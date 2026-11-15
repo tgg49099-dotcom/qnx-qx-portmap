@@ -13,9 +13,6 @@ Two files are checked, and both must carry the *same* verbatim block:
 The console output of the tool is in French and is not translated; the
 English README shows it verbatim and adds an English translation next to it,
 which this test also checks is present.
-
-The number of tests of the suite is kept at 124: this file carries one test
-method, as before, with the additional checks inside it.
 """
 
 import io

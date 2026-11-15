@@ -1,14 +1,14 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
-Tree            : /work/qnx-portmap
-Generated on    : 2026-11-15 18:49:48
-Files           : 105
-Total size      : 1152915 bytes
+Tree            : /tmp/claude-0/pm/qnx-qx-portmap
+Generated on    : 2026-11-15 19:24:53
+Files           : 108
+Total size      : 1167043 bytes
 
 The 3 biggest files:
       76314 bytes  docs/mesure-J5/mesure-J5.json
       69089 bytes  docs/mesure-J4/mesure-J4.json
-      43727 bytes  README.md
+      44152 bytes  README.md
 
 Detail (path, size in bytes, SHA-256):
 
@@ -17,10 +17,10 @@ CORPUS-NON-PUBLIE.txt	3499	6714d4af8b60e89f4a21789ffc06f1e5917820ff32d017a779244
 KIT-SOUMISSION-QNX.md	26774	c4db5108d0ddc247155c35e41fe45f932999155567fbe1ab8c95612409948f84
 LICENCE-DOCS-QNX.md	2679	8d7331c75216152ee70f8811e14e27c97dfc9466a810b08d3728e7bc57d07a8a
 LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
-LISEZMOI.md	4547	6ce50c2020f825ab917fe7c5554d9bfc8c2239e8719691ec4e5a4082b9767457
+LISEZMOI.md	4547	fcceed8f46d098dca7b029eb181945c911edb13c31c2333650650746a19cfd15
 PROGRESSION-FR.md	16434	b8d48adf7fe2b1cdcb7f41f124f75d036b6d404af6914458e9d3dd3bd78485a5
 PROGRESSION.md	18881	db085bac1ad669921d1b75141964a8e6a6d1f55ae06309dc792309ee2db199ca
-README.md	43727	aba5672d563282f6778e18d60743eff48c958a9bf70f41ec391d18d57d8dfe1e
+README.md	44152	47a8e12e51eb4c66419e388e946f0fcc482e52482577424f828c24808388b701
 VIDEO-YOUTUBE-QNX-PORTMAP.md	14528	12b7aaa3908fd2ee4d9d58b21d9417e5d666cba96b69aff107dc0bef0f938bfc
 docs/CODELAB-COMMUNITY-QNX.md	5459	97f444870fb5537858852494d1c5ca1318ad0c01f7a92c9dad33fc62cad50a8f
 docs/README-FR.md	35747	a1f2dcfba41488f11d40b15acdab05b72221e6d7d45608328aebe0de5a043ab2
@@ -68,7 +68,7 @@ docs/preuves/k-formulaire-devpost-302-401.txt	1246	6a4894233b15f34b97383efd5a86b
 docs/preuves/l-rapport-anglais-rouge.txt	8451	0abda06fe1b54d87d39186795494c9e22722b7b1553676f358d55588d4f219bb
 pyproject.toml	946	d0cff5122950c85836b71634dc9859a28369ae05e722f9056c6e5df8dd7d0187
 qnx_portmap/LISEZMOI-FR.md	782	c2ab59c8b7f12cb2d557e917db3cd7e2857612d5522d4480efb8f7d73d7284b6
-qnx_portmap/LISEZMOI.md	849	a615ce6a160149bdc6372218bf16cfcf2e276fba8b28738d85892f0ede825b7b
+qnx_portmap/LISEZMOI.md	849	60d45115b7b3b114fc9926688644ece6efd76c2dc666b9a6663776998b101aed
 qnx_portmap/__init__.py	377	483051cf6fd52457d53cdab43f28567e95f5710fc132f577c47190665d8f578e
 qnx_portmap/__main__.py	135	b175c582a7349867e7b8cd8f8ddbf87d04bbf3bec73f49cdbd351bcb5ffe528b
 qnx_portmap/classify.py	15741	2d2993c83e92dc4bffe76f06b4f57c19c9f628e9934b2420229a8b8f94873391
@@ -80,7 +80,7 @@ qnx_portmap/report.py	9325	3ca0b3e42738c2e10d3e92f6e8ae14c465e34f3e7c9dab2674498
 scripts/bootstrap_corpus.sh	5288	dd52938560f7f5c59d728bdd082e876854a58a6e43f45457339a73e22d69d1f2
 scripts/controle_fuite_corpus.py	16592	7894bd022c6e14f8a2ef7fdca8b46c5c46a538527db2409c49c149376b1854df
 scripts/manifeste_publie.py	4300	e88ecc8f86a3bcd98488cf7066896f90002ae9598c73777ff04bb62532d36797
-scripts/verify-all.sh	10909	cb5d6f3ef37aa0c60847897b326d619053c864d9637d299a1ef2b2f054d3a515
+scripts/verify-all.sh	11856	0cdcd47a3e1947be639977af7c7adf5b209113468dd0c05574b04a02525413ab
 tests/LISEZMOI.md	1240	9e4e24f45224915d4555d5cdb5c80e68ce46004bf243b0585181a85f122253bd
 tests/__init__.py	0	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 tests/fixtures/f01-abort.txt	488	cd9223e8bb1ef9a7a555bf81b9246df271fc94e3e46f8ee4bcd18a844a48fd68
@@ -105,8 +105,10 @@ tests/test_frozen_corpus.py	5955	dd52af288fb09e4ffe06e5dd75036e59d67223a0b098159
 tests/test_lang_en.py	9994	8792a69f55e57a0874aa34c951bbc60869fc0ef97196381009fcd53af4102a99
 tests/test_mesure_j4.py	22516	5ed267007df9fa57ff81665a640a8ad7efc3e0e1817ba6d31b4570adc9233000
 tests/test_mesure_j5.py	27425	d963a22bf2badf5458b937250ffe7567e6ff2b280417f667a3c5da3b61e04c36
-tests/test_readme.py	4268	781438c5a3af544aa89053d3cbe515015b66870ff93938e7112a260d5a62ceb2
-tests/verify_all_contract.py	5808	a26dd9681b03a335446f382fc5f5b9ab733863ad87ae2baa2303edb78821e768
+tests/test_published_counts.py	3957	1751e489762053f6c2eb927dfc6abc8bea9d531ce8b03e1156b885288f72644e
+tests/test_readme.py	4134	76fe2f4396e26631f39cece1ed5883d95effcf22c96ea579b75ed77e26106265
+tests/test_readme_en.py	2452	7ff5bd9c4ab918c28393c5d5894bc5caf16500d6868a8786463fe8c1ecee6b37
+tests/verify_all_contract.py	7089	1659105a7cac4204e1c2790619a5af93bdc5d963aa91534cf4bb4301223941e4
 tools/LISEZMOI.md	704	d5d1137b3713db13c21281de1356d15f2ae13468b680dd992d29414338becfc4
 tools/build_corpus.py	6339	df7cf793a9116d5b19cc6920445c9a2531945846df9f6a779578b07b069c3e54
 tools/contre_epreuve.py	9619	cf832c8ae5d2c114855d23fcae2ef6161ea36bf448cb36e6b3b07f0f9ec3feb5
@@ -116,4 +118,5 @@ tools/mesure_j4.py	43300	1a6c0e97dabf9bf58e1aa7657ae50a2e1b708d357ac8e71c4999743
 tools/mesure_j5.py	37462	3375c6fd1bf8cd12fa2e455643b0c6d3eb584f868f1b69b98e4a91492fe73ccc
 tools/mesure_kit.py	6930	e03e5fbeeaff2ead6f2113a10f1c3bb83888ece0cabdd4c1af3d3c3c28869a3c
 tools/posix-base.txt	14054	600e391015786eac7432f4a52e90fa72907d33edb6fbea5ea2c644e70d624d21
+tools/published_counts.py	5200	1d973a5baa499895169bf5453590ebc2314132c5df254b11c00dedccacdd543e
 tools/table_mesure_devpost.py	4525	f5708fc727172e8a619fa956bd623b1c7dbf2a92d80324e36d46fb3f78e0793c

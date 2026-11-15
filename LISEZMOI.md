@@ -12,7 +12,7 @@ compilation, no network by default.
 
 ## State
 
-Working V0 (14/11/2026). **147 tests, all green** (25 of them are skipped when
+Working V0 (14/11/2026). **164 tests, all green** (26 of them are skipped when
 the corpus is absent). RED counter-proof: 11/11 with
 the corpus, 10/10 without it (the rule on the integrity of the frozen corpus
 cannot be tested without it).

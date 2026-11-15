@@ -13,9 +13,10 @@
 #   1  the unit test suite                  the published proofs (a) and (b)
 #   2  the anti-leak control of the corpus   the published proof (d)
 #   3  the published manifest                the published proof (f)
-#   4  the parity of the README output block the published example of the README
-#   5  the RED counter-proof                 the published proofs (c) and (i)
-#   6  the lengths of the submission kit     KIT-SOUMISSION-QNX.md
+#   4  the published numbers                 every test and file count of the README
+#   5  the parity of the README output block the published example of the README
+#   6  the RED counter-proof                 the published proofs (c) and (i)
+#   7  the lengths of the submission kit     KIT-SOUMISSION-QNX.md
 #
 # THREE STATES, NEVER MIXED
 #
@@ -109,7 +110,7 @@ copy_tree() {
 echo "======================================================================================================"
 echo "QX PORTMAP - replay every published proof of this repository"
 echo "======================================================================================================"
-echo "checks     : 6"
+echo "checks     : 7"
 echo
 
 # ---------------------------------------------------------------- 1. the suite
@@ -161,7 +162,27 @@ else
     record "published manifest" "FAILED" "the published manifest is obsolete" "$rc" "$log"
 fi
 
-# --------------------------------------------- 4. the parity of the README
+# ------------------------------------------- 4. the published numbers
+nb_check=$((nb_check + 1))
+log="$TMP/log-$nb_check"
+if [ -f "$CORPUS/index/pages.jsonl" ]; then corpus_state=present; else corpus_state=absent; fi
+if [ "$n_tests" = "?" ] || [ "$n_files" = "?" ]; then
+    record "published numbers of the README" "NOT CHECKED" \
+           "the suite or the manifest gave no number" "-" "$log"
+else
+    python3 -B tools/published_counts.py --tests "$n_tests" --skipped "$n_skip" \
+        --corpus "$corpus_state" --files "$n_files" > "$log" 2>&1
+    rc=$?
+    if [ "$rc" -eq 0 ]; then
+        record "published numbers of the README" "OK" \
+               "every published count is the real one" "$rc" "$log"
+    else
+        record "published numbers of the README" "FAILED" \
+               "a published count is not the real one" "$rc" "$log"
+    fi
+fi
+
+# --------------------------------------------- 5. the parity of the README
 nb_check=$((nb_check + 1))
 log="$TMP/log-$nb_check"
 python3 -B -m unittest tests.test_readme -v > "$log" 2>&1
@@ -177,7 +198,7 @@ else
            "the README shows the real output" "$rc" "$log"
 fi
 
-# -------------------------------------------------- 5. the RED counter-proof
+# -------------------------------------------------- 6. the RED counter-proof
 nb_check=$((nb_check + 1))
 log="$TMP/log-$nb_check"
 if copy_tree "$ROOT" "$TMP/tree"; then
@@ -197,7 +218,7 @@ else
     record "RED counter-proof" "NOT CHECKED" "the temporary copy failed" "-" "$log"
 fi
 
-# -------------------------------------------- 6. the lengths of the submission kit
+# -------------------------------------------- 7. the lengths of the submission kit
 nb_check=$((nb_check + 1))
 log="$TMP/log-$nb_check"
 python3 -B tools/mesure_kit.py --check > "$log" 2>&1

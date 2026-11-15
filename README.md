@@ -1,9 +1,9 @@
 # QX PORTMAP
 
 > **This README is entirely in English.** The console output of the tool is
-> still in French: it is the program output, so it is not translated. It is
-> shown **verbatim** where it is the subject of the test, with an **English
-> translation** next to it and a table of the console labels.
+> in French by default; add **`--lang en`** to get the same output in English.
+> The French output is shown **verbatim** where it is the subject of a test,
+> with the English output next to it and a table of the console labels.
 
 ## What QX PORTMAP does
 
@@ -58,33 +58,15 @@ the test, and compared with the published number.
 
 ```console
 $ pip install .
-$ qnx-portmap abort accept bzero zzz_fonction_inexistante
+$ qnx-portmap --lang en abort accept bzero zzz_fonction_inexistante
 ```
 
-Excerpt of the **real output** (executed on 15 November 2026; the complete
-session is further down and is compared line by line by a test - the citation
-blocks are elided here). The tool prints in French: the first block is the
-**verbatim tool output (French)**, the second one is its **English
-translation**.
+Excerpt of the **real output** with `--lang en` (executed on 15 November
+2026; the citation blocks are elided here, and this excerpt is compared with
+the real output by `tests/test_readme_en.py`):
 
 ```text
-QX PORTMAP - etat des symboles QNX dans la documentation 8.0
-corpus fige : <CORPUS>
-pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
-
-  abort                        documente
-    page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
-    ...
-  accept                       decrit ailleurs
-    ...
-  bzero                        absent de la 8.0
-    ...
-  zzz_fonction_inexistante     inconnu du corpus
-    ...
-```
-
-```text
-QX PORTMAP - state of the QNX symbols in the 8.0 documentation
+QX PORTMAP - status of QNX symbols in the 8.0 documentation
 frozen corpus: <CORPUS>
 pages: 3426 (7.1: 1200, 8.0: 2226) - consulted on 2026-11-14 - offline mode
 
@@ -93,9 +75,28 @@ pages: 3426 (7.1: 1200, 8.0: 2226) - consulted on 2026-11-14 - offline mode
     ...
   accept                       described elsewhere
     ...
-  bzero                        absent from 8.0
+  bzero                        absent
     ...
-  zzz_fonction_inexistante     unknown to the corpus
+  zzz_fonction_inexistante     unknown
+    ...
+```
+
+Without `--lang en`, the tool prints the same output in French (the default,
+kept byte-identical to the published proofs; the complete French session is
+further down and is compared line by line by `tests/test_readme.py`):
+
+```text
+QX PORTMAP - etat des symboles QNX dans la documentation 8.0
+corpus fige : <CORPUS>
+pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
+
+  abort                        documente
+    ...
+  accept                       decrit ailleurs
+    ...
+  bzero                        absent de la 8.0
+    ...
+  zzz_fonction_inexistante     inconnu du corpus
     ...
 ```
 
@@ -131,14 +132,14 @@ pip install .                     # or, without installing: python3 -m qnx_portm
 python3 -m unittest discover -s tests -t .
 ```
 
-Result measured on 15 November 2026: **147 tests, exit code 0**, without any
+Result measured on 15 November 2026: **164 tests, exit code 0**, without any
 network access and without any third-party dependency.
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/`, next to the package | 147 tests, **0 skipped**, exit code 0 |
-| Corpus through `QX_PORTMAP_CORPUS` | 147 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 147 tests, **25 skipped**, exit code 0 |
+| Corpus in `corpus/`, next to the package | 164 tests, **0 skipped**, exit code 0 |
+| Corpus through `QX_PORTMAP_CORPUS` | 164 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 164 tests, **26 skipped**, exit code 0 |
 
 The skipped tests are the ones that need the corpus: they are skipped, never
 failed. A test that always passes tests nothing, so the repository also
@@ -186,8 +187,9 @@ added here and in the submission kit when it goes online).
   "absent from the frozen 8.0 documentation", not "absent from the system".
 - The 96 % figure is a measurement on one sample of 100 symbols; it is not a
   guarantee for another project.
-- The console messages are in French; the JSON output (`--format json`) uses
-  English field names, and the status table above is in English.
+- The console messages are in French by default and in English with
+  `--lang en`; the JSON output (`--format json`) uses English field names in
+  both modes.
 - The **documentation** of this repository is in English (this README, the
   manuals, the licences, the submission kit, the video plan, the codelab).
   The **source code** still carries French comments and docstrings: the engine
@@ -332,17 +334,23 @@ P3  accept                     decrit ailleurs
       cite par le guide de migration : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
 ```
 
-English translation of the block above (for reading only - the block above is
-the byte-exact output of the tool):
+The same command with `--lang en` (real output of the English mode,
+compared line by line with the real output by `tests/test_readme_en.py`):
 
 ```
-QX PORTMAP - state of the QNX symbols in the 8.0 documentation
+$ qnx-portmap --lang en abort accept bzero zzz_fonction_inexistante
+```
+
+English output (real):
+
+```
+QX PORTMAP - status of QNX symbols in the 8.0 documentation
 frozen corpus: <CORPUS>
 pages: 3426 (7.1: 1200, 8.0: 2226) - consulted on 2026-11-14 - offline mode
 
   abort                        documented
     page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
-    citation (C Library Reference 8.0 index) :
+    citation (index C Library Reference 8.0) :
       Raise the SIGABRT signal to terminate program execution
     detail :
       The abort() function causes abnormal process termination to occur by means of the function
@@ -355,24 +363,24 @@ pages: 3426 (7.1: 1200, 8.0: 2226) - consulted on 2026-11-14 - offline mode
   accept                       described elsewhere
     page   : https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
     see    : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
-    citation (C Library Reference 8.0 index, section "described elsewhere") :
+    citation (index C Library Reference 8.0, section "described elsewhere") :
       FreeBSD documentation (
       https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports ) and
       Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
-    * cited by the official 8.0 migration guide: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
+    * cited by the official migration guide 8.0: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
     note   : described in the 8.0 documentation but without a page of its own in the C Library Reference
 
-  bzero                        absent from 8.0
+  bzero                        absent
     page   : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
-    citation (C Library Reference 7.1 index, index entry) :
+    citation (index C Library Reference 7.1, index entry) :
       Set the first part of an object to null bytes
-    note   : present in the 7.1 C Library Reference, absent from the whole 8.0 corpus
+    note   : present in the C Library Reference 7.1, absent from the whole 8.0 corpus
 
-  zzz_fonction_inexistante     unknown to the corpus
-    note   : not found in the frozen 8.0 corpus: unknown symbol, typo, or addition published after 2026-11-14
+  zzz_fonction_inexistante     unknown
+    note   : not found in the frozen 8.0 corpus: unknown symbol, typo, or added after 2026-11-14
 
---- Upgrade work list (2 symbol(s)) ---
-P2  bzero                      absent from 8.0
+--- Upgrade worklist (2 symbol(s)) ---
+P2  bzero                      absent
       https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
       Set the first part of an object to null bytes
 P3  accept                     described elsewhere
@@ -453,10 +461,11 @@ documentation is not redistributed - is reported `NOT CHECKED`: it is never
 counted as `OK`, and it never makes the exit code fail. The verdict counts the
 two apart, so `0` means "nothing was disproved", not "everything was checked".
 
-The six checks, in this order: the unit test suite, the anti-leak control of
-the corpus, the published manifest, the parity of the output block of this
-README, the RED counter-proof, and the measured lengths of the submission
-kit. The command writes nothing in the repository: the RED counter-proof,
+The seven checks, in this order: the unit test suite, the anti-leak control
+of the corpus, the published manifest, the published numbers (every test and
+file count written in this README and in the two LISEZMOI files must be the
+real one), the parity of the output block of this README, the RED
+counter-proof, and the measured lengths of the submission kit. The command writes nothing in the repository: the RED counter-proof,
 which breaks a rule of the code on purpose, is replayed on a temporary copy
 of the tree, never on the checkout of the reader.
 
@@ -472,21 +481,22 @@ bash scripts/verify-all.sh
 ======================================================================================================
 QX PORTMAP - replay every published proof of this repository
 ======================================================================================================
-checks     : 6
+checks     : 7
 
 ======================================================================================================
 SUMMARY - one line per verification
 ======================================================================================================
 VERIFICATION                               RESULT       DETAIL                                         EXIT
 ------------------------------------------ ------------ ------------------------------------------------ ----
-unit test suite                            OK           147 tests, 25 skipped                          0
+unit test suite                            OK           164 tests, 26 skipped                          0
 anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
-published manifest                         OK           MANIFESTE-PUBLIE.txt lists 104 files           0
+published manifest                         OK           MANIFESTE-PUBLIE.txt lists 108 files           0
+published numbers of the README            OK           every published count is the real one          0
 parity of the README output block          NOT CHECKED  the frozen corpus is absent here               0
 RED counter-proof                          OK           10 / 10 rules counter-proved                   0
 lengths of the submission kit              OK           every measured length matches the text         0
 ======================================================================================================
-VERDICT: NO CHECK FAILED - 4/6 OK, 2 NOT CHECKED (RC 0)
+VERDICT: NO CHECK FAILED - 5/7 OK, 2 NOT CHECKED (RC 0)
          the check(s) that could not run on this machine are named in the
          table above and are never reported as OK: nothing was disproved,
          but these proofs were NOT re-run here.
@@ -511,13 +521,13 @@ python3 -m unittest tests.verify_all_contract
 python3 -m unittest discover -s tests -t .
 ```
 
-147 tests, no dependency, **no network access**. Two cases:
+164 tests, no dependency, **no network access**. Two cases:
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/` (next to the package) | 147 tests, **0 skipped**, exit code 0 |
-| Corpus via `QX_PORTMAP_CORPUS` | 147 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 147 tests, **25 skipped**, exit code 0 |
+| Corpus in `corpus/` (next to the package) | 164 tests, **0 skipped**, exit code 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | 164 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 164 tests, **26 skipped**, exit code 0 |
 
 With the corpus given by `QX_PORTMAP_CORPUS`, the only skipped test is the
 one that requires the corpus **inside the installed package** (absent from the
@@ -537,7 +547,7 @@ corpus absent : lancer scripts/bootstrap_corpus.sh
 (the message of the tool, in French: "corpus absent: run
 scripts/bootstrap_corpus.sh")
 
-The 99 other tests pass **without the corpus**. Among them, the 21 tests of
+The 138 other tests pass **without the corpus**. Among them, the 21 tests of
 `tests/test_fixtures.py` work on the **miniature fixtures**: 12 short extracts
 (1 to 3 lines) of real QNX pages, stored in `tests/fixtures/`, with the source
 URL, the consultation date and the SHA-256 of the complete page the extract
@@ -732,8 +742,8 @@ is in `docs/preuves/`:
 
 | File | Evidence |
 |---|---|
-| `a-tests-sans-corpus.txt` | 147 tests on a copy **without** the corpus: 122 pass, 25 are skipped, exit code 0 |
-| `b-tests-avec-corpus.txt` | the same command **with** the corpus: 147 tests, 0 skipped, exit code 0 |
+| `a-tests-sans-corpus.txt` | archived run of 15/11/2026 (commit `5653bb2`, before the English mode was added): 147 tests on a copy **without** the corpus, 122 pass, 25 are skipped, exit code 0 |
+| `b-tests-avec-corpus.txt` | the same archived run **with** the corpus: 147 tests, 0 skipped, exit code 0 |
 | `c-contre-epreuve-rouge-sans-corpus.txt` | RED counter-proof without the corpus: 10/10 conclusive, 1 rule not testable |
 | `d-controle-fuite-corpus.txt` | anti-leak control: 0 match |
 | `e-fresh-sans-corpus.txt` | `--fresh --fresh-max-pages 3` on the copy without the corpus: exit code 0, frozen corpus unchanged |
