@@ -1,9 +1,9 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
 Tree            : /work/qnx-portmap
-Generated on    : 2026-11-15 07:34:12
+Generated on    : 2026-11-15 07:38:35
 Files           : 102
-Total size      : 1109442 bytes
+Total size      : 1109461 bytes
 
 The 3 biggest files:
       76314 bytes  docs/mesure-J5/mesure-J5.json
@@ -12,7 +12,7 @@ The 3 biggest files:
 
 Detail (path, size in bytes, SHA-256):
 
-.gitignore	89	3b7d0412d843969134e0569a5bbf80605ace41ba556d5116521706e0ab058d65
+.gitignore	108	2f22a3834102ea229a1904665d78ed928bc4a0e90a2632241a3de7697421c620
 CORPUS-NON-PUBLIE.txt	3499	6714d4af8b60e89f4a21789ffc06f1e5917820ff32d017a7792447d29c62600c
 KIT-SOUMISSION-QNX.md	26774	c4db5108d0ddc247155c35e41fe45f932999155567fbe1ab8c95612409948f84
 LICENCE-DOCS-QNX.md	2679	8d7331c75216152ee70f8811e14e27c97dfc9466a810b08d3728e7bc57d07a8a
@@ -58,7 +58,7 @@ docs/preuves/b-tests-avec-corpus.txt	21572	52f10a4b65b625f8d9bf4f65791e4f4594819
 docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt	3082	7446a46988cf4243906d229bca03489350221dee1f35915d436e911fddee01e2
 docs/preuves/d-controle-fuite-corpus.txt	5185	02b1da67eced9044bb54a4d1e56423ca802a62f917b11a0364b68b4a12f0a557
 docs/preuves/e-fresh-sans-corpus.txt	1691	f6a31a7c6bdd0b53b57a0e9fa74bfcfbe095786006a6ab83b8d0f92a4cf3fd8a
-docs/preuves/f-manifeste-publie.txt	1591	868cfb5c2452de8ea2507bce08c292480352b5fcaaec7fe0fe342945ba6c3dfd
+docs/preuves/f-manifeste-publie.txt	1591	991a85f83258b6dbc71e15a50e25ab7bac5b5f5f1c3348a6dab6d885afc22db9
 docs/preuves/g-mesure-j4-rouge.txt	11336	7896de5608cf26c3585b32561c048cb3e45aeef8137ff3026ac6b113fe06a2b1
 docs/preuves/garde-fou-bootstrap.txt	1133	6f8610c805a1615d0767607040b09a8d9b85e5ec6a8fab84104adbc085cb14aa
 docs/preuves/h-mesure-j5-rouge.txt	30287	0e2870c5be87be135b8cb6af731e998992f323aa652a9b0e657f2ab8a5b363d4

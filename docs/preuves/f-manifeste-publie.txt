@@ -13,13 +13,13 @@ Commandes :
 Sortie reelle de la regeneration :
     MANIFESTE-PUBLIE.txt ecrit : /work/qnx-portmap/MANIFESTE-PUBLIE.txt
       fichiers      : 102
-      taille totale : 1109442 octets
+      taille totale : 1109461 octets
       plus gros     :     76314 octets  docs/mesure-J5/mesure-J5.json
       plus gros     :     69089 octets  docs/mesure-J4/mesure-J4.json
       plus gros     :     43300 octets  tools/mesure_j4.py
 
 Sortie reelle de la verification :
-    MANIFESTE-PUBLIE.txt est a jour : 102 fichiers, 1109442 octets.
+    MANIFESTE-PUBLIE.txt est a jour : 102 fichiers, 1109461 octets.
 
 Code de sortie : regeneration 0, verification 0 (0 = le manifeste est a jour).
 
@@ -27,7 +27,7 @@ Chiffres du manifeste (arbre publiable complet, manifeste lui-meme exclu
 de sa propre liste) :
 
     nombre de fichiers  : 102
-    taille totale       : 1109442 octets
+    taille totale       : 1109461 octets
     les 3 plus gros fichiers :
           76314 octets  docs/mesure-J5/mesure-J5.json
           69089 octets  docs/mesure-J4/mesure-J4.json
