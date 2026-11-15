@@ -1,9 +1,9 @@
 MANIFESTE DES FICHIERS PUBLIABLES - QX PORTMAP
 
 Arbre          : /work/qnx-portmap
-Genere le      : 2026-11-14 13:04:24
+Genere le      : 2026-11-15 02:13:39
 Fichiers       : 76
-Taille totale  : 683959 octets
+Taille totale  : 715964 octets
 
 Les 3 plus gros fichiers :
       76314 octets  docs/mesure-J5/mesure-J5.json
@@ -19,7 +19,7 @@ LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
 LISEZMOI.md	4489	854ece09696bc99af488e80fa51b4996e5ece46ec3df62e6c8b586032c7ad267
 PROGRESSION.md	12416	37d1dcb04739131c32a2542807aee7644906b357a2bc43ccb0471490df38b209
 README.md	25526	f09cd1dceac3ea8ce011420af4cd88c988c1ff5b7e0000913d906ddd77986149
-docs/contre-epreuve-rouge.txt	6705	887643f2ec0d61273a3f2a216fb48b195a7a502dcebfd6e31449e906cd2cf39a
+docs/contre-epreuve-rouge.txt	6719	158fe3b55580d86a4e212ef93716e90b49226f6526fcda19d31a48c6c42796db
 docs/demo-projets-reels.md	7015	8f7e88eb5aefbb33e4019bee844cbabb122d4c248b8a241cf02f46f115afb981
 docs/mesure-J4.md	30669	7946d2218fd1ade0cb80c00a9e49c09ef2e180c10afb5d22021d1fe6cc5446b5
 docs/mesure-J4/citations-qnx-bsp_raspberrypi-bcm2712-rpi5.txt	9147	8526b5fd2a5db5dc0936fcc2543747fc2f572617dc98720feeac096482da6a8c
@@ -35,11 +35,11 @@ docs/mesure-J5/citations-qnx-socketcan.txt	9791	036107ad6f151fcf9bc734ff58c41d75
 docs/mesure-J5/citations-varghes-Raspberry-QNX.txt	9872	3a8a3830e1d1eff37da4903d1de548ce3f15767e8f85930ee643e884bbc7d9aa
 docs/mesure-J5/citations-vocho-openqnx.txt	9432	e9c903ab3ca070083d2696436a130e8527d85011d05bda3b84c2c7436a39f597
 docs/mesure-J5/mesure-J5.json	76314	54548e0e6ac7cb65b1c3286051fc8e178f26f5cc80296b3e70ef371f4d9e3869
-docs/preuves/a-tests-sans-corpus.txt	1586	aaf4708ca636023522db25151a7af9f066e9743d21222ef53d6f1d108b3fae5b
-docs/preuves/b-tests-avec-corpus.txt	1717	7ef52c58ad888d51196bf0f2f52d687fd01a8c32e87bf2a75cda9cda7618f96c
-docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt	3155	5018eb39e5917cce214a9dfde7d0adcdf622b62a30a9dd9202c00c33901372d7
+docs/preuves/a-tests-sans-corpus.txt	18253	2f696ca3f8539666020c7c1d135266bf856d6f5d928e4fada189eb0190310154
+docs/preuves/b-tests-avec-corpus.txt	17211	e7fe2d6bca4e213e0f5ee7075c2d2bf0ff4b47612f8b049da8b72942e3013674
+docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt	2967	1ad1f9f1cb692439c761303012dd6a9ebbb69a19d1d508b8cfcc24b8bebd9c56
 docs/preuves/d-controle-fuite-corpus.txt	4251	4c3f522b6049dc1edf1eb389f1bb81a8181856d7a66c6ca4d5d146b6aecbd99b
-docs/preuves/e-fresh-sans-corpus.txt	1673	96b14078dc61a3ac68ea9f9494f5f20c688493d887292214bcb2f617bc3cfb29
+docs/preuves/e-fresh-sans-corpus.txt	1691	f6a31a7c6bdd0b53b57a0e9fa74bfcfbe095786006a6ab83b8d0f92a4cf3fd8a
 docs/preuves/f-manifeste-publie.txt	1481	57c0b300adea787e4a59c89c47ad44b232ab7e297496ae9c1a65a3098150266a
 docs/preuves/g-mesure-j4-rouge.txt	6489	ed51f71ca5aa72c3885266dd0cfd8a29780ee04c6dc512199d6e5f33c05bb965
 docs/preuves/garde-fou-bootstrap.txt	1133	6f8610c805a1615d0767607040b09a8d9b85e5ec6a8fab84104adbc085cb14aa
