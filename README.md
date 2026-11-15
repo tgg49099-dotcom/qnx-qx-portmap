@@ -131,7 +131,11 @@ python3 tools/contre_epreuve.py
 
 11 rules, 11 conclusive (11/11, exit code 0) with the corpus, 10/11 without it
 (the eleventh rule is about the integrity of the frozen corpus itself); the
-output is kept in [`docs/contre-epreuve-rouge.txt`](docs/contre-epreuve-rouge.txt).
+output is kept in
+[`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`](docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt)
+(11/11) and
+[`docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt`](docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt)
+(10/10).
 
 ### Submission kit and video plan
 
@@ -432,13 +436,15 @@ python3 tools/contre_epreuve.py
 | une page QNX 8.0 verifiee dans le corpus fige est exigee pour chaque conversion | `test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256` |
 
 Les 11 contre-epreuves sont concluantes (`11 / 11`, code de sortie 0) ; la sortie
-complete est conservee dans `docs/contre-epreuve-rouge.txt`.
+complete est conservee dans `docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`
+(et dans `docs/contre-epreuve-rouge.txt`).
 
 Sur l'arbre **sans** corpus, 10 des 11 regles restent contre-prouvees (`10 / 10`,
 code de sortie 0) : la regle "integrite du corpus fige livre" porte sur les
 3 426 pages, donc sur le corpus lui-meme ; sans lui, il n'y a rien a corrompre
 et le test correspondant est saute. Les deux executions sont dans
-`docs/contre-epreuve-rouge.txt`.
+`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt` (11/11) et
+`docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt` (10/10).
 
 ## Corpus QNX : non distribue
 
@@ -570,8 +576,8 @@ python3 scripts/manifeste_publie.py --check    # verifie qu'il est a jour
 
 ### Preuves
 
-Les preuves du 14/11/2026 (commande et sortie reelle pour chacune) sont dans
-`docs/preuves/` :
+Les preuves du 14/11 et du 15/11/2026 (commande et sortie reelle pour chacune)
+sont dans `docs/preuves/` :
 
 | Fichier | Preuve |
 |---|---|
@@ -584,6 +590,9 @@ Les preuves du 14/11/2026 (commande et sortie reelle pour chacune) sont dans
 | `garde-fou-bootstrap.txt` | le script de reconstruction refuse d'ecrire dans un corpus fige |
 | `g-mesure-j4-rouge.txt` | la mesure J4 : le test echoue quand on truque le taux ou les donnees publiees, puis repasse au vert |
 | `h-mesure-j5-rouge.txt` | la mesure J5 : le test echoue sur l'etat d'avant (93 %) et quand la donnee publiee est cassee, puis repasse au vert (96 %) |
+| `i-contre-epreuve-rouge-avec-corpus.txt` | contre-epreuve ROUGE avec le corpus dans l'arbre : 11/11 concluantes |
+| `j-mesure-champs-devpost.txt` | les 120 pages de projets Devpost publies mesurees : longueurs observees des champs |
+| `k-formulaire-devpost-302-401.txt` | le formulaire du concours QNX est derriere une session : HTTP 302 et HTTP 401 |
 
 ## Sources
 

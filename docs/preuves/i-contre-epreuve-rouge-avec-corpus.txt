@@ -1,0 +1,29 @@
+Contre-epreuve ROUGE de QX PORTMAP
+On casse une regle a la fois ; le test charge doit echouer.
+
+frontiere de mot dans la recherche de citation             test rouge OK
+    FAIL: test_respects_word_boundaries (tests.test_extract.TestSentencesWith.test_respects_word_boundaries)
+verification du SHA-256 des pages du corpus                test rouge OK
+    FAIL: test_detects_a_corrupted_page (tests.test_corpus.TestMiniCorpus.test_detects_a_corrupted_page)
+verification du fichier SHA256SUMS                         test rouge OK
+    FAIL: test_detects_a_corrupted_sha256sums_file (tests.test_corpus.TestMiniCorpus.test_detects_a_corrupted_sha256sums_file)
+lecture du tableau "described elsewhere" de l'index        test rouge OK
+    FAIL: test_described_elsewhere_symbol (tests.test_classify.TestClassification.test_described_elsewhere_symbol)
+extraction de la section Description                       test rouge OK
+    FAIL: test_description_is_the_description_section_not_the_library_one (tests.test_extract.TestParseTopicPage.test_description_is_the_description_section_not_the_library_one)
+statut inconnu pour un symbole hors corpus                 test rouge OK
+    FAIL: test_unknown_symbol (tests.test_classify.TestClassification.test_unknown_symbol)
+deduplication de la liste de symboles                      test rouge OK
+    FAIL: test_duplicate_symbol_is_reported_once (tests.test_classify.TestClassification.test_duplicate_symbol_is_reported_once)
+integrite du corpus fige livre                             test rouge OK
+    FAIL: test_every_page_matches_its_sha256 (tests.test_frozen_corpus.TestFrozenCorpus.test_every_page_matches_its_sha256)
+la mention en prose ne vaut que pour un nom qui ressemble a une API test rouge OK
+    FAIL: test_english_word_mentioned_in_prose_is_not_a_symbol (tests.test_classify.TestClassification.test_english_word_mentioned_in_prose_is_not_a_symbol)
+detection des symboles cites en gras                       test rouge OK
+    FAIL: test_symbol_cited_in_bold (tests.test_classify.TestClassification.test_symbol_cited_in_bold)
+le taux J4 ne compte que les symboles resolus et cites     test rouge OK
+    FAIL: test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j4.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main)
+
+Depot propre apres contre-epreuve : oui
+
+11 / 11 contre-epreuves concluantes

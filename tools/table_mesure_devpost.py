@@ -8,7 +8,7 @@ ce script en tire la table courte qui justifie les chiffres cites dans
 
 Usage :
     python3 tools/table_mesure_devpost.py <mesure_champs_devpost.json> \
-        --out docs/preuves/e-mesure-champs-devpost.txt
+        --out docs/preuves/j-mesure-champs-devpost.txt
 
 Code de sortie : 0 si tout va bien, 1 sinon.
 """
@@ -17,7 +17,7 @@ import argparse
 import json
 import sys
 
-DEFAULT_OUT = "docs/preuves/e-mesure-champs-devpost.txt"
+DEFAULT_OUT = "docs/preuves/j-mesure-champs-devpost.txt"
 
 
 def ascii_safe(text):

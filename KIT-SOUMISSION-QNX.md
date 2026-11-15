@@ -59,7 +59,7 @@ GET https://qnx.devpost.com/submissions/new.json
 be read from outside a session. No limit is declared here for those fields.
 This is not a claim that the field has no limit: it is a statement that the
 limit was not read. The commands and the raw headers are kept in
-`docs/preuves/h-formulaire-devpost-302-401.txt`.
+`docs/preuves/k-formulaire-devpost-302-401.txt`.
 
 ### 1.3 Lower bound by observation, on the same platform
 
@@ -67,7 +67,7 @@ To bound what the platform accepts, 120 **public** Devpost project pages were
 measured on 15/11/2026 (sampled from five public hackathon galleries; the
 scripts are in the repository, `tools/mesure_champs_devpost.py` and
 `tools/table_mesure_devpost.py`; the per-page table is in
-`docs/preuves/e-mesure-champs-devpost.txt`):
+`docs/preuves/j-mesure-champs-devpost.txt`):
 
 | Published element | Observed range (120 pages) | Median |
 |---|---|---|

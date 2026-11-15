@@ -55,8 +55,8 @@ Ce fichier est la carte de l'outil. Il est mis a jour a chaque cycle, avant le r
 | `mesure_j5.measure` / `.taux` / `.resume` | Rejoue la mesure J5 sur le meme echantillon que J4 et calcule le taux | fait | `tests/test_mesure_j5.py::TestMesureReproductible::test_le_taux_recalcule_vaut_le_taux_publie` |
 | `mesure_j5.comparer_echantillons` | Verifie que l'echantillon rederive des 5 depots epingles est **strictement** celui de la mesure J4 | fait | `tests/test_mesure_j5.py::TestEchantillonJ5::test_echantillon_identique_a_j4` |
 | `mesure_kit.py` | Recalcule la longueur de chaque bloc de `KIT-SOUMISSION-QNX.md`, la reecrit, et `--check` echoue si un chiffre publie est faux | fait | contre-epreuve : "138" -> "999" sur le bloc tagline = RC 1 ("2_2: file says 999, measured 138"), apres restauration RC 0 |
-| `mesure_champs_devpost.py` | Mesure les longueurs reellement acceptees par Devpost, sur 120 pages de projets publiees (nom, description, tags, URL) | fait | `docs/preuves/e-mesure-champs-devpost.txt` (120 pages, resume + detail) |
-| `table_mesure_devpost.py` | Transforme la mesure brute en une table de preuves ASCII, sans extrait de page | fait | `docs/preuves/e-mesure-champs-devpost.txt` (sortie ASCII verifiee par le script) |
+| `mesure_champs_devpost.py` | Mesure les longueurs reellement acceptees par Devpost, sur 120 pages de projets publiees (nom, description, tags, URL) | fait | `docs/preuves/j-mesure-champs-devpost.txt` (120 pages, resume + detail) |
+| `table_mesure_devpost.py` | Transforme la mesure brute en une table de preuves ASCII, sans extrait de page | fait | `docs/preuves/j-mesure-champs-devpost.txt` (sortie ASCII verifiee par le script) |
 
 ## 3. Ce qui reste a faire (vu par la fiche, pas par moi)
 
@@ -160,7 +160,7 @@ Ce qui a ete construit et verifie :
   (l'execution sur QNX 8.0 lui-meme), avec ce qu'il faut pour le produire ;
 - `tools/mesure_kit.py` - le controleur : il recalcule chaque longueur du kit et **echoue** si un
   chiffre publie est faux (contre-epreuve faite : RC 1 quand on force "138" en "999") ;
-- `tools/mesure_champs_devpost.py` + `tools/table_mesure_devpost.py` + `docs/preuves/e-mesure-champs-devpost.txt` -
+- `tools/mesure_champs_devpost.py` + `tools/table_mesure_devpost.py` + `docs/preuves/j-mesure-champs-devpost.txt` -
   la mesure des longueurs reellement acceptees par la plateforme (120 pages de projets Devpost
   publies), qui donne la **borne inferieure** des limites non publiees ;
 - `README.md` - section "Build and test (English)" (build, test, les 3 configurations de corpus),
