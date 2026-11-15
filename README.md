@@ -429,6 +429,82 @@ byte-identical**, next to the English one:
 The French files are there for the record; the published documentation is the
 English one.
 
+## One command to replay every published proof
+
+Everything this repository publishes is replayed by **one command**, from the
+root of the clone:
+
+```bash
+bash scripts/verify-all.sh
+```
+
+The command prints one line per verification and answers one question: *did
+any published proof turn out to be false?*
+
+| Exit code | Meaning |
+|---|---|
+| 0 | no published proof was contradicted (only `OK` and `NOT CHECKED` rows) |
+| 1 | at least one row is `FAILED`: a published proof is false, or the code is broken |
+| 2 | the command itself could not run (`python3` is absent) |
+
+`OK`, `FAILED` and `NOT CHECKED` are never mixed. A check that could not run
+on this machine - the frozen QNX corpus is absent, because the QNX
+documentation is not redistributed - is reported `NOT CHECKED`: it is never
+counted as `OK`, and it never makes the exit code fail. The verdict counts the
+two apart, so `0` means "nothing was disproved", not "everything was checked".
+
+The six checks, in this order: the unit test suite, the anti-leak control of
+the corpus, the published manifest, the parity of the output block of this
+README, the RED counter-proof, and the measured lengths of the submission
+kit. The command writes nothing in the repository: the RED counter-proof,
+which breaks a rule of the code on purpose, is replayed on a temporary copy
+of the tree, never on the checkout of the reader.
+
+Real output, on a fresh clone without the corpus:
+
+```bash
+git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git
+cd qnx-qx-portmap
+bash scripts/verify-all.sh
+```
+
+```
+======================================================================================================
+QX PORTMAP - replay every published proof of this repository
+======================================================================================================
+checks     : 6
+
+======================================================================================================
+SUMMARY - one line per verification
+======================================================================================================
+VERIFICATION                               RESULT       DETAIL                                         EXIT
+------------------------------------------ ------------ ------------------------------------------------ ----
+unit test suite                            OK           147 tests, 25 skipped                          0
+anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
+published manifest                         OK           MANIFESTE-PUBLIE.txt lists 104 files           0
+parity of the README output block          NOT CHECKED  the frozen corpus is absent here               0
+RED counter-proof                          OK           10 / 10 rules counter-proved                   0
+lengths of the submission kit              OK           every measured length matches the text         0
+======================================================================================================
+VERDICT: NO CHECK FAILED - 4/6 OK, 2 NOT CHECKED (RC 0)
+         the check(s) that could not run on this machine are named in the
+         table above and are never reported as OK: nothing was disproved,
+         but these proofs were NOT re-run here.
+======================================================================================================
+```
+
+The output above is the real one: the command prints no path and no timing,
+so it is the same on every machine.
+
+The contract of the command itself - exit code 0 when nothing is disproved,
+exit code 1 when a published proof is false - is proved by
+`tests/verify_all_contract.py`. It breaks a published proof on purpose in a
+temporary copy and checks that the exit code becomes 1:
+
+```bash
+python3 -m unittest tests.verify_all_contract
+```
+
 ## Tests
 
 ```bash

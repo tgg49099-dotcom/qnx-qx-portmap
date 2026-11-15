@@ -1,12 +1,12 @@
 CONTROLE ANTI-FUITE DU CORPUS QNX
-  date              : 2026-11-15 04:47:25
+  date              : 2026-11-15 08:56:15
   arbre publiable   : /work/qnx-portmap
   corpus de ref.    : /work/qnx-portmap-corpus-local/corpus
   pages de reference: 3426 (empreintes de contenu)
   fichiers stockes  : 3427 (empreintes gzip)
 
 1. SHA-256 des fichiers de l'arbre publiable
-   fichiers analyses          : 88 (861055 octets)
+   fichiers analyses          : 105 (1141884 octets)
    correspondances page QNX   : 0
    correspondances fichier    : 0
 
@@ -14,7 +14,7 @@ CONTROLE ANTI-FUITE DU CORPUS QNX
    correspondances page QNX   : 0
 
 3. Objets git du depot publiable
-   objets blob                : 189
+   objets blob                : 237
    correspondances            : 0
 
 4. Recouvrement ligne a ligne (lignes de 40 caracteres ou plus)
@@ -33,19 +33,28 @@ CONTROLE ANTI-FUITE DU CORPUS QNX
 5. Recouvrement par fragments (plus longue sous-chaine commune)
    texte du corpus             : 350127068 caracteres
    fichiers dont le contenu entier est dans le corpus : 0
-   fichiers analyses fragment par fragment            : 26
-   octets de texte QNX verbatim (fragments) total    : 6037
+   fichiers analyses fragment par fragment            : 35
+   octets de texte QNX verbatim (fragments) total    : 7177
+     docs/mesure-J4-FR.md                             112 octet(s), plus long fragment    59 octet(s)
      docs/mesure-J4.md                                112 octet(s), plus long fragment    59 octet(s)
+     docs/mesure-J4/citations-qnx-bsp_raspberrypi-bcm2712-rpi5-FR.txt   187 octet(s), plus long fragment    70 octet(s)
      docs/mesure-J4/citations-qnx-bsp_raspberrypi-bcm2712-rpi5.txt   187 octet(s), plus long fragment    70 octet(s)
+     docs/mesure-J4/citations-qnx-qnx-posix-publish-subscribe-FR.txt   131 octet(s), plus long fragment    69 octet(s)
      docs/mesure-J4/citations-qnx-qnx-posix-publish-subscribe.txt   131 octet(s), plus long fragment    69 octet(s)
-     docs/mesure-J4/citations-qnx-socketcan.txt        54 octet(s), plus long fragment    54 octet(s)
-     docs/mesure-J4/citations-varghes-Raspberry-QNX.txt   125 octet(s), plus long fragment    71 octet(s)
-     docs/mesure-J4/citations-vocho-openqnx.txt       179 octet(s), plus long fragment    68 octet(s)
+     docs/mesure-J4/citations-qnx-socketcan-FR.txt     54 octet(s), plus long fragment    54 octet(s)
+     docs/mesure-J4/citations-varghes-Raspberry-QNX-FR.txt   125 octet(s), plus long fragment    71 octet(s)
+     docs/mesure-J4/citations-varghes-Raspberry-QNX.txt    71 octet(s), plus long fragment    71 octet(s)
+     docs/mesure-J4/citations-vocho-openqnx-FR.txt    179 octet(s), plus long fragment    68 octet(s)
+     docs/mesure-J4/citations-vocho-openqnx.txt       125 octet(s), plus long fragment    68 octet(s)
+     docs/mesure-J5/citations-qnx-bsp_raspberrypi-bcm2712-rpi5-FR.txt   187 octet(s), plus long fragment    70 octet(s)
      docs/mesure-J5/citations-qnx-bsp_raspberrypi-bcm2712-rpi5.txt   187 octet(s), plus long fragment    70 octet(s)
+     docs/mesure-J5/citations-qnx-qnx-posix-publish-subscribe-FR.txt   131 octet(s), plus long fragment    69 octet(s)
      docs/mesure-J5/citations-qnx-qnx-posix-publish-subscribe.txt   131 octet(s), plus long fragment    69 octet(s)
-     docs/mesure-J5/citations-qnx-socketcan.txt        54 octet(s), plus long fragment    54 octet(s)
-     docs/mesure-J5/citations-varghes-Raspberry-QNX.txt   125 octet(s), plus long fragment    71 octet(s)
-     docs/mesure-J5/citations-vocho-openqnx.txt       179 octet(s), plus long fragment    68 octet(s)
+     docs/mesure-J5/citations-qnx-socketcan-FR.txt     54 octet(s), plus long fragment    54 octet(s)
+     docs/mesure-J5/citations-varghes-Raspberry-QNX-FR.txt   125 octet(s), plus long fragment    71 octet(s)
+     docs/mesure-J5/citations-varghes-Raspberry-QNX.txt    71 octet(s), plus long fragment    71 octet(s)
+     docs/mesure-J5/citations-vocho-openqnx-FR.txt    179 octet(s), plus long fragment    68 octet(s)
+     docs/mesure-J5/citations-vocho-openqnx.txt       125 octet(s), plus long fragment    68 octet(s)
      tests/fixtures/f01-abort.txt                     133 octet(s), plus long fragment   133 octet(s)
      tests/fixtures/f02-abort.txt                     258 octet(s), plus long fragment   258 octet(s)
      tests/fixtures/f03-abort.txt                     357 octet(s), plus long fragment   226 octet(s)
@@ -63,17 +72,10 @@ CONTROLE ANTI-FUITE DU CORPUS QNX
      tests/test_fixtures.py                           163 octet(s), plus long fragment    57 octet(s)
 
 6. Budget de copie (4000 octets de texte QNX verbatim par fichier)
-   fichiers avec du texte verbatim QNX : 26
-   octets verbatim QNX dans l'arbre   : 6037
+   fichiers avec du texte verbatim QNX : 35
+   octets verbatim QNX dans l'arbre   : 7177
    fichiers au-dessus du budget        : 0
 
 RESULTAT : 0 correspondance. L'arbre publiable ne contient aucune
            page de la documentation QNX.
-Duree du controle : 712.6 s
-
-Commande utilisee (depuis la racine du depot publiable) :
-    python3 scripts/controle_fuite_corpus.py --tree . \
-        --corpus /work/qnx-portmap-corpus-local/corpus
-Etat du depot au moment du controle : commit 4124360 ("Evidence refresh after the
-English README: anti-leak control, test proofs, manifest"), 88 fichiers analyses,
-861 055 octets, 189 objets blob git. Code de sortie : 0.
+Duree du controle : 1054.2 s
