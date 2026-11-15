@@ -1,0 +1,147 @@
+MESURE DES CHAMPS DEVPOST PUBLIES - QX PORTMAP
+
+But : borner par l'observation ce que la plateforme accepte,
+quand la limite exacte du formulaire QNX n'est pas lisible
+(le formulaire est derriere une session : HTTP 302 / 401).
+
+Source des donnees : https://devpost.com/software/<slug> (pages de projets publiees)
+Echantillon       : 120 pages publiees mesurees
+Mesure le        : 2026-11-15
+Commande de mesure :
+    python3 tools/mesure_champs_devpost.py <liste_de_slugs>
+Table generee par :
+    python3 tools/table_mesure_devpost.py <mesure.json>
+
+Resume des longueurs observees :
+
+| element | n | min | median | max |
+|---|---|---|---|---|
+| longueur du nom du projet | 120 | 3 | 9 | 45 |
+| longueur de la description publiee | 119 | 637 | 3659 | 48663 |
+| nombre de tags Built with | 113 | 1 | 4 | 14 |
+| longueur de l'URL try it out | 110 | 17 | 42 | 168 |
+
+Detail (une ligne par page publiee mesuree) :
+
+| # | slug | nom | description | tags | url try it out |
+|---|---|---|---|---|---|
+| 1 | a-feuvb1 | 7 | 2562 | 1 | 43 |
+| 2 | aegismesh-oj813b | 10 | 3704 | 3 | 46 |
+| 3 | agent-wall-hqrjvb | 10 | 8200 | 5 | 40 |
+| 4 | ai-shutter | 10 | 3506 | 1 | 38 |
+| 5 | aircade-m4n6zv | 7 | 6109 | 1 | 39 |
+| 6 | alyosha | 7 | 11216 |  | 33 |
+| 7 | among-us-lbrwjk | 8 | 6340 | 2 | 38 |
+| 8 | ardb | 17 | 2297 | 2 | 41 |
+| 9 | article-checker | 15 | 1291 | 3 |  |
+| 10 | atc | 6 | 11983 | 7 | 17 |
+| 11 | audiobook-87kcgs | 9 | 1553 | 1 | 45 |
+| 12 | audionova | 9 | 4713 | 3 | 41 |
+| 13 | autodrift | 9 | 945 | 2 | 34 |
+| 14 | b-lot | 5 | 1998 | 2 | 17 |
+| 15 | badminbuddy | 11 | 3223 | 2 |  |
+| 16 | balloons | 8 | 2857 | 5 |  |
+| 17 | bazaar-wgv16i | 7 | 13180 | 6 | 36 |
+| 18 | best-daily-planner | 18 | 1806 | 1 | 59 |
+| 19 | bing-bong-z7rsny | 8 | 1892 |  | 39 |
+| 20 | bloxify | 7 | 3129 | 5 | 36 |
+| 21 | bump-pets | 8 | 5230 | 9 | 43 |
+| 22 | cadex | 5 | 6712 | 3 | 39 |
+| 23 | cadify | 10 | 4816 | 10 | 49 |
+| 24 | cardiolensv2 | 13 | 7228 | 6 | 53 |
+| 25 | civil-dialog | 12 | 4670 | 3 | 28 |
+| 26 | clankergram | 10 | 10998 | 3 | 38 |
+| 27 | clicknic-two-peas-in-a-pod | 38 | 2872 | 6 | 54 |
+| 28 | codle-tbkglw | 5 | 1435 | 7 | 36 |
+| 29 | combadge | 8 | 3102 | 9 | 49 |
+| 30 | communicares | 12 | 4045 | 3 | 40 |
+| 31 | community-compass-0e4cyn | 17 | 5126 | 8 |  |
+| 32 | compass-hunt9r | 7 | 6805 | 3 | 40 |
+| 33 | composition | 11 | 2208 | 5 | 43 |
+| 34 | comprefinsive | 13 | 2447 | 2 | 43 |
+| 35 | concerto-0wd9zs | 8 | 6356 |  | 45 |
+| 36 | connect-u-3lymhx | 9 | 1000 | 4 | 39 |
+| 37 | cool-ppl-from-amplify | 4 | 5778 | 3 | 28 |
+| 38 | crisisbridge-45x6bd | 12 | 6883 |  |  |
+| 39 | dc-realestate-price-predictor | 30 | 1448 | 4 | 50 |
+| 40 | dean-your-personal-agent-at-your-command | 4 | 9481 | 2 | 46 |
+| 41 | deepeyes | 8 | 5117 | 3 | 35 |
+| 42 | detect-pot | 12 | 6229 | 12 | 46 |
+| 43 | dominiq | 7 | 2568 | 3 | 37 |
+| 44 | dripbot | 7 | 1768 | 2 | 43 |
+| 45 | dual-vision-glasses | 9 | 6399 | 6 | 42 |
+| 46 | eat-da-bugger | 14 | 3633 | 3 | 58 |
+| 47 | emojiaix | 8 | 2678 | 2 | 43 |
+| 48 | enviroshield-benefits-enrollment-navigator | 45 | 637 | 2 | 71 |
+| 49 | fake-standup | 11 | 1877 | 3 | 46 |
+| 50 | fd-7g0sbo | 3 | 9384 | 1 | 102 |
+| 51 | feel-the-music | 14 | 6426 | 9 | 44 |
+| 52 | finret | 6 | 2048 | 2 | 52 |
+| 53 | flourish-17hbcf | 8 | 2707 | 6 | 39 |
+| 54 | fluid-empowerment-through-menstrual-data | 41 | 2947 | 8 | 168 |
+| 55 | fly-vs-worm | 11 | 5945 | 6 | 39 |
+| 56 | foodsmart | 9 | 1608 | 2 | 37 |
+| 57 | forge-os8zf0 | 5 | 5397 | 6 | 50 |
+| 58 | fresco-b1riws | 7 | 4376 | 10 | 30 |
+| 59 | gestura-6m3xfv | 7 | 7024 | 3 | 66 |
+| 60 | get-good-tech | 13 | 1875 | 4 | 23 |
+| 61 | giveback-dcq1nu | 8 | 2455 | 2 | 165 |
+| 62 | grandpa-vision | 10 | 2264 | 3 |  |
+| 63 | granny-waymo | 12 | 9484 | 5 | 31 |
+| 64 | green-spark-ai | 14 | 6709 | 5 | 52 |
+| 65 | growth-mindset-assessment-f875li | 25 | 784 | 1 | 84 |
+| 66 | gymify-erd59u | 6 | 2227 |  |  |
+| 67 | hacker-hog | 31 | 6288 | 3 | 60 |
+| 68 | haven-dn65lq | 5 | 4794 | 10 | 45 |
+| 69 | heel-meals | 10 | 3352 | 3 | 49 |
+| 70 | hole-in-the-wall-nwkf1e | 16 | 3659 | 2 | 40 |
+| 71 | home-sweet-home-sq46jr | 15 | 2266 | 9 | 34 |
+| 72 | homesplice | 9 | 6168 | 11 | 54 |
+| 73 | house-bot | 10 | 10412 | 14 | 22 |
+| 74 | housescape | 10 | 1904 | 4 | 100 |
+| 75 | humancraft | 10 | 3491 | 3 | 56 |
+| 76 | idk-man-794g6v | 4 | 4732 | 5 | 39 |
+| 77 | image-art-styler | 16 | 3045 | 6 | 44 |
+| 78 | ipfs-huggingface-bridge | 23 | 1955 | 1 | 51 |
+| 79 | ji-review | 7 | 15469 | 6 | 30 |
+| 80 | jurispilot | 10 | 4535 | 2 | 37 |
+| 81 | keymaeleon | 10 | 4703 | 3 | 43 |
+| 82 | launchify | 9 | 9528 | 6 | 33 |
+| 83 | life-decision-simulator-46at2s | 23 | 4469 | 5 |  |
+| 84 | living-canvas-gz360v | 5 | 2796 | 2 | 34 |
+| 85 | loggr | 5 | 2865 | 10 | 44 |
+| 86 | maptify | 7 | 2491 | 2 | 46 |
+| 87 | marshies-adventure | 19 | 2288 | 1 | 39 |
+| 88 | medbot-2e40oh | 6 | 2493 | 3 | 42 |
+| 89 | memaid | 6 | 2495 | 4 | 44 |
+| 90 | microplastic-detection-using-yolov5 | 35 | 2776 | 7 | 54 |
+| 91 | minny | 5 | 11709 | 4 | 32 |
+| 92 | moodv | 5 | 9072 | 4 | 21 |
+| 93 | morse-code-blinking-translator | 30 | 1507 | 1 | 47 |
+| 94 | nawiri-axuq5v | 6 | 3556 | 3 | 31 |
+| 95 | neokernel | 9 | 5829 | 2 | 37 |
+| 96 | new | 17 |  |  |  |
+| 97 | nick-fgzka0 | 10 | 3178 | 1 | 43 |
+| 98 | nightsafe-bk9dt3 | 9 | 5894 | 6 | 32 |
+| 99 | nighttime-breathing-monitor | 12 | 2345 | 3 | 55 |
+| 100 | north-inc | 8 | 1564 | 6 | 37 |
+| 101 | ocean-adventure | 15 | 2203 | 4 | 44 |
+| 102 | octavius-nkl4x3 | 8 | 2959 | 6 | 38 |
+| 103 | opioid-action-engine | 20 | 14607 | 4 | 33 |
+| 104 | parity-8n5zbf | 6 | 9708 | 4 | 35 |
+| 105 | pear-0x2c7l | 4 | 2393 | 3 | 30 |
+| 106 | peerlift | 8 | 3006 | 4 | 35 |
+| 107 | perfect-predictions | 19 | 1796 | 5 | 44 |
+| 108 | physical-studio-code | 9 | 10566 | 4 | 42 |
+| 109 | pixie-8vlj7g | 5 | 48663 | 5 | 42 |
+| 110 | plus1-1imlbz | 5 | 7840 | 5 | 35 |
+| 111 | primacore | 6 | 8496 | 3 | 52 |
+| 112 | printdnd | 8 | 5781 |  | 28 |
+| 113 | proactive-prescriptions | 23 | 1269 | 8 |  |
+| 114 | project-atlas-icfow4 | 13 | 7867 | 4 | 42 |
+| 115 | project-ki3u7vwhj0x8 | 8 | 8227 | 3 | 56 |
+| 116 | project-spark-route | 38 | 5558 | 3 | 57 |
+| 117 | providence-tn6m4h | 10 | 6152 | 9 | 26 |
+| 118 | punchface | 13 | 10575 | 9 | 41 |
+| 119 | rbc-buddies | 10 | 8904 | 6 | 59 |
+| 120 | realbot | 7 | 3196 | 5 | 36 |

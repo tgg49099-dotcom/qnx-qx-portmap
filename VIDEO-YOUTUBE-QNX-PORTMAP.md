@@ -199,10 +199,10 @@ Then the README, scrolled to the table:
 **On screen**: the test suite running, then the result.
 
 ```
-$ python3 -m unittest discover -s tests -t .
+$ QX_PORTMAP_CORPUS=$PWD/corpus-downloaded python3 -m unittest discover -s tests -t .
 ...
-Ran 124 tests in 0.108s
-OK (skipped=25)
+Ran 124 tests in 13.143s
+OK (skipped=1)
 ```
 
 **Voice-over**:
@@ -228,10 +228,10 @@ MIT licence - 124 tests - AI-assisted development
 > target, and it does not redistribute the QNX documentation. And here is the
 > honest limit: this project has not been run on a QNX 8.0 machine yet,
 > because that needs the QNX SDP 8.0 licence. The code is POSIX-compatible
-> Python with the standard library only; the next segment shows it running
-> on QNX 8.0 itself. The repository is public, MIT licensed, and the
-> development was AI-assisted: every statement about a QNX symbol is backed
-> by a quotation of an official page."
+> Python with the standard library only; the next step, once that licence is
+> available, is to run it on QNX 8.0 itself. The repository is public, MIT
+> licensed, and the development was AI-assisted: every statement about a QNX
+> symbol is backed by a quotation of an official page."
 
 ### 2:34 - 2:40 - End card
 

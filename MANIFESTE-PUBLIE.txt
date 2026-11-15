@@ -1,26 +1,28 @@
 MANIFESTE DES FICHIERS PUBLIABLES - QX PORTMAP
 
 Arbre          : /work/qnx-portmap
-Genere le      : 2026-11-15 02:15:02
-Fichiers       : 78
-Taille totale  : 733015 octets
+Genere le      : 2026-11-15 03:29:06
+Fichiers       : 84
+Taille totale  : 803957 octets
 
 Les 3 plus gros fichiers :
       76314 octets  docs/mesure-J5/mesure-J5.json
       69089 octets  docs/mesure-J4/mesure-J4.json
-      32961 octets  docs/mesure-J5.md
+      35013 octets  README.md
 
 Detail (chemin, taille en octets, SHA-256) :
 
 .gitignore	89	3b7d0412d843969134e0569a5bbf80605ace41ba556d5116521706e0ab058d65
 CORPUS-NON-PUBLIE.txt	3587	2711651fa52848a87c9a1cc2712c4f33df8f8b39706111c623ddb3db58c9ff91
+KIT-SOUMISSION-QNX.md	26028	e7e274d5cdddcaef1a25615f4b552c33c2532db2a25dd58986d9288ef526e70b
 LICENCE-DOCS-QNX.md	2725	79454fcbe4a38c3790c1a576979bd6bbffa18c6f1c3e04ad96dddebe3f95d4b9
 LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
 LISEZMOI.md	4489	854ece09696bc99af488e80fa51b4996e5ece46ec3df62e6c8b586032c7ad267
-PROGRESSION.md	12416	37d1dcb04739131c32a2542807aee7644906b357a2bc43ccb0471490df38b209
-README.md	30635	17afc73f203b94f1db54aa48ded0f6c73266d92d15880f4f3e22d99a38b3adfa
-docs/CODELAB-COMMUNITY-QNX.md	5415	ceff77585d51c6b62d87b57bd3c15bc50c532ac56db6657e73db298c42b75ddf
-docs/UTILISATION.md	6527	89bc2dd2e787bdfd6392c72c0a9dd10fbda850d21f6076b356c9f8896a66a6ae
+PROGRESSION.md	16434	aa1b1ff022b4879ad34ba400377ed82336a74dc60e27c467de00fa57956696b6
+README.md	35013	984e5111fb964086b9815f399e55f37fa79a5abc28659ed7bf2178de9cd8027f
+VIDEO-YOUTUBE-QNX-PORTMAP.md	13095	20bfe731e192746e83a8277f4c2d2d63f64763d402be5a0dcdb7e687c5db3231
+docs/CODELAB-COMMUNITY-QNX.md	5458	602c1ed1e5ec92deca866a40d141cd80ee14e33698fd32cea38ad7c0f951e361
+docs/UTILISATION.md	6601	af2040b526a38a4fbf844e853de716ef2a964190f7ba85a24e0610ec834a2941
 docs/contre-epreuve-rouge.txt	6719	158fe3b55580d86a4e212ef93716e90b49226f6526fcda19d31a48c6c42796db
 docs/demo-projets-reels.md	7015	8f7e88eb5aefbb33e4019bee844cbabb122d4c248b8a241cf02f46f115afb981
 docs/mesure-J4.md	30669	7946d2218fd1ade0cb80c00a9e49c09ef2e180c10afb5d22021d1fe6cc5446b5
@@ -40,8 +42,9 @@ docs/mesure-J5/mesure-J5.json	76314	54548e0e6ac7cb65b1c3286051fc8e178f26f5cc8029
 docs/preuves/a-tests-sans-corpus.txt	18253	2f696ca3f8539666020c7c1d135266bf856d6f5d928e4fada189eb0190310154
 docs/preuves/b-tests-avec-corpus.txt	17211	e7fe2d6bca4e213e0f5ee7075c2d2bf0ff4b47612f8b049da8b72942e3013674
 docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt	2967	1ad1f9f1cb692439c761303012dd6a9ebbb69a19d1d508b8cfcc24b8bebd9c56
-docs/preuves/d-controle-fuite-corpus.txt	4251	4c3f522b6049dc1edf1eb389f1bb81a8181856d7a66c6ca4d5d146b6aecbd99b
+docs/preuves/d-controle-fuite-corpus.txt	4794	e47e000ec5e71766fd50311fd51be0a5425dfc3aed54903f4ef58f9b21be524b
 docs/preuves/e-fresh-sans-corpus.txt	1691	f6a31a7c6bdd0b53b57a0e9fa74bfcfbe095786006a6ab83b8d0f92a4cf3fd8a
+docs/preuves/e-mesure-champs-devpost.txt	6324	8c3389696c9c20d6ddf28774b8171f2fa8a562d03c09b7d38601f12e0bfd5473
 docs/preuves/f-manifeste-publie.txt	1481	57c0b300adea787e4a59c89c47ad44b232ab7e297496ae9c1a65a3098150266a
 docs/preuves/g-mesure-j4-rouge.txt	6489	ed51f71ca5aa72c3885266dd0cfd8a29780ee04c6dc512199d6e5f33c05bb965
 docs/preuves/garde-fou-bootstrap.txt	1133	6f8610c805a1615d0767607040b09a8d9b85e5ec6a8fab84104adbc085cb14aa
@@ -87,6 +90,9 @@ tools/LISEZMOI.md	732	ba93c148666678163777b96fd60b0de295ba6f9dd4f1e0b11910d98ff6
 tools/build_corpus.py	6339	df7cf793a9116d5b19cc6920445c9a2531945846df9f6a779578b07b069c3e54
 tools/contre_epreuve.py	9619	cf832c8ae5d2c114855d23fcae2ef6161ea36bf448cb36e6b3b07f0f9ec3feb5
 tools/make_fixtures.py	7042	bd501596561c2239ac9f50bf32a1e64db28e12c3b9273f2bb972f7d72a2b6670
+tools/mesure_champs_devpost.py	4984	6230c73a2f2b1be31f1fc16fb6f3f360d319d7729e8def839490329d1af68490
 tools/mesure_j4.py	29400	c7381bb4fd13f50eb824747693b6d37caab36f1d13d22447e0887b184526cf29
 tools/mesure_j5.py	24998	c6c46e8d3a329cd0c06535d8d74b335037cd8ac45c1b4d52c0ae54d12ebe1b8e
+tools/mesure_kit.py	6930	e03e5fbeeaff2ead6f2113a10f1c3bb83888ece0cabdd4c1af3d3c3c28869a3c
 tools/posix-base.txt	14129	9d7e0074ceef8e3c82079204d6ec76e83f82923f3d714dde00a9ad0d62d20d51
+tools/table_mesure_devpost.py	4525	43f171b44341804c241549ebfabd8e1a57684bda22835360cd46f7b60d2530a4

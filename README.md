@@ -38,7 +38,7 @@ difference is explained further down.
 | | |
 |---|---|
 | **QNX version** | **QNX SDP 8.0** - every answer is backed by a page of the BlackBerry QNX SDP 8.0 documentation (C Library Reference, io-sock User's Guide, SDP migration guide); each quotation carries the URL, the consultation date and the **SHA-256 of the page** it comes from |
-| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account, nor a network connection**; it is pure Python 3 and it also runs on QNX 8.0 itself |
+| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account, nor a network connection**; it is pure Python 3 with the standard library only, so it is POSIX-compatible and **designed to run on QNX 8.0 as well - this has not been demonstrated yet**, because the QNX SDP 8.0 licence is not available in this environment (see [Limites](#limites)) |
 | **Toolchain** | **Python 3.8+, standard library only** (`argparse`, `gzip`, `hashlib`, `json`, `re`, `urllib`) - no compilation step, no third-party dependency, no API key |
 
 ### AI-assisted development
@@ -59,7 +59,7 @@ $ pip install .
 $ qnx-portmap abort accept bzero zzz_fonction_inexistante
 ```
 
-Excerpt of the **real output** (executed on 14 November 2026; the complete
+Excerpt of the **real output** (executed on 15 November 2026; the complete
 session is further down and is compared line by line by a test - the citation
 blocks are elided here):
 
@@ -146,6 +146,24 @@ Usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md). A codelab draft for
 `community.qnx.com` is in [`docs/CODELAB-COMMUNITY-QNX.md`](docs/CODELAB-COMMUNITY-QNX.md)
 (text only, **not published yet**: the URL of the published codelab will be
 added here and in the submission kit when it goes online).
+
+### Honest limits (English)
+
+- The project **has not been run on a QNX 8.0 machine yet**: that needs the QNX
+  SDP 8.0 licence, which is not available in this environment. The code is
+  Python 3 with the standard library only and is POSIX-compatible, so it is
+  designed to run on QNX 8.0 as well, but that has not been demonstrated. The
+  missing video segment is exactly that demonstration (see
+  [`VIDEO-YOUTUBE-QNX-PORTMAP.md`](VIDEO-YOUTUBE-QNX-PORTMAP.md), section 4).
+- The corpus is a **snapshot** of the official QNX documentation, taken on
+  14 November 2026: a symbol published since then is reported as `unknown`,
+  never guessed.
+- The tool analyses the **documentation**, not a binary: `absent` means
+  "absent from the frozen 8.0 documentation", not "absent from the system".
+- The 96 % figure is a measurement on one sample of 100 symbols; it is not a
+  guarantee for another project.
+- The console messages are in French; the JSON output (`--format json`) uses
+  English field names, and the status table above is in English.
 
 ---
 
@@ -266,7 +284,9 @@ Code de sortie : `0` si tous les symboles analyses sont documentes en 8.0,
 
 ### Exemple reel execute
 
-Commande lancee le 14/11/2026 sur ce depot :
+Commande lancee le 14/11/2026 sur ce depot, et rejouee le 15/11/2026 par le
+test `tests/test_readme.py`, qui compare cette sortie ligne a ligne avec la
+sortie reelle du jour :
 
 ```
 $ qnx-portmap abort accept bzero zzz_fonction_inexistante
@@ -454,7 +474,7 @@ Le script :
 4. **refuse d'ecrire dans un corpus deja fige** (et dans tout repertoire
    place sous une archive portant le marqueur `CORPUS-FIGE.txt`).
 
-**Temps mesure** le 14/11/2026, avec un delai de 1,0 s : **27 pages en 53 s**
+**Temps mesure** le 15/11/2026, avec un delai de 1,0 s : **27 pages en 51 s**
 (soit environ 2 s par page, requete comprise), 0 echec. Pour le corpus complet
 de 3 426 pages, il faut compter **environ 1 h 55** a ce rythme. La commande
 s'arrete a tout moment : `--max-pages N` limite le nombre de pages par livre
@@ -522,13 +542,15 @@ aucune page de la documentation QNX. Il fait six controles :
 6. budget de copie : **aucun fichier ne doit contenir plus de 4 000 octets de
    texte QNX verbatim**.
 
-Resultat mesure le 14/11/2026 : **0 correspondance**. L'arbre entier ne contient que
+Resultat mesure le 15/11/2026 : **0 correspondance**. L'arbre entier ne contient que
 **6 037 octets** de texte QNX verbatim, et le fichier qui en contient le plus en compte
 **633 octets** (le mini corpus recompose dans `tests/helpers.py`) ; **0 fichier** ne depasse le
 budget de 4 000 octets. Les fichiers de citations des mesures J4 et J5
 (`docs/mesure-J4/citations-*.txt`, `docs/mesure-J5/citations-*.txt`) sont analyses fragment par
 fragment comme les fixtures : ils contiennent 54 a 187 octets de texte QNX verbatim chacun. La
-sortie complete est dans `docs/preuves/d-controle-fuite-corpus.txt`.
+sortie complete est dans `docs/preuves/d-controle-fuite-corpus.txt` ; le nombre de fichiers
+qu'elle y analyse est celui du moment de la mesure (kit de soumission et plan de la video
+compris).
 
 ```bash
 python3 scripts/controle_fuite_corpus.py --tree . \
@@ -603,7 +625,7 @@ etaient dans la reference 7.1, l'outil le dit et ne les invente pas. C'est le
 Ce qui change entre les deux mesures : en J4, trois symboles
 (`InterruptAttach`, `if_freenameindex`, `setsockopt`) etaient renvoyes par
 l'index 8.0 vers une documentation **externe** (pages FreeBSD) ou vers une
-autre page de QNX, et comptaient donc « non resolus ». En J5, l'outil est
+autre page de QNX, et comptaient donc "non resolus". En J5, l'outil est
 interroge sur la page QNX 8.0 qui decrit reellement ces trois symboles -
 le guide de migration pour `InterruptAttach`, le guide io-sock pour les deux
 fonctions socket - et cite cette page avec son empreinte SHA-256. Le
@@ -618,7 +640,7 @@ Les mesures sont **reproductibles** (`tools/mesure_j4.py` et
 tests** : `tests/test_mesure_j4.py` et `tests/test_mesure_j5.py` recalculent
 le taux et le comparent au taux **compte a la main sur dix symboles donnes
 dans le test** ; le test echoue si le taux publie ne correspond plus aux
-donnees publiees, si un symbole « resolu » n'a pas de page QNX 8.0
+donnees publiees, si un symbole "resolu" n'a pas de page QNX 8.0
 verifiable dans le corpus fige, ou si l'echantillon change. Les preuves
 ROUGE -> VERT (on casse la regle, le test echoue, on restaure, le test
 repasse) sont dans
@@ -629,6 +651,14 @@ l'etat de chaque fonction de l'outil est dans
 
 ## Limites
 
+- Le projet **n'a pas encore ete execute sur une machine QNX 8.0** : cela
+  demande la licence QNX SDP 8.0, qui n'est pas disponible dans cet
+  environnement. Le code est du Python 3 (bibliotheque standard uniquement) et
+  il est compatible POSIX, donc il est concu pour tourner aussi sur QNX 8.0,
+  mais cela n'a pas ete demontre. La regle du concours demande de montrer que
+  le projet "genuinely builds for or runs on QNX 8.0" ; le segment de video
+  qui manque est precisement cette demonstration
+  (`VIDEO-YOUTUBE-QNX-PORTMAP.md`, section 4).
 - Le corpus est un **instantane** : il date du 14/11/2026. Un symbole ajoute
   dans une version ulterieure de la documentation est classe `unknown`, jamais
   devine. `--fresh` reconstruit le corpus a partir du site officiel.

@@ -64,7 +64,9 @@ limit was not read.
 
 To bound what the platform accepts, 120 **public** Devpost project pages were
 measured on 15/11/2026 (sampled from five public hackathon galleries; the
-script is in the repository, `tools/mesure_champs_devpost.py`):
+scripts are in the repository, `tools/mesure_champs_devpost.py` and
+`tools/table_mesure_devpost.py`; the per-page table is in
+`docs/preuves/e-mesure-champs-devpost.txt`):
 
 | Published element | Observed range (120 pages) | Median |
 |---|---|---|
@@ -76,8 +78,9 @@ script is in the repository, `tools/mesure_champs_devpost.py`):
 No page showed a description truncated at 1 200 characters. The description
 measurement includes a few dozen characters of page furniture, so it is an
 upper estimate of the submitted text. **The QNX contest has no public project
-yet** (its gallery `https://qnx.devpost.com/project-gallery`, read 15/11/2026,
-lists none), so the observation is made on the platform, not on this contest.
+yet**: its gallery `https://qnx.devpost.com/project-gallery` (read 15/11/2026,
+HTTP 200) says "The hackathon managers haven't published this gallery yet, but
+hang tight!", so the observation is made on the platform, not on this contest.
 
 ---
 
@@ -172,7 +175,7 @@ symbols to fix, sorted by priority.
 | | |
 |---|---|
 | QNX version | QNX SDP 8.0. Every answer is backed by a page of the official BlackBerry QNX SDP 8.0 documentation (C Library Reference, io-sock User's Guide, SDP migration guide). Each quotation carries the URL, the consultation date and the SHA-256 of the page it comes from. |
-| Target | A host tool (Linux, macOS, Windows). It needs no QNX SDP, no QNX board, no QNX account and no network connection to run. It is pure Python 3 and uses the standard library only, so it is POSIX-compatible and runs on QNX 8.0 as well. |
+| Target | A host tool (Linux, macOS, Windows). It needs no QNX SDP, no QNX board, no QNX account and no network connection to run. It is pure Python 3 and uses the standard library only, so it is POSIX-compatible and designed to run on QNX 8.0 as well. **This has not been demonstrated yet**: the project has not been run on a QNX 8.0 machine, because the QNX SDP 8.0 licence is not available in this environment (see "Honest limits" below). |
 | Toolchain | Python 3.8+, standard library only (`argparse`, `gzip`, `hashlib`, `json`, `re`, `urllib`). No compilation step, no third-party dependency, no API key. |
 
 ## Run it in three commands
@@ -183,8 +186,9 @@ cd qnx-qx-portmap && pip install . && bash scripts/bootstrap_corpus.sh --out cor
 QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
 ```
 
-Real output, executed on 14 November 2026 against the 3,426-page corpus
-(offline mode; the citation blocks are elided here, the complete session is in
+Real output, executed on 15 November 2026 against the 3,426-page corpus (the
+corpus is a snapshot of the official documentation taken on 14 November 2026;
+offline mode, the citation blocks are elided here, the complete session is in
 the repository README):
 
 ```text
@@ -229,9 +233,12 @@ symbols, the citation of each one and the SHA-256 of the cited page are in
 python3 -m unittest discover -s tests -t .
 ```
 
-124 tests, no third-party dependency, no network access. With the corpus
-present: 124 tests, 1 skipped. Without the corpus: 124 tests, 25 skipped
-(the skipped ones are the ones that need the corpus). The suite also contains
+124 tests, no third-party dependency, no network access. Measured on
+15 November 2026 in the three possible configurations: with the corpus in
+`corpus/` next to the package, 124 tests and 0 skipped; with the corpus
+pointed to by the environment variable `QX_PORTMAP_CORPUS`, 124 tests and 1
+skipped; without any corpus, 124 tests and 25 skipped (the skipped ones are
+the ones that need the corpus). The suite also contains
 a RED -> GREEN proof: `tools/contre_epreuve.py` breaks one rule of the code
 at a time and checks that the matching test turns red, then restores the
 repository. The 11 rules and their output are in `docs/contre-epreuve-rouge.txt`.
@@ -270,7 +277,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 6816 characters
+- Length (measured): 7297 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to
@@ -480,7 +487,7 @@ https://github.com/tgg49099-dotcom/qnx-qx-portmap :
 
 The output to look at: for each symbol, the official QNX 8.0 page, the exact
 quotation taken from that page, and the SHA-256 of the page. Example, executed
-on 14 November 2026:
+on 15 November 2026:
 
   abort    documente
     page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
@@ -558,8 +565,8 @@ step 6, read 15/11/2026):
 | check | expected |
 |---|---|
 | Project name | `QX PORTMAP` |
-| Project tagline | the block 3.2 text, 163 characters |
-| Project story | the block 4.1 text, 6816 characters |
+| Project tagline | the block 3.2 text, 138 characters |
+| Project story | the block 4.1 text, 7097 characters |
 | Built with tags | the 11 tags of block 4.2 |
 | Try it out | the public repository URL of block 4.3 |
 | Video demo link | the public YouTube URL, replacing the placeholder of block 4.5 |

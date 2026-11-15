@@ -54,6 +54,9 @@ Ce fichier est la carte de l'outil. Il est mis a jour a chaque cycle, avant le r
 | `mesure_j5.etat_j5` | Etat J5 : « resolu et cite » des que la page QNX 8.0 qui decrit le symbole est verifiee | fait | `tests/test_mesure_j5.py::TestEchantillonJ5::test_le_taux_publie_est_96_pour_cent` |
 | `mesure_j5.measure` / `.taux` / `.resume` | Rejoue la mesure J5 sur le meme echantillon que J4 et calcule le taux | fait | `tests/test_mesure_j5.py::TestMesureReproductible::test_le_taux_recalcule_vaut_le_taux_publie` |
 | `mesure_j5.comparer_echantillons` | Verifie que l'echantillon rederive des 5 depots epingles est **strictement** celui de la mesure J4 | fait | `tests/test_mesure_j5.py::TestEchantillonJ5::test_echantillon_identique_a_j4` |
+| `mesure_kit.py` | Recalcule la longueur de chaque bloc de `KIT-SOUMISSION-QNX.md`, la reecrit, et `--check` echoue si un chiffre publie est faux | fait | contre-epreuve : "138" -> "999" sur le bloc tagline = RC 1 ("2_2: file says 999, measured 138"), apres restauration RC 0 |
+| `mesure_champs_devpost.py` | Mesure les longueurs reellement acceptees par Devpost, sur 120 pages de projets publiees (nom, description, tags, URL) | fait | `docs/preuves/e-mesure-champs-devpost.txt` (120 pages, resume + detail) |
+| `table_mesure_devpost.py` | Transforme la mesure brute en une table de preuves ASCII, sans extrait de page | fait | `docs/preuves/e-mesure-champs-devpost.txt` (sortie ASCII verifiee par le script) |
 
 ## 3. Ce qui reste a faire (vu par la fiche, pas par moi)
 
@@ -137,3 +140,54 @@ Les 4 symboles absents de la 8.0 (`ND_NODE_CMP`, `pthread_sleepon_lock`,
 `pthread_sleepon_unlock`, `fcfgopen`) **restent absents** : le plafond honnete du taux sur cet
 echantillon est **96/100**. Aucune fonction nouvelle n'a ete ajoutee a l'outil ; le J5 de la fiche
 (extension aux appels systeme) reste `prevu`, c'est une autre chose.
+
+---
+
+## Avance de ce cycle (15/11/2026, preparation de la soumission QNX)
+
+**Le dossier de soumission existe** : le kit de formulaire Devpost, le plan de la video, et le
+README public en anglais. **Aucune fonction nouvelle n'a ete ajoutee a `qnx_portmap/`** (moteur
+gele, commit `395ffc2` inchange).
+
+Ce qui a ete construit et verifie :
+
+- `KIT-SOUMISSION-QNX.md` (25 841 octets) - le texte a coller dans le formulaire Devpost, bloc par
+  bloc, dans l'ordre du formulaire, avec pour chaque bloc sa **longueur mesuree** et la limite du
+  champ, avec sa source et sa date ; **aucune limite inventee** : ce que le formulaire QNX
+  n'affiche pas (il est derriere une session : HTTP 302 / 401) est dit comme "non lu" ;
+- `VIDEO-YOUTUBE-QNX-PORTMAP.md` (13 095 octets) - le plan minute par minute de la video (2 min 40),
+  avec les commandes a l'ecran, le **voice-over en anglais**, et le **segment unique qui manque**
+  (l'execution sur QNX 8.0 lui-meme), avec ce qu'il faut pour le produire ;
+- `tools/mesure_kit.py` - le controleur : il recalcule chaque longueur du kit et **echoue** si un
+  chiffre publie est faux (contre-epreuve faite : RC 1 quand on force "138" en "999") ;
+- `tools/mesure_champs_devpost.py` + `tools/table_mesure_devpost.py` + `docs/preuves/e-mesure-champs-devpost.txt` -
+  la mesure des longueurs reellement acceptees par la plateforme (120 pages de projets Devpost
+  publies), qui donne la **borne inferieure** des limites non publiees ;
+- `README.md` - section "Build and test (English)" (build, test, les 3 configurations de corpus),
+  section "Honest limits (English)", liens vers le kit, le plan video et le codelab, chiffres
+  corriges (l'option `--fresh --fresh-max-pages` n'existait pas ; les 27 pages du mode court sont
+  mesurees en **51 s** le 15/11/2026) ;
+- `docs/UTILISATION.md` et `docs/CODELAB-COMMUNITY-QNX.md` - meme correction de commande.
+
+Resultat : **le dossier est soumettable**, sauf le segment video qui exige la licence SDP 8.0
+(action du proprietaire). Le **controle anti-fuite** rejoue sur l'arbre complet (kit et plan video
+compris) : **0 correspondance**, 6 037 octets de texte QNX verbatim, 0 fichier au-dessus du budget
+de 4 000 octets (`docs/preuves/d-controle-fuite-corpus.txt`).
+
+Points d'honnetete traites cette fois :
+
+- la sortie console de l'outil est en **francais** alors que la regle l. 320 impose l'anglais :
+  le kit et le plan video donnent la **table de traduction** des libelles ;
+- le projet **n'a pas ete execute sur QNX 8.0** (licence SDP absente) : ni le kit, ni le README, ni
+  la video ne pretendent le contraire ; la phrase qui le disait ("it also runs on QNX 8.0 itself")
+  a ete corrigee en "designed to run on QNX 8.0 as well - this has not been demonstrated yet".
+
+## Suite
+
+1. Gestes du proprietaire : licence SDP 8.0 + execution reelle (segment video), video YouTube
+   publique (08/12), codelab community.qnx.com (10/12), formulaire Devpost (13/12), miniature 3:2
+   et 3 captures pour la galerie, depot public jusqu'au 29/01/2027.
+2. Question a la mere : faut-il un mode de sortie **anglais** dans l'outil (changement du moteur,
+   donc soumis au gel) ? Faut-il un README **integralement** en anglais ?
+3. Ne rien faire sans instruction : nouvelle fonction du moteur, publication Devpost, video,
+   compte, message a Tgg.
