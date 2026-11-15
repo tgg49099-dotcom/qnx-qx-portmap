@@ -1,9 +1,9 @@
 MANIFESTE DES FICHIERS PUBLIABLES - QX PORTMAP
 
 Arbre          : /work/qnx-portmap
-Genere le      : 2026-11-15 02:13:39
-Fichiers       : 76
-Taille totale  : 715964 octets
+Genere le      : 2026-11-15 02:15:02
+Fichiers       : 78
+Taille totale  : 733015 octets
 
 Les 3 plus gros fichiers :
       76314 octets  docs/mesure-J5/mesure-J5.json
@@ -18,7 +18,9 @@ LICENCE-DOCS-QNX.md	2725	79454fcbe4a38c3790c1a576979bd6bbffa18c6f1c3e04ad96dddeb
 LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
 LISEZMOI.md	4489	854ece09696bc99af488e80fa51b4996e5ece46ec3df62e6c8b586032c7ad267
 PROGRESSION.md	12416	37d1dcb04739131c32a2542807aee7644906b357a2bc43ccb0471490df38b209
-README.md	25526	f09cd1dceac3ea8ce011420af4cd88c988c1ff5b7e0000913d906ddd77986149
+README.md	30635	17afc73f203b94f1db54aa48ded0f6c73266d92d15880f4f3e22d99a38b3adfa
+docs/CODELAB-COMMUNITY-QNX.md	5415	ceff77585d51c6b62d87b57bd3c15bc50c532ac56db6657e73db298c42b75ddf
+docs/UTILISATION.md	6527	89bc2dd2e787bdfd6392c72c0a9dd10fbda850d21f6076b356c9f8896a66a6ae
 docs/contre-epreuve-rouge.txt	6719	158fe3b55580d86a4e212ef93716e90b49226f6526fcda19d31a48c6c42796db
 docs/demo-projets-reels.md	7015	8f7e88eb5aefbb33e4019bee844cbabb122d4c248b8a241cf02f46f115afb981
 docs/mesure-J4.md	30669	7946d2218fd1ade0cb80c00a9e49c09ef2e180c10afb5d22021d1fe6cc5446b5

@@ -1,5 +1,106 @@
 # QX PORTMAP
 
+> **English summary first. The complete documentation further down is in
+> French** (technical reference, corpus procedure, measurements).
+
+## What QX PORTMAP does - English summary
+
+You have a QNX 8.0 source tree and you want to know, for each API it calls,
+**whether the symbol is still documented in QNX 8.0, and where exactly**.
+
+QX PORTMAP takes a list of QNX symbols (functions, variables, constants) and
+answers, for each one, with the **official page** and the **exact quotation**:
+
+| Status | Meaning |
+|---|---|
+| `documented` | the symbol has its own page in the QNX 8.0 C Library Reference |
+| `described_elsewhere` | no page of its own in 8.0, but the 8.0 documentation still describes it (a "described elsewhere" cross-reference, or a mention in another QNX book) |
+| `absent` | the symbol was in the C Library Reference 7.1 and is gone from the 8.0 corpus |
+| `unknown` | not found in the frozen corpus: a typo, a macro of your project, or an addition published after 14 November 2026 - the tool does not guess |
+
+It also produces a **work list** of the symbols to fix, sorted by priority.
+
+**No network access by default.** The tool reads a frozen, local copy of the
+QNX documentation (3 426 pages, 7.1 and 8.0), with the SHA-256 of every page.
+
+**The QNX documentation is not redistributed with this repository.** The corpus
+is rebuilt on demand from the official QNX site with one command and one
+download log (see [Corpus QNX](#corpus-qnx--non-distribue)).
+
+**Measured on real code**: on the 100 QNX symbols really called by five public
+QNX repositories, the tool resolves and quotes **96 %** of them
+([`docs/mesure-J5.md`](docs/mesure-J5.md)). The first measurement, on the same
+sample, resolved 93 % ([`docs/mesure-J4.md`](docs/mesure-J4.md)): the
+difference is explained further down.
+
+### The three things the contest rules ask a submission to state
+
+| | |
+|---|---|
+| **QNX version** | **QNX SDP 8.0** - every answer is backed by a page of the BlackBerry QNX SDP 8.0 documentation (C Library Reference, io-sock User's Guide, SDP migration guide); each quotation carries the URL, the consultation date and the **SHA-256 of the page** it comes from |
+| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account, nor a network connection**; it is pure Python 3 and it also runs on QNX 8.0 itself |
+| **Toolchain** | **Python 3.8+, standard library only** (`argparse`, `gzip`, `hashlib`, `json`, `re`, `urllib`) - no compilation step, no third-party dependency, no API key |
+
+### AI-assisted development
+
+This project was written with the help of an AI coding assistant
+(**AI-assisted development**). The assistant wrote the code, the tests and this
+documentation. Nothing about QNX is taken on trust: every statement about a QNX
+symbol is backed by an **exact quotation of an official page** (URL, date,
+SHA-256 of the page), and the behaviour of the tool is checked by a test suite
+plus a **RED -> GREEN proof** that breaks a rule on purpose and shows the test
+catching it. The measurement itself is counted by hand on ten symbols given in
+the test, and compared with the published number.
+
+### Quick start (English)
+
+```console
+$ pip install .
+$ qnx-portmap abort accept bzero zzz_fonction_inexistante
+```
+
+Excerpt of the **real output** (executed on 14 November 2026; the complete
+session is further down and is compared line by line by a test - the citation
+blocks are elided here):
+
+```text
+QX PORTMAP - etat des symboles QNX dans la documentation 8.0
+corpus fige : <CORPUS>
+pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
+
+  abort                        documente
+    page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
+    ...
+  accept                       decrit ailleurs
+    ...
+  bzero                        absent de la 8.0
+    ...
+  zzz_fonction_inexistante     inconnu du corpus
+    ...
+```
+
+Without a corpus, the tool says `corpus introuvable` and exits with code 2: it
+never invents an answer. The corpus is rebuilt with:
+
+```bash
+bash scripts/bootstrap_corpus.sh --out corpus-downloaded
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort
+```
+
+Usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md). A codelab draft for
+`community.qnx.com` is in [`docs/CODELAB-COMMUNITY-QNX.md`](docs/CODELAB-COMMUNITY-QNX.md)
+(text only, not published).
+
+---
+
+## Le reste de ce README est en francais
+
+La suite (installation detaillee, exemple de sortie complet, tests,
+reconstruction du corpus, controle anti-fuite, mesures J4 et J5, limites,
+licences) est en francais. Elle fait partie du depot publie et de son
+manifeste ; les commandes et les chiffres sont les memes dans les deux
+langues.
+
 **Ou en est un symbole QNX dans la documentation officielle 8.0 ?**
 
 QX PORTMAP prend une liste de symboles QNX (fonctions, variables, constantes)
@@ -78,6 +179,9 @@ Sans corpus, l'outil ne devine rien : il affiche `corpus introuvable` et
 sort avec le code 2.
 
 ## Utilisation
+
+Guide d'usage court : [`docs/UTILISATION.md`](docs/UTILISATION.md) (lancer
+l'outil, ce qu'il fait, ce que signifie la limite de 96 %).
 
 ```bash
 # symboles en ligne de commande
@@ -182,8 +286,12 @@ python3 -m unittest discover -s tests -t .
 
 | Situation | Resultat |
 |---|---|
-| Corpus present (dans `corpus/`, ou via `QX_PORTMAP_CORPUS`) | 124 tests, **0 skip**, code de sortie 0 |
+| Corpus present (dans `corpus/`, ou via `QX_PORTMAP_CORPUS`) | 124 tests, **1 skip**, code de sortie 0 |
 | Corpus absent | 124 tests, **25 skip**, code de sortie 0 |
+
+Avec le corpus, le seul test saute est celui qui exige le corpus **dans le
+paquet installe** (absent du depot, la documentation QNX n'etant pas
+redistribuee) ; il est saute, jamais en echec.
 
 Les 25 tests sautes sont ceux qui exigent le corpus complet (integrite
 SHA-256 de chacune des 3 426 pages, chiffres de l'index 8.0 et 7.1, reponses
@@ -193,7 +301,7 @@ sur des symboles reels). Ils sont **sautes, jamais en echec**, avec le message :
 corpus absent : lancer scripts/bootstrap_corpus.sh
 ```
 
-Les 85 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
+Les 99 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
 `tests/test_fixtures.py` travaillent sur les **fixtures miniatures** : 12
 extraits courts (1 a 3 lignes) de pages QNX reelles, ranges dans
 `tests/fixtures/`, avec l'URL source, la date de consultation et l'empreinte
