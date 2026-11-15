@@ -1,25 +1,27 @@
-# tests — dossier de travail de QX PORTMAP
+# tests - working folder of QX PORTMAP
 
-Sous-dossier du produit **QX PORTMAP** (racine : `qnx-portmap/`).
-Lise `../LISEZMOI.md` avant de commencer : il decrit l'outil, l'etat des tests et les
-regles (le corpus QNX n'est pas dans le depot, pas de secret, pas de caractere
-CJK / cyrillique / grec, aucun acces reseau par defaut).
+Sub-folder of the product **QX PORTMAP** (root: `qnx-portmap/`).
+Read `../LISEZMOI.md` before starting: it describes the tool, the state of the
+tests and the rules (the QNX corpus is not in the repository, no secret, no
+CJK / Cyrillic / Greek character, no network access by default).
 
-Ce que contient ce dossier :
+What this folder contains:
 
-- `test_*.py` : les tests (unittest, sans dependance). Les nouveaux tests vont ici ; ils doivent tous etre verts.
-- `fixtures/` : 12 extraits courts (1 a 3 lignes) de pages QNX, avec l'URL source et la date
-  de consultation. Ce sont les seules traces de documentation QNX presentes dans le depot.
-- `helpers.py` : outils communs, dont `build_fixture_corpus()` qui reconstitue un corpus
-  miniature au format reel a partir des fixtures, et le message de saut
-  `corpus absent : lancer scripts/bootstrap_corpus.sh`.
+- `test_*.py`: the tests (unittest, no dependency). The new tests go here; they
+  must all be green.
+- `fixtures/`: 12 short extracts (1 to 3 lines) of QNX pages, with the source
+  URL and the consultation date. They are the only traces of QNX documentation
+  present in the repository.
+- `helpers.py`: common tools, among them `build_fixture_corpus()` which
+  rebuilds a miniature corpus in the real format from the fixtures, and the
+  skip message `corpus absent : lancer scripts/bootstrap_corpus.sh`.
 
-Commandes de verification (depuis la racine `qnx-portmap/`) :
+Verification commands (from the root `qnx-portmap/`):
 
 ```bash
-python3 -m unittest discover -s tests -t .   # 90 tests : verts, 18 sautes sans corpus
-python3 tools/contre_epreuve.py               # 10/10 contre-epreuves doivent etre concluantes
+python3 -m unittest discover -s tests -t .   # 124 tests: green, 25 skipped without corpus
+python3 tools/contre_epreuve.py               # 10/10 counter-proofs must be conclusive
 ```
 
-Sans le corpus complet, les tests qui en dependent sont **sautes** (jamais en echec) ;
-les tests fondes sur les fixtures passent toujours.
+Without the complete corpus, the tests that depend on it are **skipped** (never
+failed); the tests based on the fixtures always pass.

@@ -1,63 +1,62 @@
-# Licence de la documentation QNX et du code de QX PORTMAP
+# Licence of the QNX documentation and of the QX PORTMAP code
 
-**Date de consultation des sources : 14/11/2026.**
+**Date the sources were consulted: 14/11/2026.**
 
-## 1. La documentation QNX n'est pas redistribuee
+## 1. The QNX documentation is not redistributed
 
-Les pages de documentation QNX citees par cet outil (C Library Reference,
+The QNX documentation pages cited by this tool (C Library Reference,
 User's Guide, io-sock User's Guide, Programming Guide, System Tuning Guide,
-Migration Guide) sont :
+Migration Guide) are:
 
 > (c) QNX Software Systems Ltd / BlackBerry Limited.
 
-Elles **ne sont pas redistribuees** avec ce depot. Aucune copie verbatim,
-ni complete ni partielle au-dela des 12 extraits courts ranges dans
-`tests/fixtures/`, n'est publiee. Voir `CORPUS-NON-PUBLIE.txt` pour le detail
-et la procedure de reconstruction.
+They are **not redistributed** with this repository. No verbatim copy, neither
+complete nor partial beyond the 12 short extracts stored in
+`tests/fixtures/`, is published. See `CORPUS-NON-PUBLIE.txt` for the detail and
+the rebuild procedure.
 
-Page officielle de copyright de la documentation QNX 8.0 (consultee le
-14/11/2026) :
+Official copyright page of the QNX 8.0 documentation (consulted on
+14/11/2026):
 
   https://www.qnx.com/developers/docs/8.0/com.qnx.doc.copyright/topic/coverpage.html
 
-Cette page indique que l'information de licence propre a chaque fichier se
-trouve dans le QNX Software Center, accessible avec un compte myQNX. Elle ne
-delivre aucune autorisation de redistribuer les pages de documentation. Aucune
-demande d'autorisation n'a ete adressee a QNX ou a BlackBerry : le choix fait
-est de ne pas redistribuer.
+That page states that the licence information specific to each file is in the
+QNX Software Center, accessible with a myQNX account. It gives no permission
+to redistribute the documentation pages. No request for permission has been
+addressed to QNX or to BlackBerry: the choice made is not to redistribute.
 
-Les 12 fixtures de `tests/fixtures/` sont des extraits de 1 a 3 lignes, cites
-avec leur URL source et la date de consultation, a titre de preuve de
-fonctionnement de l'outil sur de la documentation reelle. Chaque fixture porte
-aussi l'empreinte SHA-256 de la pageComplete dont elle est extraite.
+The 12 fixtures of `tests/fixtures/` are extracts of 1 to 3 lines, quoted with
+their source URL and the consultation date, as a proof that the tool works on
+real documentation. Each fixture also carries the SHA-256 fingerprint of the
+complete page it is taken from.
 
-## 2. Le code est libre (MIT)
+## 2. The code is free (MIT)
 
-Le code de QX PORTMAP (dans `qnx_portmap/`, `tests/`, `tools/`, `scripts/`)
-est distribue sous licence MIT : voir le fichier `LICENSE` a la racine du
-depot.
+The code of QX PORTMAP (in `qnx_portmap/`, `tests/`, `tools/`, `scripts/`) is
+distributed under the MIT licence: see the file `LICENSE` at the root of the
+repository.
 
 Copyright (c) 2026 QX PORTMAP contributors.
 
-Le MIT ne s'applique pas a la documentation QNX : il ne couvre ni les pages
-de documentation, ni les fixtures, qui restent la propriete de QNX Software
-Systems Ltd / BlackBerry Limited et sont cites a titre d'extrait.
+The MIT licence does not apply to the QNX documentation: it covers neither the
+documentation pages nor the fixtures, which remain the property of QNX
+Software Systems Ltd / BlackBerry Limited and are quoted as extracts.
 
-## 3. Les autres sources citees
+## 3. The other cited sources
 
-Les renvois de la documentation QNX pointent vers des pages tierces, citees
-sans etre reproduites :
+The cross-references of the QNX documentation point to third-party pages,
+cited without being reproduced:
 
-- la documentation FreeBSD (`man.freebsd.org`), citee par la documentation
-  QNX elle-meme dans ses renvois "described elsewhere" ;
-- le site officiel de documentation QNX (`www.qnx.com/developers/docs/`),
-  seule source des pages citees.
+- the FreeBSD documentation (`man.freebsd.org`), cited by the QNX
+  documentation itself in its "described elsewhere" cross-references;
+- the official QNX documentation site (`www.qnx.com/developers/docs/`), the
+  only source of the cited pages.
 
-## 4. Resume
+## 4. Summary
 
-| Element | Statut |
+| Element | Status |
 |---|---|
-| Code de l'outil (`qnx_portmap/`, `tests/`, `tools/`, `scripts/`) | MIT, redistribuable |
-| Documentation QNX (3 426 pages) | (c) QNX Software Systems Ltd / BlackBerry Limited — **non redistribuee** |
-| 12 fixtures (extraits de 1 a 3 lignes) | (c) QNX Software Systems Ltd / BlackBerry Limited — cites avec URL et date |
-| Corpus fige (archive locale du slot) | hors du depot, jamais publie |
+| Code of the tool (`qnx_portmap/`, `tests/`, `tools/`, `scripts/`) | MIT, redistributable |
+| QNX documentation (3 426 pages) | (c) QNX Software Systems Ltd / BlackBerry Limited - **not redistributed** |
+| 12 fixtures (extracts of 1 to 3 lines) | (c) QNX Software Systems Ltd / BlackBerry Limited - quoted with URL and date |
+| Frozen corpus (local archive of the slot) | outside the repository, never published |

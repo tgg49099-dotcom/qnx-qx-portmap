@@ -1,17 +1,18 @@
-# tools — dossier de travail de QX PORTMAP
+# tools - working folder of QX PORTMAP
 
-Sous-dossier du produit **QX PORTMAP** (racine : `qnx-portmap/`).
-Lise `../LISEZMOI.md` avant de commencer : il decrit l'outil, l'etat des tests et les
-regles (pas de modification du corpus `../corpus/`, pas de secret, pas de caractere
-CJK / cyrillique / grec, aucun acces reseau par defaut).
+Sub-folder of the product **QX PORTMAP** (root: `qnx-portmap/`).
+Read `../LISEZMOI.md` before starting: it describes the tool, the state of the
+tests and the rules (no modification of the corpus `../corpus/`, no secret, no
+CJK / Cyrillic / Greek character, no network access by default).
 
-Ce que contient ce dossier :
+What this folder contains:
 
-- `tools/` : `build_corpus.py` (construction deterministe du corpus) et `contre_epreuve.py` (contre-epreuve ROUGE).
+- `tools/`: `build_corpus.py` (deterministic construction of the corpus) and
+  `contre_epreuve.py` (RED counter-proof).
 
-Commandes de verification (depuis la racine `qnx-portmap/`) :
+Verification commands (from the root `qnx-portmap/`):
 
 ```bash
-python3 -m unittest discover -s tests -t .   # les tests doivent tous passer
-python3 tools/contre_epreuve.py               # 8/8 contre-epreuves doivent etre concluantes
+python3 -m unittest discover -s tests -t .   # all the tests must pass
+python3 tools/contre_epreuve.py               # 10/10 counter-proofs must be conclusive
 ```

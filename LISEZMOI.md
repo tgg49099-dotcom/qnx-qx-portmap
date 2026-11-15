@@ -1,76 +1,85 @@
-# QX PORTMAP — dossier produit
+# QX PORTMAP - product dossier
 
-**Outil** : etant donne une liste de symboles QNX (fonctions, variables, constantes),
-dire pour chacun son etat dans la documentation officielle QNX 8.0 — `documented`,
-`described_elsewhere`, `absent` ou `unknown` — avec **la page officielle** et **la citation
-exacte**, puis produire la **liste de travail de mise a niveau**.
+**Tool**: given a list of QNX symbols (functions, variables, constants), tell
+for each one its state in the official QNX 8.0 documentation - `documented`,
+`described_elsewhere`, `absent` or `unknown` - with **the official page** and
+**the exact quotation**, then produce the **upgrade work list**.
 
-**Fonction unique** (c'est le critere du concours : outil 2, different de QX Probe).
-Entree : une liste de symboles. Sortie : un statut documentaire par symbole. Source : la
-documentation officielle QNX 7.1 et 8.0. Aucun acces SDP, aucune compilation, aucun reseau
-par defaut.
+**Single function** (this is the criterion of the contest: tool 2, different
+from QX Probe). Input: a list of symbols. Output: a documentation status per
+symbol. Source: the official QNX 7.1 and 8.0 documentation. No SDP access, no
+compilation, no network by default.
 
-## Etat
+## State
 
-V0 fonctionnelle (14/11/2026). **106 tests verts**. Contre-epreuve ROUGE : 11/11 avec le corpus,
-10/10 sans le corpus (la regle d'integrite du corpus fige ne peut pas etre testee sans lui).
+Working V0 (14/11/2026). **124 green tests**. RED counter-proof: 11/11 with
+the corpus, 10/10 without it (the rule on the integrity of the frozen corpus
+cannot be tested without it).
 
-**Mesure J4 (14/11/2026)** : sur 100 symboles QNX reellement appeles par 5 depots QNX
-publics, l'outil en resout et cite **93 %** (`docs/mesure-J4.md`).
+**Measurement J4 (14/11/2026)**: on the 100 QNX symbols really called by 5
+public QNX repositories, the tool resolves and quotes **93 %**
+(`docs/mesure-J4.md`).
 
 ```
-python3 -m unittest discover -s tests -t .        # 106 tests (21 skips sans corpus)
-python3 tools/contre_epreuve.py                    # 11/11 contre-epreuves concluantes
-python3 tools/mesure_j4.py --clones <dossier>     # remesure J4 (clones QNX publics)
-qnx-portmap abort accept bzero                    # exemple reel (voir README.md)
+python3 -m unittest discover -s tests -t .        # 124 tests (25 skips without corpus)
+python3 tools/contre_epreuve.py                    # 11/11 conclusive counter-proofs
+python3 tools/mesure_j4.py --clones <dossier>     # re-measure J4 (public QNX clones)
+qnx-portmap abort accept bzero                    # real example (see README.md)
 ```
 
-## Arborescence
+## Tree
 
-Le depot est **publiable** : il ne contient plus la documentation QNX.
+The repository is **publishable**: it no longer contains the QNX documentation.
 
-| Chemin | Contenu | Taille |
+| Path | Content | Size |
 |---|---|---|
-| `qnx_portmap/` | le paquet (6 modules, bibliotheque standard uniquement) | ~100 Ko |
-| `tests/` | 106 tests, dont 21 sur les fixtures miniatures et 16 sur la mesure J4 | ~90 Ko |
-| `tests/fixtures/` | 12 extraits courts (1 a 3 lignes) de pages QNX, avec URL et date | ~4 Ko |
-| `tools/` | construction du corpus, fixtures, contre-epreuve ROUGE, mesure J4 | ~60 Ko |
-| `scripts/` | bootstrap du corpus, manifeste publie, controle anti-fuite | ~30 Ko |
-| `docs/` | contre-epreuve ROUGE, demonstration, preuves, mesure J4 | ~80 Ko |
-| `PROGRESSION.md` | une ligne par fonction de l'outil (etat + test qui la prouve) | ~9 Ko |
-| `MANIFESTE-PUBLIE.txt` | chemin, taille et SHA-256 de chaque fichier publiable | ~5 Ko |
-| `corpus/` | **absent du depot** — reconstruit a la demande, voir ci-dessous | 0 |
+| `qnx_portmap/` | the package (6 modules, standard library only) | ~100 KB |
+| `tests/` | 124 tests, among them 21 on the miniature fixtures and 16 on the J4 measurement | ~90 KB |
+| `tests/fixtures/` | 12 short extracts (1 to 3 lines) of QNX pages, with URL and date | ~4 KB |
+| `tools/` | corpus construction, fixtures, RED counter-proof, J4 measurement | ~60 KB |
+| `scripts/` | corpus bootstrap, published manifest, anti-leak control | ~30 KB |
+| `docs/` | RED counter-proof, demonstration, proofs, J4 and J5 measurements | ~170 KB |
+| `PROGRESSION.md` | one line per function of the tool (state + the test that proves it) | ~16 KB |
+| `MANIFESTE-PUBLIE.txt` | path, size and SHA-256 of every publishable file | ~9 KB |
+| `corpus/` | **absent from the repository** - rebuilt on demand, see below | 0 |
 
-## Corpus fige : a lire avant d'y toucher
+## Frozen corpus: read this before touching it
 
-Le corpus de documentation QNX (3 426 pages HTML officielles, 44,9 Mo compresses) **n'est
-plus dans ce depot** : il est (c) QNX Software Systems Ltd / BlackBerry Limited et n'est pas
-redistribue. La documentation reste la source, elle est telechargee a la demande depuis le
-site officiel.
+The QNX documentation corpus (3 426 official HTML pages, 44.9 MB compressed) is
+**no longer in this repository**: it is (c) QNX Software Systems Ltd /
+BlackBerry Limited and is not redistributed. The documentation remains the
+source, it is downloaded on demand from the official site.
 
-- L'archive locale du slot (hors depot, jamais publiee) est dans
-  `/work/qnx-portmap-corpus-local/corpus/`, avec son ancrage `CORPUS-FIGE.txt`.
-- Pour reconstituer un corpus : `bash scripts/bootstrap_corpus.sh --out corpus-downloaded`
-  (delai entre les requetes, journal `download.log`, refus d'ecrire dans un corpus fige).
-- Pour l'outil : `QX_PORTMAP_CORPUS=/chemin/vers/corpus qnx-portmap ...`.
-- **Le corpus fige n'est jamais modifie, jamais republie.** Toute page QNX qui apparait
-  dans ce depot est un extrait court : 12 extraits de 1 a 3 lignes dans `tests/fixtures/`
-  et les 100 citations de la mesure J4 dans `docs/mesure-J4/citations-*.txt`, cites avec
-  leur URL, la date de consultation et l'empreinte SHA-256 de la page source.
-- Le controle `python3 scripts/controle_fuite_corpus.py --tree . --corpus <corpus>`
-  prouve qu'aucun fichier publiable ne contient de page QNX (0 correspondance) et qu'aucun
-  fichier ne depasse 4 000 octets de texte QNX verbatim.
+- The local archive of the slot (outside the repository, never published) is in
+  `/work/qnx-portmap-corpus-local/corpus/`, with its `CORPUS-FIGE.txt`
+  anchoring file.
+- To rebuild a corpus: `bash scripts/bootstrap_corpus.sh --out corpus-downloaded`
+  (delay between the requests, `download.log` log, refuses to write into a
+  frozen corpus).
+- For the tool: `QX_PORTMAP_CORPUS=/path/to/corpus qnx-portmap ...`.
+- **The frozen corpus is never modified, never republished.** Every QNX page
+  that appears in this repository is a short extract: 12 extracts of 1 to 3
+  lines in `tests/fixtures/` and the 100 citations of the J4 measurement in
+  `docs/mesure-J4/citations-*.txt`, quoted with their URL, the consultation
+  date and the SHA-256 fingerprint of the source page.
+- The control `python3 scripts/controle_fuite_corpus.py --tree . --corpus <corpus>`
+  proves that no publishable file contains a QNX page (0 match) and that no
+  file exceeds 4 000 bytes of verbatim QNX text.
 
-## Regles du produit
+## Product rules
 
-- **Python 3.8+**, bibliotheque standard uniquement : aucune dependance a ajouter.
-- **Aucun acces reseau** dans le mode par defaut. `--fresh` est une option, pas le mode normal.
-- Chaque symbole absent du corpus doit rester `unknown` : **ne jamais deviner** un statut.
-- Une citation doit etre **verbatim** de la page officielle, jamais reformulee.
-- Un test qui passe toujours ne teste pas : chaque test a au moins un cas qui le fait echouer.
-- Un test qui exige le corpus complet est **saute** (jamais en echec) quand le corpus est
-  absent ; le message est `corpus absent : lancer scripts/bootstrap_corpus.sh`.
-- `MANIFESTE-PUBLIE.txt` est **regenere apres chaque changement** :
-  `python3 scripts/manifeste_publie.py` (verification : `--check`).
-- Aucun caractere CJK / cyrillique / grec dans les fichiers ecrits.
-- Aucun secret, aucune cle, aucune URL d'API avec cle.
+- **Python 3.8+**, standard library only: no dependency to add.
+- **No network access** in the default mode. `--fresh` is an option, not the
+  normal mode.
+- Every symbol absent from the corpus must stay `unknown`: **never guess** a
+  status.
+- A quotation must be **verbatim** from the official page, never reworded.
+- A test that always passes does not test anything: every test has at least
+  one case that makes it fail.
+- A test that requires the complete corpus is **skipped** (never failed) when
+  the corpus is absent; the message is
+  `corpus absent : lancer scripts/bootstrap_corpus.sh`.
+- `MANIFESTE-PUBLIE.txt` is **regenerated after every change**:
+  `python3 scripts/manifeste_publie.py` (verification: `--check`).
+- No CJK / Cyrillic / Greek character in the files written.
+- No secret, no key, no API URL with a key.
