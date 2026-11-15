@@ -177,7 +177,9 @@ symbols to fix, sorted by priority.
   the documentation.
 - It does not redistribute the QNX documentation. The corpus (3,426 pages,
   QNX 7.1 and 8.0) is rebuilt on demand from the official QNX site with one
-  command and one download log.
+  command and one download log. **The first download takes about 1 h 40** at one
+  request per second (about 3,400 pages, measured on 16 November 2026); after
+  that the tool works offline.
 - It makes no network request by default; the online refresh is an opt-in
   flag.
 - It does not check licences, CVEs, or symbols published after the corpus
@@ -188,7 +190,7 @@ symbols to fix, sorted by priority.
 | | |
 |---|---|
 | QNX version | QNX SDP 8.0. Every answer is backed by a page of the official BlackBerry QNX SDP 8.0 documentation (C Library Reference, io-sock User's Guide, SDP migration guide). Each quotation carries the URL, the consultation date and the SHA-256 of the page it comes from. |
-| Target | A host tool (Linux, macOS, Windows). It needs no QNX SDP, no QNX board, no QNX account and no network connection to run. It is pure Python 3 and uses the standard library only, so it is POSIX-compatible and designed to run on QNX 8.0 as well. **This has not been demonstrated yet**: the project has not been run on a QNX 8.0 machine, because the QNX SDP 8.0 licence is not available in this environment (see "Honest limits" below). |
+| Target | A host tool (Linux, macOS, Windows). It needs no QNX SDP, no QNX board and no QNX account. It needs no network connection **to run** once the corpus has been downloaded: the corpus is a local snapshot, and downloading it for the first time is the only step that needs the network (see "Run it in three commands"). It is pure Python 3 and uses the standard library only, so it is POSIX-compatible and designed to run on QNX 8.0 as well. **This has not been demonstrated yet**: the project has not been run on a QNX 8.0 machine, because the QNX SDP 8.0 licence is not available in this environment (see "Honest limits" below). |
 | Toolchain | Python 3.8+, standard library only (`argparse`, `gzip`, `hashlib`, `json`, `re`, `urllib`). No compilation step, no third-party dependency, no API key. |
 
 ## Run it in three commands
@@ -198,6 +200,10 @@ git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git
 cd qnx-qx-portmap && pip install . && bash scripts/bootstrap_corpus.sh --out corpus-downloaded
 QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
 ```
+
+The second command downloads the corpus: **3,426 pages** of the official QNX
+documentation, one request per second. **Budget about 1 h 40** (about 3,400
+pages, measured on 16 November 2026). The third command then runs offline.
 
 Real output, executed on 15 November 2026 against the 3,426-page corpus (the
 corpus is a snapshot of the official documentation taken on 14 November 2026;
@@ -292,7 +298,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 7566 characters
+- Length (measured): 8146 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to

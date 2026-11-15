@@ -40,7 +40,7 @@ difference is explained further down.
 | | |
 |---|---|
 | **QNX version** | **QNX SDP 8.0** - every answer is backed by a page of the BlackBerry QNX SDP 8.0 documentation (C Library Reference, io-sock User's Guide, SDP migration guide); each quotation carries the URL, the consultation date and the **SHA-256 of the page** it comes from |
-| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account, nor a network connection**; it is pure Python 3 with the standard library only, so it is POSIX-compatible and **designed to run on QNX 8.0 as well - this has not been demonstrated yet**, because the QNX SDP 8.0 licence is not available in this environment (see [Limits](#limits)) |
+| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account**; it needs **no network connection to run** once the corpus has been downloaded (the corpus is a local snapshot; downloading it for the first time is the only step that needs the network - see [Quick start](#quick-start)); it is pure Python 3 with the standard library only, so it is POSIX-compatible and **designed to run on QNX 8.0 as well - this has not been demonstrated yet**, because the QNX SDP 8.0 licence is not available in this environment (see [Limits](#limits)) |
 | **Toolchain** | **Python 3.8+, standard library only** (`argparse`, `gzip`, `hashlib`, `json`, `re`, `urllib`) - no compilation step, no third-party dependency, no API key |
 
 ### AI-assisted development
@@ -60,6 +60,11 @@ the test, and compared with the published number.
 $ pip install .
 $ qnx-portmap abort accept bzero zzz_fonction_inexistante
 ```
+
+The first run needs the frozen corpus: **3,426 pages** of the official QNX
+documentation, downloaded once from the official QNX site. **Budget about 1 h
+40** at one request per second (about 3,400 pages, measured on 16 November
+2026). After that download the tool runs offline, with no network request.
 
 Excerpt of the **real output** (executed on 15 November 2026; the citation
 blocks are elided here, and this excerpt is compared with the real output by

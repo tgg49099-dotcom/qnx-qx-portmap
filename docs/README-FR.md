@@ -38,7 +38,7 @@ difference is explained further down.
 | | |
 |---|---|
 | **QNX version** | **QNX SDP 8.0** - every answer is backed by a page of the BlackBerry QNX SDP 8.0 documentation (C Library Reference, io-sock User's Guide, SDP migration guide); each quotation carries the URL, the consultation date and the **SHA-256 of the page** it comes from |
-| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account, nor a network connection**; it is pure Python 3 with the standard library only, so it is POSIX-compatible and **designed to run on QNX 8.0 as well - this has not been demonstrated yet**, because the QNX SDP 8.0 licence is not available in this environment (see [Limites](#limites)) |
+| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account**; it needs **no network connection to run** once the corpus has been downloaded (the corpus is a local snapshot; downloading it for the first time is the only step that needs the network - see [Quick start](#quick-start)); it is pure Python 3 with the standard library only, so it is POSIX-compatible and **designed to run on QNX 8.0 as well - this has not been demonstrated yet**, because the QNX SDP 8.0 licence is not available in this environment (see [Limites](#limites)) |
 | **Toolchain** | **Python 3.8+, standard library only** (`argparse`, `gzip`, `hashlib`, `json`, `re`, `urllib`) - no compilation step, no third-party dependency, no API key |
 
 ### AI-assisted development
