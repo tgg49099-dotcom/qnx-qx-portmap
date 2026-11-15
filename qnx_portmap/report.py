@@ -1,4 +1,5 @@
-"""Rendu des resultats de QX PORTMAP : texte, JSON, Markdown."""
+"""Rendering of the QX PORTMAP results: text, JSON, Markdown.
+"""
 
 import json
 
@@ -18,9 +19,9 @@ STATUS_LABEL_EN = {
     UNKNOWN: "unknown",
 }
 
-# Libelles des rendus texte et Markdown dans les deux langues de sortie.
-# Les chaines francaises reproduisent exactement la sortie historique de
-# l'outil : "fr" reste la langue par defaut, octet pour octet.
+# Labels of the text and Markdown renderings in the two output languages.
+# The French strings reproduce exactly the historical output of the tool,
+# byte for byte; the console default is English.
 TEXT_STRINGS = {
     "fr": {
         "status": STATUS_LABEL,
@@ -104,7 +105,7 @@ def _wrap(text, width, indent):
     current = ""
     for word in words:
         too_long = current and len(current) + 1 + len(word) > width
-        # une URL ne doit jamais etre coupee en deux
+        # a URL must never be cut in two
         if too_long and ("://" in current or "://" in word):
             lines.append(current)
             current = word
@@ -121,7 +122,7 @@ def _wrap(text, width, indent):
 
 def render_text(results, worklist, corpus, version="8.0", previous="7.1", width=100,
                 lang="fr"):
-    """Rendu texte, lisible dans un terminal."""
+    """Text rendering, readable in a terminal."""
     L = TEXT_STRINGS[lang if lang in TEXT_STRINGS else "fr"]
     out = []
     out.append(L["title"] % version)
@@ -178,7 +179,7 @@ def render_text(results, worklist, corpus, version="8.0", previous="7.1", width=
 
 
 def render_json(results, worklist, corpus, version="8.0", previous="7.1"):
-    """Rendu JSON (une seule fois, machine lisible)."""
+    """JSON rendering (one single object, machine readable)."""
     man = corpus.manifest
     payload = {
         "tool": "QX PORTMAP",
@@ -206,7 +207,7 @@ def render_json(results, worklist, corpus, version="8.0", previous="7.1"):
 
 def render_markdown(results, worklist, corpus, version="8.0", previous="7.1",
                     lang="fr"):
-    """Rendu Markdown, prete a coller dans un rapport."""
+    """Markdown rendering, ready to paste in a report."""
     L = MD_STRINGS[lang if lang in MD_STRINGS else "fr"]
     man = corpus.manifest
     out = []

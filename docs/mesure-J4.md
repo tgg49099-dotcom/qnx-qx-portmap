@@ -184,7 +184,8 @@ done
 #    local archive)
 python3 tools/mesure_j4.py --clones <directory> \
     --corpus /work/qnx-portmap-corpus-local/corpus \
-    --out docs/mesure-J4/mesure-J4.json \
+    --public-json docs/mesure-J4/mesure-J4.json \
+    --citations-dir docs/mesure-J4 \
     --markdown docs/mesure-J4.md --lang en
 
 # --lang fr writes the same report in French

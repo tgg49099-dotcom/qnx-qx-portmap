@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Fige le corpus de documentation QNX dans le depot QX PORTMAP.
+"""Freezes the QNX documentation corpus in the QX PORTMAP repository.
 
-Le corpus est une copie, page par page, de la documentation officielle QNX
-telechargeee le 14/11/2026 (versions 7.1 et 8.0). Chaque page est stockee
-compressee (gzip) telle qu'elle a ete telechargee, et son empreinte SHA-256
-est inscrite dans ``corpus/index/pages.jsonl``.
+The corpus is a copy, page by page, of the official QNX documentation
+downloaded on 14/11/2026 (versions 7.1 and 8.0). Every page is stored
+compressed (gzip) as it was downloaded, and its SHA-256 fingerprint is written
+in ``corpus/index/pages.jsonl``.
 
-Usage :
-    python3 tools/build_corpus.py --cache /chemin/vers/cache --out corpus
+Usage:
+    python3 tools/build_corpus.py --cache /path/to/cache --out corpus
 
-Le script est deterministe : a cache identique, corpus identique.
+The script is deterministic: same cache, same corpus.
 """
 
 import argparse
@@ -39,9 +39,9 @@ def sha256_file(path):
 
 
 def relpath_of(raw_text, filename):
-    """Chemin relatif du livre/topic de la page, depuis la balise Oxygen.
+    """Relative path of the book/topic of the page, from the Oxygen tag.
 
-    Repli : reconstruction depuis le nom de fichier du cache.
+    Fallback: rebuild it from the file name of the cache.
     """
     m = OUT_RELPATH.search(raw_text)
     if m:
@@ -84,7 +84,7 @@ def main():
         rel = relpath_of(text, name)
         dest = os.path.join(pages_dir, version, rel + ".gz")
         os.makedirs(os.path.dirname(dest), exist_ok=True)
-        # gzip deterministe (mtime=0) pour que le corpus soit reproductible
+        # deterministic gzip (mtime=0) so that the corpus is reproducible
         with open(dest, "wb") as fh:
             with gzip.GzipFile(filename="", mode="wb", fileobj=fh, mtime=0) as gz:
                 gz.write(raw)
@@ -98,13 +98,13 @@ def main():
             "bytes": len(raw),
         })
 
-    # --- index des pages ---------------------------------------------------
+    # --- index of the pages ------------------------------------------------
     pages_jsonl = os.path.join(index_dir, "pages.jsonl")
     with open(pages_jsonl, "w", encoding="utf-8") as fh:
         for rec in records:
             fh.write(json.dumps(rec, ensure_ascii=False, sort_keys=True) + "\n")
 
-    # --- SHA256SUMS (empreintes des fichiers stockes) ----------------------
+    # --- SHA256SUMS (fingerprints of the stored files) ---------------------
     sums_path = os.path.join(out_root, "SHA256SUMS")
     entries = []
     for dirpath, dirnames, filenames in os.walk(out_root):

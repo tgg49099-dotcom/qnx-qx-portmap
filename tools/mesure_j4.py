@@ -1,42 +1,41 @@
 #!/usr/bin/env python3
-"""Mesure J4 : taux de resolution de QX PORTMAP sur de vrais depots QNX publics.
+"""Measurement J4: resolution rate of QX PORTMAP on real public QNX repositories.
 
-La fiche du 2e outil porte un critere J4 : *combien de symboles QNX
-reellement utilises par de vrais projets QNX l'outil reussit-il a resoudre
-et a citer* ?
+The sheet of the 2nd tool carries a J4 criterion: *how many QNX symbols
+really used by real QNX projects does the tool succeed in resolving and
+quoting*?
 
-Ce script mesure ce taux. Il fait trois choses, dans cet ordre :
+This script measures that rate. It does three things, in this order:
 
-1. **Echantillonnage.** Il parcourt les clones de depots QNX publics (clones
-   superficiels, crees par ``git clone --depth 1``), extrait les identifiants
-   appeles comme fonctions dans les fichiers ``.c``/``.h`` retenus, et
-   ecarte les symboles definis par le projet lui-meme.
-2. **Selection.** Un symbole est retenu s'il appartient a la C Library
-   Reference QNX (8.0 ou 7.1) : c'est la definition d'un symbole d'API QNX.
-   On prend les 20 symboles les plus utilises de chaque depot (en cas
-   d'egalite, ordre alphabetique), sans repeter un symbole deja pris par un
-   autre depot : l'echantillon global compte exactement 100 symboles
-   distincts.
-3. **Mesure.** QX PORTMAP classe les 100 symboles avec le corpus fige
-   (hors ligne) et l'on retient, pour chacun, le statut, la page officielle
-   et la citation.
+1. **Sampling.** It walks the clones of public QNX repositories (shallow
+   clones, made with ``git clone --depth 1``), extracts the identifiers called
+   as functions in the kept ``.c``/``.h`` files, and discards the symbols
+   defined by the project itself.
+2. **Selection.** A symbol is kept if it belongs to the QNX C Library
+   Reference (8.0 or 7.1): that is the definition of a QNX API symbol. The
+   20 most used symbols of each repository are taken (on a tie, alphabetical
+   order), without taking again a symbol already taken by another repository:
+   the global sample counts exactly 100 distinct symbols.
+3. **Measurement.** QX PORTMAP classifies the 100 symbols with the frozen
+   corpus (offline) and the status, the official page and the citation are
+   kept for each one.
 
-Le taux J4 est le nombre de symboles **resous et cites** sur 100 :
+The J4 rate is the number of symbols **resolved and cited** out of 100:
 
-* ``resolu et cite``    : le symbole a sa propre page dans la C Library
-  Reference 8.0, et cette page est verifiable dans le corpus fige ;
-* ``decrit ailleurs``   : le symbole est decrit dans la documentation 8.0 mais
-  n'a pas de page propre dans la C Library Reference -> **non resolu** ;
-* ``non resolu``        : absent de la documentation 8.0, ou introuvable
-  dans le corpus -> **non resolu**.
+* ``resolved and cited``  : the symbol has its own page in the 8.0 C Library
+  Reference, and that page is verifiable in the frozen corpus;
+* ``described elsewhere`` : the symbol is described in the 8.0 documentation
+  but has no page of its own in the C Library Reference -> **not resolved**;
+* ``not resolved``        : absent from the 8.0 documentation, or not found
+  in the corpus -> **not resolved**.
 
-Usage :
+Usage:
 
     python3 tools/mesure_j4.py --clones /work/mesure-j4/clones \
         --corpus /work/qnx-portmap-corpus-local/corpus \
-        --out docs/mesure-J4.json
+        --markdown docs/mesure-J4.md --lang en
 
-Le script n'ecrit rien dans le depot : il produit un JSON et un Markdown.
+The script writes nothing in the repository: it produces a JSON and a Markdown.
 """
 
 import argparse
@@ -53,10 +52,10 @@ from qnx_portmap.classify import (ABSENT, DOCUMENTED, ELSEWHERE,  # noqa: E402
                                   UNKNOWN, Classifier)
 from qnx_portmap.corpus import Corpus  # noqa: E402
 
-# -- l'echantillon de depots ------------------------------------------------
-# L'ordre de cette liste est l'ordre de parcours : il decide quel depot
-# garde un symbole partage avec un autre depot. Il est fige, donc la mesure
-# est reproductible.
+# -- the sample of repositories ----------------------------------------------
+# The order of this list is the walk order: it decides which repository
+# keeps a symbol shared with another one. It is frozen, so the measurement
+# is reproducible.
 REPOS = [
     {"key": "vocho/openqnx",
      "url": "https://github.com/vocho/openqnx",
@@ -102,16 +101,16 @@ REPOS = [
 
 CONSULTED = "2026-11-14"
 
-# Identite du corpus fige mesure : sha256 de corpus/SHA256SUMS.
+# Identity of the frozen corpus measured: sha256 of corpus/SHA256SUMS.
 CORPUS_SHA256 = ("e312cea466329a76053be0160911cf378ffb1c6ea80050a66c66186ca0023efd")
 
 PER_REPO = 20
 
-# -- extraction des appels ---------------------------------------------------
+# -- extraction of the calls --------------------------------------------------
 CALL = re.compile(r"(?<![A-Za-z0-9_])([A-Za-z_][A-Za-z0-9_]*)\s*\(")
-# Definition d'une fonction du projet : "type nom(args) {"
+# Definition of a function of the project: "type name(args) {"
 FUNC_DEF = re.compile(r"(?m)^[A-Za-z_][A-Za-z0-9_ \t\*]*?[\s\*]([A-Za-z_][A-Za-z0-9_]*)\s*\([^;{]*\)\s*\{")
-# Definition d'une macro du projet : "#define NOM("
+# Definition of a macro of the project: "#define NAME("
 MACRO_DEF = re.compile(r"(?m)^\s*#\s*define\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(")
 BLOCK_COMMENT = re.compile(r"/\*.*?\*/", re.S)
 LINE_COMMENT = re.compile(r"//[^\n]*")
@@ -122,23 +121,23 @@ static const volatile inline extern register void int char long short unsigned s
 double bool size_t ssize_t NULL defined __attribute__ __asm__ asm typeof
 """.split())
 
-# Les 3 etats de la mesure J4.
+# The 3 states of the J4 measurement.
 RESOLU = "resolu_et_cite"
 AILLEURS = "resolu_mais_decrit_ailleurs"
 NON_RESOLU = "non_resolu"
 
-# -- version anglaise du rapport --------------------------------------------
-# Le rapport public est en anglais ; la version francaise (sortie de l'outil,
-# `--lang fr`) est conservee a part, byte-identique. Les chiffres sont les
-# memes dans les deux versions : seul le texte change.
+# -- English version of the report --------------------------------------------
+# The public report is in English; the French version (output of the tool,
+# `--lang fr`) is kept apart, byte-identical. The figures are the same in
+# both versions: only the text changes.
 ETAT_EN = {
     RESOLU: "resolved and cited",
     AILLEURS: "resolved but described elsewhere",
     NON_RESOLU: "not resolved",
 }
 
-# Etats internes (codes machine) -> libelles anglais, pour les pages de
-# citations. Le code francais reste dans le JSON public (cle machine).
+# Internal states (machine codes) -> English labels, for the citation
+# pages. The French status code stays in the public JSON (machine key).
 ETAT_CITATION_EN = {
     "resolu_et_cite": "resolved and cited",
     "resolu_mais_decrit_ailleurs": "resolved but described elsewhere",
@@ -148,9 +147,9 @@ FAMILLE_EN = {
     "qnx": "QNX-specific",
     "standard": "standard C/POSIX",
 }
-# Les notes de l'outil sont en francais (le moteur est gele) : la version
-# anglaise les traduit. Toute note absente de cette table est signalee par
-# le test tests/test_mesure_j4.py (une note nouvelle doit etre traduite).
+# The notes of the tool are in French (the engine is frozen): the English
+# version translates them. Any note missing from this table is reported by
+# the test tests/test_mesure_j4.py (a new note must be translated).
 NOTE_EN = {
     "present en 7.1 et en 8.0": "present in 7.1 and in 8.0",
     "present dans la C Library Reference 7.1, absent de tout le corpus 8.0":
@@ -167,13 +166,14 @@ NOTE_EN = {
 
 
 def load_standard_symbols(path=None):
-    """Symboles standards (C standard, POSIX/XSI, extensions communes).
+    """Standard symbols (C standard, POSIX/XSI, common extensions).
 
-    Le fichier ``tools/posix-base.txt`` est **independant du corpus QNX** :
-    il ne vient pas de la documentation QNX et ne peut donc pas avantager
-    l'outil. Un symbole de la liste est dit "standard" ; un symbole de la
-    C Library Reference QNX qui n'y est pas est dit "specifique a QNX"
-    (``io_open``, ``resmgr_attach``, ``iofunc_read_default``...).
+    The file ``tools/posix-base.txt`` is **independent of the QNX
+    corpus**: it does not come from the QNX documentation and therefore
+    cannot favour the tool. A symbol of the list is called "standard"; a
+    symbol of the QNX C Library Reference that is not in it is called
+    "QNX-specific" (``io_open``, ``resmgr_attach``,
+    ``iofunc_read_default``...).
     """
     if path is None:
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -188,7 +188,7 @@ def load_standard_symbols(path=None):
 
 
 def source_files(root):
-    """Fichiers ``.c``/``.h`` retenus dans un clone (hors ``.git``)."""
+    """``.c``/``.h`` files kept in a clone (outside ``.git``)."""
     out = []
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = sorted(d for d in dirnames if d != ".git")
@@ -199,11 +199,11 @@ def source_files(root):
 
 
 def scan_repo(root):
-    """Parcourt un clone.
+    """Walks a clone.
 
-    Retourne ``(calls, definitions, nfiles)`` ou ``calls`` compte les appels
-    de fonctions, ``definitions`` contient les symboles definis par le
-    projet lui-meme (a ecarter : ce ne sont pas des symboles QNX).
+    Returns ``(calls, definitions, nfiles)`` where ``calls`` counts the
+    function calls, ``definitions`` holds the symbols defined by the
+    project itself (to be discarded: they are not QNX symbols).
     """
     calls = collections.Counter()
     definitions = set()
@@ -228,19 +228,19 @@ def scan_repo(root):
 
 def select_sample(classifier, clones_dir, per_repo=PER_REPO, standard=None,
                   prefer_specific=False):
-    """Choisit les symboles de l'echantillon.
+    """Chooses the symbols of the sample.
 
-    ``standard`` est l'ensemble des symboles standards (C/POSIX). Si
-    ``prefer_specific`` est vrai, on retient d'abord les symboles
-    specifiques a QNX, puis on complete avec des symboles standards si le
-    depot n'en fournit pas assez.
+    ``standard`` is the set of the standard symbols (C/POSIX). If
+    ``prefer_specific`` is true, the QNX-specific symbols are kept
+    first, then the sample is completed with standard symbols when a
+    repository does not provide enough of them.
 
-    Retourne ``(choix, residus)`` :
+    Returns ``(choices, residues)``:
 
-    * ``choix``   : liste de dicts ``{"symbol", "repo", "calls"}`` ;
-    * ``residus`` : liste de dicts ``{"symbol", "repo", "calls"}`` pour les
-      appels qui ne sont ni definis par le projet ni connus de la C Library
-      Reference (controle pour ne rien cacher derriere le filtre).
+    * ``choices``  : list of dicts ``{"symbol", "repo", "calls"}``;
+    * ``residues`` : list of dicts ``{"symbol", "repo", "calls"}`` for
+      the calls that are neither defined by the project nor known by the
+      C Library Reference (a control, to hide nothing behind the filter).
     """
     if standard is None:
         standard = load_standard_symbols()
@@ -263,7 +263,7 @@ def select_sample(classifier, clones_dir, per_repo=PER_REPO, standard=None,
                 residus.append({"symbol": word, "repo": repo["key"], "calls": count})
         cands.sort(key=lambda wc: (-wc[1], wc[0]))
         if prefer_specific:
-            # les symboles specifiques a QNX d'abord, les standards ensuite
+            # the QNX-specific symbols first, the standard ones after
             cands.sort(key=lambda wc: (wc[0] in standard, -wc[1], wc[0]))
         picked = 0
         for word, count in cands:
@@ -280,10 +280,10 @@ def select_sample(classifier, clones_dir, per_repo=PER_REPO, standard=None,
 
 
 def etat(res, page_found):
-    """Etat J4 d'un symbole.
+    """J4 state of a symbol.
 
-    ``documented`` + page presente dans le corpus + citation non vide =>
-    resolu et cite. Les deux autres etats ne comptent pas.
+    ``documented`` + page present in the corpus + non-empty citation =>
+    resolved and cited. The two other states do not count.
     """
     if res.status == DOCUMENTED and res.citation and page_found:
         return RESOLU
@@ -293,11 +293,11 @@ def etat(res, page_found):
 
 
 def taux(records):
-    """Taux J4 : fraction des symboles resolus et cites.
+    """J4 rate: fraction of the symbols resolved and cited.
 
-    Le denominateur est le nombre de mesures. Une liste vide leve une
-    exception plutot que de renvoyer 0 : un taux calcule sur rien n'est pas
-    un taux.
+    The denominator is the number of measurements. An empty list raises an
+    exception rather than returning 0: a rate computed on nothing is not
+    a rate.
     """
     total = len(records)
     if total == 0:
@@ -307,7 +307,7 @@ def taux(records):
 
 
 def measure(classifier, corpus, choix):
-    """Classe un echantillon et renvoie les enregistrements."""
+    """Classifies a sample and returns the records."""
     symbols = [c["symbol"] for c in choix]
     results = classifier.classify(symbols)
     by_symbol = {r.symbol: r for r in results}
@@ -336,7 +336,7 @@ def measure(classifier, corpus, choix):
 
 
 def resume(records):
-    """Compte les 3 etats et le taux."""
+    """Counts the 3 states and the rate."""
     counts = collections.Counter(r["etat"] for r in records)
     return {
         "total": len(records),
@@ -347,11 +347,11 @@ def resume(records):
 
 
 def write_markdown(path, data, records, lang="fr"):
-    """Ecrit la mesure J4 (liste des 100 symboles + methode + chiffres).
+    """Writes the J4 measurement (list of the 100 symbols + method + figures).
 
-    ``lang`` vaut ``"fr"`` (sortie historique, conservee byte-identique) ou
-    ``"en"`` (version publique du depot). Les chiffres sont identiques dans
-    les deux versions : seuls les libelles et le texte changent.
+    ``lang`` is ``"fr"`` (historical output, kept byte-identical) or
+    ``"en"`` (public version of the repository). The figures are
+    identical in both versions: only the labels and the text change.
     """
     if lang == "en":
         return write_markdown_en(path, data, records)
@@ -359,7 +359,7 @@ def write_markdown(path, data, records, lang="fr"):
 
 
 def write_markdown_fr(path, data, records):
-    """Ecrit la mesure J4 (liste des 100 symboles + methode + chiffres)."""
+    """Writes the J4 measurement (list of the 100 symbols + method + figures)."""
     repo_by_key = {r["key"]: r for r in data["repos"]}
     prim = data["principal"]
     sec = data["secondaire_large"]
@@ -520,17 +520,17 @@ def write_markdown_fr(path, data, records):
 
 
 def note_en(note):
-    """Traduit une note de l'outil en anglais.
+    """Translates a note of the tool into English.
 
-    Les notes viennent du moteur ``qnx_portmap/`` (gele, en francais). Toute
-    note qui ne serait pas dans le tableau ``NOTE_EN`` est signalee par le
-    test : elle devra etre traduite avant d'etre publiee en anglais.
+    The notes come from the ``qnx_portmap/`` engine (frozen, in French).
+    Any note that would not be in the ``NOTE_EN`` table is reported by the
+    test: it must be translated before being published in English.
     """
     return NOTE_EN.get(note, "see the citation source column")
 
 
 def write_markdown_en(path, data, records):
-    """Ecrit la mesure J4 en anglais (memes chiffres que la version fr)."""
+    """Writes the J4 measurement in English (same figures as the fr version)."""
     prim = data["principal"]
     sec = data["secondaire_large"]
     lines = []
@@ -677,7 +677,8 @@ def write_markdown_en(path, data, records):
     lines.append("#    local archive)")
     lines.append("python3 tools/mesure_j4.py --clones <directory> \\")
     lines.append("    --corpus /work/qnx-portmap-corpus-local/corpus \\")
-    lines.append("    --out docs/mesure-J4/mesure-J4.json \\")
+    lines.append("    --public-json docs/mesure-J4/mesure-J4.json \\")
+    lines.append("    --citations-dir docs/mesure-J4 \\")
     lines.append("    --markdown docs/mesure-J4.md --lang en")
     lines.append("")
     lines.append("# --lang fr writes the same report in French")
@@ -697,15 +698,15 @@ def write_markdown_en(path, data, records):
 
 
 def write_citations(dir_path, data, records, lang="fr"):
-    """Ecrit les citations litterales, une page par depot.
+    """Writes the literal citations, one page per repository.
 
-    Chaque page reste sous le budget de 4 000 octets de texte QNX verbatim
-    par fichier (le controle anti-fuite).
+    Every page stays under the 4,000-byte budget of verbatim QNX text
+    per file (the anti-leak control).
 
-    ``lang`` vaut ``"fr"`` (sortie historique, conservee byte-identique) ou
-    ``"en"`` (version publique du depot). Seuls les **etiquettes** changent :
-    les numeros, les URL et le texte des citations sont identiques dans les
-    deux versions.
+    ``lang`` is ``"fr"`` (historical output, kept byte-identical) or
+    ``"en"`` (public version of the repository). Only the **labels**
+    change: the numbers, the URLs and the text of the citations are
+    identical in both versions.
     """
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
@@ -769,11 +770,12 @@ def write_citations(dir_path, data, records, lang="fr"):
 
 
 def write_public_json(path, data, records):
-    """Ecrit le JSON public : tout sauf le texte des citations.
+    """Writes the public JSON: everything except the text of the citations.
 
-    Le texte des citations est dans les pages `citations-*.txt` ; le JSON
-    public n'en garde que l'empreinte SHA-256, ce qui permet de verifier
-    qu'une citation n'a pas change sans recopier la documentation.
+    The text of the citations is in the `citations-*.txt` pages; the
+    public JSON only keeps its SHA-256 fingerprint, which makes it
+    possible to check that a citation has not changed without copying the
+    documentation.
     """
     import hashlib
     out = {
@@ -828,17 +830,17 @@ def main(argv=None):
     print("symboles standards (C/POSIX, liste independante du corpus) : %d"
           % len(standard))
 
-    # -- echantillon principal (officiel) : on privilegie les symboles
-    #    specifiques a QNX (ceux que la fiche J4 vise : io_open,
-    #    resmgr_attach, iofunc_read_default...), puis on complete avec des
-    #    symboles standards si un depot n'en fournit pas assez.
+    # -- main sample (official): the QNX-specific symbols are favoured
+    #    (the ones the J4 sheet targets: io_open, resmgr_attach,
+    #    iofunc_read_default...), then the sample is completed with standard
+    #    symbols when a repository does not provide enough of them.
     choix, residus = select_sample(classifier, args.clones, args.per_repo,
                                     standard, prefer_specific=True)
     records = measure(classifier, corpus, choix)
     r1 = resume(records)
 
-    # -- echantillon large : les 20 symboles les plus appeles de chaque
-    #    depot, toutes familles confondues (contre-mesure)
+    # -- wide sample: the 20 most called symbols of each repository, all
+    #    families mixed together (counter-measurement)
     choix2, _ = select_sample(classifier, args.clones, args.per_repo,
                               standard, prefer_specific=False)
     records2 = measure(classifier, corpus, choix2)

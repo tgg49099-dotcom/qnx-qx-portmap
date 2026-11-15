@@ -30,7 +30,7 @@ What this means for the shooting:
 | public on YouTube | visibility "Public" at upload; the URL replaces the placeholder of block 4.5 of `KIT-SOUMISSION-QNX.md` |
 | no third-party trademarks | the only logo on screen is the one of the project; no QNX logo, no BlackBerry logo, no browser tab of a third-party site |
 | no copyrighted music | no music track at all; the voice-over only |
-| in English | every line of the voice-over is written in English below; the tool has an English mode (`--lang en`), so the video shows the real English console next to the French default |
+| in English | every line of the voice-over is written in English below; the console speaks English by default, so the video shows the real English console (`--lang fr` shows the French one) |
 
 ## 2. How to film
 
@@ -102,7 +102,7 @@ $ echo $?
 
 **Voice-over**:
 
-> "Without the corpus the tool says 'corpus introuvable' and exits with code
+> "Without the corpus the tool says 'corpus not found' and exits with code
 > 2. It never invents an answer. The corpus is 3,426 pages of the official
 > QNX 7.1 and 8.0 documentation, and every page is checked against its
 > SHA-256."
@@ -113,28 +113,28 @@ $ echo $?
 JSON.
 
 ```
-$ QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
-QX PORTMAP - etat des symboles QNX dans la documentation 8.0
-corpus fige : corpus-downloaded
-pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
+$ QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero zzz_fonction_inexistante
+QX PORTMAP - status of QNX symbols in the 8.0 documentation
+frozen corpus: corpus-downloaded
+pages: 3426 (7.1: 1200, 8.0: 2226) - consulted on 2026-11-14 - offline mode
 
-  abort                        documente
+  abort                        documented
     page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
     citation (index C Library Reference 8.0) :
       Raise the SIGABRT signal to terminate program execution
-    note   : present en 7.1 et en 8.0
+    note   : present in 7.1 and in 8.0
 
-  accept                       decrit ailleurs
+  accept                       described elsewhere
     page   : https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
-    voir   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
-    note   : decrit dans la documentation 8.0 mais sans page propre dans la C Library Reference
+    see    : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
+    note   : described in the 8.0 documentation but without a page of its own in the C Library Reference
 
-  bzero                        absent de la 8.0
+  bzero                        absent
     page   : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
-    note   : present dans la C Library Reference 7.1, absent de tout le corpus 8.0
+    note   : present in the C Library Reference 7.1, absent from the whole 8.0 corpus
 
-  zzz_fonction_inexistante     inconnu du corpus
-    note   : introuvable dans le corpus 8.0 fige : symbole inconnu, erreur de saisie, ou ajout posterieur au 2026-11-14
+  zzz_fonction_inexistante     unknown
+    note   : not found in the frozen 8.0 corpus: unknown symbol, typo, or added after 2026-11-14
 ```
 
 **Voice-over**:
@@ -146,18 +146,18 @@ pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
 > 'bzero' was in the 7.1 C Library Reference and is gone from the 8.0
 > corpus: the tool says so and keeps the 7.1 page, it does not drop the
 > symbol. And a name that does not exist is reported as unknown, not
-> guessed. The console is in English with `--lang en` (French by default):
-> documented, described elsewhere, absent, unknown."
+> guessed. The console is in English by default (`--lang fr` shows the
+> French one): documented, described elsewhere, absent, unknown."
 
 ### 1:28 - 1:42 - The work list
 
 **On screen**: the end of the same run, the work list.
 
 ```
---- Liste de travail de mise a niveau (2 symbole(s)) ---
-P2  bzero                      absent de la 8.0
+--- Upgrade worklist (2 symbol(s)) ---
+P2  bzero                      absent
       https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
-P3  accept                     decrit ailleurs
+P3  accept                     described elsewhere
       https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
 ```
 
@@ -201,13 +201,13 @@ Then the README, scrolled to the table:
 ```
 $ QX_PORTMAP_CORPUS=$PWD/corpus-downloaded python3 -m unittest discover -s tests -t .
 ...
-Ran 124 tests in 13.143s
+Ran 170 tests in 14.590s
 OK (skipped=1)
 ```
 
 **Voice-over**:
 
-> "124 tests, no network access, no dependency. And a test that always
+> "170 tests, no network access, no dependency. And a test that always
 > passes tests nothing, so the repository also contains a red to green proof:
 > the script breaks one rule of the code at a time and checks that the
 > matching test turns red, then restores the code."
@@ -219,7 +219,7 @@ OK (skipped=1)
 ```
 QX PORTMAP - a documentation map for the QNX 8.0 symbols your code calls
 https://github.com/tgg49099-dotcom/qnx-qx-portmap
-MIT licence - 124 tests - AI-assisted development
+MIT licence - 170 tests - AI-assisted development
 ```
 
 **Voice-over**:
@@ -296,15 +296,15 @@ build, analyze, test, deploy, debug, or manage software for QNX 8.0"
 
 ## Update 2026-11-15 - the filmed console now speaks English
 
-The tool has an English output mode (`--lang en`); the default stays French,
-byte for byte (pinned by `tests/test_lang_en.py`). The video MUST film the
-English console: the contest rules require English for all submission
-material.
+The console speaks English by default; `--lang fr` prints the same output in
+French, byte for byte (pinned by `tests/test_lang_en.py`). The video MUST
+film the English console: the contest rules require English for all
+submission material.
 
 ### Exact commands to film (QNX 8.0 target, segment "on QNX 8.0")
 
     python3 -m qnx_portmap --corpus <shared-corpus-dir> --verify-corpus
-    python3 -m qnx_portmap --corpus <shared-corpus-dir> --lang en abort pthread_create bzero
+    python3 -m qnx_portmap --corpus <shared-corpus-dir> abort pthread_create bzero
 
 ### Expected English text on screen (first lines, verbatim)
 
@@ -327,4 +327,4 @@ material.
     (nothing to migrate: every analyzed symbol is documented in 8.0)
 
 Every English label is pinned by `tests/test_lang_en.py`: a French label
-left in English mode turns the suite red.
+left in the default (English) mode turns the suite red.

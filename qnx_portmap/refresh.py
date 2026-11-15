@@ -1,12 +1,11 @@
-"""Rechargement en ligne du corpus (option ``--fresh``).
+"""Online reload of the corpus (option ``--fresh``).
 
-Ce mode n'est jamais utilise par defaut : QX PORTMAP travaille sur le corpus
-fige livre dans le depot. ``--fresh`` sert a reconstruire ce corpus depuis
-la documentation officielle, pour actualiser l'outil apres une nouvelle
-version de QNX.
+This mode is never used by default: QX PORTMAP works on the frozen corpus
+shipped in the repository. ``--fresh`` rebuilds that corpus from the
+official documentation, to update the tool after a new version of QNX.
 
-Le telechargement est fait avec l'API publique du site de documentation QNX
-(urllib), sans authentification, a la maniere d'un lecteur de documentation.
+The download is done with the public API of the QNX documentation site
+(urllib), without authentication, like a documentation reader.
 """
 
 import collections
@@ -23,7 +22,7 @@ import urllib.request
 UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/120.0 Safari/537.36")
 
-# Livres de documentation utilises pour le corpus 8.0, et leur grain.
+# Documentation books used for the 8.0 corpus, and their granularity.
 BOOKS = [
     ("com.qnx.doc.neutrino.lib_ref", "about.html"),
     ("com.qnx.doc.neutrino.io_sock", "about.html"),
@@ -40,7 +39,7 @@ OUT_RELPATH = re.compile(r'name="wh-out-relpath"\s+content="([^"]+)"')
 
 
 class Downloader(object):
-    """Telecharge les pages d'un livre de documentation et les met en cache."""
+    """Downloads the pages of a documentation book and caches them."""
 
     def __init__(self, cache_dir, delay=0.1, timeout=45, retries=3):
         self.cache_dir = cache_dir
@@ -78,7 +77,7 @@ class Downloader(object):
         return ""
 
     def crawl_book(self, version, book, seed="about.html", max_pages=None):
-        """Parcourt un livre et renvoie la liste des URL vues."""
+        """Walks a book and returns the list of the URLs seen."""
         base = "https://www.qnx.com/developers/docs/%s/%s/topic/" % (version, book)
         start = base + seed
         seen = {start}
@@ -115,9 +114,9 @@ class Downloader(object):
 
 
 def build_corpus_from_cache(cache_dir, out_dir, versions=("8.0", "7.1")):
-    """Ecrit le corpus fige a partir d'un cache de pages telechargees.
+    """Writes the frozen corpus from a cache of downloaded pages.
 
-    Renvoie le manifeste ecrit.
+    Returns the written manifest.
     """
     os.makedirs(out_dir, exist_ok=True)
     index_dir = os.path.join(out_dir, "index")

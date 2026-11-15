@@ -1,10 +1,10 @@
-"""QX PORTMAP - etat des symboles QNX dans la documentation officielle 8.0.
+"""QX PORTMAP - state of the QNX symbols in the official 8.0 documentation.
 
-Le paquet lit un corpus de documentation QNX fige dans le depot et repond,
-pour chaque symbole fourni, a une question : le symbole est-il documente en
-8.0, decrit ailleurs, absent, ou inconnu du corpus ?
+The package reads a QNX documentation corpus frozen in the repository and
+answers, for every symbol given, one single question: is the symbol
+documented in 8.0, described elsewhere, absent, or unknown to the corpus?
 
-Aucun acces reseau n'est fait au runtime.
+No network access is made at runtime.
 """
 
 __version__ = "0.1.0"

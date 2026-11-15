@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""Genere (ou verifie) ``MANIFESTE-PUBLIE.txt``.
+"""Generates (or checks) ``MANIFESTE-PUBLIE.txt``.
 
-Le manifeste liste chaque fichier publiable du depot : chemin, taille en
-octets, SHA-256. Il est regenere apres chaque changement de l'arbre
-publiable.
+The manifest lists every publishable file of the repository: path, size in
+bytes, SHA-256. It is regenerated after every change of the publishable tree.
 
-Usage :
-    python3 scripts/manifeste_publie.py            # ecrit le manifeste
-    python3 scripts/manifeste_publie.py --check    # verifie sans ecrire
-    python3 scripts/manifeste_publie.py --out AUTRE-FICHIER
+Usage:
+    python3 scripts/manifeste_publie.py            # writes the manifest
+    python3 scripts/manifeste_publie.py --check    # checks without writing
+    python3 scripts/manifeste_publie.py --out OTHER-FILE
 
-Code de sortie : 0 si tout va bien, 1 si le manifeste est obsolete.
+Exit code: 0 if everything is fine, 1 if the manifest is obsolete.
 """
 
 import argparse
@@ -42,7 +41,7 @@ def publishable_files(tree, manifest_path):
                 continue
             full = os.path.join(dirpath, fn)
             if os.path.abspath(full) == os.path.abspath(manifest_path):
-                continue          # le manifeste ne se liste pas lui-meme
+                continue          # the manifest does not list itself
             rel = os.path.relpath(full, tree).replace(os.sep, "/")
             out.append((rel, full))
     return sorted(out)
@@ -96,7 +95,7 @@ def main():
             return 1
         with open(out_path, encoding="utf-8") as fh:
             current = fh.read()
-        # on compare la partie "Detail", insensible a la date de generation
+        # the "Detail" part is compared, insensitive to the generation date
         def body(t):
             marker = "Detail (path, size in bytes, SHA-256):"
             return t.split(marker, 1)[1] if marker in t else ""

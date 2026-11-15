@@ -1,22 +1,22 @@
-"""Classification d'un symbole QNX : ou en est-il dans la documentation 8.0 ?
+"""Classification of a QNX symbol: where does it stand in the 8.0 documentation?
 
-Quatre statuts, du plus favorable au plus defavorable :
+Four statuses, from the most favourable to the least favourable:
 
 ``documented``
-    Le symbole a sa propre page dans la C Library Reference 8.0.
+    The symbol has its own page in the 8.0 C Library Reference.
 ``described_elsewhere``
-    Le symbole n'a pas de page propre en 8.0 mais la documentation 8.0 le
-    decrit (renvoi "The following are described elsewhere", ou mention dans
-    un autre livre).
+    The symbol has no page of its own in 8.0 but the 8.0 documentation
+    describes it ("The following are described elsewhere" cross reference, or
+    a mention in another book).
 ``absent``
-    Le symbole etait dans la C Library Reference 7.1 et ne se trouve nulle
-    part dans le corpus 8.0 : il a disparu.
+    The symbol was in the 7.1 C Library Reference and is nowhere in the 8.0
+    corpus: it has disappeared.
 ``unknown``
-    Le symbole est introuvable dans le corpus fige : il peut s'agir d'une
-    faute de frappe, d'une macro du projet, ou d'un symbole ajoute apres
-    le 14/11/2026. L'outil ne devine pas.
+    The symbol is not found in the frozen corpus: it may be a typo, a macro
+    of the project, or a symbol added after 14/11/2026. The tool does not
+    guess.
 
-Chaque reponse porte la page officielle et la citation exacte.
+Every answer carries the official page and the exact quotation.
 """
 
 import re
@@ -32,9 +32,10 @@ UNKNOWN = "unknown"
 
 STATUS_ORDER = {DOCUMENTED: 0, ELSEWHERE: 1, ABSENT: 2, UNKNOWN: 3}
 
-# Notes et libelles emis avec chaque resultat, dans les deux langues de
-# sortie. Les chaines francaises reproduisent exactement la sortie
-# historique de l'outil : "fr" reste la langue par defaut.
+# Notes and labels emitted with every result, in the two output
+# languages. The French strings reproduce exactly the historical
+# output of the tool; the console default is English, the French
+# strings stay for the `--lang fr` mode.
 NOTES = {
     "fr": {
         "present_both": "present en 7.1 et en 8.0",
@@ -74,22 +75,23 @@ NOTES = {
     },
 }
 
-# Un nom d'API contient presque toujours une majuscule ou un tiret bas
-# (``pthread_create``, ``MSG_...``) : un mot entierement en minuscules sans
-# tiret bas ("argument", "any") est un mot anglais, pas un symbole.
+# An API name almost always contains an upper-case letter or an
+# underscore (``pthread_create``, ``MSG_...``): a word written entirely
+# in lower case without an underscore ("argument", "any") is an English
+# word, not a symbol.
 _API_SHAPED = re.compile(r"[A-Z_]")
 
-# Priorite de la liste de travail (1 = le plus urgent).
+# Priority of the work list (1 = the most urgent).
 WORKLIST_PRIORITY = {
-    (ABSENT, True): 1,        # absent et cite par le guide de migration officiel
-    (ABSENT, False): 2,       # absent et sans aucune mention officielle
-    (ELSEWHERE, False): 3,    # decrit ailleurs (renvoi d'index)
+    (ABSENT, True): 1,        # absent and cited by the official migration guide
+    (ABSENT, False): 2,       # absent and without any official mention
+    (ELSEWHERE, False): 3,    # described elsewhere (index cross-reference)
     (ELSEWHERE, True): 3,
 }
 
 
 class SymbolResult(object):
-    """Le resultat pour un symbole."""
+    """The result for one symbol."""
 
     def __init__(self, symbol):
         self.symbol = symbol
@@ -136,9 +138,9 @@ class SymbolResult(object):
 
 
 class Classifier(object):
-    """Repond sur l'etat d'un symbole dans la documentation QNX 8.0.
+    """Answers the state of a symbol in the QNX 8.0 documentation.
 
-    Le corpus est lu sur disque, en local : aucun acces reseau.
+    The corpus is read from the local disk: no network access.
     """
 
     def __init__(self, corpus, version="8.0", previous="7.1", lang="fr"):
@@ -174,7 +176,7 @@ class Classifier(object):
             self.previous: {"entries": len(self.prev_entries), "elsewhere": len(self.prev_elsewhere)},
         }
 
-    # -- recherche dans le corpus -----------------------------------------
+    # -- search in the corpus ---------------------------------------------
     def _article_text(self, page):
         key = (page.version, page.book, page.topic)
         if key not in self._scan_cache:
@@ -184,16 +186,16 @@ class Classifier(object):
         return self._scan_cache[key]
 
     def _scan_corpus(self, symbols, call_form=True):
-        """Cherche chaque symbole dans le corpus 8.0 (hors pages d'index).
+        """Searches every symbol in the 8.0 corpus (index pages excluded).
 
-        ``call_form`` : ne retenir que les occurrences de la forme
-        ``symbole(`` (appel de fonction). Sinon, n'importe quelle mention
-        avec frontiere de mot.
+        ``call_form``: keep only the occurrences of the form
+        ``symbol(`` (function call). Otherwise, any mention with a
+        word boundary is kept.
 
-        Dans les deux cas, le symbole doit ressembler a un nom d'API (voir
-        ``_is_api_name``) : sinon c'est un mot de la langue anglaise.
+        In both cases, the symbol must look like an API name (see
+        ``_is_api_name``): otherwise it is an English word.
 
-        Retourne {symbole: (page, phrase)}.
+        Returns {symbol: (page, sentence)}.
         """
         found = {}
         if not symbols:
@@ -217,40 +219,40 @@ class Classifier(object):
             for sym, rx in patterns.items():
                 if sym in found:
                     continue
-                if sym not in text:      # test rapide, sans expression reguliere
+                if sym not in text:      # quick test, without a regular expression
                     continue
                 sentences = sentences_with(text, sym, limit=1, call_form=call_form)
                 if not sentences:
                     continue
                 if not self._is_api_name(sym):
-                    # Un mot anglais rencontre dans une phrase ("argument",
-                    # "current") ou un nom de parametre suivi de "(" dans un
-                    # extrait de code n'est pas un symbole QNX : l'annoncer
-                    # comme "decrit ailleurs" serait faux.
+                    # An English word met in a sentence ("argument",
+                    # "current") or a parameter name followed by "(" in a
+                    # code extract is not a QNX symbol: reporting it as
+                    # "described elsewhere" would be wrong.
                     continue
                 found[sym] = (page, sentences[0])
         return found
 
     def _bold_ids(self, page):
-        """Identifiants cites en gras dans une page (cache)."""
+        """Identifiers cited in bold on a page (cached)."""
         key = (page.version, page.book, page.topic)
         if key not in self._bold_cache:
             self._bold_cache[key] = bold_identifiers(self.corpus.html(page))
         return self._bold_cache[key]
 
     def _is_api_name(self, sym):
-        """Le symbole ressemble-t-il a un nom d'API plutot qu'a un mot ?
+        """Does the symbol look like an API name rather than a plain word?
 
-        Vrai si le symbole figure dans un index QNX (donc si la doc le
-        connait comme symbole) ou si son nom contient une majuscule ou un
-        tiret bas (``pthread_create``, ``MSG_NOTIFY``).
+        True if the symbol appears in a QNX index (so the documentation
+        knows it as a symbol) or if its name contains an upper-case
+        letter or an underscore (``pthread_create``, ``MSG_NOTIFY``).
         """
         if sym in self.entries or sym in self.prev_entries:
             return True
         return bool(_API_SHAPED.search(sym))
 
     def _migration_mentions(self, symbols):
-        """Symboles cites par le guide officiel de migration vers 8.0."""
+        """Symbols cited by the official migration guide to 8.0."""
         out = {}
         if self._migration_text is None:
             pages = self.corpus.migration_pages(self.version)
@@ -262,9 +264,9 @@ class Classifier(object):
                 out[sym] = hits
         return out
 
-    # -- classification ---------------------------------------------------
+    # -- classification --------------------------------------------------
     def classify(self, symbols):
-        """Classe une liste de symboles et renvoie une liste de SymbolResult."""
+        """Classifies a list of symbols and returns a list of SymbolResult."""
         unique = []
         for sym in symbols:
             sym = sym.strip() if isinstance(sym, str) else sym
@@ -302,9 +304,9 @@ class Classifier(object):
             results.append(res)
 
         if pending:
-            # 1re passe : le symbole est appele comme une fonction
+            # 1st pass: the symbol is called as a function
             found = self._scan_corpus(pending, call_form=True)
-            # 2e passe : le symbole est seulement mentionne dans le texte
+            # 2nd pass: the symbol is only mentioned in the text
             rest = [s for s in pending if s not in found]
             mentioned = self._scan_corpus(rest, call_form=False)
             for res in results:
@@ -342,8 +344,8 @@ class Classifier(object):
                                                     self.corpus.manifest.get("consulted",
                                                                              "14/11/2026"))
 
-        # le guide de migration officiel est une source a part : on le
-        # consulte pour tout symbole de la liste de travail
+        # the official migration guide is a source of its own: it is
+        # consulted for every symbol of the work list
         todo = [r.symbol for r in results if r.status in (ABSENT, ELSEWHERE)]
         migration = self._migration_mentions(todo)
         for res in results:
@@ -354,17 +356,17 @@ class Classifier(object):
         return results
 
     def _detail(self, url):
-        """Premiere phrase de la section Description de la page du symbole."""
+        """First sentence of the Description section of the page of the symbol."""
         page = self.corpus.find_url(url)
         if page is None:
             return ""
         parsed = parse_topic_page(self.corpus.html(page))
         return parsed.get("description", "")
 
-    # -- liste de travail -------------------------------------------------
+    # -- work list --------------------------------------------------------
     @staticmethod
     def worklist(results):
-        """Liste de travail de mise a niveau, par priorite decroissante."""
+        """Upgrade work list, by decreasing priority."""
         items = [r for r in results if r.status in (ABSENT, ELSEWHERE)]
         items.sort(key=lambda r: (r.priority, r.symbol))
         return items

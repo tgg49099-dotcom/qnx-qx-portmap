@@ -208,7 +208,7 @@ if copy_tree "$ROOT" "$TMP/tree"; then
     n2=$(sed -n 's/^\([0-9][0-9]*\) \/ \([0-9][0-9]*\) contre-epreuves concluantes.*/\2/p' "$log" | head -1)
     if [ "$rc" -eq 0 ] && [ -n "$n1" ]; then
         record "RED counter-proof" "OK" "$n1 / $n2 rules counter-proved" "$rc" "$log"
-    elif grep -q "le depot doit etre propre" "$log"; then
+    elif grep -q "the repository must be clean" "$log"; then
         record "RED counter-proof" "NOT CHECKED" \
                "the working copy is not clean" "$rc" "$log"
     else

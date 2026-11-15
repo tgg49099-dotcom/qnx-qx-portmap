@@ -36,6 +36,13 @@ class TestCli(unittest.TestCase):
         code, out = run(["--corpus", self.root, "frob"])
         self.assertEqual(code, 0)
         self.assertIn("frob", out)
+        self.assertIn("documented", out)
+        self.assertIn("Frob the widget", out)
+
+    def test_text_output_in_french(self):
+        code, out = run(["--corpus", self.root, "--lang", "fr", "frob"])
+        self.assertEqual(code, 0)
+        self.assertIn("frob", out)
         self.assertIn("documente", out)
         self.assertIn("Frob the widget", out)
 
@@ -51,6 +58,13 @@ class TestCli(unittest.TestCase):
 
     def test_markdown_output(self):
         code, out = run(["--corpus", self.root, "--format", "markdown", "frob"])
+        self.assertEqual(code, 0)
+        self.assertIn("| Symbol |", out)
+        self.assertIn("`frob`", out)
+
+    def test_markdown_output_in_french(self):
+        code, out = run(["--corpus", self.root, "--format", "markdown",
+                         "--lang", "fr", "frob"])
         self.assertEqual(code, 0)
         self.assertIn("| Symbole |", out)
         self.assertIn("`frob`", out)
@@ -79,6 +93,11 @@ class TestCli(unittest.TestCase):
     def test_verify_corpus_ok(self):
         code, out = run(["--corpus", self.root, "--verify-corpus"])
         self.assertEqual(code, 0)
+        self.assertIn("page SHA-256: OK", out)
+
+    def test_verify_corpus_ok_in_french(self):
+        code, out = run(["--corpus", self.root, "--verify-corpus", "--lang", "fr"])
+        self.assertEqual(code, 0)
         self.assertIn("SHA-256 des pages : OK", out)
 
     def test_verify_corpus_detects_corruption(self):
@@ -89,6 +108,17 @@ class TestCli(unittest.TestCase):
         with open(target, "ab") as fh:
             fh.write(b"\x00")
         code, out = run(["--corpus", root, "--verify-corpus"])
+        self.assertEqual(code, 1)
+        self.assertIn("FAIL", out)
+
+    def test_verify_corpus_detects_corruption_in_french(self):
+        root = os.path.join(self.tmp, "corpus-corrompu-fr")
+        build_mini_corpus(root)
+        target = os.path.join(root, "pages", "8.0", "com.qnx.doc.neutrino.lib_ref",
+                              "topic", "f", "frob.html.gz")
+        with open(target, "ab") as fh:
+            fh.write(b"\x00")
+        code, out = run(["--corpus", root, "--verify-corpus", "--lang", "fr"])
         self.assertEqual(code, 1)
         self.assertIn("ECHEC", out)
 

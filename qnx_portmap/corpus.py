@@ -1,8 +1,8 @@
-"""Acces au corpus de documentation QNX fige dans le depot.
+"""Access to the QNX documentation corpus frozen in the repository.
 
-Le corpus est un ensemble de pages HTML officielles, compressees en gzip,
-accompagnees de leurs empreintes SHA-256. Rien n'est telecharge au runtime :
-le mode par defaut est hors ligne.
+The corpus is a set of official HTML pages, compressed with gzip, with
+their SHA-256 fingerprints. Nothing is downloaded at runtime: the default
+mode is offline.
 """
 
 import gzip
@@ -20,13 +20,15 @@ INDEX_PREFIX = "lib-"
 
 
 def default_corpus_dir():
-    """Repertoire du corpus.
+    """Directory of the corpus.
 
-    Ordre de recherche :
-      1. la variable d'environnement ``QX_PORTMAP_CORPUS`` ;
-      2. le repertoire ``corpus/`` livre a cote du paquet (depot) ;
-      3. le repertoire ``corpus/`` du repertoire courant (installation
-         dans un site-packages, usage depuis la racine du depot).
+    Search order:
+      1. the ``QX_PORTMAP_CORPUS`` environment variable;
+      2. the ``corpus/`` directory shipped next to the package
+         (repository);
+      3. the ``corpus/`` directory of the current directory
+         (installation in a site-packages, use from the root of the
+         repository).
     """
     env = os.environ.get(DEFAULT_CORPUS_ENV)
     if env:
@@ -43,11 +45,11 @@ def default_corpus_dir():
 
 
 class CorpusError(Exception):
-    """Le corpus est absent, incomplet ou corrompu."""
+    """The corpus is absent, incomplete or corrupted."""
 
 
 class Page(object):
-    """Une page du corpus."""
+    """One page of the corpus."""
 
     __slots__ = ("version", "book", "topic", "url", "file", "sha256", "bytes")
 
@@ -73,7 +75,7 @@ class Page(object):
 
 
 class Corpus(object):
-    """Le corpus fige, en lecture seule."""
+    """The frozen corpus, read-only."""
 
     def __init__(self, root=None, lang="fr"):
         self.root = os.path.abspath(root or default_corpus_dir())
@@ -86,10 +88,10 @@ class Corpus(object):
         self._load()
 
     def _t(self, fr, en):
-        """Message dans la langue demandee ; le francais reste le defaut."""
+        """Message in the requested language; English is the default."""
         return en if self.lang == "en" else fr
 
-    # -- chargement ------------------------------------------------------
+    # -- loading ---------------------------------------------------------
     def _load(self):
         manifest_path = os.path.join(self.root, "MANIFEST.json")
         if not os.path.isfile(manifest_path):
@@ -114,7 +116,7 @@ class Corpus(object):
             raise CorpusError(self._t("corpus vide : %s" % self.root,
                                       "empty corpus: %s" % self.root))
 
-    # -- acces -----------------------------------------------------------
+    # -- access ----------------------------------------------------------
     def versions(self):
         return list(self.manifest.get("versions", []))
 
@@ -122,7 +124,7 @@ class Corpus(object):
         return os.path.join(self.root, page.file)
 
     def raw_bytes(self, page):
-        """Octets originaux (decompresses) de la page."""
+        """Original (decompressed) bytes of the page."""
         path = self.path_of(page)
         if not os.path.isfile(path):
             raise CorpusError(self._t("page absente du corpus : %s" % page.file,
@@ -138,7 +140,7 @@ class Corpus(object):
         return self.raw_bytes(page).decode("utf-8", "replace")
 
     def text(self, page):
-        """Texte de la page (balises retirees), mis en cache."""
+        """Text of the page (tags removed), cached."""
         key = (page.version, page.book, page.topic)
         if key not in self._text_cache:
             self._text_cache[key] = strip_tags(self.html(page))
@@ -151,7 +153,7 @@ class Corpus(object):
         return self._by_url.get(url)
 
     def index_pages(self, version):
-        """Pages d'index A-Z de la C Library Reference d'une version."""
+        """A-Z index pages of the C Library Reference of one version."""
         return [p for p in self.pages if p.version == version and p.is_index_page]
 
     def migration_pages(self, version="8.0"):
@@ -161,21 +163,21 @@ class Corpus(object):
         return [p for p in self.pages if p.version == version and p.book == book]
 
     def search_pages(self, version):
-        """Pages du corpus d'une version, hors C Library Reference.
+        """Pages of the corpus of one version, outside the C Library Reference.
 
-        Sert a repondre : "ce symbole est-il decrit ailleurs en 8.0 ?".
+        Used to answer: "is this symbol described elsewhere in 8.0?".
         """
         return [p for p in self.pages if p.version == version and p.book != LIB_REF_BOOK]
 
     def all_pages(self, version):
         return [p for p in self.pages if p.version == version]
 
-    # -- integrite -------------------------------------------------------
+    # -- integrity -------------------------------------------------------
     def verify(self, version=None):
-        """Verifie le SHA-256 de chaque page contre l'index fige.
+        """Verifies the SHA-256 of every page against the frozen index.
 
-        Retourne un dict : ``checked``, ``ok``, ``failed`` (liste de
-        (url, attendu, obtenu)).
+        Returns a dict: ``checked``, ``ok``, ``failed`` (list of
+        (url, expected, got)).
         """
         checked = 0
         failed = []
@@ -196,7 +198,7 @@ class Corpus(object):
         return {"checked": checked, "ok": not failed, "failed": failed}
 
     def verify_sha256sums(self):
-        """Verifie le fichier SHA256SUMS (empreintes des fichiers stockes)."""
+        """Verifies the SHA256SUMS file (fingerprints of the stored files)."""
         path = os.path.join(self.root, "SHA256SUMS")
         if not os.path.isfile(path):
             raise CorpusError(self._t("SHA256SUMS introuvable : %s" % path,
@@ -225,9 +227,9 @@ class Corpus(object):
 
 
 def read_symbols(text):
-    """Lit une liste de symboles : un par ligne, ou separes par virgule.
+    """Reads a list of symbols: one per line, or separated by commas.
 
-    Les commentaires (``#``) et les lignes vides sont ignores.
+    The comments (``#``) and the empty lines are ignored.
     """
     out = []
     for line in text.splitlines():

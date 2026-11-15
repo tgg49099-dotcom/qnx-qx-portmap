@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
-"""Fabrique les fixtures miniatures de ``tests/fixtures/``.
+"""Builds the miniature fixtures of ``tests/fixtures/``.
 
-Les fixtures sont des extraits courts (1 a 3 lignes) de pages officielles de
-la documentation QNX, avec l'URL source et la date de consultation. Elles
-permettent de faire tourner les tests de l'outil **sans** le corpus complet :
-le corpus n'est pas redistribue, il est reconstruit a la demande
+The fixtures are short extracts (1 to 3 lines) of official pages of the QNX
+documentation, with the source URL and the consultation date. They make it
+possible to run the tests of the tool **without** the complete corpus: the
+corpus is not redistributed, it is rebuilt on demand
 (``scripts/bootstrap_corpus.sh``).
 
-Ce script n'est pas necessaire pour utiliser l'outil : il documente comment
-les fixtures ont ete produites. Il est deterministe : a corpus identique,
-fixtures identiques.
+This script is not needed to use the tool: it documents how the fixtures were
+produced. It is deterministic: same corpus, same fixtures.
 
-Usage :
+Usage:
     python3 tools/make_fixtures.py \
         --corpus /work/qnx-portmap-corpus-local/corpus --out tests/fixtures
 """
@@ -27,7 +26,7 @@ import sys
 CONSULTED = "2026-11-14"
 DOCS_ROOT = "https://www.qnx.com/developers/docs/%s/"
 
-# (id, version, book, topic, kind, symbole attendu, selecteur)
+# (id, version, book, topic, kind, expected symbol, selector)
 SPECS = [
     ("f01", "8.0", "com.qnx.doc.neutrino.lib_ref", "a/abort.html", "h1", "abort",
      {"type": "line", "contains": "<h1 ", "count": 1}),
@@ -81,16 +80,16 @@ def page_html(corpus_dir, rec):
 
 
 def extract(html, selector):
-    """Extrait le fragment demande. Retourne une liste de lignes."""
+    """Extracts the requested fragment. Returns a list of lines."""
     kind = selector["type"]
     count = selector.get("count", 1)
     if kind == "line":
         lines = html.splitlines()
         scope = list(range(len(lines)))
         if selector.get("scope", "article") == "article":
-            # on ne cherche que dans le corps <article> de la page :
-            # l'entete (<head>) et la navigation ne sont pas des extraits
-            # de documentation, ils sont repetes sur chaque page.
+            # only the <article> body of the page is searched:
+            # the header (<head>) and the navigation are not documentation
+            # extracts, they are repeated on every page.
             first = last = None
             for i, line in enumerate(lines):
                 if first is None and "<article" in line:
@@ -146,7 +145,7 @@ def main():
         ]
         path = os.path.join(args.out, "%s-%s.txt" % (fid, symbol or kind))
         with open(path, "w", encoding="utf-8") as fh:
-            # les entetes, une ligne vide, puis l'extrait verbatim
+            # the headers, an empty line, then the verbatim extract
             fh.write("\n".join(header) + "\n" + content + "\n")
         written.append((path, len(lines), len(content)))
         print("%-14s %-18s %d ligne(s) %5d octets  %s"

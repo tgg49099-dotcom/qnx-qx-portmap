@@ -1,10 +1,10 @@
-"""Interface en ligne de commande de QX PORTMAP.
+"""Command line interface of QX PORTMAP.
 
-QX PORTMAP repond a une seule question : etant donne une liste de symboles
-QNX, ou en est chacun dans la documentation officielle 8.0 ?
+QX PORTMAP answers one single question: given a list of QNX symbols, where
+does each one stand in the official 8.0 documentation?
 
-Par defaut, l'outil ne touche pas au reseau : il lit le corpus de
-documentation fige dans le depot.
+By default, the tool never touches the network: it reads the frozen
+documentation corpus of the repository.
 """
 
 import argparse
@@ -15,8 +15,9 @@ from .classify import Classifier
 from .corpus import Corpus, CorpusError, default_corpus_dir, read_symbols
 from .report import render_json, render_markdown, render_text
 
-# Aide de l'analyseur d'arguments dans les deux langues de sortie. Le
-# francais reste la langue par defaut.
+# Help of the argument parser in the two output languages. English is the
+# default language of the console; the French help is printed on demand
+# (``--lang fr``) and states the same real default.
 HELP_STRINGS = {
     "fr": {
         "description": "Etat des symboles QNX dans la documentation 8.0 "
@@ -42,7 +43,7 @@ HELP_STRINGS = {
         "fresh_cache": "repertoire du cache de telechargement (defaut : <fresh-out>/cache)",
         "fresh_max_pages": "limiter le nombre de pages par livre lors du rechargement",
         "fresh_only": "avec --fresh : reconstruire le corpus et sortir",
-        "lang": "langue de sortie (defaut : fr)",
+        "lang": "langue de sortie (defaut : en)",
     },
     "en": {
         "description": "Status of QNX symbols in the 8.0 documentation "
@@ -68,11 +69,11 @@ HELP_STRINGS = {
         "fresh_cache": "download cache directory (default: <fresh-out>/cache)",
         "fresh_max_pages": "cap the number of pages per book during the reload",
         "fresh_only": "with --fresh: rebuild the corpus and exit",
-        "lang": "output language (default: fr)",
+        "lang": "output language (default: en)",
     },
 }
 
-# Messages de la console (hors rendus) dans les deux langues de sortie.
+# Console messages (outside the renderings) in the two output languages.
 CLI_STRINGS = {
     "fr": {
         "no_symbols": "qnx-portmap: aucun symbole donne (argument, --file ou --stdin)\n",
@@ -124,16 +125,16 @@ CLI_STRINGS = {
 
 
 def _early_lang(argv):
-    """Langue demandee avant l'analyse, pour traduire aussi ``--help``."""
+    """Language asked for before the parsing, to translate ``--help`` too."""
     for i, arg in enumerate(argv):
         if arg == "--lang" and i + 1 < len(argv):
             return argv[i + 1]
         if arg.startswith("--lang="):
             return arg.split("=", 1)[1]
-    return "fr"
+    return "en"
 
 
-def build_parser(lang="fr"):
+def build_parser(lang="en"):
     h = HELP_STRINGS[lang if lang in HELP_STRINGS else "fr"]
     p = argparse.ArgumentParser(
         prog="qnx-portmap",
@@ -146,7 +147,7 @@ def build_parser(lang="fr"):
                    help=h["format"])
     p.add_argument("--corpus", default=None,
                    help=h["corpus"])
-    p.add_argument("--lang", choices=("fr", "en"), default="fr",
+    p.add_argument("--lang", choices=("fr", "en"), default="en",
                    help=h["lang"])
     p.add_argument("--version-doc", default="8.0", help=h["version_doc"])
     p.add_argument("--previous-version", default="7.1",
@@ -189,7 +190,7 @@ def _collect_symbols(args, s):
 
 
 def _do_fresh(args, corpus_dir, s):
-    """Recharge le corpus depuis qnx.com. Le corpus fige n'est pas touche."""
+    """Reloads the corpus from qnx.com. The frozen corpus is never touched."""
     from .refresh import (BOOKS, BOOKS_71, Downloader, build_corpus_from_cache)
 
     out_dir = args.fresh_out or (os.path.abspath(corpus_dir) + "-fresh")
@@ -285,7 +286,7 @@ def main(argv=None):
                                          previous=args.previous_version,
                                          lang=args.lang))
 
-    # code de sortie : 0 si tout va bien, 1 si un symbole est absent ou inconnu
+    # exit code: 0 if everything is fine, 1 if a symbol is absent or unknown
     from .classify import ABSENT, UNKNOWN
     return 1 if any(r.status in (ABSENT, UNKNOWN) for r in results) else 0
 

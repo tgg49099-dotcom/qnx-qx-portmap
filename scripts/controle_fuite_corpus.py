@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
-"""Controle anti-fuite : le depot publiable ne contient aucune page QNX.
+"""Anti-leak control: the publishable repository contains no QNX page.
 
-Le controle compare, par SHA-256 :
+The control compares, by SHA-256:
 
-1. chaque fichier de l'arbre publiable avec la liste des SHA-256 des pages
-   du corpus de reference (``corpus/index/pages.jsonl``) ;
-2. chaque fichier de l'arbre publiable avec la liste des SHA-256 des fichiers
-   stockes dans le corpus (``corpus/SHA256SUMS``, pages compressees) ;
-3. le contenu decompresse de chaque fichier gzip de l'arbre publiable avec
-   les SHA-256 des pages ;
-4. chaque objet git de l'arbre publiable (contenu brut et contenu decompresse)
-   avec les SHA-256 des pages.
+1. every file of the publishable tree with the list of the SHA-256 of the
+   pages of the reference corpus (``corpus/index/pages.jsonl``);
+2. every file of the publishable tree with the list of the SHA-256 of the
+   files stored in the corpus (``corpus/SHA256SUMS``, compressed pages);
+3. the decompressed content of every gzip file of the publishable tree with
+   the SHA-256 of the pages;
+4. every git object of the publishable tree (raw content and decompressed
+   content) with the SHA-256 of the pages.
 
-Il ajoute trois controles plus forts que la simple comparaison d'empreintes :
+It adds three controls stronger than the plain comparison of fingerprints:
 
-5. le recouvrement ligne a ligne : quelles lignes de l'arbre publiable
-   apparaissent mot pour mot dans le corpus, et de combien d'octets ;
-6. le recouvrement par fragments : pour chaque fichier, le plus long fragment
-   verbatim present dans le corpus (recherche par plus longue sous-chaine
-   commune), et le nombre total d'octets QNX que le fichier contient ;
-7. le budget de copie : aucun fichier de l'arbre publiable ne doit contenir
-   plus de 4 000 octets de texte QNX verbatim.
+5. the line by line overlap: which lines of the publishable tree appear word
+   for word in the corpus, and of how many bytes;
+6. the overlap by fragments: for every file, the longest verbatim fragment
+   present in the corpus (longest common substring search), and the total
+   number of QNX bytes the file contains;
+7. the copy budget: no file of the publishable tree must contain more than
+   4,000 bytes of verbatim QNX text.
 
-Usage :
+Usage:
     python3 scripts/controle_fuite_corpus.py \
         --tree . --corpus /work/qnx-portmap-corpus-local/corpus
 
-Code de sortie : 0 si aucune correspondance, 1 sinon, 2 si le corpus de
-reference est introuvable (le controle n'est alors pas realisable).
+Exit code: 0 if no match, 1 otherwise, 2 if the reference corpus cannot be
+found (the control is then not possible).
 """
 
 import argparse
@@ -42,17 +42,17 @@ import time
 IGNORED_DIRS = (".git", "__pycache__", "build", "dist", ".pylocal", ".npm",
                 "qnx_portmap.egg-info")
 IGNORED_SUFFIX = (".pyc", ".pyo")
-LINE_MIN = 40          # longueur minimale d'une ligne retenue comme verbatim
-COPY_BUDGET = 4000     # octets de texte QNX verbatim maximum par fichier
-# Balises du balisage Oxygen (DITA-OT) des pages QNX : un fichier qui les
-# contient est analyse fragment par fragment, meme si aucune de ses lignes
-# n'est identique a une ligne du corpus.
+LINE_MIN = 40          # minimal length of a line kept as verbatim
+COPY_BUDGET = 4000     # maximum bytes of verbatim QNX text per file
+# Tags of the Oxygen (DITA-OT) markup of the QNX pages: a file that contains
+# them is analysed fragment by fragment, even if none of its lines is
+# identical to a line of the corpus.
 QNX_MARKERS = ("<article", "role=\"treeitem\"", "apiname", "varname",
                "<var class", "<span class")
-# Dossiers dont chaque fichier est analyse fragment par fragment, meme
-# s'il ne porte aucune balise Oxygen : les extraits de test et les fichiers
-# de citations des mesures J4 et J5 (docs/mesure-J4/citations-*.txt,
-# docs/mesure-J5/citations-*.txt) contiennent du texte QNX sans balisage.
+# Directories whose every file is analysed fragment by fragment, even if it
+# carries no Oxygen tag: the test extracts and the citation files of the
+# J4 and J5 measurements (docs/mesure-J4/citations-*.txt,
+# docs/mesure-J5/citations-*.txt) contain QNX text without markup.
 FRAGMENT_DIRS = ("tests/fixtures", "docs/mesure-J4", "docs/mesure-J5")
 
 
@@ -61,7 +61,7 @@ def sha256_bytes(data):
 
 
 def publishable_files(tree):
-    """Fichiers de l'arbre publiable (hors .git, caches, builds)."""
+    """Files of the publishable tree (outside .git, caches, builds)."""
     out = []
     for dirpath, dirnames, filenames in os.walk(tree):
         dirnames[:] = sorted(d for d in dirnames if d not in IGNORED_DIRS)
@@ -75,7 +75,7 @@ def publishable_files(tree):
 
 
 def load_corpus_hashes(corpus_dir):
-    """Empreintes de reference : pages (decompressees) et fichiers stockes."""
+    """Reference fingerprints: pages (decompressed) and stored files."""
     index = os.path.join(corpus_dir, "index", "pages.jsonl")
     sums = os.path.join(corpus_dir, "SHA256SUMS")
     if not os.path.isfile(index) or not os.path.isfile(sums):
@@ -96,7 +96,7 @@ def load_corpus_hashes(corpus_dir):
 
 
 def corpus_lines(corpus_dir, index_path):
-    """Lignes longues distinctes du corpus, avec leur longueur."""
+    """Distinct long lines of the corpus, with their length."""
     lines = {}
     with open(index_path, encoding="utf-8") as fh:
         for raw in fh:
@@ -120,12 +120,12 @@ def corpus_lines(corpus_dir, index_path):
 
 
 def corpus_line_list(corpus_dir, index_path):
-    """Toutes les lignes longues distinctes du corpus, dans l'ordre."""
+    """All the distinct long lines of the corpus, in order."""
     return list(corpus_lines(corpus_dir, index_path).keys())
 
 
 def corpus_blob(corpus_dir, index_path):
-    """Texte de toutes les pages du corpus, concatene (une seule chaine)."""
+    """Text of every page of the corpus, concatenated (one single string)."""
     parts = []
     with open(index_path, encoding="utf-8") as fh:
         for raw in fh:
@@ -147,12 +147,10 @@ def corpus_blob(corpus_dir, index_path):
 
 
 def longest_verbatim_run(line, corpus_line_list):
-    """Plus long fragment de ``line`` present mot pour mot dans le corpus.
+    """Longest fragment of ``line`` present word for word in the corpus.
 
-    On sonde la fenetre du milieu puis le debut de la ligne ; a chaque
-    occurrence trouvee dans une ligne du corpus, on etend la correspondance
-    a gauche et a droite tant que les caracteres coincident. Le resultat ne
-    depend que du corpus et de la ligne : il est reproductible.
+    The window of the middle is probed first, then the beginning of the
+    line; at every step the window is reduced by one character.
     """
     n = len(line)
     if n < LINE_MIN:
@@ -188,7 +186,7 @@ def longest_verbatim_run(line, corpus_line_list):
 
 
 def git_blobs(repo):
-    """Contenu de tous les objets blob du depot (brut, puis decompresse)."""
+    """Content of every blob object of the repository (raw, then decompressed)."""
     blobs = []
     try:
         names = subprocess.run(

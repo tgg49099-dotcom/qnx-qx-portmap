@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Contre-epreuve ROUGE : casser une regle, montrer que le test echoue.
+"""RED counter-proof: break a rule, show that the test fails.
 
-Un test qui passe toujours ne teste rien. Ce script casse volontairement
-dix regles du code, une par une, et verifie que le test charge de la
-detester. Il restaure le depot a chaque etape (restauration par git).
+A test that always passes tests nothing. This script breaks ten rules of the
+code on purpose, one at a time, and checks that the loaded test detects it.
+It restores the repository at every step (restoration by git).
 
-Neuf regles se testent sans le corpus complet (elles s'appuient sur le
-corpus miniature reconstruit a partir des fixtures). La dixieme verifie
-l'integrite du corpus fige livre : elle n'est testable que si le corpus
-est present dans le depot ; sinon elle est signalee comme non testable
-et n'est pas comptee dans le total.
+Nine rules are testable without the complete corpus (they rely on the
+miniature corpus rebuilt from the fixtures). The tenth one verifies the
+integrity of the frozen corpus shipped with the tool: it is testable only if
+the corpus is present in the tree; otherwise it is reported as not testable
+and is not counted in the total.
 
-Usage :
+Usage:
     python3 tools/contre_epreuve.py
 
-Sortie : un tableau "regle cassee -> test -> echec observe".
-Code de sortie : 0 si toutes les contre-epreuves testables sont concluantes.
+Output: a table "broken rule -> test -> observed failure".
+Exit code: 0 when every testable counter-proof is conclusive.
 """
 
 import os
@@ -25,7 +25,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# (nom de la regle, fichier, avant, apres, test a lancer)
+# (name of the rule, file, before, after, test to run)
 BREAKS = [
     ("frontiere de mot dans la recherche de citation",
      "qnx_portmap/extract.py",
@@ -89,14 +89,14 @@ BREAKS = [
     ("la mention en prose ne vaut que pour un nom qui ressemble a une API",
      "qnx_portmap/classify.py",
      '                if not self._is_api_name(sym):\n'
-     '                    # Un mot anglais rencontre dans une phrase ("argument",\n'
-     '                    # "current") ou un nom de parametre suivi de "(" dans un\n'
-     '                    # extrait de code n\'est pas un symbole QNX : l\'annoncer\n'
-     '                    # comme "decrit ailleurs" serait faux.\n'
+     '                    # An English word met in a sentence ("argument",\n'
+     '                    # "current") or a parameter name followed by "(" in a\n'
+     '                    # code extract is not a QNX symbol: reporting it as\n'
+     '                    # "described elsewhere" would be wrong.\n'
      '                    continue',
      '                if not self._is_api_name(sym):\n'
-     '                    # regle cassee volontairement : la mention en prose est\n'
-     '                    # acceptee quel que soit le nom\n'
+     '                    # rule broken on purpose: the prose mention is\n'
+     '                    # accepted whatever the name is\n'
      '                    pass',
      "tests.test_classify.TestClassification."
      "test_english_word_mentioned_in_prose_is_not_a_symbol"),
@@ -121,11 +121,11 @@ def sh(cmd, cwd=ROOT):
 
 
 def restore(path, original=None):
-    """Remet le fichier dans son etat initial.
+    """Puts the file back in its initial state.
 
-    On ecrit directement les octets d'origine : le corpus fige n'est pas
-    suivi par git dans l'arbre publiable, `git checkout` ne pourrait donc
-    pas le restaurer.
+    The original bytes are written directly: the frozen corpus is not
+    tracked by git in the publishable tree, so `git checkout` could not
+    restore it.
     """
     if original is not None:
         with open(path, "wb") as fh:
@@ -135,12 +135,12 @@ def restore(path, original=None):
 
 
 def clean_pycache():
-    """Supprime les bytecodes caches.
+    """Removes the cached bytecodes.
 
-    Sans cela, Python peut reutiliser un .pyc compiles avant la casse : le
-    fichier source etant modifie dans la meme seconde et avec la meme taille
-    que la version precedente, le bytecode reutilise masque la casse, et le
-    test passerait alors que la regle cassee n'a jamais ete executee.
+    Without this, Python can reuse a .pyc compiled before the break: the
+    source file being modified in the same second and with the same size
+    as the previous version, the reused bytecode hides the break, and
+    the test would pass although the broken rule was never executed.
     """
     for sub in ("qnx_portmap", "tests", "tools", ""):
         d = os.path.join(ROOT, sub, "__pycache__") if sub else os.path.join(ROOT, "__pycache__")
@@ -150,8 +150,8 @@ def clean_pycache():
 def main():
     status = sh(["git", "status", "--porcelain"])
     if status.stdout.strip():
-        sys.stderr.write("contre_epreuve: le depot doit etre propre "
-                         "(git status non vide)\n")
+        sys.stderr.write("contre_epreuve: the repository must be clean "
+                         "(git status not empty)\n")
         return 2
     print("Contre-epreuve ROUGE de QX PORTMAP")
     print("On casse une regle a la fois ; le test charge doit echouer.\n")
@@ -160,9 +160,9 @@ def main():
         full = os.path.join(ROOT, path)
         original = None
         if before is None:
-            # corruption binaire d'une page du corpus fige : on altere un octet
-            # au milieu du flux compresse, ce qui change le contenu
-            # decompresse et donc son empreinte SHA-256
+            # binary corruption of a page of the frozen corpus: one byte is
+            # altered in the middle of the compressed stream, which changes
+            # the decompressed content and therefore its SHA-256 fingerprint
             if not os.path.isfile(full):
                 results.append((name, test, "NON TESTABLE (corpus absent)", ""))
                 print("%-58s %s" % (name, "non testable : corpus absent"))
@@ -201,7 +201,7 @@ def main():
         if detail:
             print("    %s" % detail)
 
-    # le depot doit etre propre apres la contre-epreuve
+    # the repository must be clean after the counter-proof
     final = sh(["git", "status", "--porcelain"])
     print("\nDepot propre apres contre-epreuve : %s"
           % ("oui" if not final.stdout.strip() else "NON"))

@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Transforme la mesure brute des pages Devpost en une table de preuves ASCII.
+"""Turns the raw measurement of the Devpost pages into a table of ASCII proofs.
 
-Le script de mesure (`tools/mesure_champs_devpost.py`) ecrit un JSON qui
-contient des extraits de pages publiques. Ce JSON n'est pas publie tel quel :
-ce script en tire la table courte qui justifie les chiffres cites dans
-`KIT-SOUMISSION-QNX.md` (longueurs observees sur 120 pages publiees).
+The measurement script (``tools/mesure_champs_devpost.py``) writes a JSON
+that contains extracts of public pages. This JSON is not published as it is:
+this script extracts the short table that justifies the figures quoted in
+``KIT-SOUMISSION-QNX.md`` (lengths observed on 120 published pages).
 
-Usage :
+Usage:
     python3 tools/table_mesure_devpost.py <mesure_champs_devpost.json> \
         --out docs/preuves/j-mesure-champs-devpost.txt
 
-Code de sortie : 0 si tout va bien, 1 sinon.
+Exit code: 0 if everything is fine, 1 otherwise.
 """
 
 import argparse
@@ -21,7 +21,7 @@ DEFAULT_OUT = "docs/preuves/j-mesure-champs-devpost.txt"
 
 
 def ascii_safe(text):
-    """Remplace tout caractere non ASCII par son equivalent lisible."""
+    """Replaces every non-ASCII character by its readable equivalent."""
     if text is None:
         return ""
     out = []

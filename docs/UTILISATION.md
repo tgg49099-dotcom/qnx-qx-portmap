@@ -86,9 +86,8 @@ The tool looks for the frozen corpus in this order:
 
 The repository **does not contain** a `corpus/` directory: the QNX
 documentation is not redistributable (see `LICENCE-DOCS-QNX.md`). Without a
-corpus, the tool prints `corpus introuvable` and exits with code `2` - it
-guesses nothing. (`corpus introuvable` is the exact console message of the
-tool, in French: it is the program output, so it is not translated.)
+corpus, the tool prints `corpus not found` (`corpus introuvable` with
+`--lang fr`) and exits with code `2` - it guesses nothing.
 
 ### Rebuilding the corpus (one command, one log)
 
@@ -144,8 +143,8 @@ this sample.
 python3 -m unittest discover -s tests -t .
 ```
 
-Without the corpus: 164 tests, 26 of them skipped (the test says so, it does
-not lie). With the corpus: 164 tests, 1 skipped, exit code 0.
+Without the corpus: 170 tests, 27 of them skipped (the test says so, it does
+not lie). With the corpus: 170 tests, 1 skipped, exit code 0.
 (Figures re-measured on 15/11/2026.)
 
 The **RED -> GREEN** proof (a rule is broken, the test fails, the code is
@@ -157,7 +156,7 @@ the measurements and of the methods in [`mesure-J4.md`](mesure-J4.md) and
 
 | symptom | cause | solution |
 |---|---|---|
-| `corpus introuvable` (French console message), code 2 | the corpus is not in the tree | `bash scripts/bootstrap_corpus.sh --out corpus-downloaded`, then `QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort` |
+| `corpus not found` (`corpus introuvable` with `--lang fr`), code 2 | the corpus is not in the tree | `bash scripts/bootstrap_corpus.sh --out corpus-downloaded`, then `QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort` |
 | `unknown` for a symbol that exists | added after 14/11/2026 | rebuild the corpus (`--fresh`) or check the spelling |
 | `absent` for a symbol in use | it has disappeared from 8.0 | read the quoted 7.1 page; it is a state of the documentation, not an error |
 | a quotation looks badly formatted | the official HTML has an irregular formatting | the text is verbatim, the punctuation is not always so |

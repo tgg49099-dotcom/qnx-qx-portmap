@@ -1,26 +1,27 @@
 #!/usr/bin/env python3
-"""Mesure J5 : taux de resolution de QX PORTMAP, sur le MEME echantillon que J4.
+"""Measurement J5: resolution rate of QX PORTMAP, on the SAME sample as J4.
 
-J5 ajoute **une seule chose** a la mesure J4. Quand un symbole est « decrit
-ailleurs » (renvoi « The following are described elsewhere » de l'index 8.0),
-J5 cherche la **page exacte du livre QNX 8.0 qui le decrit**, verifie cette
-page dans le corpus fige (empreinte SHA-256 de la page) et cite cette page.
-Les symboles absents de la documentation 8.0 ne bougent pas.
+J5 adds **one single thing** to the J4 measurement. When a symbol is
+"described elsewhere" (a "The following are described elsewhere" cross
+reference of the 8.0 index), J5 looks for the **exact page of the QNX 8.0
+book that describes it**, verifies that page in the frozen corpus (SHA-256
+fingerprint of the page) and quotes that page. The symbols missing from the
+8.0 documentation do not move.
 
-La regle J4 (le symbole a sa propre page dans la C Library Reference 8.0)
-reste la regle principale ; J5 ne l'change pas. J5 ajoute un etat :
-« decrit ailleurs **et** resolu sur la page QNX 8.0 qui le decrit ».
+The J4 rule (the symbol has its own page in the 8.0 C Library Reference)
+stays the main rule; J5 does not change it. J5 adds one state:
+"described elsewhere **and** resolved on the QNX 8.0 page that describes it".
 
-Echantillon : les 100 symboles de la mesure J4 publiee
-(``docs/mesure-J4/mesure-J4.json``), dans le meme ordre. Avec ``--clones``,
-l'echantillon est **rederiive** des 5 depots QNX publics aux commits epingles
-de J4 et compare symbole par symbole a l'echantillon publie : c'est la preuve
-que le taux J5 et le taux J4 sont comparables.
+Sample: the 100 symbols of the published J4 measurement
+(``docs/mesure-J4/mesure-J4.json``), in the same order. With ``--clones``,
+the sample is **re-derived** from the 5 public QNX repositories at the
+commits pinned by J4 and compared symbol by symbol with the published sample:
+that is the proof that the J5 rate and the J4 rate are comparable.
 
-Aucun code de ``qnx_portmap/`` n'est modifie par cette mesure : elle ne fait
-que mesurer, citer et verifier.
+No code of ``qnx_portmap/`` is modified by this measurement: it only
+measures, quotes and verifies.
 
-Usage :
+Usage:
 
     python3 tools/mesure_j5.py \
         --corpus /work/qnx-portmap-corpus-local/corpus \
@@ -50,34 +51,28 @@ from mesure_j4 import (AILLEURS, CORPUS_SHA256, CONSULTED, ETAT_CITATION_EN,  # 
                        PER_REPO, REPOS, RESOLU, etat as etat_j4,
                        load_standard_symbols, select_sample)
 
-# -- version anglaise du rapport --------------------------------------------
-# Le rapport public est en anglais ; la version francaise (sortie de l'outil,
-# `--lang fr`) est conservee a part, byte-identique. Les chiffres sont les
-# memes dans les deux versions : seul le texte change.
-# Le genre de mention vient du moteur (en francais) : il est traduit ici.
+# -- English version of the report --------------------------------------------
+# The public report is in English; the French version (output of the tool,
+# `--lang fr`) is kept apart, byte-identical. The figures are the same in
+# both versions: only the text changes.
+# The kind of mention comes from the engine (in French): it is translated here.
 KIND_EN = {
     "appel de fonction": "function call",
     "mention": "mention",
 }
 
-# Racine de la documentation QNX 8.0 : une page qui n'y est pas n'est pas une
-# page QNX 8.0, meme si l'outil la cite (cas des renvois vers FreeBSD).
+# Root of the QNX 8.0 documentation: a page that is not in it is not a QNX
+# 8.0 page, even if the tool quotes it (case of the references to FreeBSD).
 QNX_80 = "https://www.qnx.com/developers/docs/8.0/"
 
 
 def est_url_qnx_80(url):
-    """Vrai si l'URL est une page de la documentation QNX 8.0."""
+    """True if the URL is a page of the QNX 8.0 documentation."""
     return bool(url) and url.startswith(QNX_80) and "/topic/" in url
 
 
 def pages_candidates(res):
-    """Pages QNX 8.0 candidates pour un symbole « decrit ailleurs ».
-
-    Dans l'ordre : les renvois de l'index 8.0 (``see_urls``), puis la page
-    trouvee par l'outil dans le corpus (``url``), puis les pages du guide de
-    migration qui mentionnent le symbole. Les URL hors documentation QNX 8.0
-    (renvois vers FreeBSD, par exemple) sont ecartees.
-    """
+    """QNX 8.0 pages candidate for a "described elsewhere" symbol."""
     out = []
     for url in list(res.see_urls) + [res.url] + list(res.migration_urls):
         if est_url_qnx_80(url) and url not in out:
@@ -86,19 +81,7 @@ def pages_candidates(res):
 
 
 def resoudre_page(corpus, res):
-    """Page exacte du livre QNX 8.0 qui decrit le symbole.
-
-    Renvoie ``(page, citation, kind)`` ou ``None``. La page retenue doit :
-
-    * etre une page de la documentation QNX 8.0 **presente dans le corpus
-      fige** (c'est elle qui donne l'empreinte SHA-256) ;
-    * ne pas etre une page d'index : l'index renvoie vers une source, il ne
-      decrit pas la fonction ;
-    * contenir reellement le symbole : la citation est extraite de la page.
-
-    La citation est un extrait court (au plus 320 caracteres), comme dans la
-    mesure J4.
-    """
+    """Exact page of the QNX 8.0 book that describes the symbol."""
     for url in pages_candidates(res):
         page = corpus.find_url(url)
         if page is None or page.is_index_page:
@@ -114,15 +97,7 @@ def resoudre_page(corpus, res):
 
 
 def etat_j5(res, page_found, resolution=None):
-    """Etat J5 d'un symbole.
-
-    * ``documented`` + page presente dans le corpus + citation non vide =>
-      **resolu et cite** (regle J4, inchangee) ;
-    * ``described_elsewhere`` + page QNX 8.0 trouvee et verifiee dans le
-      corpus => **resolu et cite** (regle J5) ;
-    * ``described_elsewhere`` sans page QNX 8.0 => decrit ailleurs (non resolu) ;
-    * ``absent`` / ``unknown`` => non resolu (le symbole a disparu de la 8.0).
-    """
+    """J5 state of a symbol."""
     if res.status == DOCUMENTED and res.citation and page_found:
         return RESOLU
     if res.status == ELSEWHERE:
@@ -131,12 +106,7 @@ def etat_j5(res, page_found, resolution=None):
 
 
 def taux(records):
-    """Taux J5 : fraction des symboles resolus et cites.
-
-    Le denominateur est le nombre de mesures. Une liste vide leve une
-    exception plutot que de renvoyer 0 : un taux calcule sur rien n'est pas
-    un taux.
-    """
+    """J5 rate: fraction of the symbols resolved and cited."""
     total = len(records)
     if total == 0:
         raise ValueError("taux J5 : aucune mesure (division par zero)")
@@ -145,7 +115,7 @@ def taux(records):
 
 
 def resume(records):
-    """Compte les 3 etats et le taux."""
+    """Counts the 3 states and the rate."""
     counts = collections.Counter(r["etat"] for r in records)
     return {
         "total": len(records),
@@ -156,11 +126,7 @@ def resume(records):
 
 
 def charger_echantillon(path):
-    """Lit l'echantillon publie par la mesure J4.
-
-    Renvoie ``(choix, data)`` : la liste des symboles (nom, depot, appels,
-    famille) et la mesure J4 complete.
-    """
+    """Reads the sample published by the J4 measurement."""
     with open(path, encoding="utf-8") as fh:
         data = json.load(fh)
     choix = [{"symbol": r["symbol"], "repo": r["repo"], "calls": r["calls"],
@@ -169,14 +135,14 @@ def charger_echantillon(path):
 
 
 def comparer_echantillons(choix_a, choix_b):
-    """Compare deux echantillons symbole par symbole (ordre compris)."""
+    """Compares two samples symbol by symbol (order included)."""
     def clef(choix):
         return [(c["symbol"], c["repo"], c["calls"], c["famille"]) for c in choix]
     return clef(choix_a) == clef(choix_b)
 
 
 def measure(classifier, corpus, choix):
-    """Classe un echantillon et renvoie les enregistrements (etats J5)."""
+    """Classifies a sample and returns the records (J5 states)."""
     symbols = [c["symbol"] for c in choix]
     results = classifier.classify(symbols)
     by_symbol = {r.symbol: r for r in results}
@@ -184,7 +150,7 @@ def measure(classifier, corpus, choix):
     for c in choix:
         res = by_symbol[c["symbol"]]
         page = corpus.find_url(res.url) if res.url else None
-        # la resolution J5 ne concerne que les symboles « decrit ailleurs »
+        # the J5 resolution only concerns the "described elsewhere" symbols
         resolution = (resoudre_page(corpus, res) if res.status == ELSEWHERE
                       else None)
         rec = {
@@ -229,19 +195,14 @@ def measure(classifier, corpus, choix):
 
 
 def write_markdown(path, data, records, lang="fr"):
-    """Ecrit la mesure J5 (chiffre, conversions, 100 symboles, methode).
-
-    ``lang`` vaut ``"fr"`` (sortie historique, conservee byte-identique) ou
-    ``"en"`` (version publique du depot). Les chiffres sont identiques dans
-    les deux versions : seuls les libelles et le texte changent.
-    """
+    """Writes the J5 measurement (figure, conversions, 100 symbols, method)."""
     if lang == "en":
         return write_markdown_en(path, data, records)
     return write_markdown_fr(path, data, records)
 
 
 def write_markdown_fr(path, data, records):
-    """Ecrit la mesure J5 (chiffre, conversions, 100 symboles, methode)."""
+    """Writes the J5 measurement (figure, conversions, 100 symbols, method)."""
     prim = data["principal"]
     j4 = data["mesure_j4"]
     convertis = [r for r in records if r.get("resolution_j5")]
@@ -405,12 +366,12 @@ def write_markdown_fr(path, data, records):
 
 
 def kind_en(kind):
-    """Traduit le genre de mention (donnee du moteur, en francais)."""
+    """Translates the kind of mention (data of the engine, in French)."""
     return KIND_EN.get(kind, kind)
 
 
 def write_markdown_en(path, data, records):
-    """Ecrit la mesure J5 en anglais (memes chiffres que la version fr)."""
+    """Writes the J5 measurement in English (same figures as the fr version)."""
     prim = data["principal"]
     j4 = data["mesure_j4"]
     convertis = [r for r in records if r.get("resolution_j5")]
@@ -583,13 +544,7 @@ def write_markdown_en(path, data, records):
 
 
 def write_citations(dir_path, data, records, lang="fr"):
-    """Ecrit les citations litterales, une page par depot (budget 4 000 o).
-
-    ``lang`` vaut ``"fr"`` (sortie historique, conservee byte-identique) ou
-    ``"en"`` (version publique du depot). Seules les **etiquettes** changent :
-    les numeros, les URL et le texte des citations sont identiques dans les
-    deux versions.
-    """
+    """Writes the literal citations, one page per repository (4,000-byte budget)."""
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
     written = []
@@ -653,7 +608,7 @@ def write_citations(dir_path, data, records, lang="fr"):
 
 
 def write_public_json(path, data, records):
-    """Ecrit le JSON public : tout sauf le texte des citations."""
+    """Writes the public JSON: everything except the text of the citations."""
     out = {
         "methode": data["methode"],
         "consulte_le": CONSULTED,

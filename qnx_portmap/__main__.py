@@ -1,4 +1,4 @@
-"""Point d'entree : ``python3 -m qnx_portmap``."""
+"""Entry point: ``python3 -m qnx_portmap``."""
 
 import sys
 

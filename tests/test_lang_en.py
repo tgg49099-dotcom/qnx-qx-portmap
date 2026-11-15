@@ -1,8 +1,9 @@
-"""Mode anglais de la console : ``--lang en`` couvre TOUTE la sortie.
+"""Langue de la console : l'anglais par defaut, ``--lang fr`` toujours francais.
 
-La regle du concours impose l'anglais pour tout le materiel de soumission.
-Le francais reste la langue par defaut, octet pour octet : ce fichier le
-verifie des deux cotes.
+La regle du concours impose l'anglais pour tout le materiel de soumission :
+l'anglais est donc la langue par defaut de la console. Le mode francais
+(``--lang fr``) rend toujours exactement les memes octets qu'avant : ce
+fichier le verifie des deux cotes.
 """
 
 import hashlib
@@ -147,8 +148,8 @@ class TestLangEn(unittest.TestCase):
         self.assertNotIn("| oui |", out)
         self.assertNotIn("| non |", out)
         self.assertTrue("| yes |" in out or "| no |" in out)
-        _, fr = run_cli(["--corpus", self.root, "--format", "markdown"]
-                        + self.symbols)
+        _, fr = run_cli(["--corpus", self.root, "--format", "markdown",
+                         "--lang", "fr"] + self.symbols)
         self.assertTrue("| oui |" in fr or "| non |" in fr)
 
     def test_en_verify_corpus_is_english(self):
@@ -203,17 +204,23 @@ class TestLangEn(unittest.TestCase):
             else:
                 self.assertFalse(hits, hits[:5])
 
-    # -- mode par defaut : inchange, octet pour octet ----------------------
-    def test_default_mode_is_frozen(self):
+    # -- langue par defaut : l'anglais ; --lang fr reste fige --------------
+    def test_default_mode_is_english(self):
         code_d, out_d = run_cli(["--corpus", self.root] + self.symbols)
+        code_e, out_e = run_cli(["--corpus", self.root, "--lang", "en"] + self.symbols)
+        self.assertEqual(code_d, code_e)
+        self.assertEqual(out_d, out_e)
+        # l'anglais est bien la (contre-preuve du detecteur : 0 ligne francaise)
+        self.assertFalse(_marker_hits(out_d), _marker_hits(out_d)[:5])
+        self.assertIn("frozen corpus", out_d)
+
+    def test_french_mode_is_frozen(self):
+        # --lang fr rend toujours exactement les octets francais d'avant
         code_f, out_f = run_cli(["--corpus", self.root, "--lang", "fr"] + self.symbols)
-        self.assertEqual(code_d, code_f)
-        self.assertEqual(out_d, out_f)
-        # le francais est bien la (contre-preuve du detecteur)
-        self.assertTrue(_marker_hits(out_d))
-        self.assertIn("corpus fige", out_d)
+        self.assertTrue(_marker_hits(out_f))
+        self.assertIn("corpus fige", out_f)
         # sortie figee : empreinte du texte, chemin du corpus masque
-        masked = out_d.replace(self.root, "<CORPUS>")
+        masked = out_f.replace(self.root, "<CORPUS>")
         digest = hashlib.sha256(masked.encode("utf-8")).hexdigest()
         self.assertEqual(digest, FROZEN_FR_SHA256)
 

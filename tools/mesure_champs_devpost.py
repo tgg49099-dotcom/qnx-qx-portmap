@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Mesure, sur des pages de projets Devpost PUBLIQUES, les longueurs des champs
-que le formulaire de soumission Devpost contient (tagline, description, liste
-"Built with", URL "try it out").
+"""Measures, on PUBLIC Devpost project pages, the lengths of the fields
+the Devpost submission form contains (tagline, description, "Built with"
+list, "try it out" URL).
 
-Methode : borne INFERIEURE. On observe ce que la plateforme a accepte et publie
-pour des soumissions reelles. On ne lit pas la regle du formulaire
-(le formulaire est derriere une session : HTTP 302 mesure le 15/11/2026).
+Method: a LOWER bound. What is observed is what the platform accepted and
+published for real submissions. The rule of the form itself is not read (the
+form is behind a session: HTTP 302 measured on 15/11/2026).
 
-Sortie : JSON + resume sur stdout.
+Output: JSON + a summary on stdout.
 """
 import concurrent.futures as cf
 import html
@@ -21,7 +21,7 @@ UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
 
 
 def fetch(url):
-    """curl avec un UA de navigateur (Cloudflare renvoie 403 a urllib nu)."""
+    """curl with a browser UA (Cloudflare answers 403 to bare urllib)."""
     p = subprocess.run(
         ["curl", "-s", "-L", "--max-time", "40", "-A", UA,
          "-w", "\n%{http_code}",
@@ -53,13 +53,13 @@ def measure(slug):
     if status != 200:
         return {"slug": slug, "status": status, "error": page[:120]}
     out = {"slug": slug, "status": 200, "url": url}
-    # tagline : <h1> / element de titre du projet
+    # tagline: <h1> / title element of the project
     m = re.search(r'(?is)<h1[^>]*>(.*?)</h1>', page)
     if m:
         out["titre"] = strip_tags(m.group(1))
         out["longueur_titre"] = len(out["titre"])
-    # description : contenu de app-details-left, entre la fin de la galerie et
-    # le bloc "built-with" / la colonne de droite.
+    # description: content of app-details-left, between the end of the gallery
+    # and the "built-with" block / the right column.
     i = page.find('id="app-details-left"')
     if i != -1:
         body = page[i:]
@@ -72,12 +72,12 @@ def measure(slug):
         out["longueur_description"] = len(desc)
         out["extrait_description"] = desc[:200]
         out["fin_description"] = desc[-120:]
-    # built with : liste de tags
+    # built with: list of tags
     tags = sorted(set(re.findall(r'devpost\.com/software/built-with/([a-z0-9%._+-]+)', page)))
     if tags:
         out["nb_built_with"] = len(tags)
         out["built_with"] = tags[:60]
-    # try it out / liens de telechargement
+    # try it out / download links
     m = re.search(r'(?is)try it out.{0,4000}?href="(http[^"]+)"', page)
     if m:
         out["url_try_it_out"] = m.group(1)

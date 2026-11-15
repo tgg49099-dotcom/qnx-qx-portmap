@@ -205,30 +205,30 @@ offline mode, the citation blocks are elided here, the complete session is in
 the repository README):
 
 ```text
-  abort                        documente
+  abort                        documented
     page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
     citation (index C Library Reference 8.0) :
       Raise the SIGABRT signal to terminate program execution
-  accept                       decrit ailleurs
+  accept                       described elsewhere
     page   : https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
-    voir   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
-  bzero                        absent de la 8.0
+    see    : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
+  bzero                        absent
     page   : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
 ```
 
-English translation of the console labels used above:
+The console labels used above, and their French translation (`--lang fr`):
 
-| console label | English |
+| console label (English, default) | French (`--lang fr`) |
 |---|---|
-| `documente` | documented in QNX 8.0 |
-| `decrit ailleurs` | described elsewhere in the QNX 8.0 documentation |
-| `absent de la 8.0` | present in QNX 7.1, absent from the QNX 8.0 corpus |
-| `inconnu du corpus` | not found in the frozen corpus |
+| `documented` | `documente` (documented in QNX 8.0) |
+| `described elsewhere` | `decrit ailleurs` (described elsewhere in the QNX 8.0 documentation) |
+| `absent` | `absent de la 8.0` (present in QNX 7.1, absent from the QNX 8.0 corpus) |
+| `unknown` | `inconnu du corpus` (not found in the frozen corpus) |
 
-The console messages of this version are in French by default; `--lang en`
-prints the same messages in English (see the README), and the JSON output
+The console messages of this version are in English by default; `--lang fr`
+prints the same messages in French (see the README), and the JSON output
 (`--format json`) uses English field names. Without a corpus the tool prints
-`corpus introuvable` and exits with code 2: it never invents an answer.
+`corpus not found` and exits with code 2: it never invents an answer.
 
 ## Measured on real QNX code
 
@@ -247,11 +247,11 @@ symbols, the citation of each one and the SHA-256 of the cited page are in
 python3 -m unittest discover -s tests -t .
 ```
 
-124 tests, no third-party dependency, no network access. Measured on
+170 tests, no third-party dependency, no network access. Measured on
 15 November 2026 in the three possible configurations: with the corpus in
-`corpus/` next to the package, 124 tests and 0 skipped; with the corpus
-pointed to by the environment variable `QX_PORTMAP_CORPUS`, 124 tests and 1
-skipped; without any corpus, 124 tests and 25 skipped (the skipped ones are
+`corpus/` next to the package, 170 tests and 0 skipped; with the corpus
+pointed to by the environment variable `QX_PORTMAP_CORPUS`, 170 tests and 1
+skipped; without any corpus, 170 tests and 27 skipped (the skipped ones are
 the ones that need the corpus). The suite also contains
 a RED -> GREEN proof: `tools/contre_epreuve.py` breaks one rule of the code
 at a time and checks that the matching test turns red, then restores the
@@ -270,8 +270,8 @@ repository. The 11 rules and their output are in `docs/contre-epreuve-rouge.txt`
 - The corpus is a snapshot of the official QNX documentation taken on
   14 November 2026. A symbol published since then is reported as `unknown`
   until the corpus is rebuilt.
-- The console messages are in French by default; `--lang en` prints the same
-  messages in English (the labels used above are translated in the table).
+- The console messages are in English by default; `--lang fr` prints the same
+  messages in French (the labels used above are translated in the table).
 
 ## Repository, licence, codelab
 
@@ -292,7 +292,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 7458 characters
+- Length (measured): 7566 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to
@@ -504,20 +504,21 @@ The output to look at: for each symbol, the official QNX 8.0 page, the exact
 quotation taken from that page, and the SHA-256 of the page. Example, executed
 on 15 November 2026:
 
-  abort    documente
+  abort    documented
     page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
     citation (index C Library Reference 8.0) :
       Raise the SIGABRT signal to terminate program execution
 
-  accept   decrit ailleurs
+  accept   described elsewhere
     page   : https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
-    voir   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
+    see    : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
 
-  bzero    absent de la 8.0
+  bzero    absent
     page   : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
 
-The same three symbols are shown with their English translation in the
-description block, and the English status table is in the repository README.
+The same three symbols are shown in French with `--lang fr` in the
+description block, and the table of the console labels is in the repository
+README.
 
 The measurement on real QNX code is in `docs/mesure-J5.md`: 100 QNX symbols
 really called by five public QNX repositories, pinned commits, classified by
@@ -531,7 +532,7 @@ with the standard library only, and its output is specifically intended to
 analyse and manage software for QNX 8.0.
 ```
 
-- Length (measured): 2663 characters
+- Length (measured): 2661 characters
 - Field limit: no limit published for this field. The requirement comes from
   the rules: "Evidence of QNX use : Your submission must explain how the
   project uses or supports QNX. Evidence may include QNX-specific source code

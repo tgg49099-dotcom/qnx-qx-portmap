@@ -1,7 +1,7 @@
 # QX PORTMAP
 
 > **This README is entirely in English.** The console output of the tool is
-> in French by default; add **`--lang en`** to get the same output in English.
+> in English by default; add **`--lang fr`** to get the same output in French.
 > The French output is shown **verbatim** where it is the subject of a test,
 > with the English output next to it and a table of the console labels.
 
@@ -58,12 +58,12 @@ the test, and compared with the published number.
 
 ```console
 $ pip install .
-$ qnx-portmap --lang en abort accept bzero zzz_fonction_inexistante
+$ qnx-portmap abort accept bzero zzz_fonction_inexistante
 ```
 
-Excerpt of the **real output** with `--lang en` (executed on 15 November
-2026; the citation blocks are elided here, and this excerpt is compared with
-the real output by `tests/test_readme_en.py`):
+Excerpt of the **real output** (executed on 15 November 2026; the citation
+blocks are elided here, and this excerpt is compared with the real output by
+`tests/test_readme_en.py`):
 
 ```text
 QX PORTMAP - status of QNX symbols in the 8.0 documentation
@@ -81,8 +81,8 @@ pages: 3426 (7.1: 1200, 8.0: 2226) - consulted on 2026-11-14 - offline mode
     ...
 ```
 
-Without `--lang en`, the tool prints the same output in French (the default,
-kept byte-identical to the published proofs; the complete French session is
+With `--lang fr`, the tool prints the same output in French (kept
+byte-identical to the published proofs; the complete French session is
 further down and is compared line by line by `tests/test_readme.py`):
 
 ```text
@@ -100,8 +100,9 @@ pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
     ...
 ```
 
-Without a corpus, the tool says `corpus introuvable` and exits with code 2: it
-never invents an answer. The corpus is rebuilt with:
+Without a corpus, the tool says `corpus not found` (`corpus introuvable` with
+`--lang fr`) and exits with code 2: it never invents an answer. The corpus is
+rebuilt with:
 
 ```bash
 bash scripts/bootstrap_corpus.sh --out corpus-downloaded
@@ -132,14 +133,14 @@ pip install .                     # or, without installing: python3 -m qnx_portm
 python3 -m unittest discover -s tests -t .
 ```
 
-Result measured on 15 November 2026: **164 tests, exit code 0**, without any
+Result measured on 15 November 2026: **170 tests, exit code 0**, without any
 network access and without any third-party dependency.
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/`, next to the package | 164 tests, **0 skipped**, exit code 0 |
-| Corpus through `QX_PORTMAP_CORPUS` | 164 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 164 tests, **26 skipped**, exit code 0 |
+| Corpus in `corpus/`, next to the package | 170 tests, **0 skipped**, exit code 0 |
+| Corpus through `QX_PORTMAP_CORPUS` | 170 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 170 tests, **27 skipped**, exit code 0 |
 
 The skipped tests are the ones that need the corpus: they are skipped, never
 failed. A test that always passes tests nothing, so the repository also
@@ -187,14 +188,16 @@ added here and in the submission kit when it goes online).
   "absent from the frozen 8.0 documentation", not "absent from the system".
 - The 96 % figure is a measurement on one sample of 100 symbols; it is not a
   guarantee for another project.
-- The console messages are in French by default and in English with
-  `--lang en`; the JSON output (`--format json`) uses English field names in
+- The console messages are in English by default and in French with
+  `--lang fr`; the JSON output (`--format json`) uses English field names in
   both modes.
 - The **documentation** of this repository is in English (this README, the
-  manuals, the licences, the submission kit, the video plan, the codelab).
-  The **source code** still carries French comments and docstrings: the engine
-  is frozen in its current state, and the docstrings of the test suite appear
-  as they are in the test output published in `docs/preuves/`.
+  manuals, the licences, the submission kit, the video plan, the codelab),
+  and so are the **comments and docstrings of the source code**. Every
+  document translated into English keeps its French original byte-identical
+  next to it (table below). The archived outputs of `docs/preuves/` are the
+  frozen proofs of the day they were measured: they keep the wording of that
+  day.
 
 ---
 
@@ -241,7 +244,8 @@ qnx-portmap --corpus /path/to/corpus abort
 ```
 
 Without a corpus, the tool does not guess anything: it prints
-`corpus introuvable` and exits with code 2.
+`corpus not found` (`corpus introuvable` with `--lang fr`) and exits with
+code 2.
 
 ## Usage
 
@@ -274,74 +278,17 @@ one symbol is absent or unknown, `2` on error (corpus absent, no list given).
 
 ### Real output example (executed)
 
-Command run on 14/11/2026 in this repository, and replayed on 15/11/2026 by the
-test `tests/test_readme.py`, which compares this output line by line with the
+Command run on 15/11/2026 in this repository, and replayed by the test
+`tests/test_readme_en.py`, which compares this output line by line with the
 real output of the day:
 
 ```
 $ qnx-portmap abort accept bzero zzz_fonction_inexistante
 ```
 
-Real output of the command (verbatim tool output, French - the program prints
-in French, this block is not translated and is compared byte by byte with the
-real output by the test):
-
-```
-QX PORTMAP - etat des symboles QNX dans la documentation 8.0
-corpus fige : <CORPUS>
-pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
-
-  abort                        documente
-    page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
-    citation (index C Library Reference 8.0) :
-      Raise the SIGABRT signal to terminate program execution
-    detail :
-      The abort() function causes abnormal process termination to occur by means of the function
-      call raise ( SIGABRT ) , unless the signal SIGABRT is caught and the signal handler doesn't
-      return. If the signal SIGABRT is caught and the signal handler returns, the signal handler is
-      removed and raise ( SIGABRT ) is called again. Note that prior to calling raise() , abort()
-      ensures that SIGABRT isn't ignored or blocked.
-    note   : present en 7.1 et en 8.0
-
-  accept                       decrit ailleurs
-    page   : https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
-    voir   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
-    citation (index C Library Reference 8.0, section "described elsewhere") :
-      FreeBSD documentation (
-      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports ) and
-      Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
-    * cite par le guide de migration officiel 8.0 : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
-    note   : decrit dans la documentation 8.0 mais sans page propre dans la C Library Reference
-
-  bzero                        absent de la 8.0
-    page   : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
-    citation (index C Library Reference 7.1, entree d'index) :
-      Set the first part of an object to null bytes
-    note   : present dans la C Library Reference 7.1, absent de tout le corpus 8.0
-
-  zzz_fonction_inexistante     inconnu du corpus
-    note   : introuvable dans le corpus 8.0 fige : symbole inconnu, erreur de saisie, ou ajout posterieur au 2026-11-14
-
---- Liste de travail de mise a niveau (2 symbole(s)) ---
-P2  bzero                      absent de la 8.0
-      https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
-      Set the first part of an object to null bytes
-P3  accept                     decrit ailleurs
-      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
-      FreeBSD documentation (
-      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports )
-      and Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
-      cite par le guide de migration : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
-```
-
-The same command with `--lang en` (real output of the English mode,
-compared line by line with the real output by `tests/test_readme_en.py`):
-
-```
-$ qnx-portmap --lang en abort accept bzero zzz_fonction_inexistante
-```
-
-English output (real):
+Real output of the command (verbatim tool output, English - English is the
+default language of the console, this block is not translated and is compared
+byte by byte with the real output by the test):
 
 ```
 QX PORTMAP - status of QNX symbols in the 8.0 documentation
@@ -391,7 +338,65 @@ P3  accept                     described elsewhere
       cited by the migration guide: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
 ```
 
-English translation of the console labels used above:
+The same command with `--lang fr` (real output of the French mode, compared
+line by line with the real output by `tests/test_readme.py` and
+`tests/test_readme_en.py`):
+
+```
+$ qnx-portmap --lang fr abort accept bzero zzz_fonction_inexistante
+```
+
+French output (real):
+
+```
+QX PORTMAP - etat des symboles QNX dans la documentation 8.0
+corpus fige : <CORPUS>
+pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
+
+  abort                        documente
+    page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
+    citation (index C Library Reference 8.0) :
+      Raise the SIGABRT signal to terminate program execution
+    detail :
+      The abort() function causes abnormal process termination to occur by means of the function
+      call raise ( SIGABRT ) , unless the signal SIGABRT is caught and the signal handler doesn't
+      return. If the signal SIGABRT is caught and the signal handler returns, the signal handler is
+      removed and raise ( SIGABRT ) is called again. Note that prior to calling raise() , abort()
+      ensures that SIGABRT isn't ignored or blocked.
+    note   : present en 7.1 et en 8.0
+
+  accept                       decrit ailleurs
+    page   : https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
+    voir   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
+    citation (index C Library Reference 8.0, section "described elsewhere") :
+      FreeBSD documentation (
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports ) and
+      Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
+    * cite par le guide de migration officiel 8.0 : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
+    note   : decrit dans la documentation 8.0 mais sans page propre dans la C Library Reference
+
+  bzero                        absent de la 8.0
+    page   : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
+    citation (index C Library Reference 7.1, entree d'index) :
+      Set the first part of an object to null bytes
+    note   : present dans la C Library Reference 7.1, absent de tout le corpus 8.0
+
+  zzz_fonction_inexistante     inconnu du corpus
+    note   : introuvable dans le corpus 8.0 fige : symbole inconnu, erreur de saisie, ou ajout posterieur au 2026-11-14
+
+--- Liste de travail de mise a niveau (2 symbole(s)) ---
+P2  bzero                      absent de la 8.0
+      https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
+      Set the first part of an object to null bytes
+P3  accept                     decrit ailleurs
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
+      FreeBSD documentation (
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports )
+      and Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
+      cite par le guide de migration : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
+```
+
+English translation of the French console labels used above:
 
 | console label | English |
 |---|---|
@@ -415,9 +420,9 @@ the io-sock guide), `bzero` has disappeared from 8.0, and
 of inventing an answer.
 
 `<CORPUS>` designates the corpus directory used for the command
-(`QX_PORTMAP_CORPUS=...`): the path depends on the machine. This block is
-compared line by line with the real output by `tests/test_readme.py`, which
-fails if the tool changes.
+(`QX_PORTMAP_CORPUS=...`): the path depends on the machine. The English block
+is compared line by line with the real output by `tests/test_readme_en.py`,
+and the French one by `tests/test_readme.py`: both fail if the tool changes.
 
 The French version of this README, kept byte-identical to the version that was
 published before the translation, is in [`docs/README-FR.md`](docs/README-FR.md).
@@ -488,7 +493,7 @@ SUMMARY - one line per verification
 ======================================================================================================
 VERIFICATION                               RESULT       DETAIL                                         EXIT
 ------------------------------------------ ------------ ------------------------------------------------ ----
-unit test suite                            OK           164 tests, 26 skipped                          0
+unit test suite                            OK           170 tests, 27 skipped                          0
 anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
 published manifest                         OK           MANIFESTE-PUBLIE.txt lists 108 files           0
 published numbers of the README            OK           every published count is the real one          0
@@ -521,13 +526,13 @@ python3 -m unittest tests.verify_all_contract
 python3 -m unittest discover -s tests -t .
 ```
 
-164 tests, no dependency, **no network access**. Two cases:
+170 tests, no dependency, **no network access**. Two cases:
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/` (next to the package) | 164 tests, **0 skipped**, exit code 0 |
-| Corpus via `QX_PORTMAP_CORPUS` | 164 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 164 tests, **26 skipped**, exit code 0 |
+| Corpus in `corpus/` (next to the package) | 170 tests, **0 skipped**, exit code 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | 170 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 170 tests, **27 skipped**, exit code 0 |
 
 With the corpus given by `QX_PORTMAP_CORPUS`, the only skipped test is the
 one that requires the corpus **inside the installed package** (absent from the
@@ -536,7 +541,7 @@ never failed. If the corpus is placed in `corpus/` next to the package, this
 test runs and the suite passes without any skip. The three lines of the table
 above were re-measured on 15/11/2026.
 
-The 25 skipped tests are the ones that require the complete corpus (SHA-256
+The 27 skipped tests are the ones that require the complete corpus (SHA-256
 integrity of each of the 3 426 pages, index figures for 8.0 and 7.1, answers
 on real symbols). They are **skipped, never failed**, with the message:
 
@@ -547,7 +552,7 @@ corpus absent : lancer scripts/bootstrap_corpus.sh
 (the message of the tool, in French: "corpus absent: run
 scripts/bootstrap_corpus.sh")
 
-The 138 other tests pass **without the corpus**. Among them, the 21 tests of
+The 143 other tests pass **without the corpus**. Among them, the 21 tests of
 `tests/test_fixtures.py` work on the **miniature fixtures**: 12 short extracts
 (1 to 3 lines) of real QNX pages, stored in `tests/fixtures/`, with the source
 URL, the consultation date and the SHA-256 of the complete page the extract
