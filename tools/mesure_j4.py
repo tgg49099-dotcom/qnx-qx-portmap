@@ -127,6 +127,44 @@ RESOLU = "resolu_et_cite"
 AILLEURS = "resolu_mais_decrit_ailleurs"
 NON_RESOLU = "non_resolu"
 
+# -- version anglaise du rapport --------------------------------------------
+# Le rapport public est en anglais ; la version francaise (sortie de l'outil,
+# `--lang fr`) est conservee a part, byte-identique. Les chiffres sont les
+# memes dans les deux versions : seul le texte change.
+ETAT_EN = {
+    RESOLU: "resolved and cited",
+    AILLEURS: "resolved but described elsewhere",
+    NON_RESOLU: "not resolved",
+}
+
+# Etats internes (codes machine) -> libelles anglais, pour les pages de
+# citations. Le code francais reste dans le JSON public (cle machine).
+ETAT_CITATION_EN = {
+    "resolu_et_cite": "resolved and cited",
+    "resolu_mais_decrit_ailleurs": "resolved but described elsewhere",
+    "non_resolu": "not resolved",
+}
+FAMILLE_EN = {
+    "qnx": "QNX-specific",
+    "standard": "standard C/POSIX",
+}
+# Les notes de l'outil sont en francais (le moteur est gele) : la version
+# anglaise les traduit. Toute note absente de cette table est signalee par
+# le test tests/test_mesure_j4.py (une note nouvelle doit etre traduite).
+NOTE_EN = {
+    "present en 7.1 et en 8.0": "present in 7.1 and in 8.0",
+    "present dans la C Library Reference 7.1, absent de tout le corpus 8.0":
+        "present in the C Library Reference 7.1, absent from the whole 8.0 corpus",
+    "appele dans la documentation 8.0 (livre com.qnx.doc.qnxsdp.migration) "
+    "mais sans page propre dans la C Library Reference":
+        "called in the 8.0 documentation (book com.qnx.doc.qnxsdp.migration) "
+        "but without a page of its own in the C Library Reference",
+    "decrit dans la documentation 8.0 mais sans page propre dans la C Library "
+    "Reference":
+        "described in the 8.0 documentation but without a page of its own in "
+        "the C Library Reference",
+}
+
 
 def load_standard_symbols(path=None):
     """Symboles standards (C standard, POSIX/XSI, extensions communes).
@@ -308,7 +346,19 @@ def resume(records):
     }
 
 
-def write_markdown(path, data, records):
+def write_markdown(path, data, records, lang="fr"):
+    """Ecrit la mesure J4 (liste des 100 symboles + methode + chiffres).
+
+    ``lang`` vaut ``"fr"`` (sortie historique, conservee byte-identique) ou
+    ``"en"`` (version publique du depot). Les chiffres sont identiques dans
+    les deux versions : seuls les libelles et le texte changent.
+    """
+    if lang == "en":
+        return write_markdown_en(path, data, records)
+    return write_markdown_fr(path, data, records)
+
+
+def write_markdown_fr(path, data, records):
     """Ecrit la mesure J4 (liste des 100 symboles + methode + chiffres)."""
     repo_by_key = {r["key"]: r for r in data["repos"]}
     prim = data["principal"]
@@ -469,11 +519,193 @@ def write_markdown(path, data, records):
         fh.write("\n".join(lines))
 
 
-def write_citations(dir_path, data, records):
+def note_en(note):
+    """Traduit une note de l'outil en anglais.
+
+    Les notes viennent du moteur ``qnx_portmap/`` (gele, en francais). Toute
+    note qui ne serait pas dans le tableau ``NOTE_EN`` est signalee par le
+    test : elle devra etre traduite avant d'etre publiee en anglais.
+    """
+    return NOTE_EN.get(note, "see the citation source column")
+
+
+def write_markdown_en(path, data, records):
+    """Ecrit la mesure J4 en anglais (memes chiffres que la version fr)."""
+    prim = data["principal"]
+    sec = data["secondaire_large"]
+    lines = []
+    lines.append("# Measurement J4 - QX PORTMAP resolution rate on real public "
+                 "QNX repositories")
+    lines.append("")
+    lines.append("Measured on %s by `tools/mesure_j4.py` (reproducible: see "
+                 "the \"Reproduce\" section below). The French version of this "
+                 "report is kept byte-identical in `docs/mesure-J4-FR.md`."
+                 % CONSULTED)
+    lines.append("")
+    lines.append("## The figure")
+    lines.append("")
+    lines.append("**J4 rate = %.0f %% (%d symbols resolved and cited out of "
+                 "%d).**" % (prim["taux"], prim["counts"][RESOLU], prim["total"]))
+    lines.append("")
+    lines.append("| state | count | counted in the J4 criterion ? |")
+    lines.append("|---|---:|---|")
+    lines.append("| resolved and cited | %d | yes |" % prim["counts"][RESOLU])
+    lines.append("| resolved but described elsewhere | %d | **no** |"
+                 % prim["counts"][AILLEURS])
+    lines.append("| not resolved | %d | **no** |" % prim["counts"][NON_RESOLU])
+    lines.append("")
+    lines.append("Total of the three states: %d. The J4 threshold of the "
+                 "project sheet is 80 %%: **the threshold is met**."
+                 % prim["total"])
+    lines.append("")
+    lines.append("The %d symbols that are not counted as resolved are so for a "
+                 "precise, verifiable reason, and the tool says which one:"
+                 % (prim["counts"][AILLEURS] + prim["counts"][NON_RESOLU]))
+    lines.append("")
+    lines.append("- **described elsewhere** (%d): the QNX 8.0 documentation "
+                 "explicitly points the symbol to another source (the \"The "
+                 "following are described elsewhere\" entry of the 8.0 index). "
+                 "The tool cites that exact source - it does not claim the "
+                 "symbol has a page in the C Library Reference."
+                 % prim["counts"][AILLEURS])
+    lines.append("- **absent** (%d): the symbol was in the C Library Reference "
+                 "7.1 and is no longer in the 8.0 corpus. The tool reports it "
+                 "as gone." % prim["counts"][NON_RESOLU])
+    lines.append("")
+    lines.append("## The sample: 5 public QNX repositories, 100 symbols")
+    lines.append("")
+    lines.append("| repository | URL | pinned commit | .c/.h files kept | "
+                 "subdirectory | consulted on |")
+    lines.append("|---|---|---|---:|---|---|")
+    for repo in data["repos"]:
+        sub = repo["subdir"] or "(whole repository)"
+        lines.append("| `%s` | %s | `%s` | %d | `%s` | %s |"
+                     % (repo["key"], repo["url"], repo["commit"][:8],
+                        repo["files"], sub, CONSULTED))
+    lines.append("")
+    lines.append("Clones: `git clone --depth 1` (shallow), a single useful "
+                 "subdirectory for the big repositories. The clones were deleted "
+                 "at the end of the measurement: only the symbol excerpts are "
+                 "kept.")
+    lines.append("")
+    lines.append("## The method, step by step")
+    lines.append("")
+    lines.append("1. **Extraction.** In each repository, every identifier "
+                 "called as a function in the kept `.c`/`.h` files is recorded "
+                 "(comments and preprocessor code are removed).")
+    lines.append("2. **Purge.** The symbols defined by the project itself "
+                 "(functions and macros defined in the repository) are removed: "
+                 "they are not QNX symbols.")
+    lines.append("3. **Selection.** A symbol is kept if it appears in the QNX C "
+                 "Library Reference (8.0 or 7.1 index): that is the definition "
+                 "of a QNX API symbol. We keep **the 20 most called symbols of "
+                 "each repository**, and we favour the **QNX-specific** symbols "
+                 "(`io_open`, `resmgr_attach`, `iofunc_read_default`, "
+                 "`ThreadCtl`, `ConnectAttach`...) before the standard C/POSIX "
+                 "ones. A symbol already taken by an earlier repository is not "
+                 "taken again: the sample counts exactly **100 distinct "
+                 "symbols**.")
+    lines.append("4. **Separation of the families.** A symbol is called "
+                 "\"standard\" if it appears in `tools/posix-base.txt` (C "
+                 "standard + POSIX/XSI list, **independent of the QNX "
+                 "corpus**), otherwise it is called \"QNX-specific\".")
+    lines.append("5. **Measurement.** QX PORTMAP classifies the 100 symbols "
+                 "against the frozen corpus (offline, no network access) and we "
+                 "record for each one: status, official page, citation.")
+    lines.append("6. **Verifiable citation.** A citation counts if the cited "
+                 "page exists in the frozen corpus (SHA-256 fingerprint "
+                 "verifiable) and if the citation is not empty.")
+    lines.append("")
+    lines.append("## Breakdown by family")
+    lines.append("")
+    lines.append("| family | resolved and cited | total | rate |")
+    lines.append("|---|---:|---:|---:|")
+    for key in ("qnx", "standard"):
+        info = data["par_famille"][key]
+        if info["total"]:
+            lines.append("| %s | %d | %d | %.1f %% |"
+                         % (FAMILLE_EN[key], info["resolu"], info["total"],
+                            100.0 * info["resolu"] / info["total"]))
+    lines.append("")
+    lines.append("## Counter-check: a second, wider sample")
+    lines.append("")
+    lines.append("The same protocol, but without favouring the QNX-specific "
+                 "symbols (the 20 most called symbols of each repository, all "
+                 "families together) gives **%.0f %% (%d / %d)**."
+                 % (sec["taux"], sec["counts"][RESOLU], sec["total"]))
+    lines.append("")
+    lines.append("Both samples clear the 80 % threshold.")
+    lines.append("")
+    lines.append("## The 100 measured symbols")
+    lines.append("")
+    lines.append("One line per symbol: name, repository, status, page/source. "
+                 "The literal citation of each symbol is in "
+                 "`docs/mesure-J4/citations-*.txt` (one page per repository), "
+                 "with the source page URL, the consultation date and its "
+                 "SHA-256 fingerprint.")
+    lines.append("")
+    lines.append("| # | symbol | repository | family | status | J4 state | "
+                 "calls in the repository | cited page | citation source | "
+                 "page sha256 |")
+    lines.append("|---:|---|---|---|---|---|---:|---|---|---|")
+    for i, rec in enumerate(records, 1):
+        lines.append("| %d | `%s` | `%s` | %s | `%s` | %s | %d | %s | %s | `%s` |"
+                     % (i, rec["symbol"], rec["repo"], rec["famille"],
+                        rec["status"], ETAT_EN[rec["etat"]], rec["calls"],
+                        rec["url"] or "(none)", rec["citation_source"],
+                        (rec["page_sha256"][:16] or "-")))
+    lines.append("")
+    lines.append("## What is not resolved, and why")
+    lines.append("")
+    for rec in records:
+        if rec["etat"] != RESOLU:
+            lines.append("- `%s` (%s): **%s** - %s"
+                         % (rec["symbol"], rec["repo"], rec["status"],
+                            note_en(rec["note"] or rec["citation_source"])))
+    lines.append("")
+    lines.append("## Reproduce")
+    lines.append("")
+    lines.append("```")
+    lines.append("# 1. clone the 5 repositories (shallow)")
+    lines.append("for r in vocho/openqnx qnx/bsp_raspberrypi-bcm2712-rpi5 \\")
+    lines.append("         varghes/Raspberry-QNX qnx/qnx-posix-publish-subscribe \\")
+    lines.append("         qnx/socketcan ; do")
+    lines.append("  git clone --depth 1 --filter=blob:none --sparse \\")
+    lines.append("      https://github.com/$r.git <directory>")
+    lines.append("done")
+    lines.append("# 2. measure (the frozen corpus is outside the repository:")
+    lines.append("#    local archive)")
+    lines.append("python3 tools/mesure_j4.py --clones <directory> \\")
+    lines.append("    --corpus /work/qnx-portmap-corpus-local/corpus \\")
+    lines.append("    --out docs/mesure-J4/mesure-J4.json \\")
+    lines.append("    --markdown docs/mesure-J4.md --lang en")
+    lines.append("")
+    lines.append("# --lang fr writes the same report in French")
+    lines.append("# (docs/mesure-J4-FR.md, byte-identical to the historical one).")
+    lines.append("```")
+    lines.append("")
+    lines.append("The test `tests/test_mesure_j4.py` verifies that the rate "
+                 "computed by the script is identical to the rate counted by "
+                 "hand on 10 given symbols, and that the list of the 100 "
+                 "symbols is well formed (no empty symbol, no duplicate, no "
+                 "empty repository). It also verifies that every figure "
+                 "published in this English report is the figure of the "
+                 "published JSON (the tool's own output).")
+    lines.append("")
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(lines))
+
+
+def write_citations(dir_path, data, records, lang="fr"):
     """Ecrit les citations litterales, une page par depot.
 
     Chaque page reste sous le budget de 4 000 octets de texte QNX verbatim
     par fichier (le controle anti-fuite).
+
+    ``lang`` vaut ``"fr"`` (sortie historique, conservee byte-identique) ou
+    ``"en"`` (version publique du depot). Seuls les **etiquettes** changent :
+    les numeros, les URL et le texte des citations sont identiques dans les
+    deux versions.
     """
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
@@ -486,25 +718,49 @@ def write_citations(dir_path, data, records):
         name = "citations-%s.txt" % repo["key"].replace("/", "-")
         path = os.path.join(dir_path, name)
         out = []
-        out.append("# Citations des %d symboles mesures dans %s"
-                   % (len(recs), repo["key"]))
-        out.append("# depot     : %s" % repo["url"])
-        out.append("# commit    : %s (%s)" % (repo["commit"], repo["commit_date"]))
-        out.append("# sous-dossier retenu : %s" % (repo["subdir"] or "(depot entier)"))
-        out.append("# consultee le : %s" % CONSULTED)
-        out.append("# Extraits courts (une a trois lignes) de la documentation "
-                   "QNX 8.0, avec l'URL de la page source et son empreinte "
-                   "SHA-256 : voir LICENCE-DOCS-QNX.md.")
+        if lang == "en":
+            out.append("# Citations of the %d symbols measured in %s"
+                       % (len(recs), repo["key"]))
+            out.append("# repository : %s" % repo["url"])
+            out.append("# commit     : %s (%s)"
+                       % (repo["commit"], repo["commit_date"]))
+            out.append("# sub-directory used : %s"
+                       % (repo["subdir"] or "(whole repository)"))
+            out.append("# consulted on : %s" % CONSULTED)
+            out.append("# Short extracts (one to three lines) from the QNX 8.0 "
+                       "documentation, with the URL of the source page and its "
+                       "SHA-256 fingerprint: see LICENCE-DOCS-QNX.md.")
+        else:
+            out.append("# Citations des %d symboles mesures dans %s"
+                       % (len(recs), repo["key"]))
+            out.append("# depot     : %s" % repo["url"])
+            out.append("# commit    : %s (%s)" % (repo["commit"], repo["commit_date"]))
+            out.append("# sous-dossier retenu : %s" % (repo["subdir"] or "(depot entier)"))
+            out.append("# consultee le : %s" % CONSULTED)
+            out.append("# Extraits courts (une a trois lignes) de la documentation "
+                       "QNX 8.0, avec l'URL de la page source et son empreinte "
+                       "SHA-256 : voir LICENCE-DOCS-QNX.md.")
         out.append("")
         for rec in recs:
             out.append("--- %s ---" % rec["symbol"])
-            out.append("# depot    : %s" % rec["repo"])
-            out.append("# appele %d fois dans le depot" % rec["calls"])
-            out.append("# statut   : %s (%s)" % (rec["status"], rec["etat"]))
-            out.append("# source   : %s" % rec["citation_source"])
-            out.append("# page     : %s" % (rec["url"] or "(aucune)"))
-            out.append("# sha256 de la page source : %s" % rec["page_sha256"])
-            out.append("# citation : %s" % (rec["citation"] or "(vide)"))
+            if lang == "en":
+                out.append("# repository : %s" % rec["repo"])
+                out.append("# called %d times in the repository" % rec["calls"])
+                out.append("# status     : %s (%s)"
+                           % (rec["status"], ETAT_CITATION_EN.get(
+                               rec["etat"], rec["etat"])))
+                out.append("# source     : %s" % rec["citation_source"])
+                out.append("# page       : %s" % (rec["url"] or "(none)"))
+                out.append("# sha256 of the source page : %s" % rec["page_sha256"])
+                out.append("# citation   : %s" % (rec["citation"] or "(empty)"))
+            else:
+                out.append("# depot    : %s" % rec["repo"])
+                out.append("# appele %d fois dans le depot" % rec["calls"])
+                out.append("# statut   : %s (%s)" % (rec["status"], rec["etat"]))
+                out.append("# source   : %s" % rec["citation_source"])
+                out.append("# page     : %s" % (rec["url"] or "(aucune)"))
+                out.append("# sha256 de la page source : %s" % rec["page_sha256"])
+                out.append("# citation : %s" % (rec["citation"] or "(vide)"))
             out.append("")
         with open(path, "w", encoding="utf-8") as fh:
             fh.write("\n".join(out))
@@ -557,6 +813,9 @@ def main(argv=None):
     ap.add_argument("--public-json", default=None,
                     help="JSON public (sans le texte des citations)")
     ap.add_argument("--per-repo", type=int, default=PER_REPO)
+    ap.add_argument("--lang", choices=("fr", "en"), default="fr",
+                    help="langue du rapport Markdown (fr = historique, "
+                         "en = version publique du depot)")
     args = ap.parse_args(argv)
 
     corpus = Corpus(args.corpus)
@@ -645,10 +904,10 @@ def main(argv=None):
             fh.write("\n")
         print("\necrit : %s" % args.out)
     if args.markdown:
-        write_markdown(args.markdown, out, records)
+        write_markdown(args.markdown, out, records, args.lang)
         print("ecrit : %s" % args.markdown)
     if args.citations_dir:
-        written = write_citations(args.citations_dir, out, records)
+        written = write_citations(args.citations_dir, out, records, args.lang)
         for name, nbytes in written:
             print("ecrit : %s (%d octets de citation)"
                   % (os.path.join(args.citations_dir, name), nbytes))

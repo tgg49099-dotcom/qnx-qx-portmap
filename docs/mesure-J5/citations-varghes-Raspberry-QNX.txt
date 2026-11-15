@@ -1,186 +1,186 @@
-# Citations des 20 symboles mesures dans varghes/Raspberry-QNX
-# depot     : https://github.com/varghes/Raspberry-QNX
-# commit    : 043582a94ac94e8311ff7c845beb450a9a718f04 (2022-07-30)
-# sous-dossier retenu : Bsp_Rasp/src/hardware/devi
-# consultee le : 2026-11-14
-# Extraits courts (une a trois lignes) de la documentation QNX 8.0, avec l'URL de la page source et son empreinte SHA-256 : voir LICENCE-DOCS-QNX.md.
+# Citations of the 20 symbols measured in varghes/Raspberry-QNX
+# repository : https://github.com/varghes/Raspberry-QNX
+# commit     : 043582a94ac94e8311ff7c845beb450a9a718f04 (2022-07-30)
+# sub-directory used : Bsp_Rasp/src/hardware/devi
+# consulted on : 2026-11-14
+# Short extracts (one to three lines) from the QNX 8.0 documentation, with the URL of the source page and its SHA-256 fingerprint: see LICENCE-DOCS-QNX.md.
 
 --- InterruptMask ---
-# depot    : varghes/Raspberry-QNX
-# appele 7 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptmask.html
-# sha256 de la page source : e2599468a82cf786f063fc2ff8bebf3f00e5ca6a2fe124022757f3177bc2f066
-# citation : Disable a hardware interrupt
+# repository : varghes/Raspberry-QNX
+# called 7 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptmask.html
+# sha256 of the source page : e2599468a82cf786f063fc2ff8bebf3f00e5ca6a2fe124022757f3177bc2f066
+# citation   : Disable a hardware interrupt
 
 --- basename ---
-# depot    : varghes/Raspberry-QNX
-# appele 5 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/b/basename.html
-# sha256 de la page source : 3206dee3df07faaeaacfce498ed9fa89e08eaa4c2e2b43baf8f063a84484f7ab
-# citation : Find the part of a string after the last slash ( / )
+# repository : varghes/Raspberry-QNX
+# called 5 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/b/basename.html
+# sha256 of the source page : 3206dee3df07faaeaacfce498ed9fa89e08eaa4c2e2b43baf8f063a84484f7ab
+# citation   : Find the part of a string after the last slash ( / )
 
 --- ThreadCtl ---
-# depot    : varghes/Raspberry-QNX
-# appele 4 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/t/threadctl.html
-# sha256 de la page source : 62ba371a368bc96a7df6851c76b0ce8fc966752ad4d680ac2dbd10f2367c487a
-# citation : Control a thread
+# repository : varghes/Raspberry-QNX
+# called 4 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/t/threadctl.html
+# sha256 of the source page : 62ba371a368bc96a7df6851c76b0ce8fc966752ad4d680ac2dbd10f2367c487a
+# citation   : Control a thread
 
 --- mmap_device_io ---
-# depot    : varghes/Raspberry-QNX
-# appele 4 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mmap_device_io.html
-# sha256 de la page source : 947e733be70ed59b182d92254de6322381cff2665df76535f5985ffefdb52305
-# citation : Gain access to a device's registers
+# repository : varghes/Raspberry-QNX
+# called 4 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mmap_device_io.html
+# sha256 of the source page : 947e733be70ed59b182d92254de6322381cff2665df76535f5985ffefdb52305
+# citation   : Gain access to a device's registers
 
 --- InterruptAttach ---
-# depot    : varghes/Raspberry-QNX
-# appele 3 fois dans le depot
-# statut   : described_elsewhere (etat J4 : resolu_mais_decrit_ailleurs, etat J5 : resolu_et_cite)
-# source   : com.qnx.doc.qnxsdp.migration, kernel.html
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html
-# sha256 de la page source : a3b329c6f9a04bdd8e8b0d6d29af2987b9ff73c77cbb58d4577ce4ba4d7f6d1c
-# citation : ... InterruptLock() InterruptMask() InterruptUnlock() InterruptUnmask() InterruptWait() The following functions have been removed: InterruptAttach() InterruptAttachArray() InterruptHookIdle2() InterruptHookTrace() The new InterruptAttachThread() function allows you to attach a thread to an interrupt ...
+# repository : varghes/Raspberry-QNX
+# called 3 times in the repository
+# status     : described_elsewhere (J4 state: resolved but described elsewhere, J5 state: resolved and cited)
+# source     : com.qnx.doc.qnxsdp.migration, kernel.html
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html
+# sha256 of the source page : a3b329c6f9a04bdd8e8b0d6d29af2987b9ff73c77cbb58d4577ce4ba4d7f6d1c
+# citation   : ... InterruptLock() InterruptMask() InterruptUnlock() InterruptUnmask() InterruptWait() The following functions have been removed: InterruptAttach() InterruptAttachArray() InterruptHookIdle2() InterruptHookTrace() The new InterruptAttachThread() function allows you to attach a thread to an interrupt ...
 
 --- InterruptUnlock ---
-# depot    : varghes/Raspberry-QNX
-# appele 3 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptunlock.html
-# sha256 de la page source : 92d547215685ae36f46aa6ab8a95403c9eb943620debfc5c6e31f1a441cb3f8f
-# citation : Unlock a spinlock and re-enable interrupts
+# repository : varghes/Raspberry-QNX
+# called 3 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptunlock.html
+# sha256 of the source page : 92d547215685ae36f46aa6ab8a95403c9eb943620debfc5c6e31f1a441cb3f8f
+# citation   : Unlock a spinlock and re-enable interrupts
 
 --- _exit ---
-# depot    : varghes/Raspberry-QNX
-# appele 3 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/e/_exit.html
-# sha256 de la page source : bcba6288c4673fd7e0b67b3d744c0632903a81ae31dbd1c32c88df4d228cafac
-# citation : Terminate the program
+# repository : varghes/Raspberry-QNX
+# called 3 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/e/_exit.html
+# sha256 of the source page : bcba6288c4673fd7e0b67b3d744c0632903a81ae31dbd1c32c88df4d228cafac
+# citation   : Terminate the program
 
 --- nanospin_ns ---
-# depot    : varghes/Raspberry-QNX
-# appele 3 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/n/nanospin_ns.html
-# sha256 de la page source : 980664032e70b2058860b5d8f56b4389f9198364dcb98f9eaad20b0a8d2e3ab9
-# citation : Busy-wait without blocking for a period of time
+# repository : varghes/Raspberry-QNX
+# called 3 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/n/nanospin_ns.html
+# sha256 of the source page : 980664032e70b2058860b5d8f56b4389f9198364dcb98f9eaad20b0a8d2e3ab9
+# citation   : Busy-wait without blocking for a period of time
 
 --- InterruptAttachEvent ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptattachevent.html
-# sha256 de la page source : 38e413cd205cfce2d46c587801a5340fea5d910a15d4e29a38381c16314e6588
-# citation : Attach an event to an interrupt source
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptattachevent.html
+# sha256 of the source page : 38e413cd205cfce2d46c587801a5340fea5d910a15d4e29a38381c16314e6588
+# citation   : Attach an event to an interrupt source
 
 --- InterruptLock ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptlock.html
-# sha256 de la page source : e509a9f1662dd23e37b6a9235b23b285504a2c10ff1b4d2e1a17a4df0a5e6ec9
-# citation : Attempt to acquire a spinlock with interrupts disabled
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptlock.html
+# sha256 of the source page : e509a9f1662dd23e37b6a9235b23b285504a2c10ff1b4d2e1a17a4df0a5e6ec9
+# citation   : Attempt to acquire a spinlock with interrupts disabled
 
 --- MsgReplyv ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/msgreplyv.html
-# sha256 de la page source : f0a7e65c16770fe4ab8243f96b890a3d2e3df58c7036a0e6f3cbc95e070ae29a
-# citation : Reply with a message
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/msgreplyv.html
+# sha256 of the source page : f0a7e65c16770fe4ab8243f96b890a3d2e3df58c7036a0e6f3cbc95e070ae29a
+# citation   : Reply with a message
 
 --- MsgSendv ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/msgsendv.html
-# sha256 de la page source : d5d42b2e499c7e645f22a5d7208ac32e725f162b07be420bd29fba763e03745f
-# citation : Send a message to a channel
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/msgsendv.html
+# sha256 of the source page : d5d42b2e499c7e645f22a5d7208ac32e725f162b07be420bd29fba763e03745f
+# citation   : Send a message to a channel
 
 --- dispatch_create ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/d/dispatch_create.html
-# sha256 de la page source : 92b15d292a71460f111ec6db6c822c5cd3a2fd9253a5a146fb7d0beadc4788bb
-# citation : Allocate a dispatch structure and create the channel associated with it
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/d/dispatch_create.html
+# sha256 of the source page : 92b15d292a71460f111ec6db6c822c5cd3a2fd9253a5a146fb7d0beadc4788bb
+# citation   : Allocate a dispatch structure and create the channel associated with it
 
 --- fcfgopen ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : absent (etat J4 : non_resolu, etat J5 : non_resolu)
-# source   : index C Library Reference 7.1
-# page     : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/f/fcfgopen.html
-# sha256 de la page source : a264611e986dd4b96dd4f08b5585719d5b853aedffc441678f73824a16e16aac
-# citation : Open a configuration file
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : absent (J4 state: not resolved, J5 state: not resolved)
+# source     : index C Library Reference 7.1
+# page       : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/f/fcfgopen.html
+# sha256 of the source page : a264611e986dd4b96dd4f08b5585719d5b853aedffc441678f73824a16e16aac
+# citation   : Open a configuration file
 
 --- iofunc_open_default ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_open_default.html
-# sha256 de la page source : 12cb23b43041797fbeb9a5d52f41cabb495f607ece6ed175ca221307511e76e4
-# citation : Default handler for _IO_CONNECT messages
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_open_default.html
+# sha256 of the source page : 12cb23b43041797fbeb9a5d52f41cabb495f607ece6ed175ca221307511e76e4
+# citation   : Default handler for _IO_CONNECT messages
 
 --- iofunc_unblock_default ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_unblock_default.html
-# sha256 de la page source : 41316f1da2267e50b2a4cc97b626a80e0c7c4b8931a64d1ba6e55a06c2dcd44a
-# citation : Default unblock handler
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_unblock_default.html
+# sha256 of the source page : 41316f1da2267e50b2a4cc97b626a80e0c7c4b8931a64d1ba6e55a06c2dcd44a
+# citation   : Default unblock handler
 
 --- ionotify ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/ionotify.html
-# sha256 de la page source : e3ba2fd66ae7b31b4a18328f0c86268f1c58e4c386bfc613ee5475890e9d388c
-# citation : Arm a resource manager
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/ionotify.html
+# sha256 of the source page : e3ba2fd66ae7b31b4a18328f0c86268f1c58e4c386bfc613ee5475890e9d388c
+# citation   : Arm a resource manager
 
 --- pulse_attach ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/p/pulse_attach.html
-# sha256 de la page source : 2af642bc3c95bbd2b7a4fdcc25eec87f2903c188c10aae857cbc8b1a9ce6a6e4
-# citation : Attach a handler function to a pulse code
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/p/pulse_attach.html
+# sha256 of the source page : 2af642bc3c95bbd2b7a4fdcc25eec87f2903c188c10aae857cbc8b1a9ce6a6e4
+# citation   : Attach a handler function to a pulse code
 
 --- rsrcdbmgr_attach ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/r/rsrcdbmgr_attach.html
-# sha256 de la page source : 105ea3ed7cb23a6ba9e03ea07689cdd25936e30fcac3f02bd85a0828f17bb55f
-# citation : Reserve a system resource for a process
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/r/rsrcdbmgr_attach.html
+# sha256 of the source page : 105ea3ed7cb23a6ba9e03ea07689cdd25936e30fcac3f02bd85a0828f17bb55f
+# citation   : Reserve a system resource for a process
 
 --- strlwr ---
-# depot    : varghes/Raspberry-QNX
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/s/strlwr.html
-# sha256 de la page source : 020d778b364e78bdcdbe3591cbb9f5db82ac56fba6107fefa8d6749f912a1ca4
-# citation : Convert a string to lowercase
+# repository : varghes/Raspberry-QNX
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/s/strlwr.html
+# sha256 of the source page : 020d778b364e78bdcdbe3591cbb9f5db82ac56fba6107fefa8d6749f912a1ca4
+# citation   : Convert a string to lowercase

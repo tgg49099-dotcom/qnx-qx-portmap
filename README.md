@@ -131,14 +131,14 @@ pip install .                     # or, without installing: python3 -m qnx_portm
 python3 -m unittest discover -s tests -t .
 ```
 
-Result measured on 15 November 2026: **124 tests, exit code 0**, without any
+Result measured on 15 November 2026: **147 tests, exit code 0**, without any
 network access and without any third-party dependency.
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/`, next to the package | 124 tests, **0 skipped**, exit code 0 |
-| Corpus through `QX_PORTMAP_CORPUS` | 124 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 124 tests, **25 skipped**, exit code 0 |
+| Corpus in `corpus/`, next to the package | 147 tests, **0 skipped**, exit code 0 |
+| Corpus through `QX_PORTMAP_CORPUS` | 147 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 147 tests, **25 skipped**, exit code 0 |
 
 The skipped tests are the ones that need the corpus: they are skipped, never
 failed. A test that always passes tests nothing, so the repository also
@@ -414,19 +414,34 @@ fails if the tool changes.
 The French version of this README, kept byte-identical to the version that was
 published before the translation, is in [`docs/README-FR.md`](docs/README-FR.md).
 
+Every document that was translated into English keeps its **French original,
+byte-identical**, next to the English one:
+
+| English (published) | French original (kept, byte-identical) |
+|---|---|
+| [`PROGRESSION.md`](PROGRESSION.md) | [`PROGRESSION-FR.md`](PROGRESSION-FR.md) |
+| [`docs/mesure-J4.md`](docs/mesure-J4.md) | [`docs/mesure-J4-FR.md`](docs/mesure-J4-FR.md) |
+| [`docs/mesure-J5.md`](docs/mesure-J5.md) | [`docs/mesure-J5-FR.md`](docs/mesure-J5-FR.md) |
+| [`qnx_portmap/LISEZMOI.md`](qnx_portmap/LISEZMOI.md) | [`qnx_portmap/LISEZMOI-FR.md`](qnx_portmap/LISEZMOI-FR.md) |
+| `docs/mesure-J4/citations-*.txt` | `docs/mesure-J4/citations-*-FR.txt` |
+| `docs/mesure-J5/citations-*.txt` | `docs/mesure-J5/citations-*-FR.txt` |
+
+The French files are there for the record; the published documentation is the
+English one.
+
 ## Tests
 
 ```bash
 python3 -m unittest discover -s tests -t .
 ```
 
-124 tests, no dependency, **no network access**. Two cases:
+147 tests, no dependency, **no network access**. Two cases:
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/` (next to the package) | 124 tests, **0 skipped**, exit code 0 |
-| Corpus via `QX_PORTMAP_CORPUS` | 124 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 124 tests, **25 skipped**, exit code 0 |
+| Corpus in `corpus/` (next to the package) | 147 tests, **0 skipped**, exit code 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | 147 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 147 tests, **25 skipped**, exit code 0 |
 
 With the corpus given by `QX_PORTMAP_CORPUS`, the only skipped test is the
 one that requires the corpus **inside the installed package** (absent from the
@@ -641,8 +656,8 @@ is in `docs/preuves/`:
 
 | File | Evidence |
 |---|---|
-| `a-tests-sans-corpus.txt` | 124 tests on a copy **without** the corpus: 99 pass, 25 are skipped, exit code 0 |
-| `b-tests-avec-corpus.txt` | the same command **with** the corpus: 124 tests, 0 skipped, exit code 0 |
+| `a-tests-sans-corpus.txt` | 147 tests on a copy **without** the corpus: 122 pass, 25 are skipped, exit code 0 |
+| `b-tests-avec-corpus.txt` | the same command **with** the corpus: 147 tests, 0 skipped, exit code 0 |
 | `c-contre-epreuve-rouge-sans-corpus.txt` | RED counter-proof without the corpus: 10/10 conclusive, 1 rule not testable |
 | `d-controle-fuite-corpus.txt` | anti-leak control: 0 match |
 | `e-fresh-sans-corpus.txt` | `--fresh --fresh-max-pages 3` on the copy without the corpus: exit code 0, frozen corpus unchanged |

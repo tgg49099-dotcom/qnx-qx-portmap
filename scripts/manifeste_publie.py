@@ -57,18 +57,18 @@ def render(tree, files):
         rows.append((rel, size, sha256_file(full)))
     biggest = sorted(rows, key=lambda r: -r[1])[:3]
     out = []
-    out.append("MANIFESTE DES FICHIERS PUBLIABLES - QX PORTMAP")
+    out.append("PUBLISHABLE FILES MANIFEST - QX PORTMAP")
     out.append("")
-    out.append("Arbre          : %s" % tree)
-    out.append("Genere le      : %s" % time.strftime("%Y-%m-%d %H:%M:%S"))
-    out.append("Fichiers       : %d" % len(rows))
-    out.append("Taille totale  : %d octets" % total)
+    out.append("Tree            : %s" % tree)
+    out.append("Generated on    : %s" % time.strftime("%Y-%m-%d %H:%M:%S"))
+    out.append("Files           : %d" % len(rows))
+    out.append("Total size      : %d bytes" % total)
     out.append("")
-    out.append("Les 3 plus gros fichiers :")
+    out.append("The 3 biggest files:")
     for rel, size, _digest in biggest:
-        out.append("  %9d octets  %s" % (size, rel))
+        out.append("  %9d bytes  %s" % (size, rel))
     out.append("")
-    out.append("Detail (chemin, taille en octets, SHA-256) :")
+    out.append("Detail (path, size in bytes, SHA-256):")
     out.append("")
     for rel, size, digest in rows:
         out.append("%s\t%d\t%s" % (rel, size, digest))
@@ -98,7 +98,7 @@ def main():
             current = fh.read()
         # on compare la partie "Detail", insensible a la date de generation
         def body(t):
-            marker = "Detail (chemin, taille en octets, SHA-256) :"
+            marker = "Detail (path, size in bytes, SHA-256):"
             return t.split(marker, 1)[1] if marker in t else ""
         if body(current) != body(text):
             print("MANIFESTE-PUBLIE.txt est obsolete : regenerez-le.")

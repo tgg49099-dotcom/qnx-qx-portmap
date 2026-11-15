@@ -1,18 +1,21 @@
-# qnx_portmap — dossier de travail de QX PORTMAP
+# qnx_portmap - working folder of QX PORTMAP
 
-Sous-dossier du produit **QX PORTMAP** (racine : `qnx-portmap/`).
-Lise `../LISEZMOI.md` avant de commencer : il decrit l'outil, l'etat des tests et les
-regles (le corpus QNX n'est pas dans le depot, pas de secret, pas de caractere
-CJK / cyrillique / grec, aucun acces reseau par defaut).
+Sub-folder of the product **QX PORTMAP** (root: `qnx-portmap/`).
+Read `../LISEZMOI.md` before starting: it describes the tool, the state of the
+tests and the rules (the QNX corpus is not in the repository, no secret, no
+CJK / Cyrillic / Greek character, no network access by default).
 
-Ce que contient ce dossier :
+What this folder contains:
 
-- `qnx_portmap/` : le paquet lui-meme (6 modules). Les corrections se font ici.
-  La logique de l'outil ne change pas : le depot est publiable tel quel.
+- `qnx_portmap/`: the package itself (6 modules). The fixes are made here.
+  The logic of the tool does not change: the repository is publishable as is.
 
-Commandes de verification (depuis la racine `qnx-portmap/`) :
+Verification commands (from the `qnx-portmap/` root):
 
 ```bash
-python3 -m unittest discover -s tests -t .   # 90 tests : verts, 18 sautes sans corpus
-python3 tools/contre_epreuve.py               # 10/10 contre-epreuves doivent etre concluantes
+python3 -m unittest discover -s tests -t .   # 147 tests: green, 25 skipped without corpus
+python3 tools/contre_epreuve.py               # 10/10 counter-proofs must be conclusive
 ```
+
+The French version of this file is kept byte-identical in
+`qnx_portmap/LISEZMOI-FR.md`.

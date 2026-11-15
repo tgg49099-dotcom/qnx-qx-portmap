@@ -1,186 +1,186 @@
-# Citations des 20 symboles mesures dans vocho/openqnx
-# depot     : https://github.com/vocho/openqnx
-# commit    : cc95df3543a1c481d4f8ad387e29f0d1ff0c87fe (2009-12-02)
-# sous-dossier retenu : trunk/services
-# consultee le : 2026-11-14
-# Extraits courts (une a trois lignes) de la documentation QNX 8.0, avec l'URL de la page source et son empreinte SHA-256 : voir LICENCE-DOCS-QNX.md.
+# Citations of the 20 symbols measured in vocho/openqnx
+# repository : https://github.com/vocho/openqnx
+# commit     : cc95df3543a1c481d4f8ad387e29f0d1ff0c87fe (2009-12-02)
+# sub-directory used : trunk/services
+# consulted on : 2026-11-14
+# Short extracts (one to three lines) from the QNX 8.0 documentation, with the URL of the source page and its SHA-256 fingerprint: see LICENCE-DOCS-QNX.md.
 
 --- GETIOVLEN ---
-# depot    : vocho/openqnx
-# appele 117 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/g/getiovlen.html
-# sha256 de la page source : a1e106f35eab225ac63b9e45c7606336ee59ced795f4430d51d93fbe18f8bb85
-# citation : Get the length member of an iov_t structure
+# repository : vocho/openqnx
+# called 117 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/g/getiovlen.html
+# sha256 of the source page : a1e106f35eab225ac63b9e45c7606336ee59ced795f4430d51d93fbe18f8bb85
+# citation   : Get the length member of an iov_t structure
 
 --- SETIOV ---
-# depot    : vocho/openqnx
-# appele 115 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/s/setiov.html
-# sha256 de la page source : 909ddab8c18ea668fe2292015e03c06dae32cbc3d5140e1c1fec43109f7ff0d8
-# citation : Fill in the fields of an iov_t structure
+# repository : vocho/openqnx
+# called 115 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/s/setiov.html
+# sha256 of the source page : 909ddab8c18ea668fe2292015e03c06dae32cbc3d5140e1c1fec43109f7ff0d8
+# citation   : Fill in the fields of an iov_t structure
 
 --- GETIOVBASE ---
-# depot    : vocho/openqnx
-# appele 86 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/g/getiovbase.html
-# sha256 de la page source : 8f12e5c4f9034ab17fc2b96e5acc9b5d3edc196faadf6b042ae88623e1848881
-# citation : Get the base member of an iov_t structure
+# repository : vocho/openqnx
+# called 86 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/g/getiovbase.html
+# sha256 of the source page : 8f12e5c4f9034ab17fc2b96e5acc9b5d3edc196faadf6b042ae88623e1848881
+# citation   : Get the base member of an iov_t structure
 
 --- _RESMGR_PTR ---
-# depot    : vocho/openqnx
-# appele 71 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/r/_resmgr_ptr.html
-# sha256 de la page source : e37dd7f893343f86dbcbaca8989114f41d778e03ef1124e39c86a1e5cb23787d
-# citation : Get one part from the ctp -> iov structure and fill in its fields
+# repository : vocho/openqnx
+# called 71 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/r/_resmgr_ptr.html
+# sha256 of the source page : e37dd7f893343f86dbcbaca8989114f41d778e03ef1124e39c86a1e5cb23787d
+# citation   : Get one part from the ctp -> iov structure and fill in its fields
 
 --- ENDIAN_SWAP32 ---
-# depot    : vocho/openqnx
-# appele 64 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/e/endian_swap32.html
-# sha256 de la page source : 4a50fde39cbfec8aa9afcfb7e7bd7219aa14b7d6698f16dc1e0af5ffc5b8ae60
-# citation : Endian-swap a 32-bit value in place
+# repository : vocho/openqnx
+# called 64 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/e/endian_swap32.html
+# sha256 of the source page : 4a50fde39cbfec8aa9afcfb7e7bd7219aa14b7d6698f16dc1e0af5ffc5b8ae60
+# citation   : Endian-swap a 32-bit value in place
 
 --- resmgr_attach ---
-# depot    : vocho/openqnx
-# appele 39 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/r/resmgr_attach.html
-# sha256 de la page source : 407c212bd880a3fef90416adbeda284700b0b41635ba7dbfbdef6eedbf6c2988
-# citation : Attach a path to the pathname space
+# repository : vocho/openqnx
+# called 39 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/r/resmgr_attach.html
+# sha256 of the source page : 407c212bd880a3fef90416adbeda284700b0b41635ba7dbfbdef6eedbf6c2988
+# citation   : Attach a path to the pathname space
 
 --- TraceEvent ---
-# depot    : vocho/openqnx
-# appele 34 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/t/traceevent.html
-# sha256 de la page source : bfbb392bc0209748b19c4646a522df22f07cddcb4140adc9b2ea2669ea3c2670
-# citation : Control the tracing of kernel events
+# repository : vocho/openqnx
+# called 34 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/t/traceevent.html
+# sha256 of the source page : bfbb392bc0209748b19c4646a522df22f07cddcb4140adc9b2ea2669ea3c2670
+# citation   : Control the tracing of kernel events
 
 --- iofunc_attr_init ---
-# depot    : vocho/openqnx
-# appele 30 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_attr_init.html
-# sha256 de la page source : c4fdfb6dc60da4a3e989adb450dabb01b7172f334cf3427bc945a0de876516ca
-# citation : Initialize the per-name attribute structure associated with a device
+# repository : vocho/openqnx
+# called 30 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_attr_init.html
+# sha256 of the source page : c4fdfb6dc60da4a3e989adb450dabb01b7172f334cf3427bc945a0de876516ca
+# citation   : Initialize the per-name attribute structure associated with a device
 
 --- ND_NODE_CMP ---
-# depot    : vocho/openqnx
-# appele 29 fois dans le depot
-# statut   : absent (etat J4 : non_resolu, etat J5 : non_resolu)
-# source   : index C Library Reference 7.1
-# page     : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/n/nd_node_cmp.html
-# sha256 de la page source : 4c078087f43932b07798d810d15498a49eeba20af249143b13a72c8e84a7d93d
-# citation : Compare two node descriptors
+# repository : vocho/openqnx
+# called 29 times in the repository
+# status     : absent (J4 state: not resolved, J5 state: not resolved)
+# source     : index C Library Reference 7.1
+# page       : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/n/nd_node_cmp.html
+# sha256 of the source page : 4c078087f43932b07798d810d15498a49eeba20af249143b13a72c8e84a7d93d
+# citation   : Compare two node descriptors
 
 --- ENDIAN_SWAP16 ---
-# depot    : vocho/openqnx
-# appele 28 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/e/endian_swap16.html
-# sha256 de la page source : cfb3a0b66ff7454bd83fdd63772d273c71a0601bcdbd0fa32d1ba06a9c628225
-# citation : Endian-swap a 16-bit value in place
+# repository : vocho/openqnx
+# called 28 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/e/endian_swap16.html
+# sha256 of the source page : cfb3a0b66ff7454bd83fdd63772d273c71a0601bcdbd0fa32d1ba06a9c628225
+# citation   : Endian-swap a 16-bit value in place
 
 --- ThreadDestroy ---
-# depot    : vocho/openqnx
-# appele 28 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/t/threaddestroy.html
-# sha256 de la page source : 6ce030eb595328cc746dbbed5996400b25d7ddb99e252cd5230c3e5cf291a786
-# citation : Destroy a thread immediately
+# repository : vocho/openqnx
+# called 28 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/t/threaddestroy.html
+# sha256 of the source page : 6ce030eb595328cc746dbbed5996400b25d7ddb99e252cd5230c3e5cf291a786
+# citation   : Destroy a thread immediately
 
 --- MsgError ---
-# depot    : vocho/openqnx
-# appele 27 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/msgerror.html
-# sha256 de la page source : be8b201b6e24ef63a147799f9b5094f510af3050b44446110271793b6fa7a912
-# citation : Unblock a client and set its error code
+# repository : vocho/openqnx
+# called 27 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/msgerror.html
+# sha256 of the source page : be8b201b6e24ef63a147799f9b5094f510af3050b44446110271793b6fa7a912
+# citation   : Unblock a client and set its error code
 
 --- MsgReply ---
-# depot    : vocho/openqnx
-# appele 26 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/msgreply.html
-# sha256 de la page source : d64b033bdbdb8cc4e1483210db911f079f871961a202496dd9182cbdfb5d85ed
-# citation : Reply with a message
+# repository : vocho/openqnx
+# called 26 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/msgreply.html
+# sha256 of the source page : d64b033bdbdb8cc4e1483210db911f079f871961a202496dd9182cbdfb5d85ed
+# citation   : Reply with a message
 
 --- devctl ---
-# depot    : vocho/openqnx
-# appele 23 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/d/devctl.html
-# sha256 de la page source : 01b7ceef60a6e28dc470501ae3f84869b258227a68fe73b1e78fd6bc5a52b803
-# citation : Control a device
+# repository : vocho/openqnx
+# called 23 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/d/devctl.html
+# sha256 of the source page : 01b7ceef60a6e28dc470501ae3f84869b258227a68fe73b1e78fd6bc5a52b803
+# citation   : Control a device
 
 --- slogf ---
-# depot    : vocho/openqnx
-# appele 19 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/s/slogf.html
-# sha256 de la page source : 10e537c4cf1c4b4fb3daacba26581dfb7e934932a2a0ad792c52d0eb22f43b7c
-# citation : Send a message to the system logger
+# repository : vocho/openqnx
+# called 19 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/s/slogf.html
+# sha256 of the source page : 10e537c4cf1c4b4fb3daacba26581dfb7e934932a2a0ad792c52d0eb22f43b7c
+# citation   : Send a message to the system logger
 
 --- ConnectAttach ---
-# depot    : vocho/openqnx
-# appele 18 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/c/connectattach.html
-# sha256 de la page source : f75baa440ea1cce0a4fb8cbdd2ec73e4eb3771043a6ac408be7dc8812f66b6c9
-# citation : Establish a connection between a process and a channel
+# repository : vocho/openqnx
+# called 18 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/c/connectattach.html
+# sha256 of the source page : f75baa440ea1cce0a4fb8cbdd2ec73e4eb3771043a6ac408be7dc8812f66b6c9
+# citation   : Establish a connection between a process and a channel
 
 --- iofunc_func_init ---
-# depot    : vocho/openqnx
-# appele 18 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_func_init.html
-# sha256 de la page source : 58b304930c31820b7ab4d75ad9cc85b8ac98e0bf9dc9d6303fcabdd422e1aa16
-# citation : Initialize the default POSIX-layer function tables
+# repository : vocho/openqnx
+# called 18 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_func_init.html
+# sha256 of the source page : 58b304930c31820b7ab4d75ad9cc85b8ac98e0bf9dc9d6303fcabdd422e1aa16
+# citation   : Initialize the default POSIX-layer function tables
 
 --- iofunc_attr_unlock ---
-# depot    : vocho/openqnx
-# appele 17 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_attr_unlock.html
-# sha256 de la page source : bab3e30b02d60f99e2537484d4ad67f80d851eb0ce9ed590bf0c5f0d3d9bf241
-# citation : Unlock the attribute structure
+# repository : vocho/openqnx
+# called 17 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_attr_unlock.html
+# sha256 of the source page : bab3e30b02d60f99e2537484d4ad67f80d851eb0ce9ed590bf0c5f0d3d9bf241
+# citation   : Unlock the attribute structure
 
 --- iofunc_open ---
-# depot    : vocho/openqnx
-# appele 16 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_open.html
-# sha256 de la page source : e4a53fb4eda167996c592dff494103c8154ba119c46f7d8eadeb74365d8984d3
-# citation : Verify a client's ability to open or to create a resource
+# repository : vocho/openqnx
+# called 16 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_open.html
+# sha256 of the source page : e4a53fb4eda167996c592dff494103c8154ba119c46f7d8eadeb74365d8984d3
+# citation   : Verify a client's ability to open or to create a resource
 
 --- out32 ---
-# depot    : vocho/openqnx
-# appele 16 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/o/out32.html
-# sha256 de la page source : 51946456f3b60380c2c3323e1cfdc7866dbbfc3fab34c59dac86a80c04b3a1e3
-# citation : Write a 32-bit value to a port
+# repository : vocho/openqnx
+# called 16 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/o/out32.html
+# sha256 of the source page : 51946456f3b60380c2c3323e1cfdc7866dbbfc3fab34c59dac86a80c04b3a1e3
+# citation   : Write a 32-bit value to a port

@@ -1,0 +1,145 @@
+PREUVE ROUGE -> VERT DU RAPPORT ANGLAIS (J4 ET J5)
+=================================================
+
+But : prouver que les chiffres du rapport anglais publie (docs/mesure-J4.md,
+docs/mesure-J5.md) ne sont pas des chiffres maquilles.
+
+On change UN chiffre dans le rapport anglais publie, on exige que le test
+echoue (ROUGE), on restaure le fichier octet pour octet, on exige que le
+test repasse (VERT). Les sorties ci-dessous sont reelles.
+
+Fichiers concernes :
+  docs/mesure-J4.md   (rapport anglais publie, tete de page)
+  docs/mesure-J5.md   (rapport anglais publie, tete de page)
+  tests/test_mesure_j4.py, tests/test_mesure_j5.py  (les tests qui verificent)
+
+Commande de test : python3 -m unittest tests.test_mesure_j4 tests.test_mesure_j5
+(corpus present : QX_PORTMAP_CORPUS=/work/qnx-portmap-corpus-local/corpus)
+
+------------------------------------------------------------------------
+ETAPE 1 - ROUGE : dans docs/mesure-J4.md, 93 % devient 94 % (une seule
+          ligne modifiee, ligne 7).
+------------------------------------------------------------------------
+
+Ligne cassee :
+  - **J4 rate = 93 % (93 symbols resolved and cited out of 100).**
+  + **J4 rate = 94 % (94 symbols resolved and cited out of 100).**
+
+Sortie reelle :
+
+............FF...F...F.....
+======================================================================
+FAIL: test_le_chiffre_anglais_est_celui_du_json_publie (tests.test_mesure_j4.TestRapportAnglais.test_le_chiffre_anglais_est_celui_du_json_publie)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 357, in test_le_chiffre_anglais_est_celui_du_json_publie
+    self.assertEqual(taux_md, int(round(calcule)))
+AssertionError: 94 != 93
+
+======================================================================
+FAIL: test_le_rapport_anglais_est_celui_produit_par_l_outil (tests.test_mesure_j4.TestRapportAnglais.test_le_rapport_anglais_est_celui_produit_par_l_outil)
+Le rapport publie est celui que l'outil ecrit, octet pour octet.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 454, in test_le_rapport_anglais_est_celui_produit_par_l_outil
+    self.assertEqual(regenere, publie,
+AssertionError: b'# M[288 chars]e = 93 % (93 symbols resolved and cited out of[31235 chars]).\n' != b'# M[288 chars]e = 94 % (94 symbols resolved and cited out of[31235 chars]).\n' : le rapport anglais publie n'est pas celui que l'outil produit a partir des donnees publiees
+
+======================================================================
+FAIL: test_les_deux_versions_ont_exactement_les_memes_nombres (tests.test_mesure_j4.TestRapportAnglais.test_les_deux_versions_ont_exactement_les_memes_nombres)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 344, in test_les_deux_versions_ont_exactement_les_memes_nombres
+    self.assertEqual(nombres_du_rapport(self.en),
+AssertionError: Count[247 chars] 5, '80': 4, '46': 4, '256': 4, '18': 4, '12':[2319 chars]: 1}) != Count[247 chars] 5, '93': 4, '80': 4, '46': 4, '256': 4, '18':[2319 chars]: 1}) : les chiffres du rapport anglais ne sont pas ceux du rapport francais
+
+======================================================================
+FAIL: test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j4.TestTauxPublie.test_le_taux_du_markdown_vaut_le_taux_calcule)
+Le chiffre publie doit etre celui des donnees publiees.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j4.py", line 268, in test_le_taux_du_markdown_vaut_le_taux_calcule
+    self.assertEqual(taux_md, int(round(calcule)),
+AssertionError: 94 != 93 : le taux du Markdown (docs/mesure-J4.md) ne vaut pas le taux calcule sur les donnees publiees
+
+----------------------------------------------------------------------
+Ran 27 tests in 1.764s
+
+FAILED (failures=4)
+RC=1
+>>> RC = 1 (attendu : different de 0, le test est ROUGE)
+
+------------------------------------------------------------------------
+ETAPE 2 - ROUGE : dans docs/mesure-J5.md, 96 % devient 97 % (une seule
+          ligne modifiee, ligne 7).
+------------------------------------------------------------------------
+
+Ligne cassee :
+  - **J5 rate = 96 % (96 symbols resolved and cited out of 100).**
+  + **J5 rate = 97 % (97 symbols resolved and cited out of 100).**
+
+Sortie reelle :
+
+..F..................FF....F..
+======================================================================
+FAIL: test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_du_markdown_vaut_le_taux_calcule)
+Le chiffre publie doit etre celui des donnees publiees.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 296, in test_le_taux_du_markdown_vaut_le_taux_calcule
+    self.assertEqual(taux_md, int(round(calcule)),
+AssertionError: 97 != 96 : le taux du Markdown (docs/mesure-J5.md) ne vaut pas le taux calcule sur les donnees publiees
+
+======================================================================
+FAIL: test_le_chiffre_anglais_est_celui_du_json_publie (tests.test_mesure_j5.TestRapportAnglais.test_le_chiffre_anglais_est_celui_du_json_publie)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 386, in test_le_chiffre_anglais_est_celui_du_json_publie
+    self.assertEqual(taux_md, int(round(calcule)))
+AssertionError: 97 != 96
+
+======================================================================
+FAIL: test_le_rapport_anglais_est_celui_produit_par_l_outil (tests.test_mesure_j5.TestRapportAnglais.test_le_rapport_anglais_est_celui_produit_par_l_outil)
+Le rapport publie est celui que l'outil ecrit, octet pour octet.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 486, in test_le_rapport_anglais_est_celui_produit_par_l_outil
+    self.assertEqual(regenere, publie,
+AssertionError: b'# M[275 chars]e = 96 % (96 symbols resolved and cited out of[33772 chars]`.\n' != b'# M[275 chars]e = 97 % (97 symbols resolved and cited out of[33772 chars]`.\n' : le rapport anglais publie n'est pas celui que l'outil produit a partir des donnees publiees
+
+======================================================================
+FAIL: test_les_deux_versions_ont_exactement_les_memes_nombres (tests.test_mesure_j5.TestRapportAnglais.test_les_deux_versions_ont_exactement_les_memes_nombres)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/work/qnx-portmap/tests/test_mesure_j5.py", line 373, in test_les_deux_versions_ont_exactement_les_memes_nombres
+    self.assertEqual(nombres_du_rapport(self.en),
+AssertionError: Count[195 chars] 6, '100': 6, '97': 5, '86': 5, '60': 5, '20':[2501 chars]: 1}) != Count[195 chars] 6, '96': 6, '100': 6, '86': 5, '60': 5, '20':[2501 chars]: 1}) : les chiffres du rapport anglais ne sont pas ceux du rapport francais
+
+----------------------------------------------------------------------
+Ran 30 tests in 1.774s
+
+FAILED (failures=4)
+RC=1
+>>> RC = 1 (attendu : different de 0, le test est ROUGE)
+
+------------------------------------------------------------------------
+ETAPE 3 - VERT : les deux fichiers sont restaures octet pour octet
+          (cmp avec la copie de sauvegarde : identique), les tests repassent.
+------------------------------------------------------------------------
+
+Sortie reelle :
+
+.........................................................
+----------------------------------------------------------------------
+Ran 57 tests in 3.460s
+
+OK
+RC=0
+
+>>> RC = 0 (les deux rapports sont bien ceux que l'outil produit : le test
+    "le rapport anglais publie n'est pas celui que l'outil produit a partir
+    des donnees publiees" le verifie en comparant les octets).
+
+Conclusion : un chiffre modifie dans la version anglaise fait echouer les
+tests. Les chiffres du rapport anglais sont donc ceux de la sortie de
+l'outil, pas une recopie.

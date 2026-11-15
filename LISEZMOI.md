@@ -12,7 +12,8 @@ compilation, no network by default.
 
 ## State
 
-Working V0 (14/11/2026). **124 green tests**. RED counter-proof: 11/11 with
+Working V0 (14/11/2026). **147 tests, all green** (25 of them are skipped when
+the corpus is absent). RED counter-proof: 11/11 with
 the corpus, 10/10 without it (the rule on the integrity of the frozen corpus
 cannot be tested without it).
 
@@ -21,9 +22,9 @@ public QNX repositories, the tool resolves and quotes **93 %**
 (`docs/mesure-J4.md`).
 
 ```
-python3 -m unittest discover -s tests -t .        # 124 tests (25 skips without corpus)
+python3 -m unittest discover -s tests -t .        # 147 tests (25 skips without corpus)
 python3 tools/contre_epreuve.py                    # 11/11 conclusive counter-proofs
-python3 tools/mesure_j4.py --clones <dossier>     # re-measure J4 (public QNX clones)
+python3 tools/mesure_j4.py --clones <folder>      # re-measure J4 (public QNX clones)
 qnx-portmap abort accept bzero                    # real example (see README.md)
 ```
 
@@ -34,7 +35,7 @@ The repository is **publishable**: it no longer contains the QNX documentation.
 | Path | Content | Size |
 |---|---|---|
 | `qnx_portmap/` | the package (6 modules, standard library only) | ~100 KB |
-| `tests/` | 124 tests, among them 21 on the miniature fixtures and 16 on the J4 measurement | ~90 KB |
+| `tests/` | 147 tests, among them 21 on the miniature fixtures and 16 on the J4 measurement | ~90 KB |
 | `tests/fixtures/` | 12 short extracts (1 to 3 lines) of QNX pages, with URL and date | ~4 KB |
 | `tools/` | corpus construction, fixtures, RED counter-proof, J4 measurement | ~60 KB |
 | `scripts/` | corpus bootstrap, published manifest, anti-leak control | ~30 KB |
@@ -78,7 +79,8 @@ source, it is downloaded on demand from the official site.
   one case that makes it fail.
 - A test that requires the complete corpus is **skipped** (never failed) when
   the corpus is absent; the message is
-  `corpus absent : lancer scripts/bootstrap_corpus.sh`.
+  `corpus absent : lancer scripts/bootstrap_corpus.sh` (the exact message of the
+  test framework, in French, quoted as it is printed).
 - `MANIFESTE-PUBLIE.txt` is **regenerated after every change**:
   `python3 scripts/manifeste_publie.py` (verification: `--check`).
 - No CJK / Cyrillic / Greek character in the files written.

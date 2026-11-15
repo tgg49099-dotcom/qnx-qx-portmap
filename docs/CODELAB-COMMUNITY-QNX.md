@@ -81,7 +81,7 @@ or, on a real project:
 
 ```bash
 grep -o '[A-Za-z_][A-Za-z0-9_]*' mon_code.c | sort -u \
-  | qnx-portmap --stdin --format json > etat.json
+  | qnx-portmap --stdin --format json > state.json
 ```
 
 ## Step 4 - Read the answer

@@ -45,9 +45,20 @@ from qnx_portmap.classify import DOCUMENTED, ELSEWHERE, Classifier  # noqa: E402
 from qnx_portmap.corpus import Corpus  # noqa: E402
 from qnx_portmap.extract import article_of, sentences_with, strip_tags  # noqa: E402
 
-from mesure_j4 import (AILLEURS, CORPUS_SHA256, CONSULTED, NON_RESOLU,  # noqa: E402
+from mesure_j4 import (AILLEURS, CORPUS_SHA256, CONSULTED, ETAT_CITATION_EN,  # noqa: E402
+                       ETAT_EN, FAMILLE_EN, NON_RESOLU,
                        PER_REPO, REPOS, RESOLU, etat as etat_j4,
                        load_standard_symbols, select_sample)
+
+# -- version anglaise du rapport --------------------------------------------
+# Le rapport public est en anglais ; la version francaise (sortie de l'outil,
+# `--lang fr`) est conservee a part, byte-identique. Les chiffres sont les
+# memes dans les deux versions : seul le texte change.
+# Le genre de mention vient du moteur (en francais) : il est traduit ici.
+KIND_EN = {
+    "appel de fonction": "function call",
+    "mention": "mention",
+}
 
 # Racine de la documentation QNX 8.0 : une page qui n'y est pas n'est pas une
 # page QNX 8.0, meme si l'outil la cite (cas des renvois vers FreeBSD).
@@ -217,7 +228,19 @@ def measure(classifier, corpus, choix):
     return records
 
 
-def write_markdown(path, data, records):
+def write_markdown(path, data, records, lang="fr"):
+    """Ecrit la mesure J5 (chiffre, conversions, 100 symboles, methode).
+
+    ``lang`` vaut ``"fr"`` (sortie historique, conservee byte-identique) ou
+    ``"en"`` (version publique du depot). Les chiffres sont identiques dans
+    les deux versions : seuls les libelles et le texte changent.
+    """
+    if lang == "en":
+        return write_markdown_en(path, data, records)
+    return write_markdown_fr(path, data, records)
+
+
+def write_markdown_fr(path, data, records):
     """Ecrit la mesure J5 (chiffre, conversions, 100 symboles, methode)."""
     prim = data["principal"]
     j4 = data["mesure_j4"]
@@ -381,8 +404,192 @@ def write_markdown(path, data, records):
         fh.write("\n".join(lignes))
 
 
-def write_citations(dir_path, data, records):
-    """Ecrit les citations litterales, une page par depot (budget 4 000 o)."""
+def kind_en(kind):
+    """Traduit le genre de mention (donnee du moteur, en francais)."""
+    return KIND_EN.get(kind, kind)
+
+
+def write_markdown_en(path, data, records):
+    """Ecrit la mesure J5 en anglais (memes chiffres que la version fr)."""
+    prim = data["principal"]
+    j4 = data["mesure_j4"]
+    convertis = [r for r in records if r.get("resolution_j5")]
+    absents = [r for r in records if r["etat"] == NON_RESOLU]
+    lignes = []
+    lignes.append("# Measurement J5 - QX PORTMAP resolution rate, same sample as "
+                  "J4")
+    lignes.append("")
+    lignes.append("Measured on %s by `tools/mesure_j5.py` (reproducible: see "
+                  "the \"Reproduce\" section below). The French version of this "
+                  "report is kept byte-identical in `docs/mesure-J5-FR.md`."
+                  % CONSULTED)
+    lignes.append("")
+    lignes.append("## The figure")
+    lignes.append("")
+    lignes.append("**J5 rate = %.0f %% (%d symbols resolved and cited out of "
+                  "%d).**" % (prim["taux"], prim["counts"][RESOLU],
+                              prim["total"]))
+    lignes.append("")
+    lignes.append("| state | count | counted in the criterion ? |")
+    lignes.append("|---|---:|---|")
+    lignes.append("| resolved and cited | %d | yes |" % prim["counts"][RESOLU])
+    lignes.append("| resolved but described elsewhere | %d | **no** |"
+                  % prim["counts"][AILLEURS])
+    lignes.append("| not resolved | %d | **no** |" % prim["counts"][NON_RESOLU])
+    lignes.append("")
+    lignes.append("Total of the three states: %d. The J4 measurement (%.0f %%, "
+                  "same sample) remains a **dated measurement**: J5 does not "
+                  "modify it." % (prim["total"], j4["taux"]))
+    lignes.append("")
+    lignes.append("The %d symbols that were \"described elsewhere\" in the J4 "
+                  "measurement have become \"resolved and cited\": each one now "
+                  "points to the **exact page of the QNX 8.0 book that "
+                  "describes it**, with the SHA-256 fingerprint of that page."
+                  % len(convertis))
+    lignes.append("")
+    lignes.append("## The %d conversions" % len(convertis))
+    lignes.append("")
+    lignes.append("| symbol | repository | QNX 8.0 book | cited page | "
+                  "page sha256 | kind of mention |")
+    lignes.append("|---|---|---|---|---|---|")
+    for rec in convertis:
+        r5 = rec["resolution_j5"]
+        lignes.append("| `%s` | `%s` | `%s` | `%s` | `%s` | %s |"
+                      % (rec["symbol"], rec["repo"], r5["book"], r5["topic"],
+                         rec["page_sha256"][:16], kind_en(r5["kind"])))
+    lignes.append("")
+    for rec in convertis:
+        r5 = rec["resolution_j5"]
+        avant = r5["url_avant_j5"] or ""
+        if avant and avant != rec["url"]:
+            origine = ("The 8.0 index pointed to %s; the QNX 8.0 page that "
+                       "describes the symbol is %s, verified in the frozen "
+                       "corpus" % (avant, rec["url"]))
+        else:
+            origine = ("The tool already pointed to this page; J5 adds the "
+                       "verification in the frozen corpus, the citation and "
+                       "the SHA-256 fingerprint")
+        lignes.append("- `%s`: **%s**, page `%s` (%s). %s (full SHA-256 in "
+                      "`docs/mesure-J5/citations-*.txt`)."
+                      % (rec["symbol"], r5["book"], r5["topic"], rec["url"],
+                         origine))
+    lignes.append("")
+    lignes.append("## What has not changed")
+    lignes.append("")
+    lignes.append("The %d \"not resolved\" symbols of J4 remain so: they had a "
+                  "page in the C Library Reference **7.1** and no longer have "
+                  "one in 8.0. They are not invented, not erased:"
+                  % len(absents))
+    lignes.append("")
+    for rec in absents:
+        lignes.append("- `%s` (%s): 7.1 page `%s` - absent from 8.0."
+                      % (rec["symbol"], rec["repo"], rec["url"]))
+    lignes.append("")
+    lignes.append("The %d \"resolved and cited\" symbols of J4 are "
+                  "**unchanged**: same page, same SHA-256, same citation. No "
+                  "rule of the tool (`qnx_portmap/`) was modified."
+                  % j4["counts"][RESOLU])
+    lignes.append("")
+    lignes.append("## The sample: unchanged")
+    lignes.append("")
+    lignes.append("Same 5 public QNX repositories, same pinned commits, same "
+                  "100 symbols, **in the same order** as the J4 measurement:")
+    lignes.append("")
+    lignes.append("| repository | URL | pinned commit | .c/.h files kept | "
+                  "subdirectory | consulted on |")
+    lignes.append("|---|---|---|---:|---|---|")
+    for repo in data["repos"]:
+        sub = repo["subdir"] or "(whole repository)"
+        lignes.append("| `%s` | %s | `%s` | %d | `%s` | %s |"
+                      % (repo["key"], repo["url"], repo["commit"][:8],
+                         repo["files"], sub, CONSULTED))
+    lignes.append("")
+    lignes.append("Comparability: the J5 sample is the one of the J4 "
+                  "measurement (`docs/mesure-J4/mesure-J4.json`), re-derived "
+                  "and compared symbol by symbol when the clones are available "
+                  "(`tools/mesure_j5.py --clones ...`). The test "
+                  "`tests/test_mesure_j5.py` verifies the strict equality of "
+                  "the two lists of 100 symbols.")
+    lignes.append("")
+    lignes.append("Frozen reference corpus: %d QNX pages (7.1 + 8.0), SHA-256 "
+                  "identity `%s`, **outside the publishable tree**."
+                  % (data["corpus_pages"], CORPUS_SHA256))
+    lignes.append("")
+    lignes.append("## The J5 rule, in one sentence")
+    lignes.append("")
+    lignes.append("A symbol \"described elsewhere\" counts as \"resolved and "
+                  "cited\" if the QNX 8.0 index **or** the tool points to a "
+                  "page of the QNX 8.0 documentation that really contains the "
+                  "symbol, if that page is present in the frozen corpus and "
+                  "if its SHA-256 fingerprint is verified. Links to external "
+                  "sites (FreeBSD) do not count as a QNX page.")
+    lignes.append("")
+    lignes.append("## Breakdown by family")
+    lignes.append("")
+    lignes.append("| family | resolved and cited | total | rate |")
+    lignes.append("|---|---:|---:|---:|")
+    for key in ("qnx", "standard"):
+        info = data["par_famille"][key]
+        if info["total"]:
+            lignes.append("| %s | %d | %d | %.1f %% |"
+                          % (FAMILLE_EN[key], info["resolu"], info["total"],
+                             100.0 * info["resolu"] / info["total"]))
+    lignes.append("")
+    lignes.append("## The 100 measured symbols")
+    lignes.append("")
+    lignes.append("One line per symbol: name, repository, tool status, J4 "
+                  "state, J5 state, cited page, citation source, SHA-256 of "
+                  "the page.")
+    lignes.append("")
+    lignes.append("| # | symbol | repository | family | status | J4 state | "
+                  "J5 state | calls | cited page | source | page sha256 |")
+    lignes.append("|---:|---|---|---|---|---|---|---:|---|---|---|")
+    for i, rec in enumerate(records, 1):
+        lignes.append("| %d | `%s` | `%s` | %s | `%s` | %s | %s | %d | %s | %s | `%s` |"
+                      % (i, rec["symbol"], rec["repo"], rec["famille"],
+                         rec["status"], ETAT_EN[rec["etat_j4"]], ETAT_EN[rec["etat"]],
+                         rec["calls"], rec["url"] or "(none)",
+                         rec["citation_source"], (rec["page_sha256"][:16] or "-")))
+    lignes.append("")
+    lignes.append("## Reproduce")
+    lignes.append("")
+    lignes.append("```")
+    lignes.append("# 1. the frozen corpus (outside the tree):")
+    lignes.append("#    /work/qnx-portmap-corpus-local/corpus")
+    lignes.append("# 2. re-derive the sample from the 5 pinned repositories")
+    lignes.append("#    (git clone --depth 1 --filter=blob:none --sparse)")
+    lignes.append("# 3. measure")
+    lignes.append("python3 tools/mesure_j5.py \\")
+    lignes.append("    --corpus /work/qnx-portmap-corpus-local/corpus \\")
+    lignes.append("    --sample docs/mesure-J4/mesure-J4.json \\")
+    lignes.append("    --clones /work/mesure-j5/clones \\")
+    lignes.append("    --markdown docs/mesure-J5.md --lang en \\")
+    lignes.append("    --public-json docs/mesure-J5/mesure-J5.json \\")
+    lignes.append("    --citations-dir docs/mesure-J5")
+    lignes.append("")
+    lignes.append("# --lang fr writes the same report in French")
+    lignes.append("# (docs/mesure-J5-FR.md, byte-identical to the historical one).")
+    lignes.append("```")
+    lignes.append("")
+    lignes.append("The test `tests/test_mesure_j5.py` verifies the published "
+                  "figure, the strict equality of the J4 and J5 samples, the "
+                  "fact that only the 3 converted symbols changed state, and "
+                  "that the fingerprint of each cited page is the one of the "
+                  "frozen corpus. The RED -> GREEN proof is in "
+                  "`docs/preuves/h-mesure-j5-rouge.txt`.")
+    lignes.append("")
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(lignes))
+
+
+def write_citations(dir_path, data, records, lang="fr"):
+    """Ecrit les citations litterales, une page par depot (budget 4 000 o).
+
+    ``lang`` vaut ``"fr"`` (sortie historique, conservee byte-identique) ou
+    ``"en"`` (version publique du depot). Seules les **etiquettes** changent :
+    les numeros, les URL et le texte des citations sont identiques dans les
+    deux versions.
+    """
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
     written = []
@@ -393,26 +600,51 @@ def write_citations(dir_path, data, records):
         name = "citations-%s.txt" % repo["key"].replace("/", "-")
         path = os.path.join(dir_path, name)
         out = []
-        out.append("# Citations des %d symboles mesures dans %s"
-                   % (len(recs), repo["key"]))
-        out.append("# depot     : %s" % repo["url"])
-        out.append("# commit    : %s (%s)" % (repo["commit"], repo["commit_date"]))
-        out.append("# sous-dossier retenu : %s" % (repo["subdir"] or "(depot entier)"))
-        out.append("# consultee le : %s" % CONSULTED)
-        out.append("# Extraits courts (une a trois lignes) de la documentation "
-                   "QNX 8.0, avec l'URL de la page source et son empreinte "
-                   "SHA-256 : voir LICENCE-DOCS-QNX.md.")
+        if lang == "en":
+            out.append("# Citations of the %d symbols measured in %s"
+                       % (len(recs), repo["key"]))
+            out.append("# repository : %s" % repo["url"])
+            out.append("# commit     : %s (%s)"
+                       % (repo["commit"], repo["commit_date"]))
+            out.append("# sub-directory used : %s"
+                       % (repo["subdir"] or "(whole repository)"))
+            out.append("# consulted on : %s" % CONSULTED)
+            out.append("# Short extracts (one to three lines) from the QNX 8.0 "
+                       "documentation, with the URL of the source page and its "
+                       "SHA-256 fingerprint: see LICENCE-DOCS-QNX.md.")
+        else:
+            out.append("# Citations des %d symboles mesures dans %s"
+                       % (len(recs), repo["key"]))
+            out.append("# depot     : %s" % repo["url"])
+            out.append("# commit    : %s (%s)" % (repo["commit"], repo["commit_date"]))
+            out.append("# sous-dossier retenu : %s" % (repo["subdir"] or "(depot entier)"))
+            out.append("# consultee le : %s" % CONSULTED)
+            out.append("# Extraits courts (une a trois lignes) de la documentation "
+                       "QNX 8.0, avec l'URL de la page source et son empreinte "
+                       "SHA-256 : voir LICENCE-DOCS-QNX.md.")
         out.append("")
         for rec in recs:
             out.append("--- %s ---" % rec["symbol"])
-            out.append("# depot    : %s" % rec["repo"])
-            out.append("# appele %d fois dans le depot" % rec["calls"])
-            out.append("# statut   : %s (etat J4 : %s, etat J5 : %s)"
-                       % (rec["status"], rec["etat_j4"], rec["etat"]))
-            out.append("# source   : %s" % rec["citation_source"])
-            out.append("# page     : %s" % (rec["url"] or "(aucune)"))
-            out.append("# sha256 de la page source : %s" % rec["page_sha256"])
-            out.append("# citation : %s" % (rec["citation"] or "(vide)"))
+            if lang == "en":
+                out.append("# repository : %s" % rec["repo"])
+                out.append("# called %d times in the repository" % rec["calls"])
+                out.append("# status     : %s (J4 state: %s, J5 state: %s)"
+                           % (rec["status"],
+                              ETAT_CITATION_EN.get(rec["etat_j4"], rec["etat_j4"]),
+                              ETAT_CITATION_EN.get(rec["etat"], rec["etat"])))
+                out.append("# source     : %s" % rec["citation_source"])
+                out.append("# page       : %s" % (rec["url"] or "(none)"))
+                out.append("# sha256 of the source page : %s" % rec["page_sha256"])
+                out.append("# citation   : %s" % (rec["citation"] or "(empty)"))
+            else:
+                out.append("# depot    : %s" % rec["repo"])
+                out.append("# appele %d fois dans le depot" % rec["calls"])
+                out.append("# statut   : %s (etat J4 : %s, etat J5 : %s)"
+                           % (rec["status"], rec["etat_j4"], rec["etat"]))
+                out.append("# source   : %s" % rec["citation_source"])
+                out.append("# page     : %s" % (rec["url"] or "(aucune)"))
+                out.append("# sha256 de la page source : %s" % rec["page_sha256"])
+                out.append("# citation : %s" % (rec["citation"] or "(vide)"))
             out.append("")
         with open(path, "w", encoding="utf-8") as fh:
             fh.write("\n".join(out))
@@ -462,6 +694,9 @@ def main(argv=None):
                     help="repertoire des pages de citations (une par depot)")
     ap.add_argument("--public-json", default=None,
                     help="JSON public (sans le texte des citations)")
+    ap.add_argument("--lang", choices=("fr", "en"), default="fr",
+                    help="langue du rapport Markdown (fr = historique, "
+                         "en = version publique du depot)")
     args = ap.parse_args(argv)
 
     corpus = Corpus(args.corpus)
@@ -535,10 +770,10 @@ def main(argv=None):
         "corpus_pages": len(corpus.pages),
     }
     if args.markdown:
-        write_markdown(args.markdown, data, records)
+        write_markdown(args.markdown, data, records, args.lang)
         print("\necrit : %s" % args.markdown)
     if args.citations_dir:
-        written = write_citations(args.citations_dir, data, records)
+        written = write_citations(args.citations_dir, data, records, args.lang)
         for name, nbytes in written:
             print("ecrit : %s (%d octets de citation)"
                   % (os.path.join(args.citations_dir, name), nbytes))

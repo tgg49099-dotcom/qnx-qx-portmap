@@ -1,0 +1,186 @@
+# Citations des 20 symboles mesures dans qnx/qnx-posix-publish-subscribe
+# depot     : https://github.com/qnx/qnx-posix-publish-subscribe
+# commit    : b5ca892f37464bea4ff88db3fdbbb2cc651da6a8 (2026-08-25)
+# sous-dossier retenu : (depot entier)
+# consultee le : 2026-11-14
+# Extraits courts (une a trois lignes) de la documentation QNX 8.0, avec l'URL de la page source et son empreinte SHA-256 : voir LICENCE-DOCS-QNX.md.
+
+--- _RESMGR_NPARTS ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 5 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/r/_resmgr_nparts.html
+# sha256 de la page source : ffbe0dc88e41c62097646e0fa8563aa959ae8d27804b4123867c9a3ecce16697
+# citation : Indicate how many parts from the ctp -> iov structure to return to the client
+
+--- iofunc_notify_trigger_strict ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 3 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_notify_trigger.html
+# sha256 de la page source : 3296b370a22aa16b4949b8982a6e3e2ca21086d975b3d842c699b63c211799cf
+# citation : Send notifications to queued clients
+
+--- iofunc_read_verify ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 3 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_read_verify.html
+# sha256 de la page source : 2b71f10d237da190f8539414fe0e821cac3c9ac39740686ad54a113b9fc3f2d6
+# citation : Verify a client's read access to a resource
+
+--- resmgr_msgwrite ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 3 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/r/resmgr_msgwrite.html
+# sha256 de la page source : d3f60a8112bdb79796391c448248bbd8d26a60f87827ec2ef97ee30a1630e20d
+# citation : Write a message to a client
+
+--- ClockTime_r ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 2 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/c/clocktime.html
+# sha256 de la page source : 54d925bb61247042c3e6a593be2b27861b3c9887e465fde9b527c597077e2710
+# citation : Get or set a clock
+
+--- iofunc_notify_trigger ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 2 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_notify_trigger.html
+# sha256 de la page source : 3296b370a22aa16b4949b8982a6e3e2ca21086d975b3d842c699b63c211799cf
+# citation : Send notifications to queued clients
+
+--- iofunc_write_verify ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 2 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_write_verify.html
+# sha256 de la page source : 720cc573dfa01f73d48f1ec121621cf3dbe88b98a754a160dd5bd1435d495b41
+# citation : Verify a client's write access to a resource
+
+--- resmgr_msgread ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 2 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/r/resmgr_msgread.html
+# sha256 de la page source : bea514adb9e4771bd6bc4b68360740fdcc061eedfa1f88a097037b2f88407d24
+# citation : Read a message from a client
+
+--- dispatch_destroy ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/d/dispatch_destroy.html
+# sha256 de la page source : 4ba443f6d052ed10f5afa53aa2a1661052ee44ad47a5009f87df98492bef0841
+# citation : Destroy a dispatch handle, without cleaning up the dispatch framework
+
+--- iofunc_attr_lock ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_attr_lock.html
+# sha256 de la page source : dcf74d4a24595463d6d77a55b7a0bc16485f859a3218dfec245769505ec5d25c
+# citation : Lock the attribute structure
+
+--- iofunc_close_dup_default ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_close_dup_default.html
+# sha256 de la page source : a90c1be799e1cb0ff3636dbdad9b02045f60e58e64cf94dbffcb2a0dbf991e12
+# citation : Default handler for _IO_CLOSE messages
+
+--- iofunc_close_ocb_default ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_close_ocb_default.html
+# sha256 de la page source : ed11f069156f11bb080aba0e0313efa21eaaec4c156b526ad7aa60df685b9ec0
+# citation : Return the memory allocated for an OCB
+
+--- iofunc_lseek_default ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_lseek_default.html
+# sha256 de la page source : 4b81270d77517b6cb6aa949c7f02bae97b87a2ea07a8c7c017eb325795720277
+# citation : Default handler for _IO_LSEEK messages
+
+--- iofunc_mknod ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_mknod.html
+# sha256 de la page source : 82859d4fd15f4e7a916ae1a04f6f838acc3ddca0fcfa358f80235dcb2a4db677
+# citation : Verify a client's ability to make a new filesystem entry point
+
+--- iofunc_notify ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_notify.html
+# sha256 de la page source : 256f5e46a89e9f9b514a6fa23417cf7d7dc206f03519ba17ad8e9760636e769b
+# citation : Add, poll, or remove a notification handler
+
+--- iofunc_notify_remove ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_notify_remove.html
+# sha256 de la page source : ea90b0999102312cd808bcb15ce9b6792f313fe2e9d8064495d4ae280dcb464a
+# citation : Remove notification entries from a list
+
+--- iofunc_ocb_attach ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_ocb_attach.html
+# sha256 de la page source : 250fcb86b6a96cbfdf1d137d5261b2a165c944e3c99a0cb31151d6a60766f2b9
+# citation : Initialize an Open Control Block (OCB)
+
+--- iofunc_unlink ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/iofunc_unlink.html
+# sha256 de la page source : 3789ef5f89d2538413ec77fd1f55cabf00b2f75d4c5ac36b06fbc449181a34a7
+# citation : Verify that an entry can be unlinked
+
+--- nftw ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/n/nftw.html
+# sha256 de la page source : 0129c8bd895c3165190f4e35cebf7491c4e1cda1a046a685032e4673d960f98b
+# citation : Walk a file tree
+
+--- resmgr_detach ---
+# depot    : qnx/qnx-posix-publish-subscribe
+# appele 1 fois dans le depot
+# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
+# source   : index C Library Reference 8.0
+# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/r/resmgr_detach.html
+# sha256 de la page source : 809d3e49d196f4f4d46b16b25d4453799f800f1ccf113284a30e15df9d90b062
+# citation : Remove a pathname from the pathname space

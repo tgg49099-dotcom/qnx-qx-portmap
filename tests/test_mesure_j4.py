@@ -29,9 +29,11 @@ n'est pas present (message : "corpus absent : lancer scripts/bootstrap_corpus.sh
 """
 
 import importlib.util
+import collections
 import json
 import os
 import re
+import tempfile
 import unittest
 
 from qnx_portmap.classify import Classifier
@@ -43,11 +45,19 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MESURE_DIR = os.path.join(ROOT, "docs", "mesure-J4")
 MESURE_JSON = os.path.join(MESURE_DIR, "mesure-J4.json")
 MESURE_MD = os.path.join(ROOT, "docs", "mesure-J4.md")
+MESURE_MD_FR = os.path.join(ROOT, "docs", "mesure-J4-FR.md")
 SEUIL_J4 = 80.0
 
 RESOLU = "resolu_et_cite"
 AILLEURS = "resolu_mais_decrit_ailleurs"
 NON_RESOLU = "non_resolu"
+
+# Une ligne du tableau des 100 symboles du rapport anglais.
+ROW_RE = re.compile(
+    r"^\| (?P<num>\d+) \| `(?P<symbole>[^`]+)` \| `(?P<depot>[^`]+)` \| "
+    r"(?P<famille>\w+) \| `(?P<statut>[^`]+)` \| (?P<etat>[^|]+?) \| "
+    r"(?P<appels>\d+) \| (?P<page>[^|]+?) \| (?P<source>[^|]+?) \| "
+    r"`(?P<sha>[^`]*)` \|$")
 
 
 def load_mesure_module():
@@ -65,6 +75,51 @@ mesure = load_mesure_module()
 def load_data():
     with open(MESURE_JSON, encoding="utf-8") as fh:
         return json.load(fh)
+
+
+def lire(path):
+    with open(path, encoding="utf-8") as fh:
+        return fh.read()
+
+
+def nombres_du_rapport(texte):
+    """Nombres d'un rapport, hors noms de fichiers (``mesure-J4``, ``J4``...).
+
+    Les deux versions du rapport (anglaise et francaise) doivent contenir
+    **exactement les memes nombres** : c'est la regle "les chiffres ne bougent
+    pas". Les mentions de nom de fichier (``docs/mesure-J4-FR.md``) sont
+    retirees : elles ne sont pas des chiffres de la mesure.
+    """
+    texte = re.sub(r"[A-Za-z0-9_./-]*mesure[-_]J[45][A-Za-z0-9_./-]*", "X", texte)
+    texte = re.sub(r"\bJ[45]\b", "X", texte)
+    return collections.Counter(re.findall(r"\d+(?:[.,]\d+)?", texte))
+
+
+def pages_de_citations():
+    """Les pages de citations, en anglais et en francais.
+
+    Les pages publiees sont anglaises (``citations-<depot>.txt``) ; l'original
+    francais est conserve byte-identique (``citations-<depot>-FR.txt``).
+    """
+    en, fr = {}, {}
+    for name in sorted(os.listdir(MESURE_DIR)):
+        if not name.startswith("citations-"):
+            continue
+        texte = lire(os.path.join(MESURE_DIR, name))
+        if name.endswith("-FR.txt"):
+            fr[name[:-len("-FR.txt")] + ".txt"] = texte
+        else:
+            en[name] = texte
+    return en, fr
+
+
+def lignes_de_citation(texte):
+    """Le texte des citations (les lignes ``# citation ...``), sans etiqueta."""
+    out = []
+    for ligne in texte.splitlines():
+        if ligne.startswith("# citation"):
+            out.append(ligne.split(":", 1)[1].strip())
+    return out
 
 
 # Les dix symboles du controle a la main. L'etat de chacun a ete relu dans
@@ -189,19 +244,32 @@ class TestTauxPublie(unittest.TestCase):
     """Le chiffre publie doit etre celui des donnees publiees."""
 
     def test_le_taux_du_markdown_vaut_le_taux_calcule(self):
+        """Le chiffre publie doit etre celui des donnees publiees.
+
+        Le test verifie les **deux** versions du rapport : l'anglaise (le
+        fichier public) et la francaise (conservee byte-identique).
+        """
         data = load_data()
-        with open(MESURE_MD, encoding="utf-8") as fh:
-            text = fh.read()
-        m = re.search(r"\*\*Taux J4 = (\d+) % \((\d+) symboles resolus et cites "
-                      r"sur (\d+)\)\.\*\*", text)
-        self.assertIsNotNone(m, "le taux J4 n'est pas trouve dans docs/mesure-J4.md")
-        taux_md, resolus, total = int(m.group(1)), int(m.group(2)), int(m.group(3))
         calcule = mesure.taux(data["symbols"])
-        self.assertEqual(taux_md, int(round(calcule)),
-                         "le taux du Markdown ne vaut pas le taux calcule "
-                         "sur les donnees publiees")
-        self.assertEqual(resolus, data["principal"]["counts"][RESOLU])
-        self.assertEqual(total, len(data["symbols"]))
+        for chemin, motif, nom in (
+                (MESURE_MD,
+                 r"\*\*J4 rate = (\d+) % \((\d+) symbols resolved and cited "
+                 r"out of (\d+)\)\.\*\*",
+                 "docs/mesure-J4.md"),
+                (MESURE_MD_FR,
+                 r"\*\*Taux J4 = (\d+) % \((\d+) symboles resolus et cites "
+                 r"sur (\d+)\)\.\*\*",
+                 "docs/mesure-J4-FR.md")):
+            text = lire(chemin)
+            m = re.search(motif, text)
+            self.assertIsNotNone(m, "le taux J4 n'est pas trouve dans %s" % nom)
+            taux_md, resolus, total = (int(m.group(1)), int(m.group(2)),
+                                       int(m.group(3)))
+            self.assertEqual(taux_md, int(round(calcule)),
+                             "le taux du Markdown (%s) ne vaut pas le taux "
+                             "calcule sur les donnees publiees" % nom)
+            self.assertEqual(resolus, data["principal"]["counts"][RESOLU], nom)
+            self.assertEqual(total, len(data["symbols"]), nom)
 
     def test_le_taux_publie_franchit_le_seuil_j4(self):
         """Le critere J4 de la fiche : en dessous de 80 %, la piste change."""
@@ -214,19 +282,178 @@ class TestTauxPublie(unittest.TestCase):
 
     def test_les_pages_de_citations_contenent_chaque_symbole_resolu(self):
         data = load_data()
-        textes = {}
-        for name in sorted(os.listdir(MESURE_DIR)):
-            if not name.startswith("citations-"):
-                continue
-            with open(os.path.join(MESURE_DIR, name), encoding="utf-8") as fh:
-                textes[name] = fh.read()
-        self.assertEqual(len(textes), 5)
-        tout = "\n".join(textes.values())
+        en, fr = pages_de_citations()
+        self.assertEqual(len(en), 5)
+        self.assertEqual(len(fr), 5)
+        tout = "\n".join(en.values())
         for rec in data["symbols"]:
             if rec["etat"] != RESOLU:
                 continue
             self.assertIn("--- %s ---" % rec["symbol"], tout, rec["symbol"])
             self.assertIn(rec["page_sha256"], tout, rec["symbol"])
+
+    def test_les_pages_de_citations_en_et_fr_ont_les_memes_nombres(self):
+        """La traduction des etiquettes ne doit pas bouger un chiffre."""
+        en, fr = pages_de_citations()
+        for nom in sorted(en):
+            self.assertEqual(nombres_du_rapport(en[nom]),
+                             nombres_du_rapport(fr[nom]),
+                             "les nombres de la page %s ont change" % nom)
+
+    def test_le_texte_des_citations_est_identique_en_anglais_et_en_francais(self):
+        """Les extraits QNX cites sont byte-identiques dans les deux versions."""
+        en, fr = pages_de_citations()
+        for nom in sorted(en):
+            self.assertEqual(lignes_de_citation(en[nom]),
+                             lignes_de_citation(fr[nom]),
+                             "le texte des citations de %s a change" % nom)
+
+    def test_les_pages_de_citations_publiees_sont_en_anglais(self):
+        """Aucune etiquette francaise ne doit rester dans les pages publiees."""
+        interdits = ("# appele ", "# depot ", "# depot     :", "# sous-dossier ",
+                     "# consultee le", "# statut   :", "# sha256 de la page ",
+                     "(depot entier)", "(aucune)", "(vide)")
+        en, fr = pages_de_citations()
+        for nom in sorted(en):
+            for etiquette in interdits:
+                self.assertNotIn(etiquette, en[nom],
+                                 "l'etiquette francaise %r reste dans %s"
+                                 % (etiquette, nom))
+
+
+class TestRapportAnglais(unittest.TestCase):
+    """Le rapport anglais doit porter exactement les chiffres de l'outil.
+
+    Le rapport public est en anglais (``docs/mesure-J4.md``) ; le rapport
+    francais est conserve byte-identique (``docs/mesure-J4-FR.md``). Les
+    chiffres, eux, ne doivent pas bouger : ce fichier verifie que
+
+    1. les deux versions contiennent **exactement les memes nombres** ;
+    2. chaque nombre du rapport anglais est celui du JSON publie, c'est-a-dire
+       de la sortie de l'outil ;
+    3. chaque note de loutil a bien une traduction anglaise (une note
+       nouvelle, venue du moteur gele, doit etre traduite avant publication).
+    """
+
+    def setUp(self):
+        self.data = load_data()
+        self.en = lire(MESURE_MD)
+        self.fr = lire(MESURE_MD_FR)
+
+    def test_les_deux_versions_ont_exactement_les_memes_nombres(self):
+        self.assertEqual(nombres_du_rapport(self.en),
+                         nombres_du_rapport(self.fr),
+                         "les chiffres du rapport anglais ne sont pas ceux du "
+                         "rapport francais")
+
+    def test_le_chiffre_anglais_est_celui_du_json_publie(self):
+        m = re.search(r"\*\*J4 rate = (\d+) % \((\d+) symbols resolved and "
+                      r"cited out of (\d+)\)\.\*\*", self.en)
+        self.assertIsNotNone(m, "le taux J4 n'est pas trouve dans le rapport "
+                                "anglais")
+        taux_md, resolus, total = (int(m.group(1)), int(m.group(2)),
+                                   int(m.group(3)))
+        calcule = mesure.taux(self.data["symbols"])
+        self.assertEqual(taux_md, int(round(calcule)))
+        self.assertEqual(resolus, self.data["principal"]["counts"][RESOLU])
+        self.assertEqual(total, self.data["principal"]["total"])
+
+    def test_le_tableau_des_etats_anglais_est_celui_du_json_publie(self):
+        counts = self.data["principal"]["counts"]
+        for label, cle in (("resolved and cited", RESOLU),
+                           ("resolved but described elsewhere", AILLEURS),
+                           ("not resolved", NON_RESOLU)):
+            m = re.search(r"\| %s \| (\d+) \|" % re.escape(label), self.en)
+            self.assertIsNotNone(m, "ligne %s absente du rapport anglais"
+                                % label)
+            self.assertEqual(int(m.group(1)), counts[cle], label)
+
+    def test_le_tableau_des_familles_anglais_est_celui_du_json_publie(self):
+        for cle, label in (("qnx", "QNX-specific"),
+                           ("standard", "standard C/POSIX")):
+            info = self.data["par_famille"][cle]
+            m = re.search(r"\| %s \| (\d+) \| (\d+) \| ([\d.]+) %% \|"
+                          % re.escape(label), self.en)
+            self.assertIsNotNone(m, "famille %s absente du rapport anglais"
+                                % label)
+            self.assertEqual(int(m.group(1)), info["resolu"], label)
+            self.assertEqual(int(m.group(2)), info["total"], label)
+            self.assertAlmostEqual(float(m.group(3)),
+                                   100.0 * info["resolu"] / info["total"],
+                                   places=1, msg=label)
+
+    def test_les_100_lignes_du_rapport_anglais_sont_celles_du_json(self):
+        lignes = {}
+        for line in self.en.splitlines():
+            m = ROW_RE.match(line)
+            if m:
+                lignes[int(m.group("num"))] = m
+        self.assertEqual(len(lignes), 100,
+                         "le rapport anglais ne liste pas les 100 symboles")
+        for i, rec in enumerate(self.data["symbols"], 1):
+            m = lignes.get(i)
+            self.assertIsNotNone(m, "symbole %d absent du rapport anglais" % i)
+            self.assertEqual(m.group("symbole"), rec["symbol"])
+            self.assertEqual(m.group("depot"), rec["repo"])
+            self.assertEqual(m.group("famille"), rec["famille"])
+            self.assertEqual(m.group("statut"), rec["status"])
+            self.assertEqual(m.group("etat").strip(),
+                             mesure.ETAT_EN[rec["etat"]], rec["symbol"])
+            self.assertEqual(int(m.group("appels")), rec["calls"], rec["symbol"])
+            self.assertEqual(m.group("page").strip(),
+                             rec["url"] or "(none)", rec["symbol"])
+            self.assertEqual(m.group("source").strip(),
+                             rec["citation_source"], rec["symbol"])
+            self.assertEqual(m.group("sha"),
+                             rec["page_sha256"][:16] or "-", rec["symbol"])
+
+    def test_la_liste_des_symboles_non_resolus_anglais_est_complete(self):
+        non_resolus = [r["symbol"] for r in self.data["symbols"]
+                       if r["etat"] != RESOLU]
+        self.assertTrue(non_resolus)
+        section = self.en.split("## What is not resolved, and why", 1)[1]
+        section = section.split("## Reproduce", 1)[0]
+        for symbole in non_resolus:
+            self.assertIn("`%s`" % symbole, section,
+                          "%s n'est pas dans la liste des symboles non "
+                          "resolus" % symbole)
+
+    def test_chaque_note_de_l_outil_est_traduite_en_anglais(self):
+        notes = set()
+        for rec in self.data["symbols"]:
+            if rec.get("note"):
+                notes.add(rec["note"])
+        self.assertTrue(notes, "aucune note dans le JSON publie")
+        for note in sorted(notes):
+            self.assertIn(note, mesure.NOTE_EN,
+                          "note de l'outil sans traduction anglaise : %r" % note)
+
+    def test_le_rapport_anglais_est_celui_produit_par_l_outil(self):
+        """Le rapport publie est celui que l'outil ecrit, octet pour octet.
+
+        Le JSON publie est la sortie de l'outil. Le seul chiffre qui n'y est
+        pas est celui du **contre-echantillon** (l'echantillon large) : il
+        est pris dans le rapport francais, qui est lui-meme la sortie de
+        l'outil (`--lang fr`). Le rapport anglais est alors recompose a
+        partir de ces donnees et compare octet par octet.
+        """
+        m = re.search(r"donne \*\*(\d+) % \((\d+) / (\d+)\)\*\*", self.fr)
+        self.assertIsNotNone(m, "le contre-echantillon n'est pas dans le "
+                                "rapport francais")
+        taux, resolus, total = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        data = dict(self.data)
+        data["secondaire_large"] = {"total": total, "taux": float(taux),
+                                    "counts": {RESOLU: resolus}}
+        with tempfile.TemporaryDirectory() as tmp:
+            chemin = os.path.join(tmp, "mesure-J4.md")
+            mesure.write_markdown_en(chemin, data, data["symbols"])
+            with open(chemin, "rb") as fh:
+                regenere = fh.read()
+        with open(MESURE_MD, "rb") as fh:
+            publie = fh.read()
+        self.assertEqual(regenere, publie,
+                         "le rapport anglais publie n'est pas celui que "
+                         "l'outil produit a partir des donnees publiees")
 
 
 @unittest.skipUnless(os.path.isfile(os.path.join(default_corpus_dir(), "MANIFEST.json")),

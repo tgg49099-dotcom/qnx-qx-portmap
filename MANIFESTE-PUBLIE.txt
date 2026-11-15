@@ -1,44 +1,57 @@
-MANIFESTE DES FICHIERS PUBLIABLES - QX PORTMAP
+PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
-Arbre          : /work/qnx-portmap
-Genere le      : 2026-11-15 05:00:35
-Fichiers       : 87
-Taille totale  : 852060 octets
+Tree            : /work/qnx-portmap
+Generated on    : 2026-11-15 07:27:03
+Files           : 102
+Total size      : 1093396 bytes
 
-Les 3 plus gros fichiers :
-      76314 octets  docs/mesure-J5/mesure-J5.json
-      69089 octets  docs/mesure-J4/mesure-J4.json
-      39069 octets  README.md
+The 3 biggest files:
+      76314 bytes  docs/mesure-J5/mesure-J5.json
+      69089 bytes  docs/mesure-J4/mesure-J4.json
+      43300 bytes  tools/mesure_j4.py
 
-Detail (chemin, taille en octets, SHA-256) :
+Detail (path, size in bytes, SHA-256):
 
 .gitignore	89	3b7d0412d843969134e0569a5bbf80605ace41ba556d5116521706e0ab058d65
 CORPUS-NON-PUBLIE.txt	3499	6714d4af8b60e89f4a21789ffc06f1e5917820ff32d017a7792447d29c62600c
 KIT-SOUMISSION-QNX.md	26774	c4db5108d0ddc247155c35e41fe45f932999155567fbe1ab8c95612409948f84
 LICENCE-DOCS-QNX.md	2679	8d7331c75216152ee70f8811e14e27c97dfc9466a810b08d3728e7bc57d07a8a
 LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
-LISEZMOI.md	4411	56d42cce728437fbba8d84f021dc745d99fd1f87c5ff99110a14f66221f8d153
-PROGRESSION.md	16434	b8d48adf7fe2b1cdcb7f41f124f75d036b6d404af6914458e9d3dd3bd78485a5
-README.md	39069	2edbb2643b070275d742b6e692f7a9e2b7e44236afeb45a3c20a435aefa714c1
+LISEZMOI.md	4547	5d05241bca4e0aa3b489c9e1ad922321b47fd05b3d1c5117ad3bc6f9bdf5be68
+PROGRESSION-FR.md	16434	b8d48adf7fe2b1cdcb7f41f124f75d036b6d404af6914458e9d3dd3bd78485a5
+PROGRESSION.md	18881	db085bac1ad669921d1b75141964a8e6a6d1f55ae06309dc792309ee2db199ca
+README.md	39897	cdc5f341200a832c505771b025bfbdef3bdeb67eb7732b6d6633125e59db7333
 VIDEO-YOUTUBE-QNX-PORTMAP.md	13095	20bfe731e192746e83a8277f4c2d2d63f64763d402be5a0dcdb7e687c5db3231
-docs/CODELAB-COMMUNITY-QNX.md	5458	602c1ed1e5ec92deca866a40d141cd80ee14e33698fd32cea38ad7c0f951e361
-docs/README-FR.md	35732	47d023ad030a50b97ed62a20b2d222c949c83e733b17095043a19ce5fc075075
-docs/UTILISATION.md	6486	e8eaf67787aee9df449c3f8d81c90bb4ea9d4d1ed03cc91c91654e415b4de899
+docs/CODELAB-COMMUNITY-QNX.md	5459	97f444870fb5537858852494d1c5ca1318ad0c01f7a92c9dad33fc62cad50a8f
+docs/README-FR.md	35747	a1f2dcfba41488f11d40b15acdab05b72221e6d7d45608328aebe0de5a043ab2
+docs/UTILISATION.md	6638	aaef70ebc0ed1d1efd20c73dff732607b4fd29dac3a29be745557515343a66bf
 docs/contre-epreuve-rouge.txt	6719	158fe3b55580d86a4e212ef93716e90b49226f6526fcda19d31a48c6c42796db
 docs/demo-projets-reels.md	8572	9c2d6cae11b65815c68785a86f01512f81e26c9147e92c736c229dcd537eaef9
-docs/mesure-J4.md	30669	7946d2218fd1ade0cb80c00a9e49c09ef2e180c10afb5d22021d1fe6cc5446b5
-docs/mesure-J4/citations-qnx-bsp_raspberrypi-bcm2712-rpi5.txt	9147	8526b5fd2a5db5dc0936fcc2543747fc2f572617dc98720feeac096482da6a8c
-docs/mesure-J4/citations-qnx-qnx-posix-publish-subscribe.txt	9333	4dd7edbe2856d00214d0de5a3320eb7bf53c3b6f571d5ee7340757afc5beecb0
-docs/mesure-J4/citations-qnx-socketcan.txt	8791	c788045091818e899d36e8a1f1fb1ceabc7b8b25ea7891df94386af1167d68e8
-docs/mesure-J4/citations-varghes-Raspberry-QNX.txt	9156	a0248bbfa3acbcc66432ee42b81780a64602121baa5a2442ae877da53fe5f12a
-docs/mesure-J4/citations-vocho-openqnx.txt	8716	7f997825b8ea74f78aaf280c5fb6c7afa4024877f16dc3eaf11571d0fce8d71e
+docs/mesure-J4-FR.md	30669	7946d2218fd1ade0cb80c00a9e49c09ef2e180c10afb5d22021d1fe6cc5446b5
+docs/mesure-J4.md	31375	367317af1e1a7aacd62c53c8ca0b60a6b72f79f5ef3ac1405e28ff0283d95dba
+docs/mesure-J4/citations-qnx-bsp_raspberrypi-bcm2712-rpi5-FR.txt	9147	8526b5fd2a5db5dc0936fcc2543747fc2f572617dc98720feeac096482da6a8c
+docs/mesure-J4/citations-qnx-bsp_raspberrypi-bcm2712-rpi5.txt	9555	d6c59c3386fe85d2cbf89cdad467e966c71d380883f9059ef13a103dba7f42c7
+docs/mesure-J4/citations-qnx-qnx-posix-publish-subscribe-FR.txt	9333	4dd7edbe2856d00214d0de5a3320eb7bf53c3b6f571d5ee7340757afc5beecb0
+docs/mesure-J4/citations-qnx-qnx-posix-publish-subscribe.txt	9745	2d6d14fa150c34e04dc1a444c4727389f61299b8d997cc5c4e36797a308855ba
+docs/mesure-J4/citations-qnx-socketcan-FR.txt	8791	c788045091818e899d36e8a1f1fb1ceabc7b8b25ea7891df94386af1167d68e8
+docs/mesure-J4/citations-qnx-socketcan.txt	9205	3b68f394a4fa641593dec412c659dab5a29705246a674a3da4b5cb7cbfea0f7f
+docs/mesure-J4/citations-varghes-Raspberry-QNX-FR.txt	9156	a0248bbfa3acbcc66432ee42b81780a64602121baa5a2442ae877da53fe5f12a
+docs/mesure-J4/citations-varghes-Raspberry-QNX.txt	9563	5285dd3b5f6ea468fcbf7f7b2f2c3fca252c39308a3cee6f28447a30c78c8d27
+docs/mesure-J4/citations-vocho-openqnx-FR.txt	8716	7f997825b8ea74f78aaf280c5fb6c7afa4024877f16dc3eaf11571d0fce8d71e
+docs/mesure-J4/citations-vocho-openqnx.txt	9122	8d0112bd49bf3915afa788e95f9505dd6a9b0027f5633aa104068358bb6a90f3
 docs/mesure-J4/mesure-J4.json	69089	6b89513e173c5edceb9931171c6e0d229f2d97a39bbd770930a89d3a6f51d413
-docs/mesure-J5.md	32961	e81abdcbd8cd89cfa803650ae8070fe312201eea1c0b549eba8c7b99bdf1341e
-docs/mesure-J5/citations-qnx-bsp_raspberrypi-bcm2712-rpi5.txt	9859	2645c0d0dc75df03eeec2a4ea1a755b5093a4703e4fae242b2ef7f73fb556d16
-docs/mesure-J5/citations-qnx-qnx-posix-publish-subscribe.txt	10053	0ac106d74b8ca8b9c31bef47a8afccce3277dbcf96a276737441a5a14fc773ce
-docs/mesure-J5/citations-qnx-socketcan.txt	9791	036107ad6f151fcf9bc734ff58c41d75e7a1221804869aa724f4df8ebdf7db89
-docs/mesure-J5/citations-varghes-Raspberry-QNX.txt	9872	3a8a3830e1d1eff37da4903d1de548ce3f15767e8f85930ee643e884bbc7d9aa
-docs/mesure-J5/citations-vocho-openqnx.txt	9432	e9c903ab3ca070083d2696436a130e8527d85011d05bda3b84c2c7436a39f597
+docs/mesure-J5-FR.md	32961	e81abdcbd8cd89cfa803650ae8070fe312201eea1c0b549eba8c7b99bdf1341e
+docs/mesure-J5.md	33898	ce4bd4de1ff7afc596456be19c91aa78e5b58b5dbf24e50466dd9a9e1f5ef902
+docs/mesure-J5/citations-qnx-bsp_raspberrypi-bcm2712-rpi5-FR.txt	9859	2645c0d0dc75df03eeec2a4ea1a755b5093a4703e4fae242b2ef7f73fb556d16
+docs/mesure-J5/citations-qnx-bsp_raspberrypi-bcm2712-rpi5.txt	10343	6583c7c6b705456b04f52a66d4ccb231435e96bea8409f6a5f02d80c08fb7b85
+docs/mesure-J5/citations-qnx-qnx-posix-publish-subscribe-FR.txt	10053	0ac106d74b8ca8b9c31bef47a8afccce3277dbcf96a276737441a5a14fc773ce
+docs/mesure-J5/citations-qnx-qnx-posix-publish-subscribe.txt	10545	f2860ae12877e49ad22602ca75fb97d8584fd23d02e88977622c2ab077555687
+docs/mesure-J5/citations-qnx-socketcan-FR.txt	9791	036107ad6f151fcf9bc734ff58c41d75e7a1221804869aa724f4df8ebdf7db89
+docs/mesure-J5/citations-qnx-socketcan.txt	10285	41c9e120efa3eeaab6dfdd4d4196dd9a5ab62f18a45aba1af250364b40eaf95b
+docs/mesure-J5/citations-varghes-Raspberry-QNX-FR.txt	9872	3a8a3830e1d1eff37da4903d1de548ce3f15767e8f85930ee643e884bbc7d9aa
+docs/mesure-J5/citations-varghes-Raspberry-QNX.txt	10357	0d0a00b6e906beeb14ca13ed716936ba1a396da191228a4349e10e5d0e443aa8
+docs/mesure-J5/citations-vocho-openqnx-FR.txt	9432	e9c903ab3ca070083d2696436a130e8527d85011d05bda3b84c2c7436a39f597
+docs/mesure-J5/citations-vocho-openqnx.txt	9916	f0ed174ac121c6282231c9b8514b79d0a3814097683678e5d78f6625fb5844c0
 docs/mesure-J5/mesure-J5.json	76314	54548e0e6ac7cb65b1c3286051fc8e178f26f5cc80296b3e70ef371f4d9e3869
 docs/preuves/a-tests-sans-corpus.txt	18375	e98bb224cc9184b06f80ca6bc6b543b685089eedff835292ca9a30d59d9720db
 docs/preuves/b-tests-avec-corpus.txt	17227	985acea7b0936bd7fdaa69a904c8fe74b2b5febb745001704eda805cbfcd71f0
@@ -52,8 +65,10 @@ docs/preuves/h-mesure-j5-rouge.txt	28614	fb08533aca67d53ad26b875240b59601363cd06
 docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt	2387	ba70eea7056d41e84ead6d859215f0ef5512e5373ee25257dc5045da9352e2d2
 docs/preuves/j-mesure-champs-devpost.txt	6324	8c3389696c9c20d6ddf28774b8171f2fa8a562d03c09b7d38601f12e0bfd5473
 docs/preuves/k-formulaire-devpost-302-401.txt	1246	6a4894233b15f34b97383efd5a86b630753ddbd63d9aa89e8c5fe3158caac641
+docs/preuves/l-rapport-anglais-rouge.txt	8451	0abda06fe1b54d87d39186795494c9e22722b7b1553676f358d55588d4f219bb
 pyproject.toml	946	d0cff5122950c85836b71634dc9859a28369ae05e722f9056c6e5df8dd7d0187
-qnx_portmap/LISEZMOI.md	782	c2ab59c8b7f12cb2d557e917db3cd7e2857612d5522d4480efb8f7d73d7284b6
+qnx_portmap/LISEZMOI-FR.md	782	c2ab59c8b7f12cb2d557e917db3cd7e2857612d5522d4480efb8f7d73d7284b6
+qnx_portmap/LISEZMOI.md	849	a615ce6a160149bdc6372218bf16cfcf2e276fba8b28738d85892f0ede825b7b
 qnx_portmap/__init__.py	377	483051cf6fd52457d53cdab43f28567e95f5710fc132f577c47190665d8f578e
 qnx_portmap/__main__.py	135	b175c582a7349867e7b8cd8f8ddbf87d04bbf3bec73f49cdbd351bcb5ffe528b
 qnx_portmap/classify.py	13933	167adae4b4d5170dd05065b784d1d1411dda94104eab479c8fc6fde7cb2fb600
@@ -64,7 +79,7 @@ qnx_portmap/refresh.py	8270	74a5728a420812a1a60f1bbb0c26bbce864223e2f2aa1b9ad6ed
 qnx_portmap/report.py	6409	cb003c9d779972dd26e8dcf929578b18ab3f57b0d8a219714a35e886dc33bb54
 scripts/bootstrap_corpus.sh	5288	dd52938560f7f5c59d728bdd082e876854a58a6e43f45457339a73e22d69d1f2
 scripts/controle_fuite_corpus.py	16592	7894bd022c6e14f8a2ef7fdca8b46c5c46a538527db2409c49c149376b1854df
-scripts/manifeste_publie.py	4323	0528968536320f513fe72adb4ccdb6471b8154128aa17b76f26c155df6df33b9
+scripts/manifeste_publie.py	4300	e88ecc8f86a3bcd98488cf7066896f90002ae9598c73777ff04bb62532d36797
 tests/LISEZMOI.md	1240	9e4e24f45224915d4555d5cdb5c80e68ce46004bf243b0585181a85f122253bd
 tests/__init__.py	0	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 tests/fixtures/f01-abort.txt	488	cd9223e8bb1ef9a7a555bf81b9246df271fc94e3e46f8ee4bcd18a844a48fd68
@@ -86,16 +101,16 @@ tests/test_corpus.py	5195	8aefd0485c2f935b86daf8fb24378c75acbcd18589ede86a217064
 tests/test_extract.py	5614	efb9dc285c2dc379848c8e7eca02fc6d88f0d90483e6e94198b785de13e5ed3d
 tests/test_fixtures.py	8566	be71375d071c8141c3d4f9b4a498000d82a91ffc59310c06f28b4f8edb34e3a1
 tests/test_frozen_corpus.py	5955	dd52af288fb09e4ffe06e5dd75036e59d67223a0b09815941f700d17e46edac8
-tests/test_mesure_j4.py	11653	dfbb60a3551070370e27e5224da7f8e03ec94b08d8c296f3e4e38dd6847c3cdb
-tests/test_mesure_j5.py	16440	18e5baa96fc4d00c456c0b42272387d1f35db4aee3302ab262bc847891b5f3e3
+tests/test_mesure_j4.py	22516	5ed267007df9fa57ff81665a640a8ad7efc3e0e1817ba6d31b4570adc9233000
+tests/test_mesure_j5.py	27425	d963a22bf2badf5458b937250ffe7567e6ff2b280417f667a3c5da3b61e04c36
 tests/test_readme.py	4268	781438c5a3af544aa89053d3cbe515015b66870ff93938e7112a260d5a62ceb2
 tools/LISEZMOI.md	704	d5d1137b3713db13c21281de1356d15f2ae13468b680dd992d29414338becfc4
 tools/build_corpus.py	6339	df7cf793a9116d5b19cc6920445c9a2531945846df9f6a779578b07b069c3e54
 tools/contre_epreuve.py	9619	cf832c8ae5d2c114855d23fcae2ef6161ea36bf448cb36e6b3b07f0f9ec3feb5
 tools/make_fixtures.py	7042	bd501596561c2239ac9f50bf32a1e64db28e12c3b9273f2bb972f7d72a2b6670
 tools/mesure_champs_devpost.py	4984	6230c73a2f2b1be31f1fc16fb6f3f360d319d7729e8def839490329d1af68490
-tools/mesure_j4.py	29400	c7381bb4fd13f50eb824747693b6d37caab36f1d13d22447e0887b184526cf29
-tools/mesure_j5.py	24998	c6c46e8d3a329cd0c06535d8d74b335037cd8ac45c1b4d52c0ae54d12ebe1b8e
+tools/mesure_j4.py	43300	1a6c0e97dabf9bf58e1aa7657ae50a2e1b708d357ac8e71c49997437fe0d1bb4
+tools/mesure_j5.py	37462	3375c6fd1bf8cd12fa2e455643b0c6d3eb584f868f1b69b98e4a91492fe73ccc
 tools/mesure_kit.py	6930	e03e5fbeeaff2ead6f2113a10f1c3bb83888ece0cabdd4c1af3d3c3c28869a3c
-tools/posix-base.txt	14129	9d7e0074ceef8e3c82079204d6ec76e83f82923f3d714dde00a9ad0d62d20d51
+tools/posix-base.txt	14054	600e391015786eac7432f4a52e90fa72907d33edb6fbea5ea2c644e70d624d21
 tools/table_mesure_devpost.py	4525	f5708fc727172e8a619fa956bd623b1c7dbf2a92d80324e36d46fb3f78e0793c

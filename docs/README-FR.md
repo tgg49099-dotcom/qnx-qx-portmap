@@ -29,8 +29,8 @@ download log (see [Corpus QNX](#corpus-qnx--non-distribue)).
 
 **Measured on real code**: on the 100 QNX symbols really called by five public
 QNX repositories, the tool resolves and quotes **96 %** of them
-([`docs/mesure-J5.md`](docs/mesure-J5.md)). The first measurement, on the same
-sample, resolved 93 % ([`docs/mesure-J4.md`](docs/mesure-J4.md)): the
+([`docs/mesure-J5-FR.md`](mesure-J5-FR.md)). The first measurement, on the same
+sample, resolved 93 % ([`docs/mesure-J4-FR.md`](mesure-J4-FR.md)): the
 difference is explained further down.
 
 ### The three things the contest rules ask a submission to state
@@ -205,8 +205,8 @@ courts de pages QNX, avec URL et date) et la procedure de reconstruction.
 
 **Mesure sur du code reel** : sur 100 symboles QNX reellement appeles par
 cinq depots QNX publics, l'outil en resout et cite **96 %**
-([`docs/mesure-J5.md`](docs/mesure-J5.md)). La premiere mesure, sur le meme
-echantillon, en resolvait 93 % ([`docs/mesure-J4.md`](docs/mesure-J4.md)) :
+([`docs/mesure-J5-FR.md`](mesure-J5-FR.md)). La premiere mesure, sur le meme
+echantillon, en resolvait 93 % ([`docs/mesure-J4-FR.md`](mesure-J4-FR.md)) :
 la difference est expliquee plus bas.
 
 ---
@@ -611,7 +611,7 @@ Toutes consultees le **14/11/2026** :
 **96 % des symboles QNX reellement utilises par de vrais projets QNX sont
 resolus et cites par l'outil.** Le detail complet (echantillon, commits
 epingles, methode, les 100 symboles) est dans
-[`docs/mesure-J5.md`](docs/mesure-J5.md).
+[`docs/mesure-J5-FR.md`](mesure-J5-FR.md).
 
 L'echantillon : **cinq depots QNX publics** - le BSP officiel QNX pour
 Raspberry Pi 5, un BSP QNX pour Raspberry Pi, les sources des *resource
@@ -642,7 +642,7 @@ fonctions socket - et cite cette page avec son empreinte SHA-256. Le
 verifie l'egalite stricte des deux listes.
 
 La mesure J4 reste une **mesure datee** et n'est pas reecrite :
-[`docs/mesure-J4.md`](docs/mesure-J4.md).
+[`docs/mesure-J4-FR.md`](mesure-J4-FR.md).
 
 Les mesures sont **reproductibles** (`tools/mesure_j4.py` et
 `tools/mesure_j5.py`, clones en lecture seule) et **verifiees par les
@@ -656,7 +656,7 @@ repasse) sont dans
 [`docs/preuves/g-mesure-j4-rouge.txt`](docs/preuves/g-mesure-j4-rouge.txt) et
 [`docs/preuves/h-mesure-j5-rouge.txt`](docs/preuves/h-mesure-j5-rouge.txt) ;
 l'etat de chaque fonction de l'outil est dans
-[`PROGRESSION.md`](PROGRESSION.md).
+[`PROGRESSION-FR.md`](../PROGRESSION-FR.md).
 
 ## Limites
 

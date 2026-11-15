@@ -1,23 +1,22 @@
-# Symboles de la bibliotheque C standard (ISO/IEC 9899:2011) et de POSIX.
+# Symbols of the C standard library (ISO/IEC 9899:2011) and of POSIX.
 #
-# Ce fichier sert a distinguer, dans la mesure J4, deux familles de
-# symboles que le code QNX reel appelle :
+# This file separates, in the J4 measurement, the two families of symbols
+# that real QNX code calls:
 #
-#   * les symboles *standards* (C standard, POSIX.1-2008, XSI) : ils sont
-#     aussi dans la C Library Reference QNX, mais ils ne sont pas
-#     specifiques a QNX ;
-#   * les symboles *specifiques a QNX* : io_open, resmgr_attach,
+#   * the *standard* symbols (C standard, POSIX.1-2008, XSI): they are also
+#     in the QNX C Library Reference, but they are not QNX-specific;
+#   * the *QNX-specific* symbols: io_open, resmgr_attach,
 #     iofunc_read_default, ThreadCtl, ConnectAttach, MsgSend, slogf,
-#     InterruptMask, mmap_device_memory, devctl, ... Ce sont ceux que la
-#     fiche J4 vise.
+#     InterruptMask, mmap_device_memory, devctl, ... Those are the ones the
+#     J4 sheet targets.
 #
-# La liste est **independante du corpus QNX** : elle ne vient pas de la
-# documentation QNX et ne peut donc pas avantager l'outil. Elle est
-# volontairement GENEREUSE : un nom standard qui serait oublie ici est
-# simplement traite comme un symbole QNX specifique, ce qui rend la
-# mesure plus exigeante, pas plus facile.
+# The list is **independent of the QNX corpus**: it does not come from the
+# QNX documentation, so it cannot favour the tool. It is deliberately
+# GENEROUS: a standard name forgotten here is simply treated as a
+# QNX-specific symbol, which makes the measurement more demanding, not
+# easier.
 #
-# Format : un nom par ligne, les commentaires commencent par "#".
+# Format: one name per line, comments start with "#".
 
 # --- C standard : stddef.h, stdint.h, inttypes.h, limits.h, stdbool.h ---
 size_t
@@ -638,7 +637,7 @@ if_indextoname
 if_nameindex
 if_freeindex
 
-# --- C standard : assert.h, stddef.h (macros) et extensions communes ---
+# --- C standard: assert.h, stddef.h (macros) and common extensions ---
 assert
 offsetof
 alloca
@@ -1166,4 +1165,4 @@ atomic_fetch_xor
 atomic_flag_test_and_set
 atomic_flag_clear
 
-# --- fin des ajouts ---
+# --- end of additions ---

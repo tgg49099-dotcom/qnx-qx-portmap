@@ -1,186 +1,186 @@
-# Citations des 20 symboles mesures dans qnx/socketcan
-# depot     : https://github.com/qnx/socketcan
-# commit    : 9db62b4747d84135a500dbfe3a318a4330f31654 (2026-09-29)
-# sous-dossier retenu : (depot entier)
-# consultee le : 2026-11-14
-# Extraits courts (une a trois lignes) de la documentation QNX 8.0, avec l'URL de la page source et son empreinte SHA-256 : voir LICENCE-DOCS-QNX.md.
+# Citations of the 20 symbols measured in qnx/socketcan
+# repository : https://github.com/qnx/socketcan
+# commit     : 9db62b4747d84135a500dbfe3a318a4330f31654 (2026-09-29)
+# sub-directory used : (whole repository)
+# consulted on : 2026-11-14
+# Short extracts (one to three lines) from the QNX 8.0 documentation, with the URL of the source page and its SHA-256 fingerprint: see LICENCE-DOCS-QNX.md.
 
 --- mtx_lock ---
-# depot    : qnx/socketcan
-# appele 9 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mtx_lock.html
-# sha256 de la page source : 958d05b20648dd1c5c76c507d0fa1257f652c824e23dea10c6354bdf2a3922ce
-# citation : Lock a mutex
+# repository : qnx/socketcan
+# called 9 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mtx_lock.html
+# sha256 of the source page : 958d05b20648dd1c5c76c507d0fa1257f652c824e23dea10c6354bdf2a3922ce
+# citation   : Lock a mutex
 
 --- mtx_unlock ---
-# depot    : qnx/socketcan
-# appele 9 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mtx_unlock.html
-# sha256 de la page source : 2390355fe27cdf4f4203334de5f4a93e78451add63605c92b8b840d38e828e3d
-# citation : Unlock a mutex
+# repository : qnx/socketcan
+# called 9 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mtx_unlock.html
+# sha256 of the source page : 2390355fe27cdf4f4203334de5f4a93e78451add63605c92b8b840d38e828e3d
+# citation   : Unlock a mutex
 
 --- mtx_init ---
-# depot    : qnx/socketcan
-# appele 3 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mtx_init.html
-# sha256 de la page source : d9aa0472686b6ba5588b2f17e72bf5812f654b6191d5201eb5f56b1c8595af11
-# citation : Initialize a mutex
+# repository : qnx/socketcan
+# called 3 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mtx_init.html
+# sha256 of the source page : d9aa0472686b6ba5588b2f17e72bf5812f654b6191d5201eb5f56b1c8595af11
+# citation   : Initialize a mutex
 
 --- mtx_destroy ---
-# depot    : qnx/socketcan
-# appele 2 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mtx_destroy.html
-# sha256 de la page source : 98a25f0a79a2ec50cc55199a860c0ab1e8a79eec3d7e648b09d0796668af05f4
-# citation : Destroy a mutex
+# repository : qnx/socketcan
+# called 2 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mtx_destroy.html
+# sha256 of the source page : 98a25f0a79a2ec50cc55199a860c0ab1e8a79eec3d7e648b09d0796668af05f4
+# citation   : Destroy a mutex
 
 --- ChannelDestroy ---
-# depot    : qnx/socketcan
-# appele 1 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/c/channeldestroy.html
-# sha256 de la page source : cdf0c7af2864ba2a9f75b15747bb29f515c75c9bdd2d1453e19b4629a0e6d200
-# citation : Destroy a communications channel
+# repository : qnx/socketcan
+# called 1 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/c/channeldestroy.html
+# sha256 of the source page : cdf0c7af2864ba2a9f75b15747bb29f515c75c9bdd2d1453e19b4629a0e6d200
+# citation   : Destroy a communications channel
 
 --- ConnectDetach ---
-# depot    : qnx/socketcan
-# appele 1 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/c/connectdetach.html
-# sha256 de la page source : bbd642af245158716c7b54034bd6eef77ee0ae32c5c478bbbe1116450d7bb681
-# citation : Break a connection between a process and a channel
+# repository : qnx/socketcan
+# called 1 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/c/connectdetach.html
+# sha256 of the source page : bbd642af245158716c7b54034bd6eef77ee0ae32c5c478bbbe1116450d7bb681
+# citation   : Break a connection between a process and a channel
 
 --- InterruptDetach ---
-# depot    : qnx/socketcan
-# appele 1 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptdetach.html
-# sha256 de la page source : 3856d1d642175a594639a8244d35173593114914708f5119fcdacab82631b216
-# citation : Detach an interrupt thread by ID
+# repository : qnx/socketcan
+# called 1 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptdetach.html
+# sha256 of the source page : 3856d1d642175a594639a8244d35173593114914708f5119fcdacab82631b216
+# citation   : Detach an interrupt thread by ID
 
 --- MsgReceivePulse ---
-# depot    : qnx/socketcan
-# appele 1 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/msgreceivepulse.html
-# sha256 de la page source : d05e4b85be7e1f0cea045f5a68656b77ce1e696f8bfdd0ccfba0366f2bb438af
-# citation : Receive a pulse on a channel
+# repository : qnx/socketcan
+# called 1 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/msgreceivepulse.html
+# sha256 of the source page : d05e4b85be7e1f0cea045f5a68656b77ce1e696f8bfdd0ccfba0366f2bb438af
+# citation   : Receive a pulse on a channel
 
 --- if_freenameindex ---
-# depot    : qnx/socketcan
-# appele 1 fois dans le depot
-# statut   : described_elsewhere (etat J4 : resolu_mais_decrit_ailleurs, etat J5 : resolu_et_cite)
-# source   : com.qnx.doc.neutrino.io_sock, socket_api.html
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
-# sha256 de la page source : 23dca276b71539a24c75005afae436ac89e2c22eba78c77ce628cf62282910f0
-# citation : ... getservbyname_r() getservbyport() getservbyport_r() getservent() getservent_r() getsockname() getsockopt() htonl() htons() if_freenameindex() if_indextoname() if_nameindex() if_nametoindex() inet_addr() inet_aton() inet_net_ntop() inet_net_pton() inet_network() inet_ntoa() inet_ntoa_r() ...
+# repository : qnx/socketcan
+# called 1 times in the repository
+# status     : described_elsewhere (J4 state: resolved but described elsewhere, J5 state: resolved and cited)
+# source     : com.qnx.doc.neutrino.io_sock, socket_api.html
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
+# sha256 of the source page : 23dca276b71539a24c75005afae436ac89e2c22eba78c77ce628cf62282910f0
+# citation   : ... getservbyname_r() getservbyport() getservbyport_r() getservent() getservent_r() getsockname() getsockopt() htonl() htons() if_freenameindex() if_indextoname() if_nameindex() if_nametoindex() inet_addr() inet_aton() inet_net_ntop() inet_net_pton() inet_network() inet_ntoa() inet_ntoa_r() ...
 
 --- nanospin ---
-# depot    : qnx/socketcan
-# appele 1 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/n/nanospin.html
-# sha256 de la page source : 4b6fd1795c6711e58aca374021672b6b8d28f296176bfea5804c593849559a97
-# citation : Busy-wait without thread blocking for a period of time
+# repository : qnx/socketcan
+# called 1 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/n/nanospin.html
+# sha256 of the source page : 4b6fd1795c6711e58aca374021672b6b8d28f296176bfea5804c593849559a97
+# citation   : Busy-wait without thread blocking for a period of time
 
 --- timespec2nsec ---
-# depot    : qnx/socketcan
-# appele 1 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/t/timespec2nsec.html
-# sha256 de la page source : a8e6290226dc7b17a8e3998496119dfa2e63f06941bece43525b5df722a21edd
-# citation : Convert a timespec structure to nanoseconds
+# repository : qnx/socketcan
+# called 1 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/t/timespec2nsec.html
+# sha256 of the source page : a8e6290226dc7b17a8e3998496119dfa2e63f06941bece43525b5df722a21edd
+# citation   : Convert a timespec structure to nanoseconds
 
 --- strerror ---
-# depot    : qnx/socketcan
-# appele 74 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/s/strerror.html
-# sha256 de la page source : 3f327b1d4e7d3403bda01303501680cb675284d015623490e1640cb197f09262
-# citation : Convert an error number into an error message
+# repository : qnx/socketcan
+# called 74 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/s/strerror.html
+# sha256 of the source page : 3f327b1d4e7d3403bda01303501680cb675284d015623490e1640cb197f09262
+# citation   : Convert an error number into an error message
 
 --- fprintf ---
-# depot    : qnx/socketcan
-# appele 69 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/f/fprintf.html
-# sha256 de la page source : fcc9ca0a9f2bc9d4244f527a3c8f029c31fa0c297c664aa266042d2b1126fdab
-# citation : Write output to a stream
+# repository : qnx/socketcan
+# called 69 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/f/fprintf.html
+# sha256 of the source page : fcc9ca0a9f2bc9d4244f527a3c8f029c31fa0c297c664aa266042d2b1126fdab
+# citation   : Write output to a stream
 
 --- close ---
-# depot    : qnx/socketcan
-# appele 24 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/c/close.html
-# sha256 de la page source : 7fadabd81e17a9784bbedd786b02087dc60a3eb754cc4792d0518758f605e062
-# citation : Close a file
+# repository : qnx/socketcan
+# called 24 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/c/close.html
+# sha256 of the source page : 7fadabd81e17a9784bbedd786b02087dc60a3eb754cc4792d0518758f605e062
+# citation   : Close a file
 
 --- perror ---
-# depot    : qnx/socketcan
-# appele 23 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/p/perror.html
-# sha256 de la page source : b1b1dab501078b0eaad6b8c15480155cbbed60271c102422a9c55677fd002a34
-# citation : Print an error message associated with errno
+# repository : qnx/socketcan
+# called 23 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/p/perror.html
+# sha256 of the source page : b1b1dab501078b0eaad6b8c15480155cbbed60271c102422a9c55677fd002a34
+# citation   : Print an error message associated with errno
 
 --- setsockopt ---
-# depot    : qnx/socketcan
-# appele 21 fois dans le depot
-# statut   : described_elsewhere (etat J4 : resolu_mais_decrit_ailleurs, etat J5 : resolu_et_cite)
-# source   : com.qnx.doc.neutrino.io_sock, socket_api.html
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
-# sha256 de la page source : 23dca276b71539a24c75005afae436ac89e2c22eba78c77ce628cf62282910f0
-# citation : ... res_search() res_send() send() sendto() sendmmsg() sendmsg() setdomainname() setnetent() setnetgrent() setprotoent() setservent() setsockopt() shutdown() sockatmark() socket() sysctl() sysctlbynamefb() sysctlnametomib() sysctlnametomibfd() sysctlbynamefd() , sysctlnametomibfd() The sysctlbynamefd() ...
+# repository : qnx/socketcan
+# called 21 times in the repository
+# status     : described_elsewhere (J4 state: resolved but described elsewhere, J5 state: resolved and cited)
+# source     : com.qnx.doc.neutrino.io_sock, socket_api.html
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
+# sha256 of the source page : 23dca276b71539a24c75005afae436ac89e2c22eba78c77ce628cf62282910f0
+# citation   : ... res_search() res_send() send() sendto() sendmmsg() sendmsg() setdomainname() setnetent() setnetgrent() setprotoent() setservent() setsockopt() shutdown() sockatmark() socket() sysctl() sysctlbynamefb() sysctlnametomib() sysctlnametomibfd() sysctlbynamefd() , sysctlnametomibfd() The sysctlbynamefd() ...
 
 --- strcmp ---
-# depot    : qnx/socketcan
-# appele 21 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/s/strcmp.html
-# sha256 de la page source : b57b6b80b2335b4146da4944c56550523288a3f14bfd96754849b27fdf338707
-# citation : Compare two strings
+# repository : qnx/socketcan
+# called 21 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/s/strcmp.html
+# sha256 of the source page : b57b6b80b2335b4146da4944c56550523288a3f14bfd96754849b27fdf338707
+# citation   : Compare two strings
 
 --- memcpy ---
-# depot    : qnx/socketcan
-# appele 20 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/memcpy.html
-# sha256 de la page source : 9df70b6d7880a474508a9f3ec9e46cc086869f5ad96bc49d2b65566d14f63f70
-# citation : Copy bytes from one buffer to another
+# repository : qnx/socketcan
+# called 20 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/memcpy.html
+# sha256 of the source page : 9df70b6d7880a474508a9f3ec9e46cc086869f5ad96bc49d2b65566d14f63f70
+# citation   : Copy bytes from one buffer to another
 
 --- ioctl ---
-# depot    : qnx/socketcan
-# appele 19 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/ioctl.html
-# sha256 de la page source : 8a9e8f3faa2e319d31b72a68f66af4f58ca92ccd7f6bedb2476b0f54db537e6f
-# citation : Control a device
+# repository : qnx/socketcan
+# called 19 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/ioctl.html
+# sha256 of the source page : 8a9e8f3faa2e319d31b72a68f66af4f58ca92ccd7f6bedb2476b0f54db537e6f
+# citation   : Control a device
 
 --- printf ---
-# depot    : qnx/socketcan
-# appele 16 fois dans le depot
-# statut   : documented (etat J4 : resolu_et_cite, etat J5 : resolu_et_cite)
-# source   : index C Library Reference 8.0
-# page     : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/p/printf.html
-# sha256 de la page source : d5268b2d2c1282114d8429659cff6e78c76f16f418431845926773ae443f2442
-# citation : Write formatted output to stdout
+# repository : qnx/socketcan
+# called 16 times in the repository
+# status     : documented (J4 state: resolved and cited, J5 state: resolved and cited)
+# source     : index C Library Reference 8.0
+# page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/p/printf.html
+# sha256 of the source page : d5268b2d2c1282114d8429659cff6e78c76f16f418431845926773ae443f2442
+# citation   : Write formatted output to stdout
