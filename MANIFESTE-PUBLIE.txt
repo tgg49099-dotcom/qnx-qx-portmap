@@ -1,25 +1,25 @@
 MANIFESTE DES FICHIERS PUBLIABLES - QX PORTMAP
 
 Arbre          : /work/qnx-portmap
-Genere le      : 2026-11-15 03:32:11
+Genere le      : 2026-11-15 03:55:11
 Fichiers       : 86
-Taille totale  : 808451 octets
+Taille totale  : 809055 octets
 
 Les 3 plus gros fichiers :
       76314 octets  docs/mesure-J5/mesure-J5.json
       69089 octets  docs/mesure-J4/mesure-J4.json
-      35711 octets  README.md
+      35732 octets  README.md
 
 Detail (chemin, taille en octets, SHA-256) :
 
 .gitignore	89	3b7d0412d843969134e0569a5bbf80605ace41ba556d5116521706e0ab058d65
 CORPUS-NON-PUBLIE.txt	3587	2711651fa52848a87c9a1cc2712c4f33df8f8b39706111c623ddb3db58c9ff91
-KIT-SOUMISSION-QNX.md	26191	75e1628eea0c1aadb537e048ef8eed80eca6dce6f3b08d88c323605a18508025
+KIT-SOUMISSION-QNX.md	26774	c4db5108d0ddc247155c35e41fe45f932999155567fbe1ab8c95612409948f84
 LICENCE-DOCS-QNX.md	2725	79454fcbe4a38c3790c1a576979bd6bbffa18c6f1c3e04ad96dddebe3f95d4b9
 LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
 LISEZMOI.md	4489	854ece09696bc99af488e80fa51b4996e5ece46ec3df62e6c8b586032c7ad267
 PROGRESSION.md	16434	b8d48adf7fe2b1cdcb7f41f124f75d036b6d404af6914458e9d3dd3bd78485a5
-README.md	35711	ae9788de69ee942b7d6cbe45c000b72eb3318ecfe2e299d58deebc78ded497b4
+README.md	35732	47d023ad030a50b97ed62a20b2d222c949c83e733b17095043a19ce5fc075075
 VIDEO-YOUTUBE-QNX-PORTMAP.md	13095	20bfe731e192746e83a8277f4c2d2d63f64763d402be5a0dcdb7e687c5db3231
 docs/CODELAB-COMMUNITY-QNX.md	5458	602c1ed1e5ec92deca866a40d141cd80ee14e33698fd32cea38ad7c0f951e361
 docs/UTILISATION.md	6601	af2040b526a38a4fbf844e853de716ef2a964190f7ba85a24e0610ec834a2941
@@ -42,7 +42,7 @@ docs/mesure-J5/mesure-J5.json	76314	54548e0e6ac7cb65b1c3286051fc8e178f26f5cc8029
 docs/preuves/a-tests-sans-corpus.txt	18253	2f696ca3f8539666020c7c1d135266bf856d6f5d928e4fada189eb0190310154
 docs/preuves/b-tests-avec-corpus.txt	17211	e7fe2d6bca4e213e0f5ee7075c2d2bf0ff4b47612f8b049da8b72942e3013674
 docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt	2967	1ad1f9f1cb692439c761303012dd6a9ebbb69a19d1d508b8cfcc24b8bebd9c56
-docs/preuves/d-controle-fuite-corpus.txt	4794	e47e000ec5e71766fd50311fd51be0a5425dfc3aed54903f4ef58f9b21be524b
+docs/preuves/d-controle-fuite-corpus.txt	4794	1a1c4f53162736ee4c4814851760a09bb10c1dd1b6e5fb51486697049c08b5d9
 docs/preuves/e-fresh-sans-corpus.txt	1691	f6a31a7c6bdd0b53b57a0e9fa74bfcfbe095786006a6ab83b8d0f92a4cf3fd8a
 docs/preuves/f-manifeste-publie.txt	1481	57c0b300adea787e4a59c89c47ad44b232ab7e297496ae9c1a65a3098150266a
 docs/preuves/g-mesure-j4-rouge.txt	6489	ed51f71ca5aa72c3885266dd0cfd8a29780ee04c6dc512199d6e5f33c05bb965

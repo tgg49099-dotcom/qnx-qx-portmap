@@ -1,12 +1,12 @@
 CONTROLE ANTI-FUITE DU CORPUS QNX
-  date              : 2026-11-15 03:16:10
+  date              : 2026-11-15 03:41:38
   arbre publiable   : /work/qnx-portmap
   corpus de ref.    : /work/qnx-portmap-corpus-local/corpus
   pages de reference: 3426 (empreintes de contenu)
   fichiers stockes  : 3427 (empreintes gzip)
 
 1. SHA-256 des fichiers de l'arbre publiable
-   fichiers analyses          : 83 (793862 octets)
+   fichiers analyses          : 87 (817950 octets)
    correspondances page QNX   : 0
    correspondances fichier    : 0
 
@@ -14,7 +14,7 @@ CONTROLE ANTI-FUITE DU CORPUS QNX
    correspondances page QNX   : 0
 
 3. Objets git du depot publiable
-   objets blob                : 150
+   objets blob                : 167
    correspondances            : 0
 
 4. Recouvrement ligne a ligne (lignes de 40 caracteres ou plus)
@@ -69,4 +69,4 @@ CONTROLE ANTI-FUITE DU CORPUS QNX
 
 RESULTAT : 0 correspondance. L'arbre publiable ne contient aucune
            page de la documentation QNX.
-Duree du controle : 699.7 s
+Duree du controle : 708.9 s

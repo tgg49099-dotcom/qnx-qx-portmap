@@ -40,6 +40,18 @@ file and fails if one of them is wrong.
 | Step 4 fields (submitter type, country, category, repository URL, ...) | no character limit published | Devpost help, article 126, section "Step 4: Additional Details" | 15/11/2026 |
 | File upload (if any) | 35 MB max, zip, pdf, word or apk | Devpost help, article 126, section "Step 4: Additional Details" | 15/11/2026 |
 
+The three Devpost help articles behind that table, read on 15/11/2026, each in
+HTTP 200, with the update date displayed on the page:
+
+| article | URL | update date displayed |
+|---|---|---|
+| 145 | `https://help.devpost.com/article/145-how-do-i-set-up-the-submission-period` | November 12, 2026 |
+| 126 | `https://help.devpost.com/article/126-know-your-submission-steps` | August 12, 2026 |
+| 122 | `https://help.devpost.com/article/122-how-to-enter-a-submission` | May 27, 2026 |
+
+(The older `devpost.helpscoutdocs.com/article/<n>-...` addresses redirect to
+these ones, HTTP 301.)
+
 ### 1.2 The QNX form itself could not be read: measured, not guessed
 
 The QNX submission form is behind a Devpost session. Measured on **15/11/2026

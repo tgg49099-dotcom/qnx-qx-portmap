@@ -555,8 +555,8 @@ budget de 4 000 octets. Les fichiers de citations des mesures J4 et J5
 (`docs/mesure-J4/citations-*.txt`, `docs/mesure-J5/citations-*.txt`) sont analyses fragment par
 fragment comme les fixtures : ils contiennent 54 a 187 octets de texte QNX verbatim chacun. La
 sortie complete est dans `docs/preuves/d-controle-fuite-corpus.txt` ; le nombre de fichiers
-qu'elle y analyse est celui du moment de la mesure (kit de soumission et plan de la video
-compris).
+qu'elle y analyse est celui du moment de la mesure (kit de soumission, plan de la video et
+fichiers de preuves compris).
 
 ```bash
 python3 scripts/controle_fuite_corpus.py --tree . \
