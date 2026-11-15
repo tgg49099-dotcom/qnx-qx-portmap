@@ -75,8 +75,9 @@ class Page(object):
 class Corpus(object):
     """Le corpus fige, en lecture seule."""
 
-    def __init__(self, root=None):
+    def __init__(self, root=None, lang="fr"):
         self.root = os.path.abspath(root or default_corpus_dir())
+        self.lang = lang if lang in ("fr", "en") else "fr"
         self.manifest = None
         self.pages = []
         self._by_key = {}
@@ -84,16 +85,22 @@ class Corpus(object):
         self._text_cache = {}
         self._load()
 
+    def _t(self, fr, en):
+        """Message dans la langue demandee ; le francais reste le defaut."""
+        return en if self.lang == "en" else fr
+
     # -- chargement ------------------------------------------------------
     def _load(self):
         manifest_path = os.path.join(self.root, "MANIFEST.json")
         if not os.path.isfile(manifest_path):
-            raise CorpusError("corpus introuvable : %s" % self.root)
+            raise CorpusError(self._t("corpus introuvable : %s" % self.root,
+                                      "corpus not found: %s" % self.root))
         with open(manifest_path, encoding="utf-8") as fh:
             self.manifest = json.load(fh)
         index_path = os.path.join(self.root, self.manifest.get("pages_index", "index/pages.jsonl"))
         if not os.path.isfile(index_path):
-            raise CorpusError("index des pages introuvable : %s" % index_path)
+            raise CorpusError(self._t("index des pages introuvable : %s" % index_path,
+                                      "page index not found: %s" % index_path))
         with open(index_path, encoding="utf-8") as fh:
             for line in fh:
                 line = line.strip()
@@ -104,7 +111,8 @@ class Corpus(object):
                 self._by_key[(page.version, page.book, page.topic)] = page
                 self._by_url[page.url] = page
         if not self.pages:
-            raise CorpusError("corpus vide : %s" % self.root)
+            raise CorpusError(self._t("corpus vide : %s" % self.root,
+                                      "empty corpus: %s" % self.root))
 
     # -- acces -----------------------------------------------------------
     def versions(self):
@@ -117,12 +125,14 @@ class Corpus(object):
         """Octets originaux (decompresses) de la page."""
         path = self.path_of(page)
         if not os.path.isfile(path):
-            raise CorpusError("page absente du corpus : %s" % page.file)
+            raise CorpusError(self._t("page absente du corpus : %s" % page.file,
+                                      "page missing from the corpus: %s" % page.file))
         try:
             with gzip.open(path, "rb") as fh:
                 return fh.read()
         except (OSError, EOFError) as exc:
-            raise CorpusError("page illisible (%s) : %s" % (page.file, exc))
+            raise CorpusError(self._t("page illisible (%s) : %s" % (page.file, exc),
+                                      "unreadable page (%s): %s" % (page.file, exc)))
 
     def html(self, page):
         return self.raw_bytes(page).decode("utf-8", "replace")
@@ -176,7 +186,9 @@ class Corpus(object):
             try:
                 data = self.raw_bytes(page)
             except CorpusError as exc:
-                failed.append((page.url, page.sha256, "page illisible : %s" % exc))
+                failed.append((page.url, page.sha256,
+                               self._t("page illisible : %s" % exc,
+                                       "unreadable page: %s" % exc)))
                 continue
             got = hashlib.sha256(data).hexdigest()
             if got != page.sha256:
@@ -187,7 +199,8 @@ class Corpus(object):
         """Verifie le fichier SHA256SUMS (empreintes des fichiers stockes)."""
         path = os.path.join(self.root, "SHA256SUMS")
         if not os.path.isfile(path):
-            raise CorpusError("SHA256SUMS introuvable : %s" % path)
+            raise CorpusError(self._t("SHA256SUMS introuvable : %s" % path,
+                                      "SHA256SUMS not found: %s" % path))
         failed = []
         checked = 0
         with open(path, encoding="utf-8") as fh:
@@ -199,7 +212,8 @@ class Corpus(object):
                 full = os.path.join(self.root, rel)
                 checked += 1
                 if not os.path.isfile(full):
-                    failed.append((rel, digest, "fichier absent"))
+                    failed.append((rel, digest, self._t("fichier absent",
+                                                        "file missing")))
                     continue
                 h = hashlib.sha256()
                 with open(full, "rb") as f:
@@ -211,7 +225,7 @@ class Corpus(object):
 
 
 def read_symbols(text):
-    """Lit une liste de symboles : un par ligne, ou separes par virgules.
+    """Lit une liste de symboles : un par ligne, ou separes par virgule.
 
     Les commentaires (``#``) et les lignes vides sont ignores.
     """

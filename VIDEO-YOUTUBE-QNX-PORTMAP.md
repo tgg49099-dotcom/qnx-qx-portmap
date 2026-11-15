@@ -293,3 +293,38 @@ build, analyze, test, deploy, debug, or manage software for QNX 8.0"
 | public on YouTube | the video is uploaded as "Public", and the URL replaces the placeholder of block 4.5 of `KIT-SOUMISSION-QNX.md` |
 | the URL is in the kit | `python3 tools/mesure_kit.py --check` still passes after the placeholder is replaced |
 | the URL is in the repository | the same URL is added to the README and to the description block 4.1 |
+
+## Update 2026-11-15 - the filmed console now speaks English
+
+The tool has an English output mode (`--lang en`); the default stays French,
+byte for byte (pinned by `tests/test_lang_en.py`). The video MUST film the
+English console: the contest rules require English for all submission
+material.
+
+### Exact commands to film (QNX 8.0 target, segment "on QNX 8.0")
+
+    python3 -m qnx_portmap --corpus <shared-corpus-dir> --verify-corpus
+    python3 -m qnx_portmap --corpus <shared-corpus-dir> --lang en abort pthread_create bzero
+
+### Expected English text on screen (first lines, verbatim)
+
+    corpus: <shared-corpus-dir>
+    pages checked: 8
+    page SHA-256: OK
+    SHA256SUMS: OK (N files)
+
+    QX PORTMAP - status of QNX symbols in the 8.0 documentation
+    frozen corpus: <shared-corpus-dir>
+    pages: 8 (7.1: 2, 8.0: 6) - consulted on 2026-11-14 - offline mode
+
+      abort                        documented
+        page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
+        citation (index C Library Reference 8.0) :
+          Raise the SIGABRT signal to terminate program execution
+        note   : new symbol in 8.0 (absent from the 7.1 reference)
+
+    --- Upgrade worklist (0 symbol(s)) ---
+    (nothing to migrate: every analyzed symbol is documented in 8.0)
+
+Every English label is pinned by `tests/test_lang_en.py`: a French label
+left in English mode turns the suite red.

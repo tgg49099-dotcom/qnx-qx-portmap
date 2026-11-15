@@ -32,6 +32,48 @@ UNKNOWN = "unknown"
 
 STATUS_ORDER = {DOCUMENTED: 0, ELSEWHERE: 1, ABSENT: 2, UNKNOWN: 3}
 
+# Notes et libelles emis avec chaque resultat, dans les deux langues de
+# sortie. Les chaines francaises reproduisent exactement la sortie
+# historique de l'outil : "fr" reste la langue par defaut.
+NOTES = {
+    "fr": {
+        "present_both": "present en 7.1 et en 8.0",
+        "new_in_80": "symbol nouveau en 8.0 (absent de la reference 7.1)",
+        "elsewhere_no_page": "decrit dans la documentation %s mais sans page propre "
+                             "dans la C Library Reference",
+        "called_no_page": "appele dans la documentation %s (livre %s) mais "
+                          "sans page propre dans la C Library Reference",
+        "mentioned_only": "seulement mentionne dans la documentation %s (livre %s) : "
+                          "a verifier, le symbole peut n'etre plus un appel de fonction",
+        "absent_note": "present dans la C Library Reference %s, absent de tout "
+                       "le corpus %s",
+        "unknown_note": "introuvable dans le corpus %s fige : symbole inconnu, "
+                        "erreur de saisie, ou ajout posterieur au %s",
+        "kind_call": "appel de fonction",
+        "kind_bold": "cite en gras",
+        "kind_mention": "mention",
+        "kind_index": "entree d'index",
+    },
+    "en": {
+        "present_both": "present in 7.1 and in 8.0",
+        "new_in_80": "new symbol in 8.0 (absent from the 7.1 reference)",
+        "elsewhere_no_page": "described in the %s documentation but without a page "
+                             "of its own in the C Library Reference",
+        "called_no_page": "called in the %s documentation (book %s) but "
+                          "without a page of its own in the C Library Reference",
+        "mentioned_only": "only mentioned in the %s documentation (book %s): "
+                          "to be checked, the symbol may no longer be a function call",
+        "absent_note": "present in the C Library Reference %s, absent from the "
+                       "whole %s corpus",
+        "unknown_note": "not found in the frozen %s corpus: unknown symbol, "
+                        "typo, or added after %s",
+        "kind_call": "function call",
+        "kind_bold": "cited in bold",
+        "kind_mention": "mention",
+        "kind_index": "index entry",
+    },
+}
+
 # Un nom d'API contient presque toujours une majuscule ou un tiret bas
 # (``pthread_create``, ``MSG_...``) : un mot entierement en minuscules sans
 # tiret bas ("argument", "any") est un mot anglais, pas un symbole.
@@ -99,10 +141,11 @@ class Classifier(object):
     Le corpus est lu sur disque, en local : aucun acces reseau.
     """
 
-    def __init__(self, corpus, version="8.0", previous="7.1"):
+    def __init__(self, corpus, version="8.0", previous="7.1", lang="fr"):
         self.corpus = corpus
         self.version = version
         self.previous = previous
+        self.lang = lang if lang in NOTES else "fr"
         self.entries = {}
         self.elsewhere = {}
         self.prev_entries = {}
@@ -228,6 +271,7 @@ class Classifier(object):
             if sym and sym not in unique:
                 unique.append(sym)
 
+        n = NOTES[self.lang]
         results = []
         pending = []
         for sym in unique:
@@ -243,8 +287,8 @@ class Classifier(object):
                 res.citation = cur.get("desc", "")
                 res.citation_source = "index C Library Reference %s" % self.version
                 res.detail = self._detail(cur["url"])
-                res.note = ("present en 7.1 et en 8.0" if prev is not None
-                            else "symbol nouveau en 8.0 (absent de la reference 7.1)")
+                res.note = (n["present_both"] if prev is not None
+                            else n["new_in_80"])
             elif sym in self.elsewhere:
                 info = self.elsewhere[sym]
                 res.status = ELSEWHERE
@@ -252,8 +296,7 @@ class Classifier(object):
                 res.citation = info["text"]
                 res.citation_source = "index C Library Reference %s, section \"described elsewhere\"" % self.version
                 res.see_urls = list(info["urls"])
-                res.note = ("decrit dans la documentation %s mais sans page propre "
-                            "dans la C Library Reference" % self.version)
+                res.note = n["elsewhere_no_page"] % self.version
             else:
                 pending.append(sym)
             results.append(res)
@@ -274,35 +317,30 @@ class Classifier(object):
                     res.url = page.url
                     res.citation = sentence
                     res.citation_source = "%s, %s" % (page.book, page.topic)
-                    res.citation_kind = "appel de fonction"
-                    res.note = ("appele dans la documentation %s (livre %s) mais "
-                                "sans page propre dans la C Library Reference"
-                                % (self.version, page.book))
+                    res.citation_kind = n["kind_call"]
+                    res.note = n["called_no_page"] % (self.version, page.book)
                 elif sym in mentioned:
                     page, sentence = mentioned[sym]
                     res.status = ELSEWHERE
                     res.url = page.url
                     res.citation = sentence
                     res.citation_source = "%s, %s" % (page.book, page.topic)
-                    res.citation_kind = ("cite en gras" if sym in self._bold_ids(page)
-                                         else "mention")
-                    res.note = ("seulement mentionne dans la documentation %s (livre %s) : "
-                                "a verifier, le symbole peut n'etre plus un appel de fonction"
-                                % (self.version, page.book))
+                    res.citation_kind = (n["kind_bold"] if sym in self._bold_ids(page)
+                                         else n["kind_mention"])
+                    res.note = n["mentioned_only"] % (self.version, page.book)
                 elif res.in_71:
                     res.status = ABSENT
                     prev = self.prev_entries[sym]
                     res.url = prev["url"]
                     res.citation = prev.get("desc", "")
                     res.citation_source = "index C Library Reference %s" % self.previous
-                    res.citation_kind = "entree d'index"
-                    res.note = ("present dans la C Library Reference %s, absent de tout "
-                                "le corpus %s" % (self.previous, self.version))
+                    res.citation_kind = n["kind_index"]
+                    res.note = n["absent_note"] % (self.previous, self.version)
                 else:
                     res.status = UNKNOWN
-                    res.note = ("introuvable dans le corpus %s fige : symbole inconnu, "
-                                "erreur de saisie, ou ajout posterieur au %s"
-                                % (self.version, self.corpus.manifest.get("consulted", "14/11/2026")))
+                    res.note = n["unknown_note"] % (self.version,
+                                                    self.corpus.manifest.get("consulted",
+                                                                             "14/11/2026"))
 
         # le guide de migration officiel est une source a part : on le
         # consulte pour tout symbole de la liste de travail
