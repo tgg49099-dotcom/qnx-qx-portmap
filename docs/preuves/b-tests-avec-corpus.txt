@@ -1,13 +1,12 @@
 PREUVE (b) - MEME COMMANDE AVEC LE CORPUS PRESENT : 0 SKIP
 Date : 14/11/2026
 
-Copie de travail : /work/preuves/clone-avec-corpus
-Origine           : git clone /work/qnx-portmap   (commit 15b782a)
+Copie de travail : /work/preuves-j5/clone-avec-corpus
+Origine           : git clone /work/qnx-portmap   (commit 395ffc2)
 Le corpus fige y a ete copie tel quel, sans reecriture :
-    $ cp -a /work/qnx-portmap-corpus-local/corpus /work/preuves/clone-avec-corpus/corpus
-    $ du -sh /work/preuves/clone-avec-corpus/corpus
-    52M     /work/preuves/clone-avec-corpus/corpus
-    $ ls /work/preuves/clone-avec-corpus/corpus
+    $ cp -a /work/qnx-portmap-corpus-local/corpus /work/preuves-j5/clone-avec-corpus/corpus
+    $ du -sh /work/preuves-j5/clone-avec-corpus/corpus
+    $ ls /work/preuves-j5/clone-avec-corpus/corpus
     MANIFEST.json
     NOTICE
     SHA256SUMS
@@ -15,28 +14,169 @@ Le corpus fige y a ete copie tel quel, sans reecriture :
     pages
 
 Commande :
-    cd /work/preuves/clone-avec-corpus
+    cd /work/preuves-j5/clone-avec-corpus
     python3 -m unittest discover -s tests -t .
 
 Sortie complete :
-.................qnx-portmap: corpus introuvable : /tmp/qxpm-cli-780t3fuq/absent
-  repertoire recherche : /tmp/qxpm-cli-780t3fuq/absent
+test_absent_symbol (tests.test_classify.TestClassification.test_absent_symbol)
+Cas limite : symbole absent de la 8.0. ... ok
+test_described_elsewhere_symbol (tests.test_classify.TestClassification.test_described_elsewhere_symbol)
+Cas limite : symbole decrit ailleurs (renvoi d'index). ... ok
+test_documented_symbol (tests.test_classify.TestClassification.test_documented_symbol) ... ok
+test_documented_symbol_is_not_in_the_worklist (tests.test_classify.TestClassification.test_documented_symbol_is_not_in_the_worklist) ... ok
+test_duplicate_symbol_is_reported_once (tests.test_classify.TestClassification.test_duplicate_symbol_is_reported_once)
+Cas limite : symbole duplique dans la liste d'entree. ... ok
+test_empty_list (tests.test_classify.TestClassification.test_empty_list)
+Cas limite : liste vide. ... ok
+test_empty_symbols_are_ignored (tests.test_classify.TestClassification.test_empty_symbols_are_ignored) ... ok
+test_english_word_mentioned_in_prose_is_not_a_symbol (tests.test_classify.TestClassification.test_english_word_mentioned_in_prose_is_not_a_symbol)
+Cas limite : un mot anglais rencontre en prose n'est pas un symbole. ... ok
+test_index_stats (tests.test_classify.TestClassification.test_index_stats) ... ok
+test_symbol_cited_in_bold (tests.test_classify.TestClassification.test_symbol_cited_in_bold)
+Cas limite : symbole cite en gras dans une page de la 8.0. ... ok
+test_unknown_symbol (tests.test_classify.TestClassification.test_unknown_symbol) ... ok
+test_variable_is_documented_too (tests.test_classify.TestClassification.test_variable_is_documented_too) ... ok
+test_worklist_lists_absent_before_described_elsewhere (tests.test_classify.TestClassification.test_worklist_lists_absent_before_described_elsewhere) ... ok
+test_duplicate_symbols_are_collapsed (tests.test_cli.TestCli.test_duplicate_symbols_are_collapsed) ... ok
+test_input_from_file (tests.test_cli.TestCli.test_input_from_file) ... ok
+test_json_output (tests.test_cli.TestCli.test_json_output) ... ok
+test_markdown_output (tests.test_cli.TestCli.test_markdown_output) ... ok
+test_missing_corpus_returns_error (tests.test_cli.TestCli.test_missing_corpus_returns_error) ... qnx-portmap: corpus introuvable : /tmp/qxpm-cli-nicrzv05/absent
+  repertoire recherche : /tmp/qxpm-cli-nicrzv05/absent
   solutions : QX_PORTMAP_CORPUS=/chemin/vers/corpus qnx-portmap ...
               qnx-portmap --corpus /chemin/vers/corpus ...
-.qnx-portmap: aucun symbole donne (argument, --file ou --stdin)
-........................................................................................
+ok
+test_no_symbol_returns_error (tests.test_cli.TestCli.test_no_symbol_returns_error) ... qnx-portmap: aucun symbole donne (argument, --file ou --stdin)
+ok
+test_stats (tests.test_cli.TestCli.test_stats) ... ok
+test_text_output (tests.test_cli.TestCli.test_text_output) ... ok
+test_verify_corpus_detects_corruption (tests.test_cli.TestCli.test_verify_corpus_detects_corruption) ... ok
+test_verify_corpus_ok (tests.test_cli.TestCli.test_verify_corpus_ok) ... ok
+test_env_var_has_priority (tests.test_corpus.TestCorpusLocation.test_env_var_has_priority) ... ok
+test_repo_corpus_is_found_without_env_var (tests.test_corpus.TestCorpusLocation.test_repo_corpus_is_found_without_env_var)
+Si le corpus est present, l'outil le trouve sans variable d'env. ... ok
+test_detects_a_corrupted_page (tests.test_corpus.TestMiniCorpus.test_detects_a_corrupted_page)
+Cas limite : fichier de corpus corrompu. ... ok
+test_detects_a_corrupted_sha256sums_file (tests.test_corpus.TestMiniCorpus.test_detects_a_corrupted_sha256sums_file) ... ok
+test_integrity_ok_on_fresh_corpus (tests.test_corpus.TestMiniCorpus.test_integrity_ok_on_fresh_corpus) ... ok
+test_loads_pages_and_manifest (tests.test_corpus.TestMiniCorpus.test_loads_pages_and_manifest) ... ok
+test_missing_corpus_raises (tests.test_corpus.TestMiniCorpus.test_missing_corpus_raises) ... ok
+test_missing_manifest_raises (tests.test_corpus.TestMiniCorpus.test_missing_manifest_raises) ... ok
+test_missing_page_is_reported_as_a_failure (tests.test_corpus.TestMiniCorpus.test_missing_page_is_reported_as_a_failure) ... ok
+test_page_content_is_readable (tests.test_corpus.TestMiniCorpus.test_page_content_is_readable) ... ok
+test_ignores_comments_and_blanks (tests.test_corpus.TestReadSymbols.test_ignores_comments_and_blanks) ... ok
+test_reads_comma_separated (tests.test_corpus.TestReadSymbols.test_reads_comma_separated) ... ok
+test_reads_one_per_line (tests.test_corpus.TestReadSymbols.test_reads_one_per_line) ... ok
+test_removes_duplicates (tests.test_corpus.TestReadSymbols.test_removes_duplicates) ... ok
+test_keeps_only_article (tests.test_extract.TestArticle.test_keeps_only_article) ... ok
+test_returns_empty_without_article (tests.test_extract.TestArticle.test_returns_empty_without_article) ... ok
+test_finds_described_elsewhere_row (tests.test_extract.TestParseIndexElsewhere.test_finds_described_elsewhere_row) ... ok
+test_finds_function_entry (tests.test_extract.TestParseIndexPage.test_finds_function_entry) ... ok
+test_finds_variable_entry (tests.test_extract.TestParseIndexPage.test_finds_variable_entry) ... ok
+test_ignores_navigation_letters (tests.test_extract.TestParseIndexPage.test_ignores_navigation_letters) ... ok
+test_bold_text_is_kept (tests.test_extract.TestParseTopicPage.test_bold_text_is_kept) ... ok
+test_description_is_the_description_section_not_the_library_one (tests.test_extract.TestParseTopicPage.test_description_is_the_description_section_not_the_library_one) ... ok
+test_shortdesc (tests.test_extract.TestParseTopicPage.test_shortdesc) ... ok
+test_title (tests.test_extract.TestParseTopicPage.test_title) ... ok
+test_finds_the_sentence_containing_the_symbol (tests.test_extract.TestSentencesWith.test_finds_the_sentence_containing_the_symbol) ... ok
+test_no_match_returns_empty_list (tests.test_extract.TestSentencesWith.test_no_match_returns_empty_list) ... ok
+test_respects_word_boundaries (tests.test_extract.TestSentencesWith.test_respects_word_boundaries) ... ok
+test_collapses_whitespace (tests.test_extract.TestStripTags.test_collapses_whitespace) ... ok
+test_removes_markup_and_decodes_entities (tests.test_extract.TestStripTags.test_removes_markup_and_decodes_entities) ... ok
+test_absent_symbol (tests.test_fixtures.TestClassifierOnRealQnxExcerpts.test_absent_symbol) ... ok
+test_described_elsewhere_from_the_index (tests.test_fixtures.TestClassifierOnRealQnxExcerpts.test_described_elsewhere_from_the_index) ... ok
+test_documented_symbol (tests.test_fixtures.TestClassifierOnRealQnxExcerpts.test_documented_symbol) ... ok
+test_documented_variable (tests.test_fixtures.TestClassifierOnRealQnxExcerpts.test_documented_variable) ... ok
+test_english_word_is_not_a_symbol (tests.test_fixtures.TestClassifierOnRealQnxExcerpts.test_english_word_is_not_a_symbol)
+Un mot anglais rencontre dans une phrase n'est pas un symbole QNX. ... ok
+test_symbol_called_in_another_book (tests.test_fixtures.TestClassifierOnRealQnxExcerpts.test_symbol_called_in_another_book) ... ok
+test_symbol_mentioned_in_bold (tests.test_fixtures.TestClassifierOnRealQnxExcerpts.test_symbol_mentioned_in_bold) ... ok
+test_symbol_removed_and_cited_by_the_migration_guide (tests.test_fixtures.TestClassifierOnRealQnxExcerpts.test_symbol_removed_and_cited_by_the_migration_guide) ... ok
+test_unknown_symbol (tests.test_fixtures.TestClassifierOnRealQnxExcerpts.test_unknown_symbol) ... ok
+test_worklist_is_ordered_by_priority (tests.test_fixtures.TestClassifierOnRealQnxExcerpts.test_worklist_is_ordered_by_priority) ... ok
+test_bold_mention_is_detected (tests.test_fixtures.TestExtractionOnRealQnxExcerpts.test_bold_mention_is_detected) ... ok
+test_call_form_is_found_with_word_boundary (tests.test_fixtures.TestExtractionOnRealQnxExcerpts.test_call_form_is_found_with_word_boundary) ... ok
+test_prose_contains_only_english_words (tests.test_fixtures.TestExtractionOnRealQnxExcerpts.test_prose_contains_only_english_words)
+Un extrait de prose ne contient aucun nom d'API : c'est le mot ... ok
+test_topic_page_title_and_shortdesc (tests.test_fixtures.TestExtractionOnRealQnxExcerpts.test_topic_page_title_and_shortdesc) ... ok
+test_corpus_loads (tests.test_fixtures.TestFixtureCorpus.test_corpus_loads) ... ok
+test_integrity_is_ok (tests.test_fixtures.TestFixtureCorpus.test_integrity_is_ok) ... ok
+test_at_most_twelve_fixtures (tests.test_fixtures.TestFixtureInvariants.test_at_most_twelve_fixtures) ... ok
+test_every_excerpt_is_one_to_three_lines (tests.test_fixtures.TestFixtureInvariants.test_every_excerpt_is_one_to_three_lines) ... ok
+test_every_fixture_has_a_source_url_and_a_date (tests.test_fixtures.TestFixtureInvariants.test_every_fixture_has_a_source_url_and_a_date) ... ok
+test_every_fixture_is_small (tests.test_fixtures.TestFixtureInvariants.test_every_fixture_is_small) ... ok
+test_excerpt_is_verbatim_and_not_empty (tests.test_fixtures.TestFixtureInvariants.test_excerpt_is_verbatim_and_not_empty) ... ok
+test_absent_symbol (tests.test_frozen_corpus.TestFrozenCorpus.test_absent_symbol) ... ok
+test_corpus_is_complete (tests.test_frozen_corpus.TestFrozenCorpus.test_corpus_is_complete) ... ok
+test_described_elsewhere_symbol (tests.test_frozen_corpus.TestFrozenCorpus.test_described_elsewhere_symbol) ... ok
+test_documented_symbol (tests.test_frozen_corpus.TestFrozenCorpus.test_documented_symbol) ... ok
+test_duplicate_symbol (tests.test_frozen_corpus.TestFrozenCorpus.test_duplicate_symbol) ... ok
+test_empty_list (tests.test_frozen_corpus.TestFrozenCorpus.test_empty_list) ... ok
+test_every_page_matches_its_sha256 (tests.test_frozen_corpus.TestFrozenCorpus.test_every_page_matches_its_sha256) ... ok
+test_gaps_are_all_resolved (tests.test_frozen_corpus.TestFrozenCorpus.test_gaps_are_all_resolved)
+Les 203 ecarts 7.1 -> 8.0 sont tous classes (aucun inconnu). ... ok
+test_index_7_1_counts (tests.test_frozen_corpus.TestFrozenCorpus.test_index_7_1_counts) ... ok
+test_index_8_0_counts (tests.test_frozen_corpus.TestFrozenCorpus.test_index_8_0_counts) ... ok
+test_manifest_documents_the_sources (tests.test_frozen_corpus.TestFrozenCorpus.test_manifest_documents_the_sources) ... ok
+test_new_and_removed_symbols (tests.test_frozen_corpus.TestFrozenCorpus.test_new_and_removed_symbols) ... ok
+test_sha256sums_covers_the_corpus (tests.test_frozen_corpus.TestFrozenCorpus.test_sha256sums_covers_the_corpus) ... ok
+test_symbol_cited_in_bold (tests.test_frozen_corpus.TestFrozenCorpus.test_symbol_cited_in_bold)
+Cas limite reel : rw_interrupt est cite en gras dans la doc 8.0. ... ok
+test_unknown_symbol (tests.test_frozen_corpus.TestFrozenCorpus.test_unknown_symbol) ... ok
+test_worklist_is_ordered_by_priority (tests.test_frozen_corpus.TestFrozenCorpus.test_worklist_is_ordered_by_priority) ... ok
+test_aucun_symbole_vide (tests.test_mesure_j4.TestEchantillon.test_aucun_symbole_vide) ... ok
+test_cent_symbols_distincts (tests.test_mesure_j4.TestEchantillon.test_cent_symbols_distincts) ... ok
+test_chaque_symbole_resolu_a_une_page_et_une_citation (tests.test_mesure_j4.TestEchantillon.test_chaque_symbole_resolu_a_une_page_et_une_citation) ... ok
+test_les_cinq_depots_sont_documents (tests.test_mesure_j4.TestEchantillon.test_les_cinq_depots_sont_documents) ... ok
+test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j4.TestEchantillon.test_les_etats_sont_exclusifs_et_complets) ... ok
+test_les_symboles_absents_etaient_dans_la_reference_7_1 (tests.test_mesure_j4.TestEchantillon.test_les_symboles_absents_etaient_dans_la_reference_7_1) ... ok
+test_vingt_symboles_par_depot_et_cinq_depots (tests.test_mesure_j4.TestEchantillon.test_vingt_symboles_par_depot_et_cinq_depots) ... ok
+test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j4.TestMesureReproductible.test_le_taux_recalcule_vaut_le_taux_publie) ... ok
+test_les_pages_citees_sont_dans_le_corpus_fige (tests.test_mesure_j4.TestMesureReproductible.test_les_pages_citees_sont_dans_le_corpus_fige) ... ok
+test_les_statuts_publies_sont_reproduits (tests.test_mesure_j4.TestMesureReproductible.test_les_statuts_publies_sont_reproduits) ... ok
+test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j4.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main) ... ok
+test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j4.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test) ... ok
+test_un_taux_sur_zero_leve_une_erreur (tests.test_mesure_j4.TestTauxCompteALaMain.test_un_taux_sur_zero_leve_une_erreur) ... ok
+test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j4.TestTauxPublie.test_le_taux_du_markdown_vaut_le_taux_calcule) ... ok
+test_le_taux_publie_franchit_le_seuil_j4 (tests.test_mesure_j4.TestTauxPublie.test_le_taux_publie_franchit_le_seuil_j4)
+Le critere J4 de la fiche : en dessous de 80 %, la piste change. ... ok
+test_les_pages_de_citations_contenent_chaque_symbole_resolu (tests.test_mesure_j4.TestTauxPublie.test_les_pages_de_citations_contenent_chaque_symbole_resolu) ... ok
+test_cent_symbols_et_vingt_par_depot (tests.test_mesure_j5.TestEchantillonJ5.test_cent_symbols_et_vingt_par_depot) ... ok
+test_echantillon_identique_a_j4 (tests.test_mesure_j5.TestEchantillonJ5.test_echantillon_identique_a_j4)
+Memes 100 symboles, meme ordre, meme depot, meme nombre d'appels. ... ok
+test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_du_markdown_vaut_le_taux_calcule) ... ok
+test_le_taux_publie_est_96_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_96_pour_cent)
+Le but de la tranche J5 : 96 symboles resolus et cites sur 100. ... ok
+test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j5.TestEchantillonJ5.test_les_etats_sont_exclusifs_et_complets) ... ok
+test_les_pages_de_citations_contiennent_chaque_symbole_resolu (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_contiennent_chaque_symbole_resolu) ... ok
+test_les_pages_des_trois_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_trois_convertis_sont_des_livres_qnx)
+Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD. ... ok
+test_les_quatre_absents_restent_absents (tests.test_mesure_j5.TestEchantillonJ5.test_les_quatre_absents_restent_absents) ... ok
+test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256) ... ok
+test_plus_aucun_symbole_decrit_ailleurs (tests.test_mesure_j5.TestEchantillonJ5.test_plus_aucun_symbole_decrit_ailleurs) ... ok
+test_seul_les_trois_symboles_convertis_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seul_les_trois_symboles_convertis_ont_change_d_etat)
+Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4. ... ok
+test_un_taux_sur_zero_leve_une_erreur (tests.test_mesure_j5.TestEchantillonJ5.test_un_taux_sur_zero_leve_une_erreur) ... ok
+test_la_citation_vient_de_la_page_citee (tests.test_mesure_j5.TestMesureReproductible.test_la_citation_vient_de_la_page_citee)
+La citation publiee est bien un extrait de la page citee. ... ok
+test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j5.TestMesureReproductible.test_le_taux_recalcule_vaut_le_taux_publie) ... ok
+test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256 (tests.test_mesure_j5.TestMesureReproductible.test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256) ... ok
+test_les_statuts_de_l_outil_sont_inchanges (tests.test_mesure_j5.TestMesureReproductible.test_les_statuts_de_l_outil_sont_inchanges)
+J5 ne touche pas l'outil : les statuts sont ceux de J4. ... ok
+test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j5.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main) ... ok
+test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j5.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test) ... ok
+test_readme_shows_the_real_output (tests.test_readme.TestReadmeExample.test_readme_shows_the_real_output) ... ok
+
 ----------------------------------------------------------------------
-Ran 106 tests in 8.889s
+Ran 124 tests in 9.807s
 
 OK
 
+
 Comparaison des deux executions :
 
-  copie                 tests   passes   skips   echecs   code de sortie
-  sans corpus             106       85      21        0        0
-  avec corpus             106      106       0        0        0
+  copie                 tests   classes   skips   echecs   code de sortie
+  sans corpus            124       24     25       0             0
+  avec corpus            124       24      0       0             0
 
-Les 21 tests sautes dans la premiere copie sont exactement ceux que la
-copie avec corpus execute : le corpus n'est la cause d'aucun echec, il
-debloque 21 verifications supplementaires (integrite des 3 426 pages,
-empreintes, index, comportement sur le corpus fige, rejeu de la mesure J4).
+Les tests sautes dans la premiere copie sont exactement ceux que la copie avec corpus execute : le corpus n'est la cause d'aucun echec, il debloque des verifications supplementaires (integrite des 3 426 pages, empreintes, index, comportement sur le corpus fige, rejeu des mesures J4 et J5).

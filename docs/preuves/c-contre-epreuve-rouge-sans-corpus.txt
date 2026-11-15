@@ -1,12 +1,12 @@
 PREUVE (c) - CONTRE-EPREUVE ROUGE SANS LE CORPUS
 Date : 14/11/2026
 
-Copie de travail : /work/preuves/clone-sans-corpus
-Origine           : git clone /work/qnx-portmap   (commit 15b782a)
+Copie de travail : /work/preuves-j5/clone-sans-corpus
+Origine           : git clone /work/qnx-portmap   (commit 395ffc2)
 Aucun corpus dans la copie.
 
 Commande :
-    cd /work/preuves/clone-sans-corpus
+    cd /work/preuves-j5/clone-sans-corpus
     python3 tools/contre_epreuve.py
 
 Sortie reelle :
@@ -40,13 +40,7 @@ Depot propre apres contre-epreuve : oui
 10 / 10 contre-epreuves concluantes
 regle non testable ici (corpus absent) : integrite du corpus fige livre
 
-Code de sortie : 0
 
-Bilan : 10 des 11 regles restent contre-prouvees sans le corpus. La regle non
-testable ("integrite du corpus fige livre") porte sur les 3 426 pages du
-corpus : sans corpus, il n'y a rien a corrompre, et le test correspondant est
-saute. Elle est contre-prouvee des que le corpus est present : voir la
-section 1 de docs/contre-epreuve-rouge.txt (11/11, meme jour, meme commit).
+>>> RC = 0
 
-La sortie complete des deux executions est conservee dans
-docs/contre-epreuve-rouge.txt.
+La regle non testable ici porte sur les 3 426 pages du corpus : sans corpus, il n'y a rien a corrompre, et le test correspondant est saute. Elle est contre-prouvee des que le corpus est present (voir la preuve b et docs/contre-epreuve-rouge.txt : 11/11, meme jour, meme commit).

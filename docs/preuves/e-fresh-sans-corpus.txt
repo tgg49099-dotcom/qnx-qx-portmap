@@ -1,18 +1,16 @@
 PREUVE (e) - MODE --FRESH (RECONSTRUCTION DEPUIS qnx.com) SUR LA COPIE SANS CORPUS
 Date : 14/11/2026
 
-Copie de travail : /work/preuves/clone-sans-corpus
-Origine           : git clone /work/qnx-portmap   (commit 15b782a)
-
-But : montrer que le mode reseau fonctionne (il n'est jamais utilise par
-defaut) et qu'il n'ecrit pas dans le corpus fige : il ecrit dans un
-repertoire separe, `corpus-fresh`.
+Copie de travail : /work/preuves-j5/clone-sans-corpus
+Origine           : git clone /work/qnx-portmap   (commit 395ffc2)
+But : montrer que le mode reseau fonctionne (il n'est jamais utilise par defaut) et qu'il n'ecrit pas dans le corpus fige : il ecrit dans un repertoire separe, `corpus-fresh`.
 
 Commande :
-    cd /work/preuves/clone-sans-corpus
+    cd /work/preuves-j5/clone-sans-corpus
     python3 -m qnx_portmap --fresh --fresh-max-pages 3 --fresh-only --fresh-out corpus-fresh2
 
 Sortie reelle :
+
 qnx-portmap: rechargement en ligne du corpus vers corpus-fresh2
   version 8.0
     com.qnx.doc.neutrino.lib_ref               3 pages
@@ -27,14 +25,12 @@ qnx-portmap: rechargement en ligne du corpus vers corpus-fresh2
     com.qnx.doc.neutrino.lib_ref               3 pages
 qnx-portmap: corpus reconstruit : 27 pages
 
-Code de sortie : 0
+>>> RC = 0
 
 Apres l'execution :
-    $ ls /work/preuves/clone-sans-corpus/corpus
-    ls: cannot access '/work/preuves/clone-sans-corpus/corpus': No such file or directory
-    $ du -sh /work/preuves/clone-sans-corpus/corpus-fresh2
-    1,5M    /work/preuves/clone-sans-corpus/corpus-fresh2
+    $ ls /work/preuves-j5/clone-sans-corpus/corpus
+    ls: cannot access '/work/preuves-j5/clone-sans-corpus/corpus': No such file or directory
+    $ du -sh /work/preuves-j5/clone-sans-corpus/corpus-fresh2
+    1.5M	/work/preuves-j5/clone-sans-corpus/corpus-fresh2
 
-Le corpus fige de l'arbre publiable n'a pas ete touche. Les 3 pages par livre
-suffisent a prouver que le chemin reseau fonctionne ; la mesure J4, elle,
-tourne sur le corpus fige complet.
+Le corpus fige de l'arbre publiable n'a pas ete touche. Les 3 pages par livre suffisent a prouver que le chemin reseau fonctionne ; les mesures J4 et J5, elles, tournent sur le corpus fige complet.

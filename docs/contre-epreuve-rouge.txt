@@ -6,7 +6,7 @@ une, et verifie que le test charge echoue. Un test qui passe toujours ne
 teste rien.
 
 Ce fichier conserve la sortie reelle des deux executions du 14/11/2026 sur
-l'arbre publiable (commit 15b782a) :
+l'arbre publiable (commit 395ffc2) :
 
   1. avec le corpus fige present  -> 11 / 11 contre-epreuves concluantes
   2. sans le corpus fige          -> 10 / 10 contre-epreuves concluantes,
@@ -30,11 +30,11 @@ Les 11 regles cassee une par une :
  11. le taux J4 ne compte que les symboles resolus et cites
 
 
-1. AVEC LE CORPUS FIGE (copie /work/preuves/clone-avec-corpus)
+1. AVEC LE CORPUS FIGE (copie /work/preuves-j5/clone-avec-corpus)
 ---------------------------------------------------------------
 
-Depot : /work/preuves/clone-avec-corpus (git clone de /work/qnx-portmap,
-commit 15b782a), corpus fige copie dans ./corpus.
+Depot : /work/preuves-j5/clone-avec-corpus (git clone de /work/qnx-portmap,
+commit 395ffc2), corpus fige copie dans ./corpus.
 
 Contre-epreuve ROUGE de QX PORTMAP
 On casse une regle a la fois ; le test charge doit echouer.
@@ -66,11 +66,12 @@ Depot propre apres contre-epreuve : oui
 
 11 / 11 contre-epreuves concluantes
 
-2. SANS LE CORPUS FIGE (copie /work/preuves/clone-sans-corpus)
+
+2. SANS LE CORPUS FIGE (copie /work/preuves-j5/clone-sans-corpus)
 --------------------------------------------------------------
 
-Depot : /work/preuves/clone-sans-corpus (git clone de /work/qnx-portmap,
-commit 15b782a), aucun corpus dans la copie.
+Depot : /work/preuves-j5/clone-sans-corpus (git clone de /work/qnx-portmap,
+commit 395ffc2), aucun corpus dans la copie.
 
 Contre-epreuve ROUGE de QX PORTMAP
 On casse une regle a la fois ; le test charge doit echouer.
@@ -101,6 +102,7 @@ Depot propre apres contre-epreuve : oui
 
 10 / 10 contre-epreuves concluantes
 regle non testable ici (corpus absent) : integrite du corpus fige livre
+
 
 3. HISTORIQUE
 -------------
