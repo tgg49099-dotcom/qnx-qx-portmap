@@ -1,12 +1,12 @@
 CONTROLE ANTI-FUITE DU CORPUS QNX
-  date              : 2026-11-15 04:31:45
+  date              : 2026-11-15 04:47:25
   arbre publiable   : /work/qnx-portmap
   corpus de ref.    : /work/qnx-portmap-corpus-local/corpus
   pages de reference: 3426 (empreintes de contenu)
   fichiers stockes  : 3427 (empreintes gzip)
 
 1. SHA-256 des fichiers de l'arbre publiable
-   fichiers analyses          : 88 (860166 octets)
+   fichiers analyses          : 88 (861055 octets)
    correspondances page QNX   : 0
    correspondances fichier    : 0
 
@@ -14,7 +14,7 @@ CONTROLE ANTI-FUITE DU CORPUS QNX
    correspondances page QNX   : 0
 
 3. Objets git du depot publiable
-   objets blob                : 184
+   objets blob                : 189
    correspondances            : 0
 
 4. Recouvrement ligne a ligne (lignes de 40 caracteres ou plus)
@@ -69,11 +69,11 @@ CONTROLE ANTI-FUITE DU CORPUS QNX
 
 RESULTAT : 0 correspondance. L'arbre publiable ne contient aucune
            page de la documentation QNX.
-Duree du controle : 713.8 s
+Duree du controle : 712.6 s
 
 Commande utilisee (depuis la racine du depot publiable) :
     python3 scripts/controle_fuite_corpus.py --tree . \
         --corpus /work/qnx-portmap-corpus-local/corpus
-Etat du depot au moment du controle : commit 287fa78 ("Documentation du depot en
-anglais : LISEZMOI, UTILISATION, licences, demo"), 88 fichiers analyses,
-860 166 octets, 184 objets blob git. Code de sortie : 0.
+Etat du depot au moment du controle : commit 4124360 ("Evidence refresh after the
+English README: anti-leak control, test proofs, manifest"), 88 fichiers analyses,
+861 055 octets, 189 objets blob git. Code de sortie : 0.
