@@ -1,15 +1,15 @@
 PREUVE (a) - SUITE DE TESTS SUR UNE COPIE DE L'ARBRE PUBLIABLE SANS LE CORPUS
-Date : 14/11/2026
+Date : 15/11/2026
 
-Copie de travail : /work/preuves-j5/clone-sans-corpus
-Origine           : git clone /work/qnx-portmap   (commit 395ffc2)
+Copie de travail : /tmp/clone-sans-corpus
+Origine           : git clone /work/qnx-portmap   (commit 287fa7885eb491189d5d94759b189906dae1e56c)
 Le corpus n'est pas dans la copie :
-    $ ls /work/preuves-j5/clone-sans-corpus/corpus
-    ls: cannot access '/work/preuves-j5/clone-sans-corpus/corpus': No such file or directory
+    $ ls /tmp/clone-sans-corpus/corpus
+    ls: cannot access '/tmp/clone-sans-corpus/corpus': No such file or directory
 
 Commande :
-    cd /work/preuves-j5/clone-sans-corpus
-    python3 -m unittest discover -s tests -t .
+    cd /tmp/clone-sans-corpus
+    python3 -m unittest discover -s tests -t . -v
 
 Sortie complete :
 test_absent_symbol (tests.test_classify.TestClassification.test_absent_symbol)
@@ -35,8 +35,8 @@ test_duplicate_symbols_are_collapsed (tests.test_cli.TestCli.test_duplicate_symb
 test_input_from_file (tests.test_cli.TestCli.test_input_from_file) ... ok
 test_json_output (tests.test_cli.TestCli.test_json_output) ... ok
 test_markdown_output (tests.test_cli.TestCli.test_markdown_output) ... ok
-test_missing_corpus_returns_error (tests.test_cli.TestCli.test_missing_corpus_returns_error) ... qnx-portmap: corpus introuvable : /tmp/qxpm-cli-69j65qku/absent
-  repertoire recherche : /tmp/qxpm-cli-69j65qku/absent
+test_missing_corpus_returns_error (tests.test_cli.TestCli.test_missing_corpus_returns_error) ... qnx-portmap: corpus introuvable : /tmp/qxpm-cli-x2v59w2a/absent
+  repertoire recherche : /tmp/qxpm-cli-x2v59w2a/absent
   solutions : QX_PORTMAP_CORPUS=/chemin/vers/corpus qnx-portmap ...
               qnx-portmap --corpus /chemin/vers/corpus ...
 ok
@@ -162,10 +162,11 @@ test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesur
 test_readme_shows_the_real_output (tests.test_readme.TestReadmeExample.test_readme_shows_the_real_output) ... skipped 'corpus absent : lancer scripts/bootstrap_corpus.sh'
 
 ----------------------------------------------------------------------
-Ran 124 tests in 0.095s
+Ran 124 tests in 0.125s
 
 OK (skipped=25)
 
 
 Bilan : 124 tests, dont 25 sautes (les tests qui exigent le corpus complet : integrite des 3 426 pages, empreintes SHA-256, index 7.1 / 8.0, rejeu des mesures J4 et J5), 0 echec(s). Code de sortie : 0.
 Nombre de classes de test : 24.
+Le test de lecture du bloc de sortie du README (tests/test_readme.py) est saute ici (pas de corpus) et **execute** dans la copie (b).

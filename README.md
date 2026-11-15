@@ -188,6 +188,11 @@ added here and in the submission kit when it goes online).
   guarantee for another project.
 - The console messages are in French; the JSON output (`--format json`) uses
   English field names, and the status table above is in English.
+- The **documentation** of this repository is in English (this README, the
+  manuals, the licences, the submission kit, the video plan, the codelab).
+  The **source code** still carries French comments and docstrings: the engine
+  is frozen in its current state, and the docstrings of the test suite appear
+  as they are in the test output published in `docs/preuves/`.
 
 ---
 
