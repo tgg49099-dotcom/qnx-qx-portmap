@@ -1,14 +1,14 @@
 MANIFESTE DES FICHIERS PUBLIABLES - QX PORTMAP
 
 Arbre          : /work/qnx-portmap
-Genere le      : 2026-11-15 04:27:22
+Genere le      : 2026-11-15 04:29:08
 Fichiers       : 87
-Taille totale  : 849870 octets
+Taille totale  : 849997 octets
 
 Les 3 plus gros fichiers :
       76314 octets  docs/mesure-J5/mesure-J5.json
       69089 octets  docs/mesure-J4/mesure-J4.json
-      38572 octets  README.md
+      38699 octets  README.md
 
 Detail (chemin, taille en octets, SHA-256) :
 
@@ -19,7 +19,7 @@ LICENCE-DOCS-QNX.md	2725	79454fcbe4a38c3790c1a576979bd6bbffa18c6f1c3e04ad96dddeb
 LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
 LISEZMOI.md	4489	854ece09696bc99af488e80fa51b4996e5ece46ec3df62e6c8b586032c7ad267
 PROGRESSION.md	16434	b8d48adf7fe2b1cdcb7f41f124f75d036b6d404af6914458e9d3dd3bd78485a5
-README.md	38572	9ba6ac2becf52dfb4a05197fc7f417bdfdc1d3ec78508c00fe23f51ae9273652
+README.md	38699	a8a787b3993661228f02b80da2937478c609288e017031bd2f8f7a721899bcc8
 VIDEO-YOUTUBE-QNX-PORTMAP.md	13095	20bfe731e192746e83a8277f4c2d2d63f64763d402be5a0dcdb7e687c5db3231
 docs/CODELAB-COMMUNITY-QNX.md	5458	602c1ed1e5ec92deca866a40d141cd80ee14e33698fd32cea38ad7c0f951e361
 docs/README-FR.md	35732	47d023ad030a50b97ed62a20b2d222c949c83e733b17095043a19ce5fc075075

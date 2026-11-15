@@ -600,10 +600,12 @@ no page of the QNX documentation. It performs six checks:
 6. copy budget: **no file may contain more than 4 000 bytes of QNX verbatim
    text**.
 
-Result measured on 15/11/2026: **0 match**. The whole tree contains only
-**6 037 bytes** of QNX verbatim text, and the file that contains the most
-counts **633 bytes** (the mini corpus rebuilt in `tests/helpers.py`); **0 file**
-exceeds the 4 000-byte budget. The citation files of the J4 and J5 measurements
+Result measured on 15/11/2026: **0 match**: no page of the QNX documentation is
+present in the publishable tree, in any form. The whole tree contains only a
+few kilobytes of QNX verbatim text - the exact figure of the last measurement,
+and the file that contains the most of it, are written in
+`docs/preuves/d-controle-fuite-corpus.txt` - and **no file** exceeds the
+4 000-byte budget. The citation files of the J4 and J5 measurements
 (`docs/mesure-J4/citations-*.txt`, `docs/mesure-J5/citations-*.txt`) are analysed
 fragment by fragment like the fixtures: they contain 54 to 187 bytes of QNX
 verbatim text each. The complete output is in
