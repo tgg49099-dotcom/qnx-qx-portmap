@@ -144,8 +144,8 @@ this sample.
 python3 -m unittest discover -s tests -t .
 ```
 
-Without the corpus: 147 tests, 25 of them skipped (the test says so, it does
-not lie). With the corpus: 147 tests, 1 skipped, exit code 0.
+Without the corpus: 164 tests, 26 of them skipped (the test says so, it does
+not lie). With the corpus: 164 tests, 1 skipped, exit code 0.
 (Figures re-measured on 15/11/2026.)
 
 The **RED -> GREEN** proof (a rule is broken, the test fails, the code is

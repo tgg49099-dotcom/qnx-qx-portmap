@@ -8,7 +8,7 @@ every such claim and compares it with the values measured by
 
 Usage (called by ``scripts/verify-all.sh``, check 4)::
 
-    python3 tools/published_counts.py --tests 158 --skipped 25 \\
+    python3 tools/published_counts.py --tests 164 --skipped 26 \\
         --corpus absent --files 105
 
 Exit code: 0 when every claim matches, 1 when one claim is false or when an

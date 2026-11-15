@@ -225,7 +225,8 @@ English translation of the console labels used above:
 | `absent de la 8.0` | present in QNX 7.1, absent from the QNX 8.0 corpus |
 | `inconnu du corpus` | not found in the frozen corpus |
 
-The console messages of this version are in French; the JSON output
+The console messages of this version are in French by default; `--lang en`
+prints the same messages in English (see the README), and the JSON output
 (`--format json`) uses English field names. Without a corpus the tool prints
 `corpus introuvable` and exits with code 2: it never invents an answer.
 
@@ -269,7 +270,8 @@ repository. The 11 rules and their output are in `docs/contre-epreuve-rouge.txt`
 - The corpus is a snapshot of the official QNX documentation taken on
   14 November 2026. A symbol published since then is reported as `unknown`
   until the corpus is rebuilt.
-- The console messages are in French (see the translation table above).
+- The console messages are in French by default; `--lang en` prints the same
+  messages in English (the labels used above are translated in the table).
 
 ## Repository, licence, codelab
 
@@ -290,7 +292,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 7297 characters
+- Length (measured): 7458 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to

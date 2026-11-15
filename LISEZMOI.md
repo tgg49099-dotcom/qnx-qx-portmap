@@ -22,7 +22,7 @@ public QNX repositories, the tool resolves and quotes **93 %**
 (`docs/mesure-J4.md`).
 
 ```
-python3 -m unittest discover -s tests -t .        # 147 tests (25 skips without corpus)
+python3 -m unittest discover -s tests -t .        # 164 tests (26 skips without corpus)
 python3 tools/contre_epreuve.py                    # 11/11 conclusive counter-proofs
 python3 tools/mesure_j4.py --clones <folder>      # re-measure J4 (public QNX clones)
 qnx-portmap abort accept bzero                    # real example (see README.md)
@@ -34,10 +34,10 @@ The repository is **publishable**: it no longer contains the QNX documentation.
 
 | Path | Content | Size |
 |---|---|---|
-| `qnx_portmap/` | the package (6 modules, standard library only) | ~100 KB |
-| `tests/` | 147 tests, among them 21 on the miniature fixtures and 16 on the J4 measurement | ~90 KB |
+| `qnx_portmap/` | the package (6 modules, standard library only) | ~66 KB |
+| `tests/` | 164 tests, among them 21 on the miniature fixtures and 16 on the J4 measurement | ~130 KB |
 | `tests/fixtures/` | 12 short extracts (1 to 3 lines) of QNX pages, with URL and date | ~4 KB |
-| `tools/` | corpus construction, fixtures, RED counter-proof, J4 measurement | ~60 KB |
+| `tools/` | corpus construction, fixtures, RED counter-proof, J4 measurement | ~136 KB |
 | `scripts/` | corpus bootstrap, published manifest, anti-leak control | ~30 KB |
 | `docs/` | RED counter-proof, demonstration, proofs, J4 and J5 measurements | ~170 KB |
 | `PROGRESSION.md` | one line per function of the tool (state + the test that proves it) | ~16 KB |

@@ -233,4 +233,4 @@ What was done, without touching the frozen engine (`qnx_portmap/` is unchanged s
 Result: **0 French line** in the published tree outside the deliberate whitelist (the
 French counterparts, the raw console output kept in the two VERBATIM blocks of the README
 and their translation table). The figures are unchanged: **J4 = 93 %**, **J5 = 96 %**,
-**147 tests**.
+**164 tests**.

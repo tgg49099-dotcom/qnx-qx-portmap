@@ -30,7 +30,7 @@ What this means for the shooting:
 | public on YouTube | visibility "Public" at upload; the URL replaces the placeholder of block 4.5 of `KIT-SOUMISSION-QNX.md` |
 | no third-party trademarks | the only logo on screen is the one of the project; no QNX logo, no BlackBerry logo, no browser tab of a third-party site |
 | no copyrighted music | no music track at all; the voice-over only |
-| in English | every line of the voice-over is written in English below; the console messages of the tool are in French, so the video shows the English translation table next to the French labels |
+| in English | every line of the voice-over is written in English below; the tool has an English mode (`--lang en`), so the video shows the real English console next to the French default |
 
 ## 2. How to film
 
@@ -146,8 +146,8 @@ pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
 > 'bzero' was in the 7.1 C Library Reference and is gone from the 8.0
 > corpus: the tool says so and keeps the 7.1 page, it does not drop the
 > symbol. And a name that does not exist is reported as unknown, not
-> guessed. The console is in French; the status table in the README is in
-> English: documented, described elsewhere, absent, unknown."
+> guessed. The console is in English with `--lang en` (French by default):
+> documented, described elsewhere, absent, unknown."
 
 ### 1:28 - 1:42 - The work list
 
