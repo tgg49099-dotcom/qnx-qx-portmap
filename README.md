@@ -1,9 +1,11 @@
 # QX PORTMAP
 
-> **English summary first. The complete documentation further down is in
-> French** (technical reference, corpus procedure, measurements).
+> **This README is entirely in English.** The console output of the tool is
+> still in French: it is the program output, so it is not translated. It is
+> shown **verbatim** where it is the subject of the test, with an **English
+> translation** next to it and a table of the console labels.
 
-## What QX PORTMAP does - English summary
+## What QX PORTMAP does
 
 You have a QNX 8.0 source tree and you want to know, for each API it calls,
 **whether the symbol is still documented in QNX 8.0, and where exactly**.
@@ -25,7 +27,7 @@ QNX documentation (3 426 pages, 7.1 and 8.0), with the SHA-256 of every page.
 
 **The QNX documentation is not redistributed with this repository.** The corpus
 is rebuilt on demand from the official QNX site with one command and one
-download log (see [Corpus QNX](#corpus-qnx--non-distribue)).
+download log (see [QNX corpus](#qnx-corpus-not-redistributed)).
 
 **Measured on real code**: on the 100 QNX symbols really called by five public
 QNX repositories, the tool resolves and quotes **96 %** of them
@@ -38,7 +40,7 @@ difference is explained further down.
 | | |
 |---|---|
 | **QNX version** | **QNX SDP 8.0** - every answer is backed by a page of the BlackBerry QNX SDP 8.0 documentation (C Library Reference, io-sock User's Guide, SDP migration guide); each quotation carries the URL, the consultation date and the **SHA-256 of the page** it comes from |
-| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account, nor a network connection**; it is pure Python 3 with the standard library only, so it is POSIX-compatible and **designed to run on QNX 8.0 as well - this has not been demonstrated yet**, because the QNX SDP 8.0 licence is not available in this environment (see [Limites](#limites)) |
+| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account, nor a network connection**; it is pure Python 3 with the standard library only, so it is POSIX-compatible and **designed to run on QNX 8.0 as well - this has not been demonstrated yet**, because the QNX SDP 8.0 licence is not available in this environment (see [Limits](#limits)) |
 | **Toolchain** | **Python 3.8+, standard library only** (`argparse`, `gzip`, `hashlib`, `json`, `re`, `urllib`) - no compilation step, no third-party dependency, no API key |
 
 ### AI-assisted development
@@ -52,7 +54,7 @@ plus a **RED -> GREEN proof** that breaks a rule on purpose and shows the test
 catching it. The measurement itself is counted by hand on ten symbols given in
 the test, and compared with the published number.
 
-### Quick start (English)
+### Quick start
 
 ```console
 $ pip install .
@@ -61,7 +63,9 @@ $ qnx-portmap abort accept bzero zzz_fonction_inexistante
 
 Excerpt of the **real output** (executed on 15 November 2026; the complete
 session is further down and is compared line by line by a test - the citation
-blocks are elided here):
+blocks are elided here). The tool prints in French: the first block is the
+**verbatim tool output (French)**, the second one is its **English
+translation**.
 
 ```text
 QX PORTMAP - etat des symboles QNX dans la documentation 8.0
@@ -76,6 +80,22 @@ pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
   bzero                        absent de la 8.0
     ...
   zzz_fonction_inexistante     inconnu du corpus
+    ...
+```
+
+```text
+QX PORTMAP - state of the QNX symbols in the 8.0 documentation
+frozen corpus: <CORPUS>
+pages: 3426 (7.1: 1200, 8.0: 2226) - consulted on 2026-11-14 - offline mode
+
+  abort                        documented
+    page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
+    ...
+  accept                       described elsewhere
+    ...
+  bzero                        absent from 8.0
+    ...
+  zzz_fonction_inexistante     unknown to the corpus
     ...
 ```
 
@@ -94,7 +114,7 @@ A quick check of the network path (3 pages per book: 27 pages downloaded in
 bash scripts/bootstrap_corpus.sh --out /tmp/essai --max-pages 3 --delay 1.0
 ```
 
-### Build and test (English)
+### Build and test
 
 **Build** - Python 3.8+, standard library only, no dependency, no API key, no
 account:
@@ -151,7 +171,7 @@ Usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md). A codelab draft for
 (text only, **not published yet**: the URL of the published codelab will be
 added here and in the submission kit when it goes online).
 
-### Honest limits (English)
+### Honest limits
 
 - The project **has not been run on a QNX 8.0 machine yet**: that needs the QNX
   SDP 8.0 licence, which is not available in this environment. The code is
@@ -171,132 +191,93 @@ added here and in the submission kit when it goes online).
 
 ---
 
-## Le reste de ce README est en francais
-
-La suite (installation detaillee, exemple de sortie complet, tests,
-reconstruction du corpus, controle anti-fuite, mesures J4 et J5, limites,
-licences) est en francais. Elle fait partie du depot publie et de son
-manifeste ; les commandes et les chiffres sont les memes dans les deux
-langues.
-
-**Ou en est un symbole QNX dans la documentation officielle 8.0 ?**
-
-QX PORTMAP prend une liste de symboles QNX (fonctions, variables, constantes)
-et repond, pour chacun, avec la page officielle et la citation exacte :
-
-| Statut | Signification |
-|---|---|
-| `documented` | le symbole a sa propre page dans la C Library Reference 8.0 |
-| `described_elsewhere` | pas de page propre en 8.0, mais la documentation 8.0 le decrit (renvoi "The following are described elsewhere", ou mention dans un autre livre) |
-| `absent` | le symbole etait dans la C Library Reference 7.1 et a disparu du corpus 8.0 |
-| `unknown` | introuvable dans le corpus fige : faute de frappe, macro du projet, ou ajout posterieur au 14/11/2026 - l'outil ne devine pas |
-
-L'outil produit aussi une **liste de travail de mise a niveau** : les symboles a
-traiter, classes par priorite, avec pour chacun la page a lire.
-
-**Par defaut, aucun acces reseau.** L'outil lit un corpus de documentation QNX
-fige, local (3 426 pages, 7.1 et 8.0), avec l'empreinte SHA-256 de chaque page.
-
-**La documentation QNX n'est pas redistribuee avec ce depot.** Le corpus se
-reconstruit a la demande depuis le site officiel QNX, avec une commande et un
-journal de telechargement ; voir [Corpus QNX](#corpus-qnx--non-distribue).
-Le depot contient le code, les tests, 12 **fixtures miniatures** (extraits
-courts de pages QNX, avec URL et date) et la procedure de reconstruction.
-
-**Mesure sur du code reel** : sur 100 symboles QNX reellement appeles par
-cinq depots QNX publics, l'outil en resout et cite **96 %**
-([`docs/mesure-J5.md`](docs/mesure-J5.md)). La premiere mesure, sur le meme
-echantillon, en resolvait 93 % ([`docs/mesure-J4.md`](docs/mesure-J4.md)) :
-la difference est expliquee plus bas.
-
----
-
 ## Requirements
 
-- **Python 3.8 ou plus.** Aucune dependance a installer : bibliotheque standard
-  uniquement (`argparse`, `gzip`, `hashlib`, `json`, `re`, `urllib`).
-- **Aucun acces SDP n'est requis.** Ni QNX SDP, ni compilateur, ni carte cible,
-  ni compte QNX, ni jeton d'API, ni acces root. L'outil ne compile rien et ne
-  s'execute pas sur cible : il lit de la documentation.
-- **Le corpus n'est pas livre avec le depot.** La documentation QNX est (c) QNX
-  Software Systems Ltd / BlackBerry Limited et n'est pas redistribuable : voir
-  `LICENCE-DOCS-QNX.md` et `CORPUS-NON-PUBLIE.txt`. Il se reconstruit avec une
-  seule commande, qui demande un acces reseau a
-  `https://www.qnx.com/developers/docs/` :
+- **Python 3.8 or more.** Nothing to install: standard library only
+  (`argparse`, `gzip`, `hashlib`, `json`, `re`, `urllib`).
+- **No SDP access is required.** No QNX SDP, no compiler, no target board, no
+  QNX account, no API token, no root access. The tool compiles nothing and
+  does not run on a target: it reads documentation.
+- **The corpus is not shipped with the repository.** The QNX documentation is
+  (c) QNX Software Systems Ltd / BlackBerry Limited and is not redistributable:
+  see `LICENCE-DOCS-QNX.md` and `CORPUS-NON-PUBLIE.txt`. It is rebuilt with a
+  single command, which needs network access to
+  `https://www.qnx.com/developers/docs/`:
   `bash scripts/bootstrap_corpus.sh --out corpus-downloaded`.
-- Le corpus reconstruit est verifiable : `qnx-portmap --verify-corpus`.
+- The rebuilt corpus is verifiable: `qnx-portmap --verify-corpus`.
 
 ## Installation
 
 ```bash
-# depuis la racine du depot
+# from the root of the repository
 pip install .
 
-# ou, isole, avec pipx (https://pipx.pypa.io)
+# or, isolated, with pipx (https://pipx.pypa.io)
 pipx install .
 
-# ou sans rien installer
+# or without installing anything
 python3 -m qnx_portmap --help
 ```
 
-L'outil cherche le corpus fige dans cet ordre :
+The tool looks for the frozen corpus in this order:
 
-1. la variable d'environnement `QX_PORTMAP_CORPUS` ;
-2. le repertoire `corpus/` du depot (a cote du paquet) ;
-3. le repertoire `corpus/` du repertoire courant.
+1. the `QX_PORTMAP_CORPUS` environment variable;
+2. the `corpus/` directory of the repository (next to the package);
+3. the `corpus/` directory of the current working directory.
 
-Le depot **ne contient pas** de repertoire `corpus/` : apres avoir reconstruit
-le corpus (voir plus bas), on le designate explicitement :
+The repository **does not contain** a `corpus/` directory: after rebuilding the
+corpus (see below), you point at it explicitly:
 
 ```bash
-QX_PORTMAP_CORPUS=/chemin/vers/corpus qnx-portmap abort
-qnx-portmap --corpus /chemin/vers/corpus abort
+QX_PORTMAP_CORPUS=/path/to/corpus qnx-portmap abort
+qnx-portmap --corpus /path/to/corpus abort
 ```
 
-Sans corpus, l'outil ne devine rien : il affiche `corpus introuvable` et
-sort avec le code 2.
+Without a corpus, the tool does not guess anything: it prints
+`corpus introuvable` and exits with code 2.
 
-## Utilisation
+## Usage
 
-Guide d'usage court : [`docs/UTILISATION.md`](docs/UTILISATION.md) (lancer
-l'outil, ce qu'il fait, ce que signifie la limite de 96 %).
+Short usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md) (running the
+tool, what it does, what the 96 % figure means exactly).
 
 ```bash
-# symboles en ligne de commande
+# symbols on the command line
 qnx-portmap abort accept bzero
 
-# liste dans un fichier (un symbole par ligne, les commentaires # sont ignores)
+# list in a file (one symbol per line, # comments are ignored)
 qnx-portmap --file symbols.txt
 
-# liste sur l'entree standard
-grep -o '[A-Za-z_][A-Za-z0-9_]*' mon_code.c | sort -u | qnx-portmap --stdin --format json
+# list on standard input
+grep -o '[A-Za-z_][A-Za-z0-9_]*' my_code.c | sort -u | qnx-portmap --stdin --format json
 
-# formats de sortie
-qnx-portmap --format markdown abort accept bzero > etat.md
-qnx-portmap --format json abort > etat.json
+# output formats
+qnx-portmap --format markdown abort accept bzero > state.md
+qnx-portmap --format json abort > state.json
 
-# controle d'integrite du corpus
+# integrity check of the corpus
 qnx-portmap --verify-corpus
 
-# rechargement en ligne (option, jamais utilise par defaut)
+# online reload (option, never used by default)
 qnx-portmap --fresh --fresh-only
 ```
 
-Code de sortie : `0` si tous les symboles analyses sont documentes en 8.0,
-`1` si au moins un symbole est absent ou inconnu, `2` en cas d'erreur
-(corpus absent, aucune liste fournie).
+Exit code: `0` if every analysed symbol is documented in 8.0, `1` if at least
+one symbol is absent or unknown, `2` on error (corpus absent, no list given).
 
-### Exemple reel execute
+### Real output example (executed)
 
-Commande lancee le 14/11/2026 sur ce depot, et rejouee le 15/11/2026 par le
-test `tests/test_readme.py`, qui compare cette sortie ligne a ligne avec la
-sortie reelle du jour :
+Command run on 14/11/2026 in this repository, and replayed on 15/11/2026 by the
+test `tests/test_readme.py`, which compares this output line by line with the
+real output of the day:
 
 ```
 $ qnx-portmap abort accept bzero zzz_fonction_inexistante
 ```
 
-Sortie reelle :
+Real output of the command (verbatim tool output, French - the program prints
+in French, this block is not translated and is compared byte by byte with the
+real output by the test):
 
 ```
 QX PORTMAP - etat des symboles QNX dans la documentation 8.0
@@ -346,15 +327,87 @@ P3  accept                     decrit ailleurs
       cite par le guide de migration : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
 ```
 
-Les quatre statuts apparaissent dans la meme sortie : `abort` est documente,
-`accept` est decrit ailleurs (renvoi vers la documentation FreeBSD et le guide
-io-sock), `bzero` a disparu de la 8.0, et `zzz_fonction_inexistante` est
-inconnu du corpus - l'outil le dit au lieu d'inventer une reponse.
+English translation of the block above (for reading only - the block above is
+the byte-exact output of the tool):
 
-`<CORPUS>` designe le repertoire du corpus utilise pour la commande
-(`QX_PORTMAP_CORPUS=...`) : le chemin depend de la machine. Ce bloc est
-compare ligne a ligne a la sortie reelle par `tests/test_readme.py`, qui
-echoue si l'outil change.
+```
+QX PORTMAP - state of the QNX symbols in the 8.0 documentation
+frozen corpus: <CORPUS>
+pages: 3426 (7.1: 1200, 8.0: 2226) - consulted on 2026-11-14 - offline mode
+
+  abort                        documented
+    page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
+    citation (C Library Reference 8.0 index) :
+      Raise the SIGABRT signal to terminate program execution
+    detail :
+      The abort() function causes abnormal process termination to occur by means of the function
+      call raise ( SIGABRT ) , unless the signal SIGABRT is caught and the signal handler doesn't
+      return. If the signal SIGABRT is caught and the signal handler returns, the signal handler is
+      removed and raise ( SIGABRT ) is called again. Note that prior to calling raise() , abort()
+      ensures that SIGABRT isn't ignored or blocked.
+    note   : present in 7.1 and in 8.0
+
+  accept                       described elsewhere
+    page   : https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
+    see    : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
+    citation (C Library Reference 8.0 index, section "described elsewhere") :
+      FreeBSD documentation (
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports ) and
+      Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
+    * cited by the official 8.0 migration guide: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
+    note   : described in the 8.0 documentation but without a page of its own in the C Library Reference
+
+  bzero                        absent from 8.0
+    page   : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
+    citation (C Library Reference 7.1 index, index entry) :
+      Set the first part of an object to null bytes
+    note   : present in the 7.1 C Library Reference, absent from the whole 8.0 corpus
+
+  zzz_fonction_inexistante     unknown to the corpus
+    note   : not found in the frozen 8.0 corpus: unknown symbol, typo, or addition published after 2026-11-14
+
+--- Upgrade work list (2 symbol(s)) ---
+P2  bzero                      absent from 8.0
+      https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
+      Set the first part of an object to null bytes
+P3  accept                     described elsewhere
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
+      FreeBSD documentation (
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports )
+      and Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
+      cited by the migration guide: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
+```
+
+English translation of the console labels used above:
+
+| console label | English |
+|---|---|
+| `documente` | documented in QNX 8.0 |
+| `decrit ailleurs` | described elsewhere in the QNX 8.0 documentation |
+| `absent de la 8.0` | present in QNX 7.1, absent from the QNX 8.0 corpus |
+| `inconnu du corpus` | not found in the frozen corpus |
+| `corpus introuvable` | corpus not found (no corpus available) |
+| `present en 7.1 et en 8.0` | present in 7.1 and in 8.0 |
+| `cite par le guide de migration officiel 8.0` | cited by the official 8.0 migration guide |
+| `decrit dans la documentation 8.0 mais sans page propre dans la C Library Reference` | described in the 8.0 documentation but without a page of its own in the C Library Reference |
+| `present dans la C Library Reference 7.1, absent de tout le corpus 8.0` | present in the 7.1 C Library Reference, absent from the whole 8.0 corpus |
+| `introuvable dans le corpus 8.0 fige : symbole inconnu, erreur de saisie, ou ajout posterieur au 2026-11-14` | not found in the frozen 8.0 corpus: unknown symbol, typo, or addition published after 2026-11-14 |
+| `Liste de travail de mise a niveau` | Upgrade work list |
+| `voir` | see |
+
+The four statuses appear in the same output: `abort` is documented, `accept`
+is described elsewhere (a cross-reference to the FreeBSD documentation and to
+the io-sock guide), `bzero` has disappeared from 8.0, and
+`zzz_fonction_inexistante` is unknown to the corpus - the tool says so instead
+of inventing an answer.
+
+`<CORPUS>` designates the corpus directory used for the command
+(`QX_PORTMAP_CORPUS=...`): the path depends on the machine. This block is
+compared line by line with the real output by `tests/test_readme.py`, which
+fails if the tool changes.
+
+The French version of this README, kept byte-identical to the version that was
+published before the translation, is in [`docs/README-FR.md`](docs/README-FR.md).
 
 ## Tests
 
@@ -362,369 +415,365 @@ echoue si l'outil change.
 python3 -m unittest discover -s tests -t .
 ```
 
-124 tests, aucune dependance, **aucun acces reseau**. Deux cas :
+124 tests, no dependency, **no network access**. Two cases:
 
-| Situation | Resultat |
+| Situation | Result |
 |---|---|
-| Corpus dans `corpus/` (a cote du paquet) | 124 tests, **0 skip**, code de sortie 0 |
-| Corpus via `QX_PORTMAP_CORPUS` | 124 tests, **1 skip**, code de sortie 0 |
-| Corpus absent | 124 tests, **25 skip**, code de sortie 0 |
+| Corpus in `corpus/` (next to the package) | 124 tests, **0 skipped**, exit code 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | 124 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 124 tests, **25 skipped**, exit code 0 |
 
-Avec le corpus fourni par `QX_PORTMAP_CORPUS`, le seul test saute est celui
-qui exige le corpus **dans le paquet installe** (absent du depot, la
-documentation QNX n'etant pas redistribuee) ; il est saute, jamais en echec.
-Si le corpus est place dans `corpus/` a cote du paquet, ce test s'execute et
-la suite passe sans aucun saut. Les trois lignes du tableau ci-dessus ont ete
-remesurees le 15/11/2026.
+With the corpus given by `QX_PORTMAP_CORPUS`, the only skipped test is the
+one that requires the corpus **inside the installed package** (absent from the
+repository, the QNX documentation being not redistributable); it is skipped,
+never failed. If the corpus is placed in `corpus/` next to the package, this
+test runs and the suite passes without any skip. The three lines of the table
+above were re-measured on 15/11/2026.
 
-Les 25 tests sautes sont ceux qui exigent le corpus complet (integrite
-SHA-256 de chacune des 3 426 pages, chiffres de l'index 8.0 et 7.1, reponses
-sur des symboles reels). Ils sont **sautes, jamais en echec**, avec le message :
+The 25 skipped tests are the ones that require the complete corpus (SHA-256
+integrity of each of the 3 426 pages, index figures for 8.0 and 7.1, answers
+on real symbols). They are **skipped, never failed**, with the message:
 
 ```
 corpus absent : lancer scripts/bootstrap_corpus.sh
 ```
 
-Les 99 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
-`tests/test_fixtures.py` travaillent sur les **fixtures miniatures** : 12
-extraits courts (1 a 3 lignes) de pages QNX reelles, ranges dans
-`tests/fixtures/`, avec l'URL source, la date de consultation et l'empreinte
-SHA-256 de la page complete dont l'extrait est tire. Ces tests reconstruisent
-un petit corpus a partir de ces extraits et font tourner le vrai
-classificateur dessus : `abort` est documente, `errno` est une variable,
-`accept` est decrit ailleurs, `bzero` a disparu, `rw_interrupt` est cite en
-gras, `getprotobyname_r` est appele dans un autre livre, `_smalloc` est cite
-par le guide de migration, et le mot anglais `entire` n'est **pas** annonce
-comme un symbole.
+(the message of the tool, in French: "corpus absent: run
+scripts/bootstrap_corpus.sh")
 
-Les tests couvrent aussi les cas limites de la mission : symbole absent,
-symbole decrit ailleurs, symbole cite en gras, symbole duplique, liste vide,
-fichier de corpus corrompu. Un test verifie aussi que **l'exemple de sortie
-du README est la sortie reelle** de la commande ecrite juste au-dessus.
+The 99 other tests pass **without the corpus**. Among them, the 21 tests of
+`tests/test_fixtures.py` work on the **miniature fixtures**: 12 short extracts
+(1 to 3 lines) of real QNX pages, stored in `tests/fixtures/`, with the source
+URL, the consultation date and the SHA-256 of the complete page the extract
+comes from. These tests rebuild a small corpus from these extracts and run the
+real classifier on it: `abort` is documented, `errno` is a variable, `accept`
+is described elsewhere, `bzero` has disappeared, `rw_interrupt` is cited in
+bold, `getprotobyname_r` is called in another book, `_smalloc` is cited by the
+migration guide, and the English word `entire` is **not** reported as a
+symbol.
 
-Pour tout lancer avec le corpus complet :
+The tests also cover the edge cases of the mission: absent symbol, symbol
+described elsewhere, symbol cited in bold, duplicate symbol, empty list,
+corrupted corpus file. One test also checks that **the output example of this
+README is the real output** of the command written just above it.
+
+To run everything with the complete corpus:
 
 ```bash
-QX_PORTMAP_CORPUS=/chemin/vers/corpus python3 -m unittest discover -s tests -t .
+QX_PORTMAP_CORPUS=/path/to/corpus python3 -m unittest discover -s tests -t .
 ```
 
-### Contre-epreuve ROUGE
+### RED counter-proof
 
-Un test qui passe toujours ne teste rien. `tools/contre_epreuve.py` casse
-volontairement une regle du code a la fois et verifie que le test charge
-devient **rouge**, puis restaure le depot :
+A test that always passes tests nothing. `tools/contre_epreuve.py` breaks one
+rule of the code at a time on purpose and checks that the matching test turns
+**red**, then restores the repository:
 
 ```bash
 python3 tools/contre_epreuve.py
 ```
 
-| Regle cassee | Test qui doit devenir rouge |
+| Broken rule | Test that must turn red |
 |---|---|
-| frontiere de mot dans la recherche de citation | `test_respects_word_boundaries` |
-| verification du SHA-256 des pages du corpus | `test_detects_a_corrupted_page` |
-| verification du fichier `SHA256SUMS` | `test_detects_a_corrupted_sha256sums_file` |
-| lecture du tableau "described elsewhere" de l'index | `test_described_elsewhere_symbol` |
-| extraction de la section Description | `test_description_is_the_description_section_not_the_library_one` |
-| statut inconnu pour un symbole hors corpus | `test_unknown_symbol` |
-| deduplication de la liste de symboles | `test_duplicate_symbol_is_reported_once` |
-| integrite du corpus fige livre | `test_every_page_matches_its_sha256` |
-| la mention en prose ne vaut que pour un nom qui ressemble a une API | `test_english_word_mentioned_in_prose_is_not_a_symbol` |
-| detection des symboles cites en gras | `test_symbol_cited_in_bold` |
-| le taux J4 ne compte que les symboles resolus et cites | `test_le_taux_du_script_egale_le_taux_compte_a_la_main` |
-| le taux J5 vaut 96 % sur le meme echantillon que J4 | `test_le_taux_publie_est_96_pour_cent` |
-| l'echantillon J5 est strictement celui de J4 | `test_echantillon_identique_a_j4` |
-| une page QNX 8.0 verifiee dans le corpus fige est exigee pour chaque conversion | `test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256` |
+| word boundary in the citation search | `test_respects_word_boundaries` |
+| verification of the SHA-256 of the corpus pages | `test_detects_a_corrupted_page` |
+| verification of the `SHA256SUMS` file | `test_detects_a_corrupted_sha256sums_file` |
+| reading of the "described elsewhere" table of the index | `test_described_elsewhere_symbol` |
+| extraction of the Description section | `test_description_is_the_description_section_not_the_library_one` |
+| unknown status for a symbol outside the corpus | `test_unknown_symbol` |
+| deduplication of the symbol list | `test_duplicate_symbol_is_reported_once` |
+| integrity of the frozen corpus shipped with the tool | `test_every_page_matches_its_sha256` |
+| a prose mention only counts for a name that looks like an API | `test_english_word_mentioned_in_prose_is_not_a_symbol` |
+| detection of the symbols cited in bold | `test_symbol_cited_in_bold` |
+| the J4 rate only counts the resolved and quoted symbols | `test_le_taux_du_script_egale_le_taux_compte_a_la_main` |
+| the J5 rate is 96 % on the same sample as J4 | `test_le_taux_publie_est_96_pour_cent` |
+| the J5 sample is strictly the one of J4 | `test_echantillon_identique_a_j4` |
+| a verified QNX 8.0 page of the frozen corpus is required for every conversion | `test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256` |
 
-Les 11 contre-epreuves sont concluantes (`11 / 11`, code de sortie 0) ; la sortie
-complete est conservee dans `docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`
-(et dans `docs/contre-epreuve-rouge.txt`).
+The 11 counter-proofs are conclusive (`11 / 11`, exit code 0); the complete
+output is kept in `docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`
+(and in `docs/contre-epreuve-rouge.txt`).
 
-Sur l'arbre **sans** corpus, 10 des 11 regles restent contre-prouvees (`10 / 10`,
-code de sortie 0) : la regle "integrite du corpus fige livre" porte sur les
-3 426 pages, donc sur le corpus lui-meme ; sans lui, il n'y a rien a corrompre
-et le test correspondant est saute. Les deux executions sont dans
-`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt` (11/11) et
+On the tree **without** the corpus, 10 of the 11 rules remain counter-proved
+(`10 / 10`, exit code 0): the rule "integrity of the frozen corpus shipped"
+covers the 3 426 pages, therefore the corpus itself; without it there is
+nothing to corrupt and the matching test is skipped. The two runs are in
+`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt` (11/11) and
 `docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt` (10/10).
 
-## Corpus QNX : non distribue
+## QNX corpus: not redistributed
 
 > **the QNX documentation is not redistributed; it is downloaded from the official site on demand**
 
-La documentation QNX est (c) QNX Software Systems Ltd / BlackBerry Limited. La
-page officielle de copyright de la documentation 8.0 (consultee le 14/11/2026)
-indique que l'information de licence de chaque fichier se trouve dans le QNX
-Software Center, derriere un compte myQNX ; elle ne donne aucune autorisation
-de redistribuer les pages :
+The QNX documentation is (c) QNX Software Systems Ltd / BlackBerry Limited. The
+official copyright page of the 8.0 documentation (consulted on 14/11/2026)
+states that the licence information of each file is in the QNX Software Center,
+behind a myQNX account; it gives no permission to redistribute the pages:
 
 <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.copyright/topic/coverpage.html>
 
-Le depot public livre donc **le code (MIT), les tests, 12 fixtures miniatures
-et la procedure de reconstruction**, mais pas les 3 426 pages.
+The public repository therefore ships **the code (MIT), the tests, 12 miniature
+fixtures and the rebuild procedure**, but not the 3 426 pages.
 
-### Reconstruction : la commande exacte
+### Rebuilding: the exact command
 
 ```bash
 bash scripts/bootstrap_corpus.sh --out corpus-downloaded
 ```
 
-Le script :
+The script:
 
-1. telecharge la documentation depuis `https://www.qnx.com/developers/docs/`
-   (versions 8.0 et 7.1, 9 livres), avec un **delai de 1,0 s entre les
-   requetes** (le serveur est respecte) ;
-2. **journalise chaque page telechargee** dans `corpus-downloaded/download.log`
-   (date, statut, URL, taille, SHA-256) ;
-3. construit le corpus avec le meme outil que le corpus fige
-   (`tools/build_corpus.py`, deterministe : a cache identique, corpus
-   identique) ;
-4. **refuse d'ecrire dans un corpus deja fige** (et dans tout repertoire
-   place sous une archive portant le marqueur `CORPUS-FIGE.txt`).
+1. downloads the documentation from `https://www.qnx.com/developers/docs/`
+   (versions 8.0 and 7.1, 9 books), with a **1.0 s delay between requests**
+   (the server is respected);
+2. **logs every downloaded page** in `corpus-downloaded/download.log`
+   (date, status, URL, size, SHA-256);
+3. builds the corpus with the same tool as the frozen corpus
+   (`tools/build_corpus.py`, deterministic: same cache, same corpus);
+4. **refuses to write into an already frozen corpus** (and into any directory
+   placed under an archive bearing the `CORPUS-FIGE.txt` marker).
 
-**Temps mesure** le 15/11/2026, avec un delai de 1,0 s : **27 pages en 51 s**
-(soit environ 2 s par page, requete comprise), 0 echec. Pour le corpus complet
-de 3 426 pages, il faut compter **environ 1 h 55** a ce rythme. La commande
-s'arrete a tout moment : `--max-pages N` limite le nombre de pages par livre
-(utile pour un essai).
+**Time measured** on 15/11/2026, with a 1.0 s delay: **27 pages in 51 s**
+(about 2 s per page, request included), 0 failure. For the complete corpus of
+3 426 pages, count on **about 1 h 55** at this rate. The command stops at any
+time: `--max-pages N` limits the number of pages per book (useful for a test).
 
 ```bash
-# essai rapide (3 pages par livre)
+# quick test (3 pages per book)
 bash scripts/bootstrap_corpus.sh --out /tmp/essai --max-pages 3 --delay 1.0
 
-# utiliser le corpus reconstruit
+# use the rebuilt corpus
 QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
 ```
 
-### Structure du corpus
+### Corpus structure
 
 ```
 corpus-downloaded/
-  MANIFEST.json        metadonnees, comptes par livre et par version, sources
-  SHA256SUMS           empreinte SHA-256 de chaque fichier stocke
-  NOTICE               avis de droit de copie
-  download.log         journal de telechargement (une ligne par page)
-  index/pages.jsonl    une ligne par page : URL, livre, sujet, SHA-256, taille
-  pages/8.0/<livre>/topic/<sujet>.html.gz
-  pages/7.1/<livre>/topic/<sujet>.html.gz
+  MANIFEST.json        metadata, counts per book and per version, sources
+  SHA256SUMS           SHA-256 fingerprint of every stored file
+  NOTICE               copy notice
+  download.log         download log (one line per page)
+  index/pages.jsonl    one line per page: URL, book, topic, SHA-256, size
+  pages/8.0/<book>/topic/<topic>.html.gz
+  pages/7.1/<book>/topic/<topic>.html.gz
 ```
 
-| Version | Pages | Livres |
+| Version | Pages | Books |
 |---|---|---|
-| 8.0 | 2 226 | C Library Reference (1 600), io-sock (37), user guide (169), system architecture (179), building (190), technotes (19), guide de migration (23), system tuning (9) |
+| 8.0 | 2 226 | C Library Reference (1 600), io-sock (37), user guide (169), system architecture (179), building (190), technotes (19), migration guide (23), system tuning (9) |
 | 7.1 | 1 200 | C Library Reference (1 200) |
 
-Les pages sont compressees en gzip **telles qu'elles ont ete telechargees** le
-14/11/2026 ; l'empreinte SHA-256 des octets originaux est inscrite dans
-`index/pages.jsonl` et verifiee par `qnx-portmap --verify-corpus`.
+The pages are gzip-compressed **as they were downloaded** on 14/11/2026; the
+SHA-256 fingerprint of the original bytes is written in `index/pages.jsonl`
+and verified by `qnx-portmap --verify-corpus`.
 
-### Le corpus fige d'origine (archive locale, non publiee)
+### The original frozen corpus (local archive, not published)
 
-Le corpus utilise pour developper l'outil est conserve dans une archive
-locale, hors de ce depot, avec son ancrage :
+The corpus used to develop the tool is kept in a local archive, outside this
+repository, with its anchoring:
 
-| Element | Valeur |
+| Element | Value |
 |---|---|
-| Commit d'origine qui fige le corpus | `6a2c442` |
-| Arbre git du corpus a ce commit | `a80c34bbe7873514ee031e6ea746c1157ece8393` |
-| Fichiers | 3 430 |
-| Taille | 44 942 705 octets (44,9 Mo) |
-| SHA-256 de `corpus/SHA256SUMS` | `e312cea466329a76053be0160911cf378ffb1c6ea80050a66c66186ca0023efd` |
-| SHA-256 de `corpus/MANIFEST.json` | `df762fecc0b67c7f5dd7116ae38daf080b8159843dd9dbf6abcf8971e692b3fc` |
-| SHA-256 de `corpus/index/pages.jsonl` | `292185a3cf9bd615f3709d5c52cac54cb87129ad9a5d08f4055a896bfe5d5595` |
+| Origin commit that froze the corpus | `6a2c442` |
+| Git tree of the corpus at this commit | `a80c34bbe7873514ee031e6ea746c1157ece8393` |
+| Files | 3 430 |
+| Size | 44 942 705 bytes (44.9 MB) |
+| SHA-256 of `corpus/SHA256SUMS` | `e312cea466329a76053be0160911cf378ffb1c6ea80050a66c66186ca0023efd` |
+| SHA-256 of `corpus/MANIFEST.json` | `df762fecc0b67c7f5dd7116ae38daf080b8159843dd9dbf6abcf8971e692b3fc` |
+| SHA-256 of `corpus/index/pages.jsonl` | `292185a3cf9bd615f3709d5c52cac54cb87129ad9a5d08f4055a896bfe5d5595` |
 
-L'empreinte SHA-256 de **chaque page** est dans `index/pages.jsonl` :
-`qnx-portmap --verify-corpus` les recalcule toutes (3 426 pages, ~2 s).
+The SHA-256 fingerprint of **every page** is in `index/pages.jsonl`:
+`qnx-portmap --verify-corpus` recomputes them all (3 426 pages, ~2 s).
 
-### Controle anti-fuite
+### Anti-leak control
 
-`scripts/controle_fuite_corpus.py` verifie que l'arbre publiable ne contient
-aucune page de la documentation QNX. Il fait six controles :
+`scripts/controle_fuite_corpus.py` checks that the publishable tree contains
+no page of the QNX documentation. It performs six checks:
 
-1. SHA-256 de chaque fichier publie compare aux SHA-256 des 3 426 pages et aux
-   SHA-256 des fichiers stockes dans le corpus ;
-2. contenu decompresse de chaque fichier gzip de l'arbre ;
-3. chaque objet git du depot (contenu brut et contenu decompresse) ;
-4. lignes de l'arbre identiques mot pour mot a une ligne du corpus ;
-5. plus longue sous-chaine commune, fichier par fichier (fragments) ;
-6. budget de copie : **aucun fichier ne doit contenir plus de 4 000 octets de
-   texte QNX verbatim**.
+1. SHA-256 of every published file compared with the SHA-256 of the 3 426 pages
+   and with the SHA-256 of the files stored in the corpus;
+2. decompressed content of every gzip file of the tree;
+3. every git object of the repository (raw content and decompressed content);
+4. lines of the tree identical word for word to a line of the corpus;
+5. longest common substring, file by file (fragments);
+6. copy budget: **no file may contain more than 4 000 bytes of QNX verbatim
+   text**.
 
-Resultat mesure le 15/11/2026 : **0 correspondance**. L'arbre entier ne contient que
-**6 037 octets** de texte QNX verbatim, et le fichier qui en contient le plus en compte
-**633 octets** (le mini corpus recompose dans `tests/helpers.py`) ; **0 fichier** ne depasse le
-budget de 4 000 octets. Les fichiers de citations des mesures J4 et J5
-(`docs/mesure-J4/citations-*.txt`, `docs/mesure-J5/citations-*.txt`) sont analyses fragment par
-fragment comme les fixtures : ils contiennent 54 a 187 octets de texte QNX verbatim chacun. La
-sortie complete est dans `docs/preuves/d-controle-fuite-corpus.txt` ; le nombre de fichiers
-qu'elle y analyse est celui du moment de la mesure (kit de soumission, plan de la video et
-fichiers de preuves compris).
+Result measured on 15/11/2026: **0 match**. The whole tree contains only
+**6 037 bytes** of QNX verbatim text, and the file that contains the most
+counts **633 bytes** (the mini corpus rebuilt in `tests/helpers.py`); **0 file**
+exceeds the 4 000-byte budget. The citation files of the J4 and J5 measurements
+(`docs/mesure-J4/citations-*.txt`, `docs/mesure-J5/citations-*.txt`) are analysed
+fragment by fragment like the fixtures: they contain 54 to 187 bytes of QNX
+verbatim text each. The complete output is in
+`docs/preuves/d-controle-fuite-corpus.txt`; the number of files it analyses
+there is the one at the time of the measurement (submission kit, video plan and
+proof files included).
 
 ```bash
 python3 scripts/controle_fuite_corpus.py --tree . \
-    --corpus /chemin/vers/corpus
+    --corpus /path/to/corpus
 ```
 
-Le controle est complet (bout en bout, environ 15 minutes : il decompresse et
-compare 350 Mo de documentation).
+The control is complete (end to end, about 15 minutes: it decompresses and
+compares 350 MB of documentation).
 
-`MANIFESTE-PUBLIE.txt` (a la racine) liste, pour chaque fichier publiable, le
-chemin, la taille et le SHA-256 ; il se regenere avec :
+`MANIFESTE-PUBLIE.txt` (at the root) lists, for every publishable file, the
+path, the size and the SHA-256; it is regenerated with:
 
 ```bash
-python3 scripts/manifeste_publie.py            # regenere le manifeste
-python3 scripts/manifeste_publie.py --check    # verifie qu'il est a jour
+python3 scripts/manifeste_publie.py            # regenerates the manifest
+python3 scripts/manifeste_publie.py --check    # checks that it is up to date
 ```
 
-### Preuves
+### Evidence
 
-Les preuves du 14/11 et du 15/11/2026 (commande et sortie reelle pour chacune)
-sont dans `docs/preuves/` :
+The evidence of 14/11 and 15/11/2026 (command and real output for each one)
+is in `docs/preuves/`:
 
-| Fichier | Preuve |
+| File | Evidence |
 |---|---|
-| `a-tests-sans-corpus.txt` | 124 tests sur une copie **sans** corpus : 99 passent, 25 sont sautes, code de sortie 0 |
-| `b-tests-avec-corpus.txt` | la meme commande **avec** le corpus : 124 tests, 0 saut, code de sortie 0 |
-| `c-contre-epreuve-rouge-sans-corpus.txt` | contre-epreuve ROUGE sans le corpus : 10/10 concluantes, 1 regle non testable |
-| `d-controle-fuite-corpus.txt` | controle anti-fuite : 0 correspondance |
-| `e-fresh-sans-corpus.txt` | `--fresh --fresh-max-pages 3` sur la copie sans corpus : code de sortie 0, corpus fige inchange |
-| `f-manifeste-publie.txt` | `MANIFESTE-PUBLIE.txt` : nombre de fichiers, taille totale, 3 plus gros fichiers |
-| `garde-fou-bootstrap.txt` | le script de reconstruction refuse d'ecrire dans un corpus fige |
-| `g-mesure-j4-rouge.txt` | la mesure J4 : le test echoue quand on truque le taux ou les donnees publiees, puis repasse au vert |
-| `h-mesure-j5-rouge.txt` | la mesure J5 : le test echoue sur l'etat d'avant (93 %) et quand la donnee publiee est cassee, puis repasse au vert (96 %) |
-| `i-contre-epreuve-rouge-avec-corpus.txt` | contre-epreuve ROUGE avec le corpus dans l'arbre : 11/11 concluantes |
-| `j-mesure-champs-devpost.txt` | les 120 pages de projets Devpost publies mesurees : longueurs observees des champs |
-| `k-formulaire-devpost-302-401.txt` | le formulaire du concours QNX est derriere une session : HTTP 302 et HTTP 401 |
+| `a-tests-sans-corpus.txt` | 124 tests on a copy **without** the corpus: 99 pass, 25 are skipped, exit code 0 |
+| `b-tests-avec-corpus.txt` | the same command **with** the corpus: 124 tests, 0 skipped, exit code 0 |
+| `c-contre-epreuve-rouge-sans-corpus.txt` | RED counter-proof without the corpus: 10/10 conclusive, 1 rule not testable |
+| `d-controle-fuite-corpus.txt` | anti-leak control: 0 match |
+| `e-fresh-sans-corpus.txt` | `--fresh --fresh-max-pages 3` on the copy without the corpus: exit code 0, frozen corpus unchanged |
+| `f-manifeste-publie.txt` | `MANIFESTE-PUBLIE.txt`: number of files, total size, 3 biggest files |
+| `garde-fou-bootstrap.txt` | the rebuild script refuses to write into a frozen corpus |
+| `g-mesure-j4-rouge.txt` | the J4 measurement: the test fails when the rate or the published data is faked, then passes again |
+| `h-mesure-j5-rouge.txt` | the J5 measurement: the test fails on the previous state (93 %) and when the published data is broken, then passes again (96 %) |
+| `i-contre-epreuve-rouge-avec-corpus.txt` | RED counter-proof with the corpus in the tree: 11/11 conclusive |
+| `j-mesure-champs-devpost.txt` | the 120 published Devpost project pages measured: observed field lengths |
+| `k-formulaire-devpost-302-401.txt` | the contest form is behind a session: HTTP 302 and HTTP 401 |
 
 ## Sources
 
-Toutes consultees le **14/11/2026** :
+All consulted on **14/11/2026**:
 
-- Documentation QNX OS 8.0 - <https://www.qnx.com/developers/docs/8.0/>
-  - C Library Reference : <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/>
-  - Guide de migration : <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/>
-  - Networking APIs (io-sock) : <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html>
-- Documentation QNX OS 7.1 - <https://www.qnx.com/developers/docs/7.1/>
-- Documentation FreeBSD (citee par la C Library Reference 8.0 pour les API
-  BSD retirees) : <https://man.freebsd.org/>
+- QNX OS 8.0 documentation - <https://www.qnx.com/developers/docs/8.0/>
+  - C Library Reference: <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic>
+  - Migration guide: <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic>
+  - Networking APIs (io-sock): <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html>
+- QNX OS 7.1 documentation - <https://www.qnx.com/developers/docs/7.1/>
+- FreeBSD documentation (cited by the 8.0 C Library Reference for the retired
+  BSD APIs): <https://man.freebsd.org/>
 
-## Mesure sur de vrais depots QNX publics (critere J4, puis J5)
+## Measurement on real public QNX repositories (J4 criterion, then J5)
 
-**96 % des symboles QNX reellement utilises par de vrais projets QNX sont
-resolus et cites par l'outil.** Le detail complet (echantillon, commits
-epingles, methode, les 100 symboles) est dans
-[`docs/mesure-J5.md`](docs/mesure-J5.md).
+**96 % of the QNX symbols really used by real QNX projects are resolved and
+quoted by the tool.** The complete detail (sample, pinned commits, method, the
+100 symbols) is in [`docs/mesure-J5.md`](docs/mesure-J5.md).
 
-L'echantillon : **cinq depots QNX publics** - le BSP officiel QNX pour
-Raspberry Pi 5, un BSP QNX pour Raspberry Pi, les sources des *resource
-managers* de QNX Neutrino, le Signal Framework QNX et un pilote SocketCAN.
-Pour chaque depot, on releve les symboles **reellement appeles** dans les
-`.c`/`.h` (les symboles definis par le projet lui-meme sont ecartes), on en
-retient 20, et l'echantillon compte exactement **100 symboles distincts**.
+The sample: **five public QNX repositories** - the official QNX BSP for
+Raspberry Pi 5, a QNX BSP for Raspberry Pi, the sources of the QNX Neutrino
+*resource managers*, the QNX Signal Framework and a SocketCAN driver. For each
+repository, the symbols **really called** in the `.c`/`.h` files are collected
+(the symbols defined by the project itself are discarded), 20 of them are kept,
+and the sample counts exactly **100 distinct symbols**.
 
-| etat | J4 (14/11, mesure datee) | J5 (14/11, meme echantillon) |
+| state | J4 (14/11, dated measurement) | J5 (14/11, same sample) |
 |---|---:|---:|
-| resolu et cite | 93 | **96** |
-| resolu mais decrit ailleurs | 3 | **0** |
-| non resolu | 4 | **4** |
-| **taux** | **93 %** | **96 %** |
+| resolved and quoted | 93 | **96** |
+| resolved but described elsewhere | 3 | **0** |
+| not resolved | 4 | **4** |
+| **rate** | **93 %** | **96 %** |
 
-Les 4 symboles qui ne comptent pas ont disparu de la reference 8.0 : ils
-etaient dans la reference 7.1, l'outil le dit et ne les invente pas. C'est le
-**plafond honnete** du taux sur cet echantillon.
+The 4 symbols that do not count have disappeared from the 8.0 reference: they
+were in the 7.1 reference, the tool says so and does not invent them. This is
+the **honest ceiling** of the rate on this sample.
 
-Ce qui change entre les deux mesures : en J4, trois symboles
-(`InterruptAttach`, `if_freenameindex`, `setsockopt`) etaient renvoyes par
-l'index 8.0 vers une documentation **externe** (pages FreeBSD) ou vers une
-autre page de QNX, et comptaient donc "non resolus". En J5, l'outil est
-interroge sur la page QNX 8.0 qui decrit reellement ces trois symboles -
-le guide de migration pour `InterruptAttach`, le guide io-sock pour les deux
-fonctions socket - et cite cette page avec son empreinte SHA-256. Le
-**meme echantillon**, les memes 100 symboles, le meme ordre : le test
-verifie l'egalite stricte des deux listes.
+What changes between the two measurements: in J4, three symbols
+(`InterruptAttach`, `if_freenameindex`, `setsockopt`) were returned by the 8.0
+index towards **external** documentation (FreeBSD pages) or towards another
+QNX page, and therefore counted as "not resolved". In J5, the tool is asked on
+the QNX 8.0 page that really describes these three symbols - the migration
+guide for `InterruptAttach`, the io-sock guide for the two socket functions -
+and quotes that page with its SHA-256 fingerprint. The **same sample**, the
+same 100 symbols, the same order: the test checks the strict equality of the
+two lists.
 
-La mesure J4 reste une **mesure datee** et n'est pas reecrite :
+The J4 measurement remains a **dated measurement** and is not rewritten:
 [`docs/mesure-J4.md`](docs/mesure-J4.md).
 
-Les mesures sont **reproductibles** (`tools/mesure_j4.py` et
-`tools/mesure_j5.py`, clones en lecture seule) et **verifiees par les
-tests** : `tests/test_mesure_j4.py` et `tests/test_mesure_j5.py` recalculent
-le taux et le comparent au taux **compte a la main sur dix symboles donnes
-dans le test** ; le test echoue si le taux publie ne correspond plus aux
-donnees publiees, si un symbole "resolu" n'a pas de page QNX 8.0
-verifiable dans le corpus fige, ou si l'echantillon change. Les preuves
-ROUGE -> VERT (on casse la regle, le test echoue, on restaure, le test
-repasse) sont dans
-[`docs/preuves/g-mesure-j4-rouge.txt`](docs/preuves/g-mesure-j4-rouge.txt) et
-[`docs/preuves/h-mesure-j5-rouge.txt`](docs/preuves/h-mesure-j5-rouge.txt) ;
-l'etat de chaque fonction de l'outil est dans
+The measurements are **reproducible** (`tools/mesure_j4.py` and
+`tools/mesure_j5.py`, read-only clones) and **verified by the tests**:
+`tests/test_mesure_j4.py` and `tests/test_mesure_j5.py` recompute the rate and
+compare it with the rate **counted by hand on ten symbols given in the test**;
+the test fails if the published rate no longer matches the published data, if a
+"resolved" symbol has no verifiable QNX 8.0 page in the frozen corpus, or if
+the sample changes. The RED -> GREEN proofs (the rule is broken, the test
+fails, the code is restored, the test passes again) are in
+[`docs/preuves/g-mesure-j4-rouge.txt`](docs/preuves/g-mesure-j4-rouge.txt) and
+[`docs/preuves/h-mesure-j5-rouge.txt`](docs/preuves/h-mesure-j5-rouge.txt);
+the state of each function of the tool is in
 [`PROGRESSION.md`](PROGRESSION.md).
 
-## Limites
+## Limits
 
-- Le projet **n'a pas encore ete execute sur une machine QNX 8.0** : cela
-  demande la licence QNX SDP 8.0, qui n'est pas disponible dans cet
-  environnement. Le code est du Python 3 (bibliotheque standard uniquement) et
-  il est compatible POSIX, donc il est concu pour tourner aussi sur QNX 8.0,
-  mais cela n'a pas ete demontre. La regle du concours demande de montrer que
-  le projet "genuinely builds for or runs on QNX 8.0" ; le segment de video
-  qui manque est precisement cette demonstration
+- The project **has not been run on a QNX 8.0 machine yet**: that requires the
+  QNX SDP 8.0 licence, which is not available in this environment. The code is
+  Python 3 (standard library only) and it is POSIX-compatible, so it is
+  designed to run on QNX 8.0 as well, but that has not been demonstrated. The
+  contest rule asks to show that the project "genuinely builds for or runs on
+  QNX 8.0"; the missing video segment is precisely that demonstration
   (`VIDEO-YOUTUBE-QNX-PORTMAP.md`, section 4).
-- Le corpus est un **instantane** : il date du 14/11/2026. Un symbole ajoute
-  dans une version ulterieure de la documentation est classe `unknown`, jamais
-  devine. `--fresh` reconstruit le corpus a partir du site officiel.
-- L'analyse porte sur la **documentation**, pas sur le code binaire : un
-  symbole `absent` signifie "absent de la documentation 8.0 figee", pas
-  "absent du systeme". La documentation 8.0 ne dit pas tout, et l'outil ne
-  pretend pas le contraire.
-- La recherche dans le corpus ignore les menus de navigation et ne retient que
-  le corps des pages. Une mention en prose suffit a classer un symbole
-  `described_elsewhere`, mais la citation indique alors `mention` : il faut
-  verifier que le symbole est encore un appel de fonction.
-- Les versions **6.5** et **6.6** de la documentation QNX ne sont pas publiques
-  (`https://www.qnx.com/developers/docs/6.5.0/` redirige vers une page de
-  telechargement, `6.6/` renvoie 404). L'outil couvre donc l'axe 7.1 -> 8.0.
-- Les citations sont extraites des pages HTML officielles : la mise en forme
-  du texte est parfois irreguliere (espaces autour des parentheses, par
-  exemple). Le texte est verbatim, la ponctuation ne l'est pas toujours.
-- L'outil ne remplace pas la lecture de la documentation : il indique **ou**
-  lire, et **ce que** la page dit.
+- The corpus is a **snapshot**: it dates from 14/11/2026. A symbol added in a
+  later version of the documentation is classified `unknown`, never guessed.
+  `--fresh` rebuilds the corpus from the official site.
+- The analysis concerns the **documentation**, not the binary code: a symbol
+  `absent` means "absent from the frozen 8.0 documentation", not "absent from
+  the system". The 8.0 documentation does not say everything, and the tool does
+  not pretend otherwise.
+- The search in the corpus ignores the navigation menus and keeps only the
+  body of the pages. A prose mention is enough to classify a symbol as
+  `described_elsewhere`, but the citation then says `mention`: you have to
+  check that the symbol is still a function call.
+- The versions **6.5** and **6.6** of the QNX documentation are not public
+  (`https://www.qnx.com/developers/docs/6.5.0/` redirects to a download page,
+  `6.6/` returns 404). The tool therefore covers the 7.1 -> 8.0 axis.
+- The citations are extracted from the official HTML pages: the formatting of
+  the text is sometimes irregular (spaces around the parentheses, for example).
+  The text is verbatim, the punctuation is not always so.
+- The tool does not replace reading the documentation: it tells you **where**
+  to read, and **what** the page says.
 
 ## Licence
 
-Le code est sous licence MIT (voir `LICENSE`).
+The code is under the MIT licence (see `LICENSE`).
 
-**La documentation QNX n'est pas redistribuee avec ce depot.** Les pages
-restent la propriete de QNX Software Systems Ltd / BlackBerry Limited. Les 12
-fixtures de `tests/fixtures/` et les citations des mesures J4 et J5
-(`docs/mesure-J4/`, `docs/mesure-J5/`) sont
-des extraits courts cites avec leur URL, leur date de consultation et
-l'empreinte SHA-256 de la page source ; la licence MIT ne les couvre pas. Voir
-`LICENCE-DOCS-QNX.md` (page de copyright officielle, consultee le 14/11/2026)
-et `CORPUS-NON-PUBLIE.txt`.
+**The QNX documentation is not redistributed with this repository.** The pages
+remain the property of QNX Software Systems Ltd / BlackBerry Limited. The 12
+fixtures of `tests/fixtures/` and the citations of the J4 and J5 measurements
+(`docs/mesure-J4/`, `docs/mesure-J5/`) are short extracts quoted with their
+URL, their consultation date and the SHA-256 fingerprint of the source page;
+the MIT licence does not cover them. See `LICENCE-DOCS-QNX.md` (official
+copyright page, consulted on 14/11/2026) and `CORPUS-NON-PUBLIE.txt`.
 
-## Comment le statut est decide
+## How the status is decided
 
-1. **Index 8.0** : les pages d'index A-Z de la C Library Reference 8.0
-   (26 pages) sont lues. Un symbole trouve dans l'arbre de navigation a sa
-   propre page -> `documented`, avec la description courte officielle comme
-   citation.
-2. **Renvois "described elsewhere"** : le tableau de la meme page d'index
-   renvoie vers la documentation FreeBSD ou le guide io-sock pour un certain
-   nombre de symbols -> `described_elsewhere`, avec la phrase exacte du renvoi.
-3. **Corps du corpus** : sinon, le corps de toutes les pages 8.0 est parcouru
-   en **deux passes**. 1re passe : une occurrence de la forme `symbole(`.
-   2e passe : une simple mention en prose. Dans les deux passes, le symbole
-   doit **ressembler a un nom d'API** : figurer dans un index QNX, ou
-   s'ecrire avec une majuscule ou un tiret bas (`pthread_create`, `MSG_NOTIFY`).
-   Sans cette condition, un mot anglais rencontre dans une phrase (`argument`,
-   `current`, `valid`) ou un nom de parametre suivi de `(` dans un extrait de
-   code serait annonce comme un symbole QNX : ce serait faux. La citation
-   indique la nature de la rencontre : `appel de fonction` ou `mention` ; une
-   mention en **gras** dans la page officielle est signalee `cite en gras`,
-   car c'est une mention deliberee de la documentation.
-4. **Absent** : le symbole est dans l'index 7.1 mais nulle part dans le corpus
-   8.0 -> `absent`, avec sa page 7.1 et sa description.
-5. **Inconnu** : sinon -> `unknown`.
+1. **8.0 index**: the A-Z index pages of the 8.0 C Library Reference
+   (26 pages) are read. A symbol found in the navigation tree has its own page
+   -> `documented`, with the short official description as the quotation.
+2. **"described elsewhere" cross-references**: the table of the same index page
+   points to the FreeBSD documentation or to the io-sock guide for a certain
+   number of symbols -> `described_elsewhere`, with the exact sentence of the
+   cross-reference.
+3. **Body of the corpus**: otherwise, the body of all the 8.0 pages is scanned
+   in **two passes**. 1st pass: an occurrence of the form `symbol(`. 2nd pass:
+   a simple prose mention. In both passes, the symbol must **look like an API
+   name**: be listed in a QNX index, or be written with an upper-case letter or
+   an underscore (`pthread_create`, `MSG_NOTIFY`). Without this condition, an
+   English word met in a sentence (`argument`, `current`, `valid`) or a
+   parameter name followed by `(` in a code extract would be reported as a QNX
+   symbol: that would be wrong. The quotation states the nature of the match:
+   `appel de fonction` (function call) or `mention`; a mention in **bold** in
+   the official page is reported as `cite en gras` (cited in bold), because it
+   is a deliberate mention by the documentation.
+4. **Absent**: the symbol is in the 7.1 index but nowhere in the 8.0 corpus ->
+   `absent`, with its 7.1 page and its description.
+5. **Unknown**: otherwise -> `unknown`.
 
-Le guide de migration officiel 8.0 est consulte en plus pour chaque symbole de
-la liste de travail : un symbole cite par le guide est signale, car c'est la
-seule source officielle qui dit quoi faire.
+The official 8.0 migration guide is consulted in addition for every symbol of
+the work list: a symbol cited by the guide is reported, because it is the only
+official source that says what to do.

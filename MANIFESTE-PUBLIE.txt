@@ -1,14 +1,14 @@
 MANIFESTE DES FICHIERS PUBLIABLES - QX PORTMAP
 
 Arbre          : /work/qnx-portmap
-Genere le      : 2026-11-15 03:55:11
-Fichiers       : 86
-Taille totale  : 809055 octets
+Genere le      : 2026-11-15 04:27:22
+Fichiers       : 87
+Taille totale  : 849870 octets
 
 Les 3 plus gros fichiers :
       76314 octets  docs/mesure-J5/mesure-J5.json
       69089 octets  docs/mesure-J4/mesure-J4.json
-      35732 octets  README.md
+      38572 octets  README.md
 
 Detail (chemin, taille en octets, SHA-256) :
 
@@ -19,9 +19,10 @@ LICENCE-DOCS-QNX.md	2725	79454fcbe4a38c3790c1a576979bd6bbffa18c6f1c3e04ad96dddeb
 LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
 LISEZMOI.md	4489	854ece09696bc99af488e80fa51b4996e5ece46ec3df62e6c8b586032c7ad267
 PROGRESSION.md	16434	b8d48adf7fe2b1cdcb7f41f124f75d036b6d404af6914458e9d3dd3bd78485a5
-README.md	35732	47d023ad030a50b97ed62a20b2d222c949c83e733b17095043a19ce5fc075075
+README.md	38572	9ba6ac2becf52dfb4a05197fc7f417bdfdc1d3ec78508c00fe23f51ae9273652
 VIDEO-YOUTUBE-QNX-PORTMAP.md	13095	20bfe731e192746e83a8277f4c2d2d63f64763d402be5a0dcdb7e687c5db3231
 docs/CODELAB-COMMUNITY-QNX.md	5458	602c1ed1e5ec92deca866a40d141cd80ee14e33698fd32cea38ad7c0f951e361
+docs/README-FR.md	35732	47d023ad030a50b97ed62a20b2d222c949c83e733b17095043a19ce5fc075075
 docs/UTILISATION.md	6601	af2040b526a38a4fbf844e853de716ef2a964190f7ba85a24e0610ec834a2941
 docs/contre-epreuve-rouge.txt	6719	158fe3b55580d86a4e212ef93716e90b49226f6526fcda19d31a48c6c42796db
 docs/demo-projets-reels.md	7015	8f7e88eb5aefbb33e4019bee844cbabb122d4c248b8a241cf02f46f115afb981
@@ -87,7 +88,7 @@ tests/test_fixtures.py	8566	be71375d071c8141c3d4f9b4a498000d82a91ffc59310c06f28b
 tests/test_frozen_corpus.py	5955	dd52af288fb09e4ffe06e5dd75036e59d67223a0b09815941f700d17e46edac8
 tests/test_mesure_j4.py	11653	dfbb60a3551070370e27e5224da7f8e03ec94b08d8c296f3e4e38dd6847c3cdb
 tests/test_mesure_j5.py	16440	18e5baa96fc4d00c456c0b42272387d1f35db4aee3302ab262bc847891b5f3e3
-tests/test_readme.py	2025	56f969d68d2c2cb9f68841ab782b4b1660f99962484f6f40ec4652e57640a7be
+tests/test_readme.py	4268	781438c5a3af544aa89053d3cbe515015b66870ff93938e7112a260d5a62ceb2
 tools/LISEZMOI.md	732	ba93c148666678163777b96fd60b0de295ba6f9dd4f1e0b11910d98ff60d1382
 tools/build_corpus.py	6339	df7cf793a9116d5b19cc6920445c9a2531945846df9f6a779578b07b069c3e54
 tools/contre_epreuve.py	9619	cf832c8ae5d2c114855d23fcae2ef6161ea36bf448cb36e6b3b07f0f9ec3feb5
