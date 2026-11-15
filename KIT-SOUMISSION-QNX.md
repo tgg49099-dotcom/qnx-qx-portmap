@@ -58,7 +58,8 @@ GET https://qnx.devpost.com/submissions/new.json
 **Consequence**: the constraint that the form prints for a given field cannot
 be read from outside a session. No limit is declared here for those fields.
 This is not a claim that the field has no limit: it is a statement that the
-limit was not read.
+limit was not read. The commands and the raw headers are kept in
+`docs/preuves/h-formulaire-devpost-302-401.txt`.
 
 ### 1.3 Lower bound by observation, on the same platform
 
@@ -565,8 +566,8 @@ step 6, read 15/11/2026):
 | check | expected |
 |---|---|
 | Project name | `QX PORTMAP` |
-| Project tagline | the block 3.2 text, 138 characters |
-| Project story | the block 4.1 text, 7097 characters |
+| Project tagline | the block 3.2 text, at the length measured in block 3.2 (138 characters, limit 140) |
+| Project story | the block 4.1 text, at the length measured in block 4.1 |
 | Built with tags | the 11 tags of block 4.2 |
 | Try it out | the public repository URL of block 4.3 |
 | Video demo link | the public YouTube URL, replacing the placeholder of block 4.5 |

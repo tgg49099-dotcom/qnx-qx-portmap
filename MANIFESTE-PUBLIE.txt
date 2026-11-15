@@ -1,9 +1,9 @@
 MANIFESTE DES FICHIERS PUBLIABLES - QX PORTMAP
 
 Arbre          : /work/qnx-portmap
-Genere le      : 2026-11-15 03:29:06
-Fichiers       : 84
-Taille totale  : 803957 octets
+Genere le      : 2026-11-15 03:30:32
+Fichiers       : 85
+Taille totale  : 805366 octets
 
 Les 3 plus gros fichiers :
       76314 octets  docs/mesure-J5/mesure-J5.json
@@ -14,7 +14,7 @@ Detail (chemin, taille en octets, SHA-256) :
 
 .gitignore	89	3b7d0412d843969134e0569a5bbf80605ace41ba556d5116521706e0ab058d65
 CORPUS-NON-PUBLIE.txt	3587	2711651fa52848a87c9a1cc2712c4f33df8f8b39706111c623ddb3db58c9ff91
-KIT-SOUMISSION-QNX.md	26028	e7e274d5cdddcaef1a25615f4b552c33c2532db2a25dd58986d9288ef526e70b
+KIT-SOUMISSION-QNX.md	26191	8d5640ec58ba741a7307052f3534fcd34df60d3435a9079d86bd9c3709de0889
 LICENCE-DOCS-QNX.md	2725	79454fcbe4a38c3790c1a576979bd6bbffa18c6f1c3e04ad96dddebe3f95d4b9
 LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
 LISEZMOI.md	4489	854ece09696bc99af488e80fa51b4996e5ece46ec3df62e6c8b586032c7ad267
@@ -48,6 +48,7 @@ docs/preuves/e-mesure-champs-devpost.txt	6324	8c3389696c9c20d6ddf28774b8171f2fa8
 docs/preuves/f-manifeste-publie.txt	1481	57c0b300adea787e4a59c89c47ad44b232ab7e297496ae9c1a65a3098150266a
 docs/preuves/g-mesure-j4-rouge.txt	6489	ed51f71ca5aa72c3885266dd0cfd8a29780ee04c6dc512199d6e5f33c05bb965
 docs/preuves/garde-fou-bootstrap.txt	1133	6f8610c805a1615d0767607040b09a8d9b85e5ec6a8fab84104adbc085cb14aa
+docs/preuves/h-formulaire-devpost-302-401.txt	1246	6a4894233b15f34b97383efd5a86b630753ddbd63d9aa89e8c5fe3158caac641
 docs/preuves/h-mesure-j5-rouge.txt	28614	fb08533aca67d53ad26b875240b59601363cd066d652935a202c91d92bd1b8bd
 pyproject.toml	946	d0cff5122950c85836b71634dc9859a28369ae05e722f9056c6e5df8dd7d0187
 qnx_portmap/LISEZMOI.md	782	c2ab59c8b7f12cb2d557e917db3cd7e2857612d5522d4480efb8f7d73d7284b6

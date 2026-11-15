@@ -1,0 +1,31 @@
+PREUVE : le formulaire Devpost du concours QNX est derriere une session
+Mesure le 15/11/2026 a 02:30 UTC, User-Agent de navigateur, sans cookie ni identifiant.
+(Les en-tetes de cookie et les identifiants de requete sont retires : ils ne prouvent rien.)
+
+$ curl -sS -D - -o /dev/null -A '<UA navigateur>' https://qnx.devpost.com/submissions/new
+HTTP/2 302 
+content-type: text/html; charset=utf-8
+location: https://secure.devpost.com/users/register?return_to=https%3A%2F%2Fqnx.devpost.com%2Fsubmissions%2Fnew
+cache-control: no-cache
+server: cloudflare
+status: 302 Found
+x-runtime: 0.017750
+cf-cache-status: DYNAMIC
+
+
+$ curl -sS -D - -A '<UA navigateur>' https://qnx.devpost.com/submissions/new.json
+HTTP/2 401 
+content-type: application/json; charset=utf-8
+cache-control: no-cache
+server: cloudflare
+status: 401 Unauthorized
+x-runtime: 0.019582
+cf-cache-status: DYNAMIC
+
+{"error":"Please sign up or log in to continue."}
+
+$ curl -sS -o /dev/null -w 'HTTP %{http_code}  %{size_download} octets\n' -A '<UA navigateur>' https://qnx.devpost.com/rules
+HTTP 200  161146 octets
+
+$ curl -sS -o /dev/null -w 'HTTP %{http_code}  %{size_download} octets\n' -A '<UA navigateur>' https://qnx.devpost.com/project-gallery
+HTTP 200  119483 octets
