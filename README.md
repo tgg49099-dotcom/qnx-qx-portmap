@@ -87,9 +87,65 @@ bash scripts/bootstrap_corpus.sh --out corpus-downloaded
 QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort
 ```
 
+A quick check of the network path (3 pages per book: 27 pages downloaded in
+51 seconds, measured on 15 November 2026):
+
+```bash
+bash scripts/bootstrap_corpus.sh --out /tmp/essai --max-pages 3 --delay 1.0
+```
+
+### Build and test (English)
+
+**Build** - Python 3.8+, standard library only, no dependency, no API key, no
+account:
+
+```bash
+git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git
+cd qnx-qx-portmap
+pip install .                     # or, without installing: python3 -m qnx_portmap
+```
+
+**Test**:
+
+```bash
+python3 -m unittest discover -s tests -t .
+```
+
+Result measured on 15 November 2026: **124 tests, exit code 0**, without any
+network access and without any third-party dependency.
+
+| Situation | Result |
+|---|---|
+| Corpus in `corpus/`, next to the package | 124 tests, **0 skipped**, exit code 0 |
+| Corpus through `QX_PORTMAP_CORPUS` | 124 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 124 tests, **25 skipped**, exit code 0 |
+
+The skipped tests are the ones that need the corpus: they are skipped, never
+failed. A test that always passes tests nothing, so the repository also
+contains a **RED -> GREEN proof**: one rule of the code is broken on purpose
+and the matching test must turn red, then the code is restored.
+
+```bash
+python3 tools/contre_epreuve.py
+```
+
+11 rules, 11 conclusive (11/11, exit code 0) with the corpus, 10/11 without it
+(the eleventh rule is about the integrity of the frozen corpus itself); the
+output is kept in [`docs/contre-epreuve-rouge.txt`](docs/contre-epreuve-rouge.txt).
+
+### Submission kit and video plan
+
+- [`KIT-SOUMISSION-QNX.md`](KIT-SOUMISSION-QNX.md) - the text to paste into
+  the Devpost submission form, block by block, in the order of the form, with
+  the measured length of every block and the limit of every field.
+- [`VIDEO-YOUTUBE-QNX-PORTMAP.md`](VIDEO-YOUTUBE-QNX-PORTMAP.md) - the plan of
+  the demonstration video, minute by minute, and the one segment that is
+  still missing.
+
 Usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md). A codelab draft for
 `community.qnx.com` is in [`docs/CODELAB-COMMUNITY-QNX.md`](docs/CODELAB-COMMUNITY-QNX.md)
-(text only, not published).
+(text only, **not published yet**: the URL of the published codelab will be
+added here and in the submission kit when it goes online).
 
 ---
 
@@ -286,12 +342,16 @@ python3 -m unittest discover -s tests -t .
 
 | Situation | Resultat |
 |---|---|
-| Corpus present (dans `corpus/`, ou via `QX_PORTMAP_CORPUS`) | 124 tests, **1 skip**, code de sortie 0 |
+| Corpus dans `corpus/` (a cote du paquet) | 124 tests, **0 skip**, code de sortie 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | 124 tests, **1 skip**, code de sortie 0 |
 | Corpus absent | 124 tests, **25 skip**, code de sortie 0 |
 
-Avec le corpus, le seul test saute est celui qui exige le corpus **dans le
-paquet installe** (absent du depot, la documentation QNX n'etant pas
-redistribuee) ; il est saute, jamais en echec.
+Avec le corpus fourni par `QX_PORTMAP_CORPUS`, le seul test saute est celui
+qui exige le corpus **dans le paquet installe** (absent du depot, la
+documentation QNX n'etant pas redistribuee) ; il est saute, jamais en echec.
+Si le corpus est place dans `corpus/` a cote du paquet, ce test s'execute et
+la suite passe sans aucun saut. Les trois lignes du tableau ci-dessus ont ete
+remesurees le 15/11/2026.
 
 Les 25 tests sautes sont ceux qui exigent le corpus complet (integrite
 SHA-256 de chacune des 3 426 pages, chiffres de l'index 8.0 et 7.1, reponses

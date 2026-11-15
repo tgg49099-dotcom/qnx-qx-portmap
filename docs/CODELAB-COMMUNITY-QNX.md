@@ -64,10 +64,11 @@ download log and computes the SHA-256 of every page:
 bash scripts/bootstrap_corpus.sh --out corpus-downloaded
 ```
 
-A quick 3-pages-per-book trial, to check the access:
+A quick 3-pages-per-book trial, to check the access (27 pages, 51 seconds
+measured on 15 November 2026):
 
 ```bash
-bash scripts/bootstrap_corpus.sh --out corpus-downloaded --fresh --fresh-max-pages 3
+bash scripts/bootstrap_corpus.sh --out /tmp/essai --max-pages 3 --delay 1.0
 ```
 
 ## Step 3 - Ask about your symbols

@@ -97,10 +97,11 @@ bash scripts/bootstrap_corpus.sh --out corpus-downloaded
 Le script telecharge la documentation officielle QNX 7.1 et 8.0 depuis
 `https://www.qnx.com/developers/docs/`, en garde le journal de telechargement,
 et calcule l'empreinte SHA-256 de chaque page. Un essai rapide (3 pages par
-livre, pour verifier l'acces reseau) :
+livre, pour verifier l'acces reseau ; 27 pages, 51 secondes mesurees le
+15/11/2026) :
 
 ```bash
-bash scripts/bootstrap_corpus.sh --out corpus-downloaded --fresh --fresh-max-pages 3
+bash scripts/bootstrap_corpus.sh --out /tmp/essai --max-pages 3 --delay 1.0
 ```
 
 Le corpus reconstruit est verifiable : `qnx-portmap --verify-corpus`.
@@ -142,8 +143,9 @@ les efface pas. C'est le **plafond honnete** du taux sur cet echantillon.
 python3 -m unittest discover -s tests -t .
 ```
 
-Sans corpus : 124 tests, dont 21 sautes (le test le dit, il ne ment pas).
-Avec le corpus : 124 tests, 0 saut, code de sortie 0.
+Sans corpus : 124 tests, dont 25 sautes (le test le dit, il ne ment pas).
+Avec le corpus : 124 tests, 1 saut, code de sortie 0.
+(Chiffres remesures le 15/11/2026.)
 
 La preuve **ROUGE -> VERT** (on casse une regle, le test echoue, on restaure,
 le test repasse) est dans [`preuves/`](preuves/) ; le detail des mesures et
