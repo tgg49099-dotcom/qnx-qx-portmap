@@ -480,9 +480,11 @@ Le script :
 4. **refuse d'ecrire dans un corpus deja fige** (et dans tout repertoire
    place sous une archive portant le marqueur `CORPUS-FIGE.txt`).
 
-**Temps mesure** le 15/11/2026, avec un delai de 1,0 s : **27 pages en 51 s**
-(soit environ 2 s par page, requete comprise), 0 echec. Pour le corpus complet
-de 3 426 pages, il faut compter **environ 1 h 55** a ce rythme. La commande
+**Temps mesure**, avec un delai de 1,0 s : le 15/11/2026, **27 pages en 51 s**
+(soit environ 2 s par page, requete comprise), 0 echec ; le 16/11/2026, **592 pages
+en 1 030 s** sur deux tranches (soit 1,7 s par page), 0 echec. Pour le corpus
+complet (environ 3 400 pages ; le corpus fige en compte 3 426), il faut compter
+**environ 1 h 40 a 2 h** a ce rythme. La commande
 s'arrete a tout moment : `--max-pages N` limite le nombre de pages par livre
 (utile pour un essai).
 

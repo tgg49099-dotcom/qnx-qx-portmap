@@ -61,9 +61,10 @@ $ pip install .
 $ qnx-portmap abort accept bzero zzz_fonction_inexistante
 ```
 
-The first run needs the frozen corpus: **3,426 pages** of the official QNX
-documentation, downloaded once from the official QNX site. **Budget about 1 h
-40** at one request per second (about 3,400 pages, measured on 16 November
+The first run needs the corpus: **about 3,400 pages** of the official QNX
+documentation, downloaded once from the official QNX site (the frozen snapshot
+used for the proofs below holds 3,426 pages). **Budget about 1 h 40 to 2 h** at
+one request per second (1.7 to 2 s per page, measured on 15 and 16 November
 2026). After that download the tool runs offline, with no network request.
 
 Excerpt of the **real output** (executed on 15 November 2026; the citation

@@ -175,11 +175,11 @@ symbols to fix, sorted by priority.
 
 - It does not analyse a binary and it does not run on the target: it analyses
   the documentation.
-- It does not redistribute the QNX documentation. The corpus (3,426 pages,
+- It does not redistribute the QNX documentation. The corpus (about 3,400 pages,
   QNX 7.1 and 8.0) is rebuilt on demand from the official QNX site with one
-  command and one download log. **The first download takes about 1 h 40** at one
-  request per second (about 3,400 pages, measured on 16 November 2026); after
-  that the tool works offline.
+  command and one download log. **The first download takes about 1 h 40 to 2 h**
+  at one request per second (1.7 to 2 s per page, measured on 15 and 16 November
+  2026); after that the tool works offline.
 - It makes no network request by default; the online refresh is an opt-in
   flag.
 - It does not check licences, CVEs, or symbols published after the corpus
@@ -201,9 +201,10 @@ cd qnx-qx-portmap && pip install . && bash scripts/bootstrap_corpus.sh --out cor
 QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
 ```
 
-The second command downloads the corpus: **3,426 pages** of the official QNX
-documentation, one request per second. **Budget about 1 h 40** (about 3,400
-pages, measured on 16 November 2026). The third command then runs offline.
+The second command downloads the corpus: **about 3,400 pages** of the official
+QNX documentation, one request per second. **Budget about 1 h 40 to 2 h**
+(1.7 to 2 s per page, measured on 15 and 16 November 2026). The third command
+then runs offline.
 
 Real output, executed on 15 November 2026 against the 3,426-page corpus (the
 corpus is a snapshot of the official documentation taken on 14 November 2026;
@@ -298,7 +299,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 8146 characters
+- Length (measured): 8190 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to
