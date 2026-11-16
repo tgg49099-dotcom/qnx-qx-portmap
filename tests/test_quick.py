@@ -201,6 +201,18 @@ class TestQuickSynthetic(unittest.TestCase):
         self.assertEqual(out, "")
 
 
+    def test_cli_quick_unwritable_directory_exit_code_2(self):
+        blocker = os.path.join(self.tmp, "a-file")
+        with open(blocker, "w") as fh:
+            fh.write("not a directory")
+        code, out, err = run_cli(["--quick", "--quick-out",
+                                  os.path.join(blocker, "corpus-quick"), "frob"])
+        self.assertEqual(code, 2)
+        self.assertIn("quick mode not possible", err)
+        self.assertNotIn("Traceback", err)
+        self.assertEqual(out, "")
+
+
 @unittest.skipUnless(corpus_available(), CORPUS_ABSENT_MSG)
 class TestQuickAgainstFrozenCorpus(unittest.TestCase):
     """On the real documentation: quick never contradicts full."""

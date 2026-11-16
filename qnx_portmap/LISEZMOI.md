@@ -13,7 +13,7 @@ What this folder contains:
 Verification commands (from the `qnx-portmap/` root):
 
 ```bash
-python3 -m unittest discover -s tests -t .   # 182 tests: green, 32 skipped without corpus
+python3 -m unittest discover -s tests -t .   # 183 tests: green, 32 skipped without corpus
 python3 tools/contre_epreuve.py               # 10/10 counter-proofs must be conclusive
 ```
 

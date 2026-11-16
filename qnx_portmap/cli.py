@@ -238,7 +238,7 @@ def _do_quick(args, symbols, s):
             out_dir, symbols, version=args.version_doc,
             previous=args.previous_version,
             progress=lambda line: sys.stderr.write("  %s\n" % line))
-    except QuickError as exc:
+    except (QuickError, OSError) as exc:     # network down, directory not writable
         sys.stderr.write(s["quick_failed"] % exc)
         return None
     sys.stderr.write(s["quick_built"] % (manifest["pages_total"],
