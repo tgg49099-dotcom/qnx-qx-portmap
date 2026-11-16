@@ -40,6 +40,11 @@ TEXT_STRINGS = {
         "note": "    note   : %s",
         "worklist": "--- Liste de travail de mise a niveau (%d symbole(s)) ---",
         "nothing": "(rien a migrer : tous les symboles analyses sont documentes en %s)",
+        "nothing_decided": "(rien a migrer parmi les symboles tranches)",
+        "unknown_tail": "(+ %d symbole(s) inconnu(s), hors de cette liste : %s - verifier "
+                        "l'orthographe, ou un symbole ajoute apres la date du corpus)",
+        "unknown_tail_quick": "(+ %d symbole(s) inconnu(s), non tranche(s) par le mode rapide : "
+                              "%s - le corpus complet les tranche)",
         "migration_short": "      cite par le guide de migration : %s",
     },
     "en": {
@@ -64,6 +69,11 @@ TEXT_STRINGS = {
         "note": "    note   : %s",
         "worklist": "--- Upgrade worklist (%d symbol(s)) ---",
         "nothing": "(nothing to migrate: every analyzed symbol is documented in %s)",
+        "nothing_decided": "(nothing to migrate among the decided symbols)",
+        "unknown_tail": "(+ %d unknown symbol(s), not in this list: %s - check the spelling, "
+                        "or a symbol added after the corpus date)",
+        "unknown_tail_quick": "(+ %d unknown symbol(s), not decided by the quick mode: %s - "
+                              "the full corpus decides them)",
         "migration_short": "      cited by the migration guide: %s",
     },
 }
@@ -82,6 +92,8 @@ MD_STRINGS = {
         "no": "non",
         "worklist": "### Liste de travail de mise a niveau",
         "nothing": "_Aucun symbole a migrer._",
+        "nothing_decided": "_Aucun symbole a migrer parmi les symboles tranches._",
+        "unknown_tail": "_Hors de cette liste, symboles inconnus : %s._",
         "work_head": "| Priorite | Symbole | Statut | Page |",
     },
     "en": {
@@ -102,6 +114,8 @@ MD_STRINGS = {
         "no": "no",
         "worklist": "### Upgrade worklist",
         "nothing": "_No symbol to migrate._",
+        "nothing_decided": "_No symbol to migrate among the decided ones._",
+        "unknown_tail": "_Unknown, not in this list: %s._",
         "work_head": "| Priority | Symbol | Status | Page |",
     },
 }
@@ -172,8 +186,11 @@ def render_text(results, worklist, corpus, version="8.0", previous="7.1", width=
         out.append("")
 
     out.append(L["worklist"] % len(worklist))
-    if not worklist:
+    unknown = [r.symbol for r in results if r.status == UNKNOWN]
+    if not worklist and not unknown:
         out.append(L["nothing"] % version)
+    elif not worklist:
+        out.append(L["nothing_decided"])
     else:
         for res in worklist:
             tag = "P%d" % res.priority
@@ -185,6 +202,10 @@ def render_text(results, worklist, corpus, version="8.0", previous="7.1", width=
             if res.mentioned_in_migration_guide:
                 out.append(L["migration_short"]
                            % (res.migration_urls[0] if res.migration_urls else ""))
+    if unknown:
+        # an unknown symbol is never silently left out of the worklist
+        out.append(L["unknown_tail_quick" if quick else "unknown_tail"]
+                   % (len(unknown), ", ".join(unknown)))
     out.append("")
     return "\n".join(out) + "\n"
 
@@ -246,13 +267,17 @@ def render_markdown(results, worklist, corpus, version="8.0", previous="7.1",
     out.append("")
     out.append(L["worklist"])
     out.append("")
+    unknown = [r.symbol for r in results if r.status == UNKNOWN]
     if not worklist:
-        out.append(L["nothing"])
+        out.append(L["nothing_decided"] if unknown else L["nothing"])
     else:
         out.append(L["work_head"])
         out.append("|---|---|---|---|")
         for res in worklist:
             out.append("| P%d | `%s` | %s | %s |"
                        % (res.priority, res.symbol, L["status"][res.status], res.url or "-"))
+    if unknown:
+        out.append("")
+        out.append(L["unknown_tail"] % ", ".join("`%s`" % u for u in unknown))
     out.append("")
     return "\n".join(out) + "\n"

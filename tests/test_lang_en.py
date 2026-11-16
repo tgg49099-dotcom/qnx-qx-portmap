@@ -233,4 +233,7 @@ class TestLangEn(unittest.TestCase):
         self.assertEqual(missed, [])
 
 
-FROZEN_FR_SHA256 = "c7bebbecdf55c548bd51eec6e74e2ffacf7c7ab7460d7720f2d5da7fd43eaf10"
+# 16/11/2026 (Studio) : empreinte mise a jour une seule fois, volontairement :
+# un symbole inconnu n'est plus passe sous silence apres la liste de travail
+# (ligne "(+ N symbole(s) inconnu(s) ...)", voir tests/test_worklist_unknown.py).
+FROZEN_FR_SHA256 = "b19fa66da73149e33077ebf858d67acc7cee3889597e2a91733d8dffcda9a95e"

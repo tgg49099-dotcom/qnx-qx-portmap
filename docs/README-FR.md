@@ -111,14 +111,14 @@ pip install .                     # or, without installing: python3 -m qnx_portm
 python3 -m unittest discover -s tests -t .
 ```
 
-Result measured on 16 November 2026: **189 tests, exit code 0**, without any
+Result measured on 16 November 2026: **194 tests, exit code 0**, without any
 network access and without any third-party dependency.
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/`, next to the package | 189 tests, **0 skipped**, exit code 0 |
-| Corpus through `QX_PORTMAP_CORPUS` | 189 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 189 tests, **33 skipped**, exit code 0 |
+| Corpus in `corpus/`, next to the package | 194 tests, **0 skipped**, exit code 0 |
+| Corpus through `QX_PORTMAP_CORPUS` | 194 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 194 tests, **33 skipped**, exit code 0 |
 
 The skipped tests are the ones that need the corpus: they are skipped, never
 failed. A test that always passes tests nothing, so the repository also
@@ -354,6 +354,7 @@ P3  accept                     decrit ailleurs
       https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports )
       and Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
       cite par le guide de migration : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
+(+ 1 symbole(s) inconnu(s), hors de cette liste : zzz_fonction_inexistante - verifier l'orthographe, ou un symbole ajoute apres la date du corpus)
 ```
 
 Les quatre statuts apparaissent dans la meme sortie : `abort` est documente,
@@ -372,13 +373,13 @@ echoue si l'outil change.
 python3 -m unittest discover -s tests -t .
 ```
 
-189 tests, aucune dependance, **aucun acces reseau**. Trois cas :
+194 tests, aucune dependance, **aucun acces reseau**. Trois cas :
 
 | Situation | Resultat |
 |---|---|
-| Corpus dans `corpus/` (a cote du paquet) | 189 tests, **0 skip**, code de sortie 0 |
-| Corpus via `QX_PORTMAP_CORPUS` | 189 tests, **1 skip**, code de sortie 0 |
-| Corpus absent | 189 tests, **33 skip**, code de sortie 0 |
+| Corpus dans `corpus/` (a cote du paquet) | 194 tests, **0 skip**, code de sortie 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | 194 tests, **1 skip**, code de sortie 0 |
+| Corpus absent | 194 tests, **33 skip**, code de sortie 0 |
 
 Avec le corpus fourni par `QX_PORTMAP_CORPUS`, le seul test saute est celui
 qui exige le corpus **dans le paquet installe** (absent du depot, la
@@ -395,7 +396,7 @@ sur des symboles reels). Ils sont **sautes, jamais en echec**, avec le message :
 corpus absent : lancer scripts/bootstrap_corpus.sh
 ```
 
-Les 156 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
+Les 161 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
 `tests/test_fixtures.py` travaillent sur les **fixtures miniatures** : 12
 extraits courts (1 a 3 lignes) de pages QNX reelles, ranges dans
 `tests/fixtures/`, avec l'URL source, la date de consultation et l'empreinte
