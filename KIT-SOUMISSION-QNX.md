@@ -180,7 +180,8 @@ symbols to fix, sorted by priority.
   command and one download log. **The first download takes about 1 h 40 to 2 h**
   at one request per second (1.7 to 2 s per page, measured on 15 and 16 November
   2026); after that the tool works offline. A **quick mode** (`--quick`,
-  about two minutes, 76 pages) gives a first answer without that download.
+  about two to three minutes, 76 pages) gives a first answer without that
+  download.
 - It makes no network request by default; the online refresh is an opt-in
   flag.
 - It does not check licences, CVEs, or symbols published after the corpus
@@ -198,18 +199,31 @@ symbols to fix, sorted by priority.
 
 ```bash
 git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git
-cd qnx-qx-portmap && pip install .
-qnx-portmap --quick abort accept bzero zzz_fonction_inexistante
+cd qnx-qx-portmap && pip install .   # optional: the tool needs only the standard library
+python3 -m qnx_portmap --quick abort accept bzero zzz_fonction_inexistante
 ```
 
-The third command is the **quick mode**: a first answer in about two
-minutes (76 pages downloaded in 127 s, measured on 16 November 2026, one
-request per second). It reads only the A-Z indexes of the QNX 8.0 and 7.1 C
-Library Reference, the official migration guide to 8.0 and the own page of
-each documented symbol. It answers `documented` and `described elsewhere`
-like the full mode, but it **never says `absent`**: a symbol that only the
-full corpus can decide is reported `unknown`, with a note that says why.
-Real output of that run:
+The second command is optional and can fail on a locked-down Python. Measured
+on 16 November 2026: a system Python protected by PEP 668 refuses the install,
+and inside a virtual environment with `PIP_USER` set, pip refuses a `--user`
+install. The tool is pure standard library, so the third command works with or
+without the install: `python3 -m qnx_portmap` is the same program as the
+`qnx-portmap` command the install gives, and it needs nothing else.
+
+The third command is the **quick mode**: a first answer in about two to three
+minutes (76 pages downloaded in 127 s in the build environment, and in 144 s
+in an independent replay from a clean virtual environment, both measured on
+16 November 2026, one request per second). It reads only the A-Z indexes of
+the QNX 8.0 and 7.1 C Library Reference, the official migration guide to 8.0
+and the own page of each documented symbol. It answers `documented` and
+`described elsewhere` like the full mode, but it **never says `absent`**: a
+symbol that only the full corpus can decide is reported `unknown`, with a note
+that says why.
+The exit code of that run is **1**, and that is the expected code: `0` when
+every analysed symbol is documented in 8.0, `1` when at least one symbol is
+absent or unknown, `2` on error. The quick mode answers `unknown` for the two
+symbols it cannot decide, so `1` is the right code here.
+Real output of that run (one line per symbol):
 
 ```text
   abort                        documented
@@ -326,7 +340,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 9632 characters
+- Length (measured): 10584 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to
