@@ -63,9 +63,11 @@ frozen corpus (tools/build_corpus.py).
 The script REFUSES to write into an already frozen corpus, and into any
 directory placed under an archive bearing the CORPUS-FIGE.txt marker.
 
-Time measured on 14/11/2026: 27 pages in 53 s with a 1.0 s delay
-(about 2 s per page, request included). For the 3 426 pages of the complete
-corpus, count on about 1 h 55 at this rate.
+Time measured with a 1.0 s delay: on 14/11/2026, 27 pages in 53 s
+(about 2 s per page, request included); on 16/11/2026, 592 pages in
+1 030 s in two tranches (about 1.7 s per page), 0 failure. For the complete
+corpus (about 3,400 pages; the frozen snapshot holds 3,426 pages), count on
+about 1 h 40 to 2 h at this rate.
 
 To use the rebuilt corpus:
 

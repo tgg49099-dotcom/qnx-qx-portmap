@@ -650,9 +650,11 @@ The script:
 4. **refuses to write into an already frozen corpus** (and into any directory
    placed under an archive bearing the `CORPUS-FIGE.txt` marker).
 
-**Time measured** on 15/11/2026, with a 1.0 s delay: **27 pages in 51 s**
-(about 2 s per page, request included), 0 failure. For the complete corpus of
-3 426 pages, count on **about 1 h 55** at this rate. The command stops at any
+**Time measured** with a 1.0 s delay: on 15/11/2026, **27 pages in 51 s**
+(about 2 s per page, request included), 0 failure; on 16/11/2026, **592 pages in
+1 030 s** in two tranches (about 1.7 s per page), 0 failure. For the complete
+corpus (about 3,400 pages; the frozen snapshot used for the proofs below holds
+3,426 pages), count on **about 1 h 40 to 2 h** at this rate. The command stops at any
 time: `--max-pages N` limits the number of pages per book (useful for a test).
 
 ```bash
