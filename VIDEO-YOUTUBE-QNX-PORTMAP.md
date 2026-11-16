@@ -332,7 +332,7 @@ left in the default (English) mode turns the suite red.
 ## Update 2026-11-16 - the video is filmed (supersedes sections 2 and 3 for timings)
 
 The demonstration video now exists. It was filmed on 16/11/2026 from the
-**public repository** (first command: a fresh `git clone`, commit `fe19680`
+**public repository** (first command: a fresh `git clone`, commit `c43f60c`
 shown on screen), in a real terminal: every command is really executed, the
 session is recorded with `script -T` and replayed frame by frame; nothing is
 retyped. Only the network wait of the first quick-mode run is shortened, and
@@ -340,10 +340,10 @@ the screen says so (">> wait shortened").
 
 | fact | value | how it was measured |
 |---|---|---|
-| duration | **109.8 s** (under the 3-minute limit) | `ffprobe` on the file |
+| duration | **111.04 s** (under the 3-minute limit) | `ffprobe` on the file |
 | streams | one H.264 video stream, 1920x1080, 25 fps, **no audio track** (no music) | `ffprobe` |
-| quick mode, first run | 76 pages downloaded from qnx.com in 95.3 s, exit code 1 | shown on screen |
-| quick mode, second run | cached, 1.7 s, exit code 0 | shown on screen |
+| quick mode, first run | 76 pages downloaded from qnx.com in 151.2 s, exit code 1 | shown on screen |
+| quick mode, second run | cached, 77 pages in 2.5 s, exit code 0 | shown on screen |
 | test suite on the fresh clone | 194 tests, OK (skipped=33) | shown on screen |
 
 Scenes: title card; clone and Python version; `--quick abort bzero
@@ -381,6 +381,8 @@ Not shown: the tool running on a QNX 8.0 target (that needs the QNX SDP 8.0 lice
 The QNX documentation is not redistributed. Developed with AI assistance.
 
 Code (MIT licence): https://github.com/tgg49099-dotcom/qnx-qx-portmap
+The video file itself, downloadable: https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/qx-portmap-demo-final.mp4
+Thumbnail: https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/qx-portmap-demo-thumbnail.png
 ```
 
 The URL that YouTube gives replaces `<YOUTUBE_URL_TO_BE_FILLED_AFTER_THE_VIDEO_IS_UPLOADED>`

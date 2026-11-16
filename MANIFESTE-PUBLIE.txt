@@ -1,14 +1,14 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
-Tree            : /tmp/pm
-Generated on    : 2026-11-16 15:43:15
-Files           : 114
-Total size      : 3060491 bytes
+Tree            : /work/qnx-portmap
+Generated on    : 2026-11-16 17:13:23
+Files           : 115
+Total size      : 3232853 bytes
 
 The 3 biggest files:
     1832957 bytes  media/qx-portmap-demo-final.mp4
+     172092 bytes  media/qx-portmap-demo-thumbnail.png
       76314 bytes  docs/mesure-J5/mesure-J5.json
-      69089 bytes  docs/mesure-J4/mesure-J4.json
 
 Detail (path, size in bytes, SHA-256):
 
@@ -20,8 +20,8 @@ LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
 LISEZMOI.md	4548	1d2b71093529a08ddac3924093a203f67bb119a92f10b007f42c2b14295afc90
 PROGRESSION-FR.md	16434	b8d48adf7fe2b1cdcb7f41f124f75d036b6d404af6914458e9d3dd3bd78485a5
 PROGRESSION.md	22772	a5e8125190c7fba86629ce7ef8f5e596d547bb012bf0e8f79d0b7d5eca2efcb5
-README.md	47766	8703f2e76683bed9ca8ee2542509096e1c0d9e414b3259e970d48013d80da758
-VIDEO-YOUTUBE-QNX-PORTMAP.md	17623	eef876bb0acd00633f21d033070f94a542c69eed31b84714c0e46347f6609457
+README.md	47766	d0807b6033dd86e7072f0df811855e7aea87f6321fa124d01322efea9faedbb3
+VIDEO-YOUTUBE-QNX-PORTMAP.md	17893	ea2a6ea4aa141c7f74d6ebfb74985ddebea61b8e54451c5f0b2d8773b9f367a4
 docs/CODELAB-COMMUNITY-QNX.md	5459	97f444870fb5537858852494d1c5ca1318ad0c01f7a92c9dad33fc62cad50a8f
 docs/README-FR.md	36946	809ffc69faec30fb4c3adf093f43d9f784db18c3a174633e18b6f7dea777b672
 docs/UTILISATION.md	6562	64c80fbbef84d802dd68877be3f3a4e485857dfba21df26865e853e416ab22b5
@@ -67,6 +67,7 @@ docs/preuves/j-mesure-champs-devpost.txt	6324	8c3389696c9c20d6ddf28774b8171f2fa8
 docs/preuves/k-formulaire-devpost-302-401.txt	1246	6a4894233b15f34b97383efd5a86b630753ddbd63d9aa89e8c5fe3158caac641
 docs/preuves/l-rapport-anglais-rouge.txt	8451	0abda06fe1b54d87d39186795494c9e22722b7b1553676f358d55588d4f219bb
 media/qx-portmap-demo-final.mp4	1832957	edbcc4a09ee16b874ebbf95dad7656e08d42a77d61bb4f391f7e3a303270b697
+media/qx-portmap-demo-thumbnail.png	172092	1640b7e43efe87b1bf05017a3f12675bf25f8d5ac0b1601305a59ff08f77acea
 pyproject.toml	946	d0cff5122950c85836b71634dc9859a28369ae05e722f9056c6e5df8dd7d0187
 qnx_portmap/LISEZMOI-FR.md	782	c2ab59c8b7f12cb2d557e917db3cd7e2857612d5522d4480efb8f7d73d7284b6
 qnx_portmap/LISEZMOI.md	849	2db980f078365f6bccef45ca009e6839dc0a8092b0a5ceac559e087f344ea698
