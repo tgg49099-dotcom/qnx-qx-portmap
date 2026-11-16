@@ -111,14 +111,14 @@ pip install .                     # or, without installing: python3 -m qnx_portm
 python3 -m unittest discover -s tests -t .
 ```
 
-Result measured on 15 November 2026: **124 tests, exit code 0**, without any
+Result measured on 16 November 2026: **184 tests, exit code 0**, without any
 network access and without any third-party dependency.
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/`, next to the package | 124 tests, **0 skipped**, exit code 0 |
-| Corpus through `QX_PORTMAP_CORPUS` | 124 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 124 tests, **25 skipped**, exit code 0 |
+| Corpus in `corpus/`, next to the package | 184 tests, **0 skipped**, exit code 0 |
+| Corpus through `QX_PORTMAP_CORPUS` | 184 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 184 tests, **32 skipped**, exit code 0 |
 
 The skipped tests are the ones that need the corpus: they are skipped, never
 failed. A test that always passes tests nothing, so the repository also
@@ -372,22 +372,22 @@ echoue si l'outil change.
 python3 -m unittest discover -s tests -t .
 ```
 
-124 tests, aucune dependance, **aucun acces reseau**. Deux cas :
+184 tests, aucune dependance, **aucun acces reseau**. Trois cas :
 
 | Situation | Resultat |
 |---|---|
-| Corpus dans `corpus/` (a cote du paquet) | 124 tests, **0 skip**, code de sortie 0 |
-| Corpus via `QX_PORTMAP_CORPUS` | 124 tests, **1 skip**, code de sortie 0 |
-| Corpus absent | 124 tests, **25 skip**, code de sortie 0 |
+| Corpus dans `corpus/` (a cote du paquet) | 184 tests, **0 skip**, code de sortie 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | 184 tests, **1 skip**, code de sortie 0 |
+| Corpus absent | 184 tests, **32 skip**, code de sortie 0 |
 
 Avec le corpus fourni par `QX_PORTMAP_CORPUS`, le seul test saute est celui
 qui exige le corpus **dans le paquet installe** (absent du depot, la
 documentation QNX n'etant pas redistribuee) ; il est saute, jamais en echec.
 Si le corpus est place dans `corpus/` a cote du paquet, ce test s'execute et
 la suite passe sans aucun saut. Les trois lignes du tableau ci-dessus ont ete
-remesurees le 15/11/2026.
+remesurees le 16/11/2026.
 
-Les 25 tests sautes sont ceux qui exigent le corpus complet (integrite
+Les 32 tests sautes sont ceux qui exigent le corpus complet (integrite
 SHA-256 de chacune des 3 426 pages, chiffres de l'index 8.0 et 7.1, reponses
 sur des symboles reels). Ils sont **sautes, jamais en echec**, avec le message :
 
@@ -395,7 +395,7 @@ sur des symboles reels). Ils sont **sautes, jamais en echec**, avec le message :
 corpus absent : lancer scripts/bootstrap_corpus.sh
 ```
 
-Les 99 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
+Les 152 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
 `tests/test_fixtures.py` travaillent sur les **fixtures miniatures** : 12
 extraits courts (1 a 3 lignes) de pages QNX reelles, ranges dans
 `tests/fixtures/`, avec l'URL source, la date de consultation et l'empreinte
@@ -593,8 +593,8 @@ sont dans `docs/preuves/` :
 
 | Fichier | Preuve |
 |---|---|
-| `a-tests-sans-corpus.txt` | 124 tests sur une copie **sans** corpus : 99 passent, 25 sont sautes, code de sortie 0 |
-| `b-tests-avec-corpus.txt` | la meme commande **avec** le corpus : 124 tests, 0 saut, code de sortie 0 |
+| `a-tests-sans-corpus.txt` | execution archivee du 15/11/2026 (commit `5653bb2`, avant l'ajout du mode anglais) : 147 tests sur une copie **sans** corpus, 122 passent, 25 sont sautes, code de sortie 0 |
+| `b-tests-avec-corpus.txt` | la meme execution archivee **avec** le corpus : 147 tests, 0 saut, code de sortie 0 |
 | `c-contre-epreuve-rouge-sans-corpus.txt` | contre-epreuve ROUGE sans le corpus : 10/10 concluantes, 1 regle non testable |
 | `d-controle-fuite-corpus.txt` | controle anti-fuite : 0 correspondance |
 | `e-fresh-sans-corpus.txt` | `--fresh --fresh-max-pages 3` sur la copie sans corpus : code de sortie 0, corpus fige inchange |

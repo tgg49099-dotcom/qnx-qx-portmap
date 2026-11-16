@@ -1,7 +1,7 @@
 """The checker of the published numbers must catch a false number.
 
 ``tools/published_counts.py`` compares every test and file count written in
-the README and the two LISEZMOI files with the values measured by
+the README, the French README, the submission kit and the two LISEZMOI files with the values measured by
 ``scripts/verify-all.sh``.  These tests run it on a small synthetic tree:
 a sound tree is green, one false number is caught (and only that one), a
 reworded claim is caught, and the skip counts are never reported OK when the
@@ -29,9 +29,31 @@ published manifest                         OK           MANIFESTE-PUBLIE.txt lis
 """
 LISEZMOI = "Working V0. **{n} tests, all green** ({s} of them are skipped when\n"
 PKG = "python3 -m unittest discover -s tests -t .   # {n} tests: green, {s} skipped without corpus\n"
+README_FR = """Result measured on 16 November 2026: **{n} tests, exit code 0**, without
+
+| Corpus in `corpus/`, next to the package | {n} tests, **0 skipped**, exit code 0 |
+| Corpus through `QX_PORTMAP_CORPUS` | {n} tests, **1 skipped**, exit code 0 |
+| Corpus absent | {n} tests, **{s} skipped**, exit code 0 |
+
+{n} tests, aucune dependance, **aucun acces reseau**. Trois cas :
+
+| Corpus dans `corpus/` (a cote du paquet) | {n} tests, **0 skip**, code de sortie 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | {n} tests, **1 skip**, code de sortie 0 |
+| Corpus absent | {n} tests, **{s} skip**, code de sortie 0 |
+
+Les {s} tests sautes sont ceux qui exigent le corpus complet
+
+Les {p} autres tests passent **sans corpus**.
+"""
+KIT = """{n} tests, no third-party dependency, no network access. Measured on
+16 November 2026 in the three possible configurations: with the corpus in
+`corpus/` next to the package, {n} tests and 0 skipped; with the corpus
+pointed to by the environment variable `QX_PORTMAP_CORPUS`, {n} tests and 1
+skipped; without any corpus, {n} tests and {s} skipped (the skipped ones are
+"""
 
 
-def make_tree(root, n=10, s=3, f=7, p=None):
+def make_tree(root, n=10, s=3, f=7, p=None, fr_n=None):
     if p is None:
         p = n - s
     os.makedirs(os.path.join(root, "qnx_portmap"))
@@ -41,6 +63,11 @@ def make_tree(root, n=10, s=3, f=7, p=None):
         h.write(LISEZMOI.format(n=n, s=s))
     with open(os.path.join(root, "qnx_portmap", "LISEZMOI.md"), "w", encoding="utf-8") as h:
         h.write(PKG.format(n=n, s=s))
+    os.makedirs(os.path.join(root, "docs"))
+    with open(os.path.join(root, "docs", "README-FR.md"), "w", encoding="utf-8") as h:
+        h.write(README_FR.format(n=n if fr_n is None else fr_n, s=s, p=n - s))
+    with open(os.path.join(root, "KIT-SOUMISSION-QNX.md"), "w", encoding="utf-8") as h:
+        h.write(KIT.format(n=n, s=s))
 
 
 class TestPublishedCounts(unittest.TestCase):
@@ -65,6 +92,16 @@ class TestPublishedCounts(unittest.TestCase):
             make_tree(root, n=10)
             rows, failed = check(root, 11, 3, False, 7)  # one test was added
             self.assertGreaterEqual(failed, 8, rows)
+
+    def test_stale_french_readme_is_caught(self):
+        # 16/11/2026: docs/README-FR.md still said 124 tests while the suite
+        # had 183, because the French README was not checked at all.
+        with tempfile.TemporaryDirectory() as root:
+            make_tree(root, fr_n=9)
+            rows, failed = check(root, 10, 3, False, 7)
+            self.assertEqual(failed, 8, rows)
+            self.assertEqual({r[0] for r in rows if r[4] == "FAILED"},
+                             {"docs/README-FR.md"})
 
     def test_reworded_claim_is_not_silently_dropped(self):
         with tempfile.TemporaryDirectory() as root:

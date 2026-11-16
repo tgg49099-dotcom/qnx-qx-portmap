@@ -270,3 +270,7 @@ for byte, and `--lang fr` is the French output of the day before, byte for byte.
 The published figures are unchanged: **J4 = 93 %**, **J5 = 96 %**, **170 tests**
 (170 tests, 27 of them skipped without the corpus, 1 skipped with the corpus).
 
+
+## Progress of this cycle (16/11/2026, quick mode and the judge's first command)
+
+- `--quick` (A-Z indexes of the 8.0 and 7.1 C Library Reference, migration guide to 8.0, own page of each documented symbol): **76 pages in 127 s** for `abort accept bzero zzz_fonction_inexistante`, measured on 16/11/2026 at one request per second; it never says `absent`; `tests/test_quick.py` checks on the frozen corpus that it never contradicts the full mode. It is now the first command of the submission kit (section 4.1), and `tools/published_counts.py` also checks the French README and the kit, where stale test counts (124 instead of 183) had been left unchecked.

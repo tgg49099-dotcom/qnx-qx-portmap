@@ -179,7 +179,8 @@ symbols to fix, sorted by priority.
   QNX 7.1 and 8.0) is rebuilt on demand from the official QNX site with one
   command and one download log. **The first download takes about 1 h 40 to 2 h**
   at one request per second (1.7 to 2 s per page, measured on 15 and 16 November
-  2026); after that the tool works offline.
+  2026); after that the tool works offline. A **quick mode** (`--quick`,
+  about two minutes, 76 pages) gives a first answer without that download.
 - It makes no network request by default; the online refresh is an opt-in
   flag.
 - It does not check licences, CVEs, or symbols published after the corpus
@@ -197,14 +198,40 @@ symbols to fix, sorted by priority.
 
 ```bash
 git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git
-cd qnx-qx-portmap && pip install . && bash scripts/bootstrap_corpus.sh --out corpus-downloaded
-QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
+cd qnx-qx-portmap && pip install .
+qnx-portmap --quick abort accept bzero zzz_fonction_inexistante
 ```
 
-The second command downloads the corpus: **about 3,400 pages** of the official
-QNX documentation, one request per second. **Budget about 1 h 40 to 2 h**
-(1.7 to 2 s per page, measured on 15 and 16 November 2026). The third command
-then runs offline.
+The third command is the **quick mode**: a first answer in about two
+minutes (76 pages downloaded in 127 s, measured on 16 November 2026, one
+request per second). It reads only the A-Z indexes of the QNX 8.0 and 7.1 C
+Library Reference, the official migration guide to 8.0 and the own page of
+each documented symbol. It answers `documented` and `described elsewhere`
+like the full mode, but it **never says `absent`**: a symbol that only the
+full corpus can decide is reported `unknown`, with a note that says why.
+Real output of that run:
+
+```text
+  abort                        documented
+    note   : present in 7.1 and in 8.0
+  accept                       described elsewhere
+    note   : described in the 8.0 documentation but without a page of its own in the C Library Reference
+  bzero                        unknown
+    note   : quick mode: in the 7.1 C Library Reference index, not in the 8.0 index; the other 8.0 books were not read, so absent or described elsewhere is decided by the full corpus (scripts/bootstrap_corpus.sh)
+  zzz_fonction_inexistante     unknown
+    note   : quick mode: in neither the 8.0 nor the 7.1 index; the other 8.0 books were not read (full corpus: scripts/bootstrap_corpus.sh)
+```
+
+For the full answer (quotations, SHA-256, and `absent`), download the
+complete corpus once: **about 3,400 pages** of the official QNX
+documentation, one request per second. **Budget about 1 h 40 to 2 h**
+(1.7 to 2 s per page, measured on 15 and 16 November 2026). The tool then
+runs offline:
+
+```bash
+bash scripts/bootstrap_corpus.sh --out corpus-downloaded
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
+```
 
 Real output, executed on 15 November 2026 against the 3,426-page corpus (the
 corpus is a snapshot of the official documentation taken on 14 November 2026;
@@ -254,11 +281,11 @@ symbols, the citation of each one and the SHA-256 of the cited page are in
 python3 -m unittest discover -s tests -t .
 ```
 
-183 tests, no third-party dependency, no network access. Measured on
-15 November 2026 in the three possible configurations: with the corpus in
-`corpus/` next to the package, 183 tests and 0 skipped; with the corpus
-pointed to by the environment variable `QX_PORTMAP_CORPUS`, 183 tests and 1
-skipped; without any corpus, 183 tests and 32 skipped (the skipped ones are
+184 tests, no third-party dependency, no network access. Measured on
+16 November 2026 in the three possible configurations: with the corpus in
+`corpus/` next to the package, 184 tests and 0 skipped; with the corpus
+pointed to by the environment variable `QX_PORTMAP_CORPUS`, 184 tests and 1
+skipped; without any corpus, 184 tests and 32 skipped (the skipped ones are
 the ones that need the corpus). The suite also contains
 a RED -> GREEN proof: `tools/contre_epreuve.py` breaks one rule of the code
 at a time and checks that the matching test turns red, then restores the
@@ -299,7 +326,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 8190 characters
+- Length (measured): 9632 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to
