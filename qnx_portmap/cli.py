@@ -13,6 +13,7 @@ import sys
 
 from .classify import Classifier
 from .corpus import Corpus, CorpusError, default_corpus_dir, read_symbols
+from .quick import apply_quick_limits, is_quick
 from .report import render_json, render_markdown, render_text
 
 # Help of the argument parser in the two output languages. English is the
@@ -44,6 +45,10 @@ HELP_STRINGS = {
         "fresh_max_pages": "limiter le nombre de pages par livre lors du rechargement",
         "fresh_only": "avec --fresh : reconstruire le corpus et sortir",
         "lang": "langue de sortie (defaut : en)",
+        "quick": "mode rapide : telecharge seulement les index A-Z 8.0 et 7.1, "
+                 "le guide de migration et les pages des symboles (environ 80 "
+                 "requetes, quelques minutes) ; ne dit jamais \"absent\"",
+        "quick_out": "repertoire du petit corpus du mode rapide (defaut : corpus-quick)",
     },
     "en": {
         "description": "Status of QNX symbols in the 8.0 documentation "
@@ -70,6 +75,10 @@ HELP_STRINGS = {
         "fresh_max_pages": "cap the number of pages per book during the reload",
         "fresh_only": "with --fresh: rebuild the corpus and exit",
         "lang": "output language (default: en)",
+        "quick": "quick mode: download only the 8.0 and 7.1 A-Z indexes, the "
+                 "migration guide and the pages of the symbols (about 80 "
+                 "requests, a few minutes); never says \"absent\"",
+        "quick_out": "directory of the small quick-mode corpus (default: corpus-quick)",
     },
 }
 
@@ -97,6 +106,9 @@ CLI_STRINGS = {
         "fresh_version": "  version %s\n",
         "fresh_failed": "qnx-portmap: %d page(s) non telechargee(s)\n",
         "fresh_built": "qnx-portmap: corpus reconstruit : %d pages\n",
+        "quick_online": "qnx-portmap: mode rapide, telechargement vers %s\n",
+        "quick_failed": "qnx-portmap: mode rapide impossible : %s\n",
+        "quick_built": "qnx-portmap: petit corpus pret : %d pages en %s s\n",
     },
     "en": {
         "no_symbols": "qnx-portmap: no symbol given (argument, --file or --stdin)\n",
@@ -120,6 +132,9 @@ CLI_STRINGS = {
         "fresh_version": "  version %s\n",
         "fresh_failed": "qnx-portmap: %d page(s) not downloaded\n",
         "fresh_built": "qnx-portmap: corpus rebuilt: %d pages\n",
+        "quick_online": "qnx-portmap: quick mode, downloading to %s\n",
+        "quick_failed": "qnx-portmap: quick mode not possible: %s\n",
+        "quick_built": "qnx-portmap: small corpus ready: %d pages in %s s\n",
     },
 }
 
@@ -168,6 +183,8 @@ def build_parser(lang="en"):
                    help=h["fresh_max_pages"])
     p.add_argument("--fresh-only", action="store_true",
                    help=h["fresh_only"])
+    p.add_argument("--quick", action="store_true", help=h["quick"])
+    p.add_argument("--quick-out", default="corpus-quick", help=h["quick_out"])
     return p
 
 
@@ -210,12 +227,40 @@ def _do_fresh(args, corpus_dir, s):
     return out_dir
 
 
+def _do_quick(args, symbols, s):
+    """Builds the small corpus of the quick mode. Returns its directory."""
+    from .quick import QuickError, build_quick_corpus
+
+    out_dir = os.path.abspath(args.quick_out)
+    sys.stderr.write(s["quick_online"] % out_dir)
+    try:
+        manifest = build_quick_corpus(
+            out_dir, symbols, version=args.version_doc,
+            previous=args.previous_version,
+            progress=lambda line: sys.stderr.write("  %s\n" % line))
+    except QuickError as exc:
+        sys.stderr.write(s["quick_failed"] % exc)
+        return None
+    sys.stderr.write(s["quick_built"] % (manifest["pages_total"],
+                                         manifest["quick"]["seconds"]))
+    return out_dir
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     args = build_parser(_early_lang(argv)).parse_args(argv)
     s = CLI_STRINGS[args.lang]
     corpus_dir = args.corpus or default_corpus_dir()
-    if args.fresh:
+    quick_symbols = None
+    if args.quick:
+        quick_symbols = _collect_symbols(args, s)
+        if not quick_symbols:
+            sys.stderr.write(s["no_symbols"])
+            return 2
+        corpus_dir = _do_quick(args, quick_symbols, s)
+        if corpus_dir is None:
+            return 2
+    elif args.fresh:
         corpus_dir = _do_fresh(args, corpus_dir, s)
         if args.fresh_only:
             return 0
@@ -255,7 +300,7 @@ def main(argv=None):
             print("  %-42s %d" % (book, n))
         return 0
 
-    symbols = _collect_symbols(args, s)
+    symbols = quick_symbols or _collect_symbols(args, s)
     if not symbols:
         sys.stderr.write(s["no_symbols"])
         return 2
@@ -263,6 +308,9 @@ def main(argv=None):
     classifier = Classifier(corpus, version=args.version_doc,
                             previous=args.previous_version, lang=args.lang)
     results = classifier.classify(symbols)
+    if is_quick(corpus):
+        apply_quick_limits(results, version=args.version_doc,
+                           previous=args.previous_version, lang=args.lang)
     worklist = Classifier.worklist(results)
 
     if args.format == "json":

@@ -256,6 +256,16 @@ qnx-portmap --corpus /chemin/vers/corpus abort
 Sans corpus, l'outil ne devine rien : il affiche `corpus introuvable` et
 sort avec le code 2.
 
+**Mode rapide** (environ 80 requetes, quelques minutes) :
+`qnx-portmap --quick --lang fr abort accept bzero`. Il ne telecharge que les
+26 pages d'index A-Z des C Library Reference 8.0 et 7.1, le guide de
+migration 8.0 et la page propre de chaque symbole documente (dans
+`corpus-quick/`). Il repond `documente` et `decrit ailleurs` comme le mode
+complet, mais **ne dit jamais `absent`** : un symbole de la 7.1 absent de
+l'index 8.0 (ici `bzero`) sort `inconnu du corpus`, avec sa page 7.1 et une
+note qui l'explique. `tests/test_quick.py` verifie sur le corpus fige que le
+mode rapide ne contredit jamais le mode complet.
+
 ## Utilisation
 
 Guide d'usage court : [`docs/UTILISATION.md`](docs/UTILISATION.md) (lancer

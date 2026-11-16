@@ -28,6 +28,9 @@ TEXT_STRINGS = {
         "title": "QX PORTMAP - etat des symboles QNX dans la documentation %s",
         "corpus": "corpus fige : %s",
         "pages": "pages : %d (7.1 : %d, 8.0 : %d) - consulte le %s - mode hors ligne",
+        "corpus_quick": "petit corpus du mode rapide : %s",
+        "pages_quick": "pages : %d (7.1 : %d, 8.0 : %d) - telecharge le %s - mode rapide "
+                       "(index A-Z et guide de migration seulement ; jamais \"absent\")",
         "empty": "(aucun symbole a analyser)",
         "page": "    page   : %s",
         "see": "    voir   : %s",
@@ -49,6 +52,9 @@ TEXT_STRINGS = {
         "title": "QX PORTMAP - status of QNX symbols in the %s documentation",
         "corpus": "frozen corpus: %s",
         "pages": "pages: %d (7.1: %d, 8.0: %d) - consulted on %s - offline mode",
+        "corpus_quick": "quick-mode small corpus: %s",
+        "pages_quick": "pages: %d (7.1: %d, 8.0: %d) - downloaded on %s - quick mode "
+                       "(A-Z indexes and migration guide only; never \"absent\")",
         "empty": "(no symbol to analyze)",
         "page": "    page   : %s",
         "see": "    see    : %s",
@@ -67,6 +73,8 @@ MD_STRINGS = {
         "status": STATUS_LABEL,
         "title": "## QX PORTMAP - etat des symboles dans la documentation QNX %s",
         "header": "Corpus fige : %d pages (%s), consulte le %s, lecture hors ligne.",
+        "header_quick": "Mode rapide : %d pages (%s), telechargees le %s : index A-Z et "
+                        "guide de migration seulement, jamais \"absent\".",
         "by_version": "%s : %d pages",
         "empty": "_Aucun symbole analyse._",
         "table_head": "| Symbole | Statut %s | En 7.1 | Page officielle | Citation exacte |",
@@ -85,6 +93,8 @@ MD_STRINGS = {
         },
         "title": "## QX PORTMAP - status of symbols in the QNX %s documentation",
         "header": "Frozen corpus: %d pages (%s), consulted on %s, offline reading.",
+        "header_quick": "Quick mode: %d pages (%s), downloaded on %s: A-Z indexes and "
+                        "migration guide only, never \"absent\".",
         "by_version": "%s: %d pages",
         "empty": "_No symbol analyzed._",
         "table_head": "| Symbol | Status %s | In 7.1 | Official page | Exact citation |",
@@ -127,8 +137,9 @@ def render_text(results, worklist, corpus, version="8.0", previous="7.1", width=
     out = []
     out.append(L["title"] % version)
     man = corpus.manifest
-    out.append(L["corpus"] % corpus.root)
-    out.append(L["pages"] % (man.get("pages_total", 0),
+    quick = man.get("mode") == "quick"
+    out.append(L["corpus_quick" if quick else "corpus"] % corpus.root)
+    out.append(L["pages_quick" if quick else "pages"] % (man.get("pages_total", 0),
                              man.get("pages_by_version", {}).get(previous, 0),
                              man.get("pages_by_version", {}).get(version, 0),
                              man.get("consulted", "?")))
@@ -190,7 +201,8 @@ def render_json(results, worklist, corpus, version="8.0", previous="7.1"):
             "pages_total": man.get("pages_total"),
             "pages_by_version": man.get("pages_by_version"),
             "consulted": man.get("consulted"),
-            "offline": True,
+            "offline": man.get("mode") != "quick",
+            "mode": man.get("mode", "full"),
         },
         "symbols": [r.to_dict() for r in results],
         "worklist": [r.to_dict() for r in worklist],
@@ -213,7 +225,7 @@ def render_markdown(results, worklist, corpus, version="8.0", previous="7.1",
     out = []
     out.append(L["title"] % version)
     out.append("")
-    out.append(L["header"]
+    out.append(L["header_quick" if man.get("mode") == "quick" else "header"]
                % (man.get("pages_total", 0),
                   ", ".join(L["by_version"] % (v, n)
                             for v, n in sorted(man.get("pages_by_version", {}).items())),

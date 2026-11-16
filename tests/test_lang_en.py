@@ -17,6 +17,7 @@ from contextlib import redirect_stderr, redirect_stdout
 
 from qnx_portmap import classify as classify_mod
 from qnx_portmap import cli as cli_mod
+from qnx_portmap import quick as quick_mod
 from qnx_portmap import report as report_mod
 from qnx_portmap.cli import main
 from qnx_portmap.classify import Classifier
@@ -41,6 +42,7 @@ FRENCH_MARKERS = [
     "telechargement", "reconstruit", "reconstruire", "rechargement",
     "acces reseau", "defaut", "exemples", "sortie", "entree standard",
     "statistiques", "verifier", "visee", "langue", "sha-256 des", "fichiers",
+    "mode rapide", "petit corpus", "telecharge le", "telechargees",
 ]
 
 # Paires fr/en dont la seule difference est l'espace avant le deux-points
@@ -70,7 +72,8 @@ def _marker_hits(text):
 def _pairs():
     """Toutes les paires (fr, en) qui different, des tables de libelles."""
     tables = (classify_mod.NOTES, report_mod.TEXT_STRINGS,
-              report_mod.MD_STRINGS, cli_mod.CLI_STRINGS, cli_mod.HELP_STRINGS)
+              report_mod.MD_STRINGS, cli_mod.CLI_STRINGS, cli_mod.HELP_STRINGS,
+              quick_mod.QUICK_NOTES)
     for table in tables:
         for key, fr in table["fr"].items():
             if key in SPACING_ONLY or key in CELL_ONLY:

@@ -1,30 +1,30 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
-Tree            : /work/qnx-portmap
-Generated on    : 2026-11-16 01:43:44
-Files           : 108
-Total size      : 1172279 bytes
+Tree            : /home/claude/portmap
+Generated on    : 2026-11-16 01:14:04
+Files           : 110
+Total size      : 1194637 bytes
 
 The 3 biggest files:
       76314 bytes  docs/mesure-J5/mesure-J5.json
       69089 bytes  docs/mesure-J4/mesure-J4.json
-      45114 bytes  README.md
+      45928 bytes  README.md
 
 Detail (path, size in bytes, SHA-256):
 
 .gitignore	108	2f22a3834102ea229a1904665d78ed928bc4a0e90a2632241a3de7697421c620
 CORPUS-NON-PUBLIE.txt	3634	882565eb222d17f75f3ec1178eabf82ce029e8e33dd29c9b89d9b5c1101f70a1
-KIT-SOUMISSION-QNX.md	27665	95d2fd1e40762ef77c81e4f881b76eade4f64b529c5ced38779b2f8977adf7ac
+KIT-SOUMISSION-QNX.md	27665	e966f0adc4eaa40c1f91aa96f96e17902f4114184c526e2379d45f1ccf1bbd14
 LICENCE-DOCS-QNX.md	2679	8d7331c75216152ee70f8811e14e27c97dfc9466a810b08d3728e7bc57d07a8a
 LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
-LISEZMOI.md	4548	de471e65fcf9052985360f3194fe96b60ff9ef5b1bf74e1738efa2cf6b472b20
+LISEZMOI.md	4548	e0e2dbc1541e76dc05681273a450c43648a6860b01078b479e812cf51bc4abf6
 PROGRESSION-FR.md	16434	b8d48adf7fe2b1cdcb7f41f124f75d036b6d404af6914458e9d3dd3bd78485a5
 PROGRESSION.md	20980	724ff61c3aafaa14880d32b4e34b92a973ea64c4a9f82dc2e2e8e93615dcd0ee
-README.md	45114	ca3b06e11b9d1a5af4a3d0554f9adc93308bfc7893aef433c7f4b9aff8da4795
+README.md	45928	2bc4c2b1846721ae86e4a88c2e87f485d855b3c01c3f17699d584974e86a610e
 VIDEO-YOUTUBE-QNX-PORTMAP.md	14505	3adf5a87912223fb61258a387baf3c0f5502aee6fb6d262c52135041683264e5
 docs/CODELAB-COMMUNITY-QNX.md	5459	97f444870fb5537858852494d1c5ca1318ad0c01f7a92c9dad33fc62cad50a8f
-docs/README-FR.md	36080	066c209b85d411451ed6ec888c3a11c6b777940f4ca98310e40aac39f2135cb2
-docs/UTILISATION.md	6562	8e8e0fcd982404dd4fef8e5365858b159058e3ae6eb452db5d3a8bbeabf361fb
+docs/README-FR.md	36702	c9f119147a54c43ba0cefb17af64438ed23b40dba7a2f6b216650c9a23ea030a
+docs/UTILISATION.md	6562	b1993efb5f7218ef7736de2390d3d4f6c1e6810b56377c11566ac0bd1c4a955e
 docs/contre-epreuve-rouge.txt	6719	158fe3b55580d86a4e212ef93716e90b49226f6526fcda19d31a48c6c42796db
 docs/demo-projets-reels.md	8572	9c2d6cae11b65815c68785a86f01512f81e26c9147e92c736c229dcd537eaef9
 docs/mesure-J4-FR.md	30669	7946d2218fd1ade0cb80c00a9e49c09ef2e180c10afb5d22021d1fe6cc5446b5
@@ -68,20 +68,21 @@ docs/preuves/k-formulaire-devpost-302-401.txt	1246	6a4894233b15f34b97383efd5a86b
 docs/preuves/l-rapport-anglais-rouge.txt	8451	0abda06fe1b54d87d39186795494c9e22722b7b1553676f358d55588d4f219bb
 pyproject.toml	946	d0cff5122950c85836b71634dc9859a28369ae05e722f9056c6e5df8dd7d0187
 qnx_portmap/LISEZMOI-FR.md	782	c2ab59c8b7f12cb2d557e917db3cd7e2857612d5522d4480efb8f7d73d7284b6
-qnx_portmap/LISEZMOI.md	849	f16cba60e1404dcbcb8100678f90031f9ff94967a60c0e694e0a0a915aaa538f
+qnx_portmap/LISEZMOI.md	849	a2063ffa2b4774a0cc1c731118439cd1f71720816a69c6e214575169a4a4e7f5
 qnx_portmap/__init__.py	385	fb0a7d26903562acc28075650cc00ad00e66ec80aab944a86390fd09a810669e
 qnx_portmap/__main__.py	131	646687eab6b4ac778f4dd765b29b1b8bf5804c7731c32281a719c69084bd79b6
 qnx_portmap/classify.py	15690	92c9860dd708cb7da3c10ec4367496fba26a61b16d1487ce9228731d9caee3c2
-qnx_portmap/cli.py	13354	02d7deb65af4fc64add39f8292903ef7d0b69e6fb8b57714d1637254bd872ce3
+qnx_portmap/cli.py	15847	f090d2b809d3ef147334a08289e6d3b4d4c24bf681a5795348633f0ef48f6c3b
 qnx_portmap/corpus.py	8994	573f0f6b1104e2fff13523f317684a4f7c081d4f7d77b143d65788fac19a2f85
 qnx_portmap/extract.py	10537	2db2129ba498b70c317e4660b7f6a40a91404e7328a66ec60bedcfa9cee35629
+qnx_portmap/quick.py	6092	2b32a6c52f8c358ce9827a8359e1ad4797d88a260183a3654398190e2db9b0c2
 qnx_portmap/refresh.py	8209	d71b51cb123ccd76271a852654cd78e9a9d79cd2bdab1fc576573cc89e1347ff
-qnx_portmap/report.py	9311	4bf1a9972ee2fe0fb9dfaca499f0e208f6390006be18fc5892f496b660d55c5a
+qnx_portmap/report.py	10311	f8e9b650be7f88c59fb2d41a5bab9cdeda46713ad4b5dcc7a5c210b1a80a1655
 scripts/bootstrap_corpus.sh	5288	dd52938560f7f5c59d728bdd082e876854a58a6e43f45457339a73e22d69d1f2
 scripts/controle_fuite_corpus.py	16319	bfe579a8747fc734dfb1677bfb798799b2b6e64aceb15209f0e46f58e1efa7b8
 scripts/manifeste_publie.py	4298	8267826d993946a54aca47ae50619af0962aaf440e06fb9d53aa8bfe7b2a43c4
 scripts/verify-all.sh	11859	f4b76ea305d0465a34a27b44e327be2617ffb3720343ebafd80d0670993d786d
-tests/LISEZMOI.md	1240	18632cf2f4526d93e15da4c6c6d9d6043a4f750ef56b2a0101f63a24159fe3ea
+tests/LISEZMOI.md	1240	a8b45dad1ea800dcfd5108a6b4d29c1028590a5096e95b6a20f5c51ae913a51e
 tests/__init__.py	0	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 tests/fixtures/f01-abort.txt	488	cd9223e8bb1ef9a7a555bf81b9246df271fc94e3e46f8ee4bcd18a844a48fd68
 tests/fixtures/f02-abort.txt	620	27a14378c3c091816f098bbbc077871d9deffc45742842f9005a0dd0e32f8ec1
@@ -102,10 +103,11 @@ tests/test_corpus.py	5195	8aefd0485c2f935b86daf8fb24378c75acbcd18589ede86a217064
 tests/test_extract.py	5614	efb9dc285c2dc379848c8e7eca02fc6d88f0d90483e6e94198b785de13e5ed3d
 tests/test_fixtures.py	8566	be71375d071c8141c3d4f9b4a498000d82a91ffc59310c06f28b4f8edb34e3a1
 tests/test_frozen_corpus.py	5955	dd52af288fb09e4ffe06e5dd75036e59d67223a0b09815941f700d17e46edac8
-tests/test_lang_en.py	10445	2d47dd747e6ab653bb8ff86111078fb92f1dbd2d8dd85125d23d26161606e367
+tests/test_lang_en.py	10593	c329e56ae913acdd184803d45542de7d90d7ed96c412554367dec933ced41c5c
 tests/test_mesure_j4.py	22516	5ed267007df9fa57ff81665a640a8ad7efc3e0e1817ba6d31b4570adc9233000
 tests/test_mesure_j5.py	27425	d963a22bf2badf5458b937250ffe7567e6ff2b280417f667a3c5da3b61e04c36
 tests/test_published_counts.py	3957	1751e489762053f6c2eb927dfc6abc8bea9d531ce8b03e1156b885288f72644e
+tests/test_quick.py	11189	ea781e23721246a51686bea7df1551c0acc594f06f148dc43800d10bee87439b
 tests/test_readme.py	4771	d0f24f2fcf7971c5791001b0cb2ee90a1de3060e338496d13b743bdd5e357fb4
 tests/test_readme_en.py	3468	c1351aa652720e49ba7dd0dc0ac07f95aa2965bcc88f3b1ca8473d65e075bbce
 tests/verify_all_contract.py	7089	1659105a7cac4204e1c2790619a5af93bdc5d963aa91534cf4bb4301223941e4

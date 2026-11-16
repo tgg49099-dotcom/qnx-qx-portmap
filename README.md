@@ -106,6 +106,23 @@ pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
     ...
 ```
 
+**No time for the full download? Use the quick mode** (about 80 requests,
+a few minutes at one request per second):
+
+```console
+$ qnx-portmap --quick abort accept bzero zzz_fonction_inexistante
+```
+
+It downloads only the 26 A-Z index pages of the 8.0 and 7.1 C Library
+Reference, the official migration guide to 8.0 and the own page of each
+documented symbol, into `corpus-quick/`, then runs the same classifier.
+It answers `documented` and `described elsewhere` exactly like the full mode,
+but it **never says `absent`**: that is a statement about the whole 8.0
+documentation, which the quick mode has not read. Such a symbol (here
+`bzero`) is reported `unknown`, with its 7.1 page and a note that says so.
+`tests/test_quick.py` checks, on the frozen corpus, that the quick mode
+never contradicts the full mode.
+
 Without a corpus, the tool says `corpus not found` (`corpus introuvable` with
 `--lang fr`) and exits with code 2: it never invents an answer. The corpus is
 rebuilt with:
@@ -139,14 +156,14 @@ pip install .                     # or, without installing: python3 -m qnx_portm
 python3 -m unittest discover -s tests -t .
 ```
 
-Result measured on 15 November 2026: **170 tests, exit code 0**, without any
+Result measured on 16 November 2026: **182 tests, exit code 0**, without any
 network access and without any third-party dependency.
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/`, next to the package | 170 tests, **0 skipped**, exit code 0 |
-| Corpus through `QX_PORTMAP_CORPUS` | 170 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 170 tests, **27 skipped**, exit code 0 |
+| Corpus in `corpus/`, next to the package | 182 tests, **0 skipped**, exit code 0 |
+| Corpus through `QX_PORTMAP_CORPUS` | 182 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 182 tests, **32 skipped**, exit code 0 |
 
 The skipped tests are the ones that need the corpus: they are skipped, never
 failed. A test that always passes tests nothing, so the repository also
@@ -499,9 +516,9 @@ SUMMARY - one line per verification
 ======================================================================================================
 VERIFICATION                               RESULT       DETAIL                                         EXIT
 ------------------------------------------ ------------ ------------------------------------------------ ----
-unit test suite                            OK           170 tests, 27 skipped                          0
+unit test suite                            OK           182 tests, 32 skipped                          0
 anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
-published manifest                         OK           MANIFESTE-PUBLIE.txt lists 108 files           0
+published manifest                         OK           MANIFESTE-PUBLIE.txt lists 110 files           0
 published numbers of the README            OK           every published count is the real one          0
 parity of the README output block          NOT CHECKED  the frozen corpus is absent here               0
 RED counter-proof                          OK           10 / 10 rules counter-proved                   0
@@ -532,13 +549,13 @@ python3 -m unittest tests.verify_all_contract
 python3 -m unittest discover -s tests -t .
 ```
 
-170 tests, no dependency, **no network access**. Two cases:
+182 tests, no dependency, **no network access**. Two cases:
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/` (next to the package) | 170 tests, **0 skipped**, exit code 0 |
-| Corpus via `QX_PORTMAP_CORPUS` | 170 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 170 tests, **27 skipped**, exit code 0 |
+| Corpus in `corpus/` (next to the package) | 182 tests, **0 skipped**, exit code 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | 182 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 182 tests, **32 skipped**, exit code 0 |
 
 With the corpus given by `QX_PORTMAP_CORPUS`, the only skipped test is the
 one that requires the corpus **inside the installed package** (absent from the
@@ -547,7 +564,7 @@ never failed. If the corpus is placed in `corpus/` next to the package, this
 test runs and the suite passes without any skip. The three lines of the table
 above were re-measured on 15/11/2026.
 
-The 27 skipped tests are the ones that require the complete corpus (SHA-256
+The 32 skipped tests are the ones that require the complete corpus (SHA-256
 integrity of each of the 3 426 pages, index figures for 8.0 and 7.1, answers
 on real symbols). They are **skipped, never failed**, with the message:
 
@@ -558,7 +575,7 @@ corpus absent : lancer scripts/bootstrap_corpus.sh
 (the message of the tool, in French: "corpus absent: run
 scripts/bootstrap_corpus.sh")
 
-The 143 other tests pass **without the corpus**. Among them, the 21 tests of
+The 150 other tests pass **without the corpus**. Among them, the 21 tests of
 `tests/test_fixtures.py` work on the **miniature fixtures**: 12 short extracts
 (1 to 3 lines) of real QNX pages, stored in `tests/fixtures/`, with the source
 URL, the consultation date and the SHA-256 of the complete page the extract
