@@ -154,11 +154,11 @@ commit `395ffc2` unchanged).
 
 What was built and verified:
 
-- `KIT-SOUMISSION-QNX.md` (25 841 bytes) - the text to paste into the Devpost form, block by
+- `KIT-SOUMISSION-QNX.md` (30 060 bytes) - the text to paste into the Devpost form, block by
   block, in the order of the form, with for each block its **measured length** and the limit of
   the field, with its source and its date; **no invented limit**: what the QNX form does not
   display (it is behind a session: HTTP 302 / 401) is said as "not read";
-- `VIDEO-YOUTUBE-QNX-PORTMAP.md` (13 095 bytes) - the minute by minute plan of the video
+- `VIDEO-YOUTUBE-QNX-PORTMAP.md` (18 817 bytes) - the minute by minute plan of the video
   (2 min 40), with the commands on screen, the **voice-over in English**, and the **single
   segment that is missing** (the execution on QNX 8.0 itself), with what is needed to produce it;
 - `tools/mesure_kit.py` - the controller: it recomputes each length of the kit and **fails** if
@@ -276,3 +276,49 @@ The published figures are unchanged: **J4 = 93 %**, **J5 = 96 %**, **170 tests**
 - `--quick` (A-Z indexes of the 8.0 and 7.1 C Library Reference, migration guide to 8.0, own page of each documented symbol): **76 pages in 127 s** for `abort accept bzero zzz_fonction_inexistante`, measured on 16/11/2026 at one request per second; it never says `absent`; `tests/test_quick.py` checks on the frozen corpus that it never contradicts the full mode. It is now the first command of the submission kit (section 4.1), and `tools/published_counts.py` also checks the French README and the kit, where stale test counts (124 instead of 183) had been left unchecked.
 - 16/11/2026 (mere): the judge's path replayed in a clean virtual environment (venv, `pip install .`, then the quick mode): **76 pages in 144.2 s**, exit code **1** (the expected code: the quick mode answers `unknown` for the two symbols it cannot decide), output identical to the one published in the kit. `pip install .` fails inside a venv when `PIP_USER` is set, so the kit now offers the no-install path (`python3 -m qnx_portmap`).
 - 16/11/2026 (Studio): the README quick start, the first thing a judge reads on GitHub, still began with `pip install .` then `qnx-portmap abort ...`: on a PEP 668 Python the install fails and the command does not exist, and without the corpus the full mode can only say `corpus not found`. It now gives the same three commands as the kit (quick mode through `python3 -m`, install optional), the real quick-mode output and the meaning of exit code 1; the full corpus comes after. `tests/test_quick.py` guards it: the quick-start command, the optional install, the same output block in the README and the kit, and (with the frozen corpus) the published block replayed through the real command line.
+
+## Progress of this cycle (16/11/2026, the run on a QNX 8.0 target is prepared)
+
+The one segment that the demonstration video does not contain is the run of
+the tool **on a QNX 8.0 target**. It is blocked by the SDP 8.0 licence
+(owner's action), but everything that can be done without the SDP was done
+this cycle: the procedure, the one-command check, and the sources.
+
+- **What was checked in the official QNX documentation** (all read on
+  16/11/2026, the URLs are in `docs/QNX-8.0-CIBLE.md`): the SDP 8.0.3 ships
+  a **Python 3.13 for QNX OS targets** (package `com.qnx.qnx800.target.utils.python3`,
+  internal version `3.13.7.00013T202603200501L`), so the same command fits a
+  QNX 8.0 target; the QNX Everywhere licence is free for non-commercial use
+  (myQNX account) and the **Quick Start Target Image for Raspberry Pi 4B**
+  already has **PIP installed by default** (release of 11 September 2025), so
+  a target with Python is reachable without buying anything; the x86_64 QEMU
+  image is built by `mkqnximage --type=qemu --arch=x86_64 --run`.
+- **`scripts/qnx8_target_check.sh`** (new): one POSIX-shell command, run from
+  the root of the repository, that proves on the target itself that the
+  system is a QNX system, that a Python 3 is there, that every page of the
+  corpus matches its SHA-256, and that the tool answers. It ends with an
+  explicit verdict (`RESULT      : PASS`). It installs nothing, writes
+  nothing in the repository, and never touches the network. Two variables
+  replace the arguments when needed: `QX_PORTMAP_CORPUS` and
+  `QX_PORTMAP_PYTHON` (the release notes do not publish the path of the
+  interpreter on the target).
+- **Rehearsed, not guessed**: the script was run on 16/11/2026 with `/bin/sh`
+  (dash) and with `bash`, from the root of the repository and from another
+  directory, with the frozen corpus (3 426 pages verified, `page SHA-256:
+  OK`, `SHA256SUMS: OK (3 427 files)`), with the corpus absent (explicit
+  failure with the procedure to rebuild it), and with `QX_PORTMAP_PYTHON`.
+  The real output is in `docs/QNX-8.0-CIBLE.md`, section 5.
+- **`docs/QNX-8.0-CIBLE.md`** (new): what the tool needs on the target, the
+  two ways to get a QNX 8.0 target, the exact command to film, how to get
+  the corpus onto the target (the QNX documentation is not redistributed),
+  the rehearsal and its real output, and the sources with their dates.
+- **The honest limit does not move**: the project **has still not been run on
+  a QNX 8.0 machine**. The README, the video plan and the new document all
+  say so; the check script says `NOT a QNX system - this run is a rehearsal`
+  when it is not on a target. The date of the run on a target is the day the
+  licence arrives.
+- The video plan (`VIDEO-YOUTUBE-QNX-PORTMAP.md`, section 4) now lists the
+  two needs that were missing from the table - a Python 3 on the target and
+  the corpus on the target - and gives the exact command to film. The
+  published figures are unchanged: **194 tests** (33 skipped without the
+  corpus), **117 files** in the published manifest.

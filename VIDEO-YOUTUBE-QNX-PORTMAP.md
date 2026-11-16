@@ -261,8 +261,21 @@ without the licence is not possible.
 | the QNX SDP 8.0 licence | free non-commercial licence, requested with a myQNX account (`https://qnx.software/en/developers/get-started/qnx-everywhere`); it is a gesture of the repository owner, not a technical step |
 | the SDP itself | the QNX SDP 8.0 installation (several GB), installed on the same machine as the video |
 | a QNX 8.0 target to run on | the QNX 8.0 x86_64 QEMU image that comes with the SDP, or a physical board |
+| a Python 3 on the target | the SDP 8.0.3 ships one: "QNX SDP 8.0 Utilities - Python 3.13 (QNX OS)", package `com.qnx.qnx800.target.utils.python3`; the Quick Start Target Image for Raspberry Pi has PIP installed by default |
+| the corpus on the target | the QNX documentation is not redistributed: the corpus is built on the host (`bash scripts/bootstrap_corpus.sh --out corpus`) and copied to the target |
 | the video capture | the same terminal capture, with the QNX console prompt instead of the Linux one |
 | the expected content of the segment | `qnx-portmap abort accept bzero` executed on the QNX 8.0 console, with the same four answers, plus the `qnx-portmap --verify-corpus` output proving the corpus integrity on the target |
+
+**The exact command to film**, from the root of the repository, on the target:
+
+    sh scripts/qnx8_target_check.sh /path/to/corpus abort accept bzero
+
+One command, one screen: the system and its version, the interpreter, the
+integrity of the corpus page by page, the answers of the tool, and the
+verdict. The whole procedure, with the sources, is in
+[`docs/QNX-8.0-CIBLE.md`](docs/QNX-8.0-CIBLE.md); the script is
+[`scripts/qnx8_target_check.sh`](scripts/qnx8_target_check.sh), already
+rehearsed on a workstation.
 
 **What the segment would prove**: that the tool really builds and runs on
 QNX 8.0, which the rules ask for: "The repository must show that the project

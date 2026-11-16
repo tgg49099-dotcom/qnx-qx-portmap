@@ -40,7 +40,7 @@ difference is explained further down.
 | | |
 |---|---|
 | **QNX version** | **QNX SDP 8.0** - every answer is backed by a page of the BlackBerry QNX SDP 8.0 documentation (C Library Reference, io-sock User's Guide, SDP migration guide); each quotation carries the URL, the consultation date and the **SHA-256 of the page** it comes from |
-| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account**; it needs **no network connection to run** once the corpus has been downloaded (the corpus is a local snapshot; downloading it for the first time is the only step that needs the network - see [Quick start](#quick-start)); it is pure Python 3 with the standard library only, so it is POSIX-compatible and **designed to run on QNX 8.0 as well - this has not been demonstrated yet**, because the QNX SDP 8.0 licence is not available in this environment (see [Limits](#limits)) |
+| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account**; it needs **no network connection to run** once the corpus has been downloaded (the corpus is a local snapshot; downloading it for the first time is the only step that needs the network - see [Quick start](#quick-start)); it is pure Python 3 with the standard library only, so it is POSIX-compatible and **designed to run on QNX 8.0 as well - this has not been demonstrated yet**, because the QNX SDP 8.0 licence is not available in this environment (see [Limits](#limits)); the SDP 8.0.3 does ship a **Python 3.13 for QNX OS targets** (package `com.qnx.qnx800.target.utils.python3`), so the same command fits a QNX 8.0 target, and the one-command target check is ready: [`docs/QNX-8.0-CIBLE.md`](docs/QNX-8.0-CIBLE.md) |
 | **Toolchain** | **Python 3.8+, standard library only** (`argparse`, `gzip`, `hashlib`, `json`, `re`, `urllib`) - no compilation step, no third-party dependency, no API key |
 
 ### AI-assisted development
@@ -224,6 +224,9 @@ added here and in the submission kit when it goes online).
   designed to run on QNX 8.0 as well, but that has not been demonstrated. The
   missing video segment is exactly that demonstration (see
   [`VIDEO-YOUTUBE-QNX-PORTMAP.md`](VIDEO-YOUTUBE-QNX-PORTMAP.md), section 4).
+  The procedure and the one-command target check are ready in
+  [`docs/QNX-8.0-CIBLE.md`](docs/QNX-8.0-CIBLE.md) and
+  [`scripts/qnx8_target_check.sh`](scripts/qnx8_target_check.sh).
 - The corpus is a **snapshot** of the official QNX documentation, taken on
   14 November 2026: a symbol published since then is reported as `unknown`,
   never guessed.
@@ -540,7 +543,7 @@ VERIFICATION                               RESULT       DETAIL                  
 ------------------------------------------ ------------ ------------------------------------------------ ----
 unit test suite                            OK           194 tests, 33 skipped                          0
 anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
-published manifest                         OK           MANIFESTE-PUBLIE.txt lists 115 files           0
+published manifest                         OK           MANIFESTE-PUBLIE.txt lists 117 files           0
 published numbers of the README            OK           every published count is the real one          0
 parity of the README output block          NOT CHECKED  the frozen corpus is absent here               0
 RED counter-proof                          OK           10 / 10 rules counter-proved                   0
@@ -877,7 +880,10 @@ the state of each function of the tool is in
   designed to run on QNX 8.0 as well, but that has not been demonstrated. The
   contest rule asks to show that the project "genuinely builds for or runs on
   QNX 8.0"; the missing video segment is precisely that demonstration
-  (`VIDEO-YOUTUBE-QNX-PORTMAP.md`, section 4).
+  (`VIDEO-YOUTUBE-QNX-PORTMAP.md`, section 4). The procedure is written in
+  [`docs/QNX-8.0-CIBLE.md`](docs/QNX-8.0-CIBLE.md), with the one-command
+  target check [`scripts/qnx8_target_check.sh`](scripts/qnx8_target_check.sh),
+  already rehearsed on a workstation.
 - The corpus is a **snapshot**: it dates from 14/11/2026. A symbol added in a
   later version of the documentation is classified `unknown`, never guessed.
   `--fresh` rebuilds the corpus from the official site.

@@ -151,11 +151,11 @@ gele, commit `395ffc2` inchange).
 
 Ce qui a ete construit et verifie :
 
-- `KIT-SOUMISSION-QNX.md` (25 841 octets) - le texte a coller dans le formulaire Devpost, bloc par
+- `KIT-SOUMISSION-QNX.md` (30 060 octets) - le texte a coller dans le formulaire Devpost, bloc par
   bloc, dans l'ordre du formulaire, avec pour chaque bloc sa **longueur mesuree** et la limite du
   champ, avec sa source et sa date ; **aucune limite inventee** : ce que le formulaire QNX
   n'affiche pas (il est derriere une session : HTTP 302 / 401) est dit comme "non lu" ;
-- `VIDEO-YOUTUBE-QNX-PORTMAP.md` (13 095 octets) - le plan minute par minute de la video (2 min 40),
+- `VIDEO-YOUTUBE-QNX-PORTMAP.md` (18 817 octets) - le plan minute par minute de la video (2 min 40),
   avec les commandes a l'ecran, le **voice-over en anglais**, et le **segment unique qui manque**
   (l'execution sur QNX 8.0 lui-meme), avec ce qu'il faut pour le produire ;
 - `tools/mesure_kit.py` - le controleur : il recalcule chaque longueur du kit et **echoue** si un

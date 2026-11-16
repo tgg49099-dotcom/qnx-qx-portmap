@@ -1,0 +1,132 @@
+#!/bin/sh
+# qnx8_target_check.sh - the check to run ON a QNX 8.0 target.
+#
+# One command, one screen. It proves, on the target itself:
+#
+#   1. the system is a QNX system, and which version;
+#   2. a Python 3 interpreter is available;
+#   3. the frozen corpus is there, and every page matches its SHA-256;
+#   4. the tool answers for the symbols that are asked.
+#
+# Usage (from the root of the repository, on the target):
+#
+#   sh scripts/qnx8_target_check.sh [CORPUS_DIR] [SYMBOL ...]
+#
+#   CORPUS_DIR  directory of the frozen corpus on the target. Default: the
+#               QX_PORTMAP_CORPUS variable, then ./corpus of the repository.
+#   SYMBOL      QNX symbols to analyse. Default: abort accept bzero.
+#
+# Two variables can be set instead of the arguments:
+#   QX_PORTMAP_CORPUS   directory of the corpus on the target;
+#   QX_PORTMAP_PYTHON   path of the Python 3 interpreter, when it is not in
+#                        the PATH of the console of the target.
+#
+# The same command is the rehearsal on a Linux or macOS workstation: the
+# script then says "NOT a QNX system - this run is a rehearsal" and proves
+# the three other points. Nothing else is needed: a POSIX shell and python3.
+# It installs nothing, it writes nothing in the repository, and it never
+# touches the network.
+#
+# Exit code:
+#   0  the check passed (the corpus is intact and the tool answered).
+#   1  the check failed (no corpus, corrupted corpus, or the tool errored).
+#   2  the check could not run at all (no Python 3 on this system).
+#
+# See docs/QNX-8.0-CIBLE.md for the whole procedure.
+
+set -u
+
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd) || exit 2
+cd "$ROOT" || exit 2
+
+CORPUS="${QX_PORTMAP_CORPUS:-$ROOT/corpus}"
+SYMBOLS=""
+
+if [ $# -gt 0 ]; then
+    case "$1" in
+        -h|--help)
+            sed -n '2,30p' "$0" | sed 's/^# \{0,1\}//'
+            exit 0
+            ;;
+        *) CORPUS=$1; shift ;;
+    esac
+fi
+for sym in "$@"; do
+    SYMBOLS="$SYMBOLS $sym"
+done
+[ -n "$SYMBOLS" ] || SYMBOLS="abort accept bzero"
+
+printf '== QX PORTMAP - check on the target ==\n\n'
+
+# --- 1. the system --------------------------------------------------------
+SYS=$(uname -s 2>/dev/null || echo unknown)
+REL=$(uname -r 2>/dev/null || echo unknown)
+ARCH=$(uname -m 2>/dev/null || echo unknown)
+printf 'system      : %s %s (%s)\n' "$SYS" "$REL" "$ARCH"
+case "$SYS" in
+    QNX*)
+        printf 'target      : QNX system detected\n'
+        ;;
+    *)
+        printf 'target      : NOT a QNX system - this run is a rehearsal on %s\n' "$SYS"
+        ;;
+esac
+
+# --- 2. the interpreter ---------------------------------------------------
+# The interpreter of a QNX target is not always in the PATH of the console:
+# QX_PORTMAP_PYTHON gives its path explicitly when it is not.
+PY=""
+if [ -n "${QX_PORTMAP_PYTHON:-}" ]; then
+    if [ -x "$QX_PORTMAP_PYTHON" ]; then
+        PY="$QX_PORTMAP_PYTHON"
+    else
+        printf 'python      : QX_PORTMAP_PYTHON=%s is not executable\n' "$QX_PORTMAP_PYTHON"
+    fi
+fi
+if [ -z "$PY" ]; then
+    for cand in python3 python; do
+        if command -v "$cand" >/dev/null 2>&1; then
+            PY="$cand"
+            break
+        fi
+    done
+fi
+if [ -z "$PY" ]; then
+    printf 'python      : NOT FOUND - the tool needs Python 3 on the target\n'
+    printf '               (set QX_PORTMAP_PYTHON to the path of the interpreter)\n'
+    printf '\nRESULT      : FAIL (no Python 3 on this system)\n'
+    exit 2
+fi
+printf 'python      : %s\n' "$("$PY" --version 2>&1)"
+
+# --- 3. the corpus and its integrity --------------------------------------
+printf 'corpus      : %s\n' "$CORPUS"
+if [ ! -f "$CORPUS/MANIFEST.json" ]; then
+    printf '             : MANIFEST.json absent - there is no corpus here.\n'
+    printf '               The QNX documentation is not redistributed with this\n'
+    printf '               repository (see CORPUS-NON-PUBLIE.txt). Build it on the\n'
+    printf '               host with "bash scripts/bootstrap_corpus.sh --out corpus"\n'
+    printf '               and copy it to the target, or run the quick mode on the\n'
+    printf '               target itself (it needs the network).\n'
+    printf '\nRESULT      : FAIL (no corpus on this system)\n'
+    exit 1
+fi
+printf '\n-- corpus integrity --\n'
+"$PY" -m qnx_portmap --corpus "$CORPUS" --verify-corpus
+rc_verify=$?
+
+# --- 4. the answers -------------------------------------------------------
+printf '\n-- symbols --\n'
+"$PY" -m qnx_portmap --corpus "$CORPUS" $SYMBOLS
+rc_symbols=$?
+
+# --- the verdict ----------------------------------------------------------
+printf '\n-- verdict --\n'
+printf 'verify-corpus exit code : %s (0 = every page matches its SHA-256)\n' "$rc_verify"
+printf 'symbols exit code       : %s (0 = every symbol documented, 1 = at least one absent or unknown, 2 = error)\n' "$rc_symbols"
+if [ "$rc_verify" -eq 0 ] && { [ "$rc_symbols" -eq 0 ] || [ "$rc_symbols" -eq 1 ]; }; then
+    printf 'RESULT      : PASS\n'
+    exit 0
+fi
+printf 'RESULT      : FAIL\n'
+exit 1
