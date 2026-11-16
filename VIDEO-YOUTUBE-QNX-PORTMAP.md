@@ -328,3 +328,60 @@ submission material.
 
 Every English label is pinned by `tests/test_lang_en.py`: a French label
 left in the default (English) mode turns the suite red.
+
+## Update 2026-11-16 - the video is filmed (supersedes sections 2 and 3 for timings)
+
+The demonstration video now exists. It was filmed on 16/11/2026 from the
+**public repository** (first command: a fresh `git clone`, commit `fe19680`
+shown on screen), in a real terminal: every command is really executed, the
+session is recorded with `script -T` and replayed frame by frame; nothing is
+retyped. Only the network wait of the first quick-mode run is shortened, and
+the screen says so (">> wait shortened").
+
+| fact | value | how it was measured |
+|---|---|---|
+| duration | **109.8 s** (under the 3-minute limit) | `ffprobe` on the file |
+| streams | one H.264 video stream, 1920x1080, 25 fps, **no audio track** (no music) | `ffprobe` |
+| quick mode, first run | 76 pages downloaded from qnx.com in 95.3 s, exit code 1 | shown on screen |
+| quick mode, second run | cached, 1.7 s, exit code 0 | shown on screen |
+| test suite on the fresh clone | 194 tests, OK (skipped=33) | shown on screen |
+
+Scenes: title card; clone and Python version; `--quick abort bzero
+zzz_fonction_inexistante` (`abort` documented with its official page, `bzero`
+and the typo `unknown`, never `absent`, the worklist names the two unknown
+symbols); `--quick accept MsgSend` (`accept` described elsewhere, in the
+worklist; `MsgSend` documented); the same answer in JSON; the tests; then
+three cards: the measure on real QNX code (96 of 100 symbols), the honest
+limits (not yet run on a QNX 8.0 target: that needs the QNX SDP 8.0 licence;
+the QNX documentation is not redistributed; AI-assisted development), and the
+end card (repository, MIT licence). English captions are burned in.
+
+Reproduce it: `scripts/video/record_demo.sh` (recording, about 2 minutes) then
+`scripts/video/render_demo.py` (rendering, under a minute). These two video
+scripts need `pyte`, `Pillow` and `ffmpeg`; the tool itself does not.
+
+### YouTube fields (ready to paste; the upload is done by the entrant)
+
+- Title: `QX PORTMAP - is every QNX symbol your code calls still documented in QNX 8.0?`
+- Visibility: Public. Made for kids: No.
+- Description:
+
+```
+QX PORTMAP is a host tool for the QNX Global Hackathon (Developer Tooling & Host Tools).
+For each QNX symbol your C code calls, it tells you whether it is still documented in
+QNX 8.0, and quotes the official QNX page that says so. Python 3, standard library only.
+
+Shown in this video (real terminal, nothing retyped; only the network wait is shortened):
+- a fresh clone of the public repository;
+- quick mode: 76 official pages (A-Z indexes of the 7.1 and 8.0 C Library Reference and
+  the 8.0 migration guide) downloaded at one request per second; it never guesses "absent";
+- the upgrade worklist, the JSON output, and the test suite (194 tests).
+
+Not shown: the tool running on a QNX 8.0 target (that needs the QNX SDP 8.0 licence).
+The QNX documentation is not redistributed. Developed with AI assistance.
+
+Code (MIT licence): https://github.com/tgg49099-dotcom/qnx-qx-portmap
+```
+
+The URL that YouTube gives replaces `<YOUTUBE_URL_TO_BE_FILLED_AFTER_THE_VIDEO_IS_UPLOADED>`
+in `KIT-SOUMISSION-QNX.md`.
