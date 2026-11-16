@@ -23,6 +23,19 @@ for or runs on QNX 8.0, not merely that QNX 8.0 is named in the README"
 The last point is what makes the tool a **host tool** that also fits a QNX
 target: it is the same code, the same command, and the same answers.
 
+**Measured on 16/11/2026, not assumed.** The package `qnx_portmap/` (9 files)
+needs **Python 3.4 or later** (`vermin --no-parse-comments --target=3.13-
+--violations qnx_portmap/` -> "Minimum required versions: 3.4"), so the
+Python 3.13.7 of the SDP 8.0.3 target is new enough for it. The modules it
+imports are `argparse`, `collections`, `gzip`, `hashlib`, `html`, `json`, `os`,
+`re`, `string`, `sys`, `time`, `urllib`: **none of them is among the modules
+that Python 3.13 removed** (PEP 594, "Removal of dead batteries"), and there is
+no third-party dependency to install on the target. The measurement is
+reproducible with `pip install vermin` and the command above (working copy of
+the output: `/work/preuves-qnx13/PROMESSE-PYTHON-CIBLE.txt`); the target
+check itself prints a `compat` line, so the day it runs on the real target the
+compatibility is shown on the screen and not only in this document.
+
 ## 2. Two ways to get a QNX 8.0 target
 
 **a. QNX Everywhere and the Quick Start Target Image (free).** The QNX
@@ -63,13 +76,15 @@ From the root of the repository, **on the target**:
     sh scripts/qnx8_target_check.sh /path/to/corpus abort accept bzero
 
 One command, one screen. It proves four things, in this order: the system is
-a QNX system and which version; a Python 3 interpreter is there; the corpus
-is there and **every page matches its SHA-256**; the tool answers for the
-symbols that are asked. The last lines are the verdict:
+a QNX system and which version; a Python 3 interpreter is there, and new
+enough for the package; the corpus is there and **every page matches its
+SHA-256**; the tool answers for the symbols that are asked. The last lines are
+the verdict:
 
     -- verdict --
     verify-corpus exit code : 0 (0 = every page matches its SHA-256)
     symbols exit code       : 1 (0 = every symbol documented, 1 = at least one absent or unknown, 2 = error)
+    compat exit code        : 0 (0 = the interpreter is new enough for the package)
     RESULT      : PASS
 
 The exit code 1 of the second line is the expected one: it means the tool
@@ -109,6 +124,7 @@ corpus, not a transcription):
     system      : Linux 6.8.0-149-generic (x86_64)
     target      : NOT a QNX system - this run is a rehearsal on Linux
     python      : Python 3.11.2
+    compat      : OK - the package needs Python 3.4 or later
     corpus      : /work/qnx-portmap-corpus-local/corpus
 
     -- corpus integrity --
@@ -132,14 +148,21 @@ corpus, not a transcription):
     -- verdict --
     verify-corpus exit code : 0 (0 = every page matches its SHA-256)
     symbols exit code       : 1 (0 = every symbol documented, 1 = at least one absent or unknown, 2 = error)
+    compat exit code        : 0 (0 = the interpreter is new enough for the package)
     RESULT      : PASS
 
 What this proves today: the script is POSIX shell, it runs from any
-directory, it detects the system and the interpreter, it verifies the corpus
-page by page, and it runs the tool and reports its real exit code. What it
-does **not** prove: that a QNX 8.0 system answers the same way. The
-`target` line is the one that changes on a real target, and the day it says
+directory, it detects the system and the interpreter, it checks that the
+interpreter is new enough for the package, it verifies the corpus page by
+page, and it runs the tool and reports its real exit code. What it does
+**not** prove: that a QNX 8.0 system answers the same way. The `target` line
+is the one that changes on a real target, and the day it says
 `QNX system detected`, the segment is filmed.
+
+The complete output of this rehearsal (64 lines) is kept in
+`/work/preuves-qnx13/rehearsal-cible-16-11-2026.txt` (working copy); the same
+command was also run with `bash` and from another directory, with the same
+result.
 
 ## 6. Sources
 
@@ -160,3 +183,7 @@ All of them were read on 16/11/2026.
   `https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.utilities/topic/m/mkqnximage.html`
 - The rules of the contest (the segment that is missing, and the acceptance
   of host tools): `https://qnx.devpost.com/rules`, read on 15/11/2026.
+- The modules that Python 3.13 removed (PEP 594, "Removal of dead
+  batteries"): `https://peps.python.org/pep-0594/`, read on 16/11/2026.
+- `vermin`, the tool that measures the minimum Python version of a source
+  tree: `https://pypi.org/project/vermin/`, run on 16/11/2026.

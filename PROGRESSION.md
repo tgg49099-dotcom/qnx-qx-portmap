@@ -4,7 +4,9 @@ One line per function of the tool: **name**, what it does, its state, the test t
 State = `done` (implemented and tested) / `partial` (done but incomplete) / `planned` (not done).
 
 This file is the map of the tool. It is updated at every cycle, before the report.
-The French version of this file is kept byte-identical in `PROGRESSION-FR.md`.
+The French version is in `PROGRESSION-FR.md`; it follows the same sections, cycle
+by cycle, and the English one is currently ahead by four sections (the four
+English sections of 15/11 and 16/11 have not been translated yet).
 
 ---
 
@@ -322,3 +324,47 @@ this cycle: the procedure, the one-command check, and the sources.
   the corpus on the target - and gives the exact command to film. The
   published figures are unchanged: **194 tests** (33 skipped without the
   corpus), **117 files** in the published manifest.
+
+## Progress of this cycle (16/11/2026, the target check measures the interpreter, the gallery images are ready)
+
+- **`scripts/qnx8_target_check.sh` now measures the interpreter too**: a new
+  `compat` line appears right after the version of Python, and a third exit
+  code appears in the verdict (`compat exit code`). It answers a question that
+  could not be answered before without the target: *is that interpreter new
+  enough for the package?* The threshold is not a guess, it is measured (see
+  the next point). The check still passes on the rehearsal, with `/bin/sh`
+  (dash) and with `bash`, from the root of the repository and from another
+  directory, and `--help` now prints the whole header of the script.
+- **The compatibility of the target-side code is measured, not assumed**
+  (16/11/2026): `vermin --no-parse-comments --target=3.13- --violations
+  qnx_portmap/` gives "Minimum required versions: **3.4**" for the 9 files of
+  the package, so the **Python 3.13.7** that the SDP 8.0.3 installs on a
+  target is new enough for it; the modules the package imports (`argparse`,
+  `collections`, `gzip`, `hashlib`, `html`, `json`, `os`, `re`, `string`,
+  `sys`, `time`, `urllib`) are **none of the modules that Python 3.13
+  removed** (PEP 594) and there is no third-party dependency; the two shell
+  scripts have no bashism. Output:
+  `/work/preuves-qnx13/PROMESSE-PYTHON-CIBLE.txt`, and the complete output of
+  the rehearsal in `/work/preuves-qnx13/rehearsal-cible-16-11-2026.txt` (64
+  lines).
+- **`docs/QNX-8.0-CIBLE.md`** now states this measurement in section 1,
+  quotes the new verdict in section 3, and shows the new `compat` line in the
+  real output of section 5.
+- **The images of the Devpost gallery are produced and verified** (16/11/2026):
+  a 3:2 thumbnail (1500x1000) and three screenshots, all rendered from real
+  recorded sessions (`script -T`, replayed through pyte), never retyped. The
+  verification is independent of the builder: every drawn line must be
+  verbatim in the recording, the PNG on disk must be pixel by pixel identical
+  to a re-render from the recording, PNG and under 5 MB, the thumbnail exactly
+  3:2 -> `verify_galerie.py` exits 0 on the four images.
+- **They are delivered, not committed**: the four PNG, the recordings, the
+  builder and the verifier are in `/work/A_ENVOYER/DEVPOST-GALERIE/` with a
+  `LISEZ-MOI.txt` (what to upload where, and what the images do not show).
+  They are **not** in the repository, because the submission kit states that
+  no thumbnail and no screenshot is committed yet, and the kit is not to be
+  touched: the images are uploaded to Devpost by the owner.
+- **The honest limits do not move**: the project **has still not been run on a
+  QNX 8.0 machine**, and the gallery images show the output of the tool on
+  the host, not on a target. The published figures are unchanged: **194
+  tests** (33 skipped without the corpus), **117 files** in the published
+  manifest.

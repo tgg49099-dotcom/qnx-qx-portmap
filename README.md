@@ -227,6 +227,11 @@ added here and in the submission kit when it goes online).
   The procedure and the one-command target check are ready in
   [`docs/QNX-8.0-CIBLE.md`](docs/QNX-8.0-CIBLE.md) and
   [`scripts/qnx8_target_check.sh`](scripts/qnx8_target_check.sh).
+  What *is* measured (16/11/2026): the package needs **Python 3.4 or later**
+  (`vermin`), imports **none** of the modules that Python 3.13 removed
+  (PEP 594), and has no third-party dependency - so the Python 3.13 of the
+  SDP 8.0.3 target is new enough for it, and the target check prints a
+  `compat` line to show it on the day it runs.
 - The corpus is a **snapshot** of the official QNX documentation, taken on
   14 November 2026: a symbol published since then is reported as `unknown`,
   never guessed.

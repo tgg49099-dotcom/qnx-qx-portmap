@@ -191,3 +191,50 @@ Points d'honnetete traites cette fois :
    donc soumis au gel) ? Faut-il un README **integralement** en anglais ?
 3. Ne rien faire sans instruction : nouvelle fonction du moteur, publication Devpost, video,
    compte, message a Tgg.
+
+## Avance de ce cycle (16/11/2026, le controle cible mesure l'interpreteur, les images de la galerie sont pretes)
+
+- **`scripts/qnx8_target_check.sh` mesure maintenant l'interpreteur** : une
+  nouvelle ligne `compat` apparait juste apres la version de Python, et un
+  troisieme code de sortie apparait dans le verdict (`compat exit code`).
+  Elle repond a une question qui ne pouvait pas etre repondue avant la cible :
+  *cet interpreteur est-il assez recent pour le paquet ?* Le seuil n'est pas
+  suppose, il est mesure (voir le point suivant). Le controle passe toujours
+  a la repetition, avec `/bin/sh` (dash) et avec `bash`, depuis la racine du
+  depot et depuis un autre repertoire, et `--help` affiche maintenant tout
+  l'en-tete du script.
+- **La compatibilite du code cote cible est mesuree, pas supposee**
+  (16/11/2026) : `vermin --no-parse-comments --target=3.13- --violations
+  qnx_portmap/` donne "Minimum required versions: **3.4**" pour les 9 fichiers
+  du paquet, donc le **Python 3.13.7** que le SDP 8.0.3 installe sur une
+  cible lui suffit ; les modules importes par le paquet (`argparse`,
+  `collections`, `gzip`, `hashlib`, `html`, `json`, `os`, `re`, `string`,
+  `sys`, `time`, `urllib`) ne sont **aucun des modules supprimes en Python
+  3.13** (PEP 594) et il n'y a aucune dependance tierce ; les deux scripts
+  shell n'ont aucun bashisme. Sortie :
+  `/work/preuves-qnx13/PROMESSE-PYTHON-CIBLE.txt`, et la sortie complete de
+  la repetition dans `/work/preuves-qnx13/rehearsal-cible-16-11-2026.txt`
+  (64 lignes).
+- **`docs/QNX-8.0-CIBLE.md`** dit desormais cette mesure en section 1, cite
+  le nouveau verdict en section 3, et montre la nouvelle ligne `compat` dans
+  la sortie reelle de la section 5.
+- **Les images de la galerie Devpost sont produites et verifiees**
+  (16/11/2026) : une vignette 3:2 (1500x1000) et trois captures, toutes
+  rendues a partir de sessions reellement enregistrees (`script -T`, rejouees
+  par pyte), jamais retranscrites. La verification est independante du
+  generateur : chaque ligne dessinee doit etre verbatim dans l'enregistrement,
+  le PNG livre doit etre identique pixel par pixel a un re-rendu tire de
+  l'enregistrement, PNG et moins de 5 Mo, la vignette exactement 3:2 ->
+  `verify_galerie.py` sort avec 0 sur les quatre images.
+- **Elles sont livrees, pas commitees** : les quatre PNG, les enregistrements,
+  le generateur et le verificateur sont dans
+  `/work/A_ENVOYER/DEVPOST-GALERIE/` avec un `LISEZ-MOI.txt` (quoi televerser
+  ou, et ce que les images ne montrent pas). Elles ne sont **pas** dans le
+  depot, parce que le kit de soumission dit qu'aucune miniature et aucune
+  capture n'est encore commitee, et que le kit ne doit pas etre touche : les
+  images sont televersees sur Devpost par le proprietaire.
+- **Les limites honnete ne bougent pas** : le projet **n'a toujours pas ete
+  execute sur une machine QNX 8.0**, et les images de la galerie montrent la
+  sortie de l'outil sur l'hote, pas sur une cible. Les chiffres publies sont
+  inchanges : **194 tests** (33 ignores sans le corpus), **117 fichiers** dans
+  le manifeste publie.

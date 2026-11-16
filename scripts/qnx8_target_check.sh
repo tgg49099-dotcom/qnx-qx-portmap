@@ -4,7 +4,7 @@
 # One command, one screen. It proves, on the target itself:
 #
 #   1. the system is a QNX system, and which version;
-#   2. a Python 3 interpreter is available;
+#   2. a Python 3 interpreter is available, and new enough for the package;
 #   3. the frozen corpus is there, and every page matches its SHA-256;
 #   4. the tool answers for the symbols that are asked.
 #
@@ -45,7 +45,7 @@ SYMBOLS=""
 if [ $# -gt 0 ]; then
     case "$1" in
         -h|--help)
-            sed -n '2,30p' "$0" | sed 's/^# \{0,1\}//'
+            awk 'NR>1 && /^#/ {sub(/^# ?/,""); print; next} NR>1 {exit}' "$0"
             exit 0
             ;;
         *) CORPUS=$1; shift ;;
@@ -99,6 +99,19 @@ if [ -z "$PY" ]; then
 fi
 printf 'python      : %s\n' "$("$PY" --version 2>&1)"
 
+# --- 2b. is that interpreter new enough for the package? ------------------
+# The package qnx_portmap/ needs Python 3.4 or later: measured with
+# "vermin --target=3.13- qnx_portmap/" (see docs/QNX-8.0-CIBLE.md, section 1).
+# The target of the SDP 8.0.3 carries Python 3.13, so the check is a formality
+# there; it is here to catch a target with an old interpreter.
+if "$PY" -c 'import sys; sys.exit(0 if sys.version_info[:2] >= (3, 4) else 1)' 2>/dev/null; then
+    printf 'compat      : OK - the package needs Python 3.4 or later\n'
+    RC_COMPAT=0
+else
+    printf 'compat      : FAIL - the package needs Python 3.4 or later\n'
+    RC_COMPAT=1
+fi
+
 # --- 3. the corpus and its integrity --------------------------------------
 printf 'corpus      : %s\n' "$CORPUS"
 if [ ! -f "$CORPUS/MANIFEST.json" ]; then
@@ -124,7 +137,8 @@ rc_symbols=$?
 printf '\n-- verdict --\n'
 printf 'verify-corpus exit code : %s (0 = every page matches its SHA-256)\n' "$rc_verify"
 printf 'symbols exit code       : %s (0 = every symbol documented, 1 = at least one absent or unknown, 2 = error)\n' "$rc_symbols"
-if [ "$rc_verify" -eq 0 ] && { [ "$rc_symbols" -eq 0 ] || [ "$rc_symbols" -eq 1 ]; }; then
+printf 'compat exit code        : %s (0 = the interpreter is new enough for the package)\n' "${RC_COMPAT:-1}"
+if [ "$rc_verify" -eq 0 ] && [ "${RC_COMPAT:-1}" -eq 0 ] && { [ "$rc_symbols" -eq 0 ] || [ "$rc_symbols" -eq 1 ]; }; then
     printf 'RESULT      : PASS\n'
     exit 0
 fi
