@@ -56,16 +56,52 @@ the test, and compared with the published number.
 
 ### Quick start
 
-```console
-$ pip install .
-$ qnx-portmap abort accept bzero zzz_fonction_inexistante
+Three commands, copied as they are, give a first answer in about two to three
+minutes, on Linux, macOS or Windows, with no QNX SDP, no board and no account:
+
+```bash
+git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git
+cd qnx-qx-portmap && pip install .   # optional: the tool needs only the standard library
+python3 -m qnx_portmap --quick abort accept bzero zzz_fonction_inexistante
 ```
 
-The first run needs the corpus: **about 3,400 pages** of the official QNX
-documentation, downloaded once from the official QNX site (the frozen snapshot
-used for the proofs below holds 3,426 pages). **Budget about 1 h 40 to 2 h** at
-one request per second (1.7 to 2 s per page, measured on 15 and 16 November
-2026). After that download the tool runs offline, with no network request.
+The second command is optional and may fail on a locked-down Python (a system
+Python protected by PEP 668 refuses it, measured on 16 November 2026): the
+third command works with or without it, because `python3 -m qnx_portmap` is
+the same program as the `qnx-portmap` command that the install adds.
+
+The third command is the **quick mode** (76 pages downloaded in 127 s and, in
+an independent replay from a clean environment, in 144 s, both measured on
+16 November 2026 at one request per second). Real output of the quick mode
+(one line per symbol, header elided):
+
+```text
+  abort                        documented
+    note   : present in 7.1 and in 8.0
+  accept                       described elsewhere
+    note   : described in the 8.0 documentation but without a page of its own in the C Library Reference
+  bzero                        unknown
+    note   : quick mode: in the 7.1 C Library Reference index, not in the 8.0 index; the other 8.0 books were not read, so absent or described elsewhere is decided by the full corpus (scripts/bootstrap_corpus.sh)
+  zzz_fonction_inexistante     unknown
+    note   : quick mode: in neither the 8.0 nor the 7.1 index; the other 8.0 books were not read (full corpus: scripts/bootstrap_corpus.sh)
+```
+
+The exit code of that run is **1**, and that is expected: `0` when every
+symbol is documented in 8.0, `1` when at least one is absent or unknown, `2`
+on error. The quick mode never says `absent` (that is a statement about the
+whole 8.0 documentation, which it has not read): `bzero` stays `unknown`.
+
+**The full answer** (quotations, SHA-256 of every page, and `absent`) needs
+the complete corpus: **about 3,400 pages** of the official QNX documentation,
+downloaded once from the official QNX site (the frozen snapshot used for the
+proofs below holds 3,426 pages). **Budget about 1 h 40 to 2 h** at one
+request per second (1.7 to 2 s per page, measured on 15 and 16 November
+2026). After that download the tool runs offline, with no network request:
+
+```bash
+bash scripts/bootstrap_corpus.sh --out corpus-downloaded
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded python3 -m qnx_portmap abort accept bzero zzz_fonction_inexistante
+```
 
 Excerpt of the **real output** (executed on 15 November 2026; the citation
 blocks are elided here, and this excerpt is compared with the real output by
@@ -106,31 +142,15 @@ pages : 3426 (7.1 : 1200, 8.0 : 2226) - consulte le 2026-11-14 - mode hors ligne
     ...
 ```
 
-**No time for the full download? Use the quick mode** (about 80 requests,
-a few minutes at one request per second):
+How the quick mode works: it downloads only the 26 A-Z index pages of the
+8.0 and 7.1 C Library Reference, the official migration guide to 8.0 and the
+own page of each documented symbol, into `corpus-quick/`, then runs the same
+classifier. It answers `documented` and `described elsewhere` exactly like the
+full mode; `tests/test_quick.py` checks, on the frozen corpus, that the quick
+mode never contradicts the full mode.
 
-```console
-$ qnx-portmap --quick abort accept bzero zzz_fonction_inexistante
-```
-
-It downloads only the 26 A-Z index pages of the 8.0 and 7.1 C Library
-Reference, the official migration guide to 8.0 and the own page of each
-documented symbol, into `corpus-quick/`, then runs the same classifier.
-It answers `documented` and `described elsewhere` exactly like the full mode,
-but it **never says `absent`**: that is a statement about the whole 8.0
-documentation, which the quick mode has not read. Such a symbol (here
-`bzero`) is reported `unknown`, with its 7.1 page and a note that says so.
-`tests/test_quick.py` checks, on the frozen corpus, that the quick mode
-never contradicts the full mode.
-
-Without a corpus, the tool says `corpus not found` (`corpus introuvable` with
-`--lang fr`) and exits with code 2: it never invents an answer. The corpus is
-rebuilt with:
-
-```bash
-bash scripts/bootstrap_corpus.sh --out corpus-downloaded
-QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort
-```
+Without a corpus, the full mode says `corpus not found` (`corpus introuvable`
+with `--lang fr`) and exits with code 2: it never invents an answer.
 
 A quick check of the network path (3 pages per book: 27 pages downloaded in
 51 seconds, measured on 15 November 2026):
@@ -156,14 +176,14 @@ pip install .                     # or, without installing: python3 -m qnx_portm
 python3 -m unittest discover -s tests -t .
 ```
 
-Result measured on 16 November 2026: **184 tests, exit code 0**, without any
+Result measured on 16 November 2026: **189 tests, exit code 0**, without any
 network access and without any third-party dependency.
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/`, next to the package | 184 tests, **0 skipped**, exit code 0 |
-| Corpus through `QX_PORTMAP_CORPUS` | 184 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 184 tests, **32 skipped**, exit code 0 |
+| Corpus in `corpus/`, next to the package | 189 tests, **0 skipped**, exit code 0 |
+| Corpus through `QX_PORTMAP_CORPUS` | 189 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 189 tests, **33 skipped**, exit code 0 |
 
 The skipped tests are the ones that need the corpus: they are skipped, never
 failed. A test that always passes tests nothing, so the repository also
@@ -516,7 +536,7 @@ SUMMARY - one line per verification
 ======================================================================================================
 VERIFICATION                               RESULT       DETAIL                                         EXIT
 ------------------------------------------ ------------ ------------------------------------------------ ----
-unit test suite                            OK           184 tests, 32 skipped                          0
+unit test suite                            OK           189 tests, 33 skipped                          0
 anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
 published manifest                         OK           MANIFESTE-PUBLIE.txt lists 110 files           0
 published numbers of the README            OK           every published count is the real one          0
@@ -549,13 +569,13 @@ python3 -m unittest tests.verify_all_contract
 python3 -m unittest discover -s tests -t .
 ```
 
-184 tests, no dependency, **no network access**. Three cases:
+189 tests, no dependency, **no network access**. Three cases:
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/` (next to the package) | 184 tests, **0 skipped**, exit code 0 |
-| Corpus via `QX_PORTMAP_CORPUS` | 184 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 184 tests, **32 skipped**, exit code 0 |
+| Corpus in `corpus/` (next to the package) | 189 tests, **0 skipped**, exit code 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | 189 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 189 tests, **33 skipped**, exit code 0 |
 
 With the corpus given by `QX_PORTMAP_CORPUS`, the only skipped test is the
 one that requires the corpus **inside the installed package** (absent from the
@@ -564,7 +584,7 @@ never failed. If the corpus is placed in `corpus/` next to the package, this
 test runs and the suite passes without any skip. The three lines of the table
 above were re-measured on 15/11/2026.
 
-The 32 skipped tests are the ones that require the complete corpus (SHA-256
+The 33 skipped tests are the ones that require the complete corpus (SHA-256
 integrity of each of the 3 426 pages, index figures for 8.0 and 7.1, answers
 on real symbols). They are **skipped, never failed**, with the message:
 
@@ -575,7 +595,7 @@ corpus absent : lancer scripts/bootstrap_corpus.sh
 (the message of the tool, in French: "corpus absent: run
 scripts/bootstrap_corpus.sh")
 
-The 152 other tests pass **without the corpus**. Among them, the 21 tests of
+The 156 other tests pass **without the corpus**. Among them, the 21 tests of
 `tests/test_fixtures.py` work on the **miniature fixtures**: 12 short extracts
 (1 to 3 lines) of real QNX pages, stored in `tests/fixtures/`, with the source
 URL, the consultation date and the SHA-256 of the complete page the extract

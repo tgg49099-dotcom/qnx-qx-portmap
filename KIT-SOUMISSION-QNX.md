@@ -295,11 +295,11 @@ symbols, the citation of each one and the SHA-256 of the cited page are in
 python3 -m unittest discover -s tests -t .
 ```
 
-184 tests, no third-party dependency, no network access. Measured on
+189 tests, no third-party dependency, no network access. Measured on
 16 November 2026 in the three possible configurations: with the corpus in
-`corpus/` next to the package, 184 tests and 0 skipped; with the corpus
-pointed to by the environment variable `QX_PORTMAP_CORPUS`, 184 tests and 1
-skipped; without any corpus, 184 tests and 32 skipped (the skipped ones are
+`corpus/` next to the package, 189 tests and 0 skipped; with the corpus
+pointed to by the environment variable `QX_PORTMAP_CORPUS`, 189 tests and 1
+skipped; without any corpus, 189 tests and 33 skipped (the skipped ones are
 the ones that need the corpus). The suite also contains
 a RED -> GREEN proof: `tools/contre_epreuve.py` breaks one rule of the code
 at a time and checks that the matching test turns red, then restores the

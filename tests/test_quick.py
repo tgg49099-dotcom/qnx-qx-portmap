@@ -262,3 +262,94 @@ class TestQuickAgainstFrozenCorpus(unittest.TestCase):
         for sym, want in (("abort", DOCUMENTED), ("accept", ELSEWHERE),
                           ("bzero", UNKNOWN), ("zzz_fonction_inexistante", UNKNOWN)):
             self.assertEqual(self.quick_res[sym], want, sym)
+
+    def test_readme_quick_output_is_the_real_one(self):
+        """The quick-mode block of the README is what the judge's command prints.
+
+        The third command of the README quick start is replayed through the
+        real command line, with the frozen corpus serving the pages instead of
+        the network: every line of the published block must appear, in order,
+        in the real output, and the exit code must be the published 1.
+        """
+        tmp = tempfile.mkdtemp(prefix="qxpm-quick-readme-")
+        orig = quick_mod.Downloader
+
+        def serve(url):
+            page = self.full.find_url(url.split("#")[0])
+            return self.full.html(page) if page else ""
+
+        quick_mod.Downloader = lambda cache, delay=1.0: FakeDownloader(cache, serve)
+        try:
+            code, out, _ = run_cli(["--quick", "--quick-out", os.path.join(tmp, "q")]
+                                   + README_QUICK_SYMBOLS)
+        finally:
+            quick_mod.Downloader = orig
+            shutil.rmtree(tmp, ignore_errors=True)
+        self.assertEqual(code, 1)
+        lines = out.splitlines()
+        pos = 0
+        for want in readme_quick_block().splitlines():
+            self.assertIn(want, lines[pos:], "README quick-mode line not printed: %r" % want)
+            pos = lines.index(want, pos) + 1
+
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+README_QUICK_SYMBOLS = ["abort", "accept", "bzero", "zzz_fonction_inexistante"]
+JUDGE_COMMAND = "python3 -m qnx_portmap --quick " + " ".join(README_QUICK_SYMBOLS)
+
+
+def _block_after(path, marker):
+    with open(os.path.join(ROOT, path), encoding="utf-8") as fh:
+        text = fh.read()
+    pos = text.find(marker)
+    if pos < 0:
+        return None
+    start = text.index("```text\n", pos) + len("```text\n")
+    return text[start:text.index("```", start)].rstrip("\n")
+
+
+def readme_quick_block():
+    return _block_after("README.md", "Real output of the quick mode")
+
+
+def quick_start_section():
+    with open(os.path.join(ROOT, "README.md"), encoding="utf-8") as fh:
+        text = fh.read()
+    start = text.index("### Quick start")
+    end = text.find("**The full answer**", start)
+    if end < 0:                       # no full-answer paragraph: up to the next section
+        end = text.find("\n### ", start + 1)
+    return text[start:end]
+
+
+class TestJudgePathInReadme(unittest.TestCase):
+    """The first commands a judge copies from the README must work as written.
+
+    Measured on 16 November 2026: on a system Python protected by PEP 668,
+    ``pip install .`` fails, so ``qnx-portmap`` does not exist; and without the
+    corpus (about 1 h 40 to download) the full mode can only say ``corpus not
+    found``.  The quick start therefore starts with the quick mode through
+    ``python3 -m``, and any install line in it is marked optional.
+    """
+
+    def test_quick_start_runs_the_quick_mode_through_python_m(self):
+        section = quick_start_section()
+        self.assertIn(JUDGE_COMMAND, section)
+
+    def test_install_is_optional_in_the_quick_start(self):
+        for line in quick_start_section().splitlines():
+            if "pip install" in line:
+                self.assertIn("optional", line, line)
+
+    def test_no_bare_console_script_before_the_full_answer(self):
+        for line in quick_start_section().splitlines():
+            self.assertFalse(line.lstrip("$ ").startswith("qnx-portmap "), line)
+
+    def test_readme_and_kit_show_the_same_quick_output(self):
+        readme = readme_quick_block()
+        kit = _block_after("KIT-SOUMISSION-QNX.md", "Real output of that run")
+        self.assertIsNotNone(readme, "quick-mode block not found in the README")
+        self.assertIsNotNone(kit, "quick-mode block not found in the kit")
+        self.assertEqual(readme, kit)
+        self.assertIn(JUDGE_COMMAND, open(os.path.join(ROOT, "KIT-SOUMISSION-QNX.md"),
+                                          encoding="utf-8").read())
