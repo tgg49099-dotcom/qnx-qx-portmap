@@ -134,8 +134,11 @@ pip install .
 Step 3 builds the full snapshot, which takes more than an hour at one request
 per second. If you only want to see the tool answer first, the **quick mode**
 downloads only the 26 A-Z index pages of 8.0 and of 7.1, the migration guide
-and the page of each documented symbol (76 pages, 94 seconds measured on
-17 November 2026), and answers at once:
+and the page of each documented symbol (76 pages, **about two to three
+minutes**: 127 s and 144 s measured on 16 November 2026, 94 s and 151 s on
+17 November 2026 - the QNX site is not always as fast; the tool writes the
+real duration of **your** run in `corpus-quick/MANIFEST.json`, under
+`quick.seconds`), and answers at once:
 
 ```bash
 qnx-portmap --quick abort accept bzero zzz_fonction_inexistante
@@ -156,6 +159,9 @@ and at the end:
 ```text
 (+ 2 unknown symbol(s), not decided by the quick mode: bzero, zzz_fonction_inexistante - the full corpus decides them)
 ```
+
+The exit code of that command is `1`, because two symbols are `unknown` (see
+step 5): that is the expected code, not a failure of the tool.
 
 `bzero` is `unknown` here, not `absent`: the quick mode has read only the
 indexes, so it cannot prove that no other 8.0 book describes the call. It
@@ -194,8 +200,8 @@ in `corpus-downloaded/download.log`, with the SHA-256 of each one.
 
 The full run downloads the 3 426 pages of the frozen snapshot used by the
 project (1 200 pages of 7.1, 2 226 pages of 8.0), at one request per second:
-plan **more than an hour** (about 45 pages a minute measured on 17 November
-2026, slower when the QNX site is busy). Start it, and do step 5 while it runs.
+plan **about 1 h 40 to 2 h** (1.7 to 2 s per page, measured on 15 and 16
+November 2026). Start it, and do step 5 while it runs.
 
 If the last line says `N echec(s)` (pages the network cut off), run **the same
 command again**: the pages already downloaded are kept in the `cache/` folder
@@ -327,9 +333,23 @@ QX_PORTMAP_CORPUS=$PWD/corpus-downloaded \
 The first command keeps only the words followed by `(` - the calls - and
 drops the C keywords and `main`. Without it, every word of the file (types,
 variables, `include`, `h`...) would come back as `unknown` and hide the real
-work list: on a 2-line test file, 11 "symbols" and 9 `unknown` instead of 2
-calls (`abort`, `bzero`). Check `calls.txt` by eye: your own functions will
-also be there, and the tool will rightly call them `unknown`.
+work list.
+
+With this two-line file:
+
+```c
+#include <stdlib.h>
+void f(void) { abort(); bzero(p, 10); }
+```
+
+the first command gives 3 calls (`abort`, `bzero`, `f`), and the tool answers:
+`abort` is `documented`, `bzero` is `absent`, `f` is `unknown` - it is your
+own function, not a QNX call.
+
+Without the filter, the same file would give 8 "symbols" (`abort`, `bzero`,
+`f`, `h`, `include`, `p`, `stdlib`, `void`), 6 of them `unknown`. Check
+`calls.txt` by eye: your own functions are in it too (`f` above), and the
+tool rightly calls them `unknown`.
 
 **You should see:** a `state.json` file with one entry per call. Here is the
 real output for one symbol (`qnx-portmap --format json abort`), so that you
