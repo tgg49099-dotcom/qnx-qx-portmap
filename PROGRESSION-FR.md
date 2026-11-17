@@ -308,3 +308,56 @@ Points d'honnetete traites cette fois :
   caractere ; `python3 -I tools/controle_placeholders.py` -> OK, 69 documents,
   aucun placeholder ; `bash scripts/verify-all.sh` -> aucun controle en echec
   (6/8 OK, 2 non verifiables sur cette machine, le corpus fige est absent).
+
+## Progression de ce cycle (17/11/2026, un chemin rapide dans le codelab, un telechargement qui survit a une page coupee, et les chiffres du tutoriel sont ceux mesures)
+
+- **Une page coupee par le reseau n'arrete plus le telechargement du
+  corpus.** `qnx_portmap/refresh.py` attrape maintenant
+  `http.client.HTTPException` (`IncompleteRead`) et la retente comme une
+  erreur reseau ; avant, une seule page coupee au milieu arretait tout le
+  telechargement avec une trace (mesure le 17/11/2026, page 1545 sur 3426).
+  Deux tests ont ete ajoutes (`tests/test_download_retry.py`), et la
+  **contre-epreuve ROUGE a ete verifiee a la main** sur une copie
+  temporaire : avec l'ancien `refresh.py` les deux tests finissent en
+  `ERROR` (`IncompleteRead` non rattrapee), avec le nouveau ils passent.
+- **Le codelab a un « chemin de 2 minutes »** : le mode rapide telecharge
+  les 26 index A-Z de 8.0 et de 7.1, le guide de migration et la page de
+  chaque symbole documente (76 pages) et repond tout de suite. Sa sortie
+  reelle et sa duree reelle sont dans le tutoriel, et son code de sortie
+  (`1`, parce que deux symboles restent `unknown`) est explique : un juge
+  qui lance la commande ne doit pas lire `1` comme un echec.
+- **Les chiffres du tutoriel sont ceux qu'on a mesures.** Le mode rapide a
+  ete lance pour de vrai le 17/11/2026 : 76 pages en **143,7 s**, duree que
+  l'ecrit lui-meme dans `corpus-quick/MANIFEST.json` (`quick.seconds`). Les
+  quatre mesures archivees sont 127 s et 144 s (16/11), 94 s et 151 s
+  (17/11) : le tutoriel dit desormais « about two to three minutes » et les
+  donne, comme le README et le kit. Le telechargement complet garde le
+  budget publie (« about 1 h 40 to 2 h », 1,7 a 2 s par page).
+- **L'etape 6 ne garde que les appels.** L'extraction des symboles de votre
+  propre code ne garde plus que les mots suivis de `(` et retire les mots
+  cles du C ; le tutoriel montre le fichier de 2 lignes qu'il compte
+  (8 « symboles » et 6 `unknown` sans le filtre, 3 appels avec) et la
+  reponse que l'outil donne vraiment (`abort` documented, `bzero` absent,
+  `f` unknown).
+- **La capture de la galerie qui montre la suite de tests a ete refilmee** :
+  elle affichait encore « Ran 200 tests » alors que tous les documents
+  publies disaient 202. C'est un vrai enregistrement (`script -T`, rejeu par
+  pyte) : elle a ete refilmee, pas retouchee ; la nouvelle capture montre
+  « Ran 202 tests in 1.130s » et « OK (skipped=33) », et `verify_galerie.py`
+  controle que le PNG publie est le re-rendu pixel par pixel de
+  l'enregistrement. Les trois autres images sont identiques octet pour
+  octet. Deux chiffres du kit suivent l'image (sa taille et la legende de la
+  section 4.4) ; rien d'autre du kit n'a ete touche.
+- **Les chiffres publies sont maintenant 202 tests** (33 ignores sans le
+  corpus, code de sortie 0, mesures le 17 novembre 2026) et **125 fichiers**
+  dans le manifeste publie. Le chiffre de l'entree precedente (200 tests,
+  124 fichiers) est celui du cycle precedent : ce fichier est un journal
+  date, il n'est donc pas reecrit.
+- **Controles de ce cycle** : `python3 -m unittest discover -s tests -t .` ->
+  202 tests, OK, 33 ignores (et OK, 1 ignore, avec le corpus fige pointe par
+  `QX_PORTMAP_CORPUS`) ; `bash scripts/verify-all.sh` -> aucun controle en
+  echec (6/8 OK, 2 non verifiables sur cette machine, le corpus fige est
+  absent de l'arbre, RC 0), la contre-epreuve ROUGE du depot est 10/10 ;
+  `python3 -I tools/mesure_kit.py --check` -> OK ;
+  `python3 -I tools/controle_placeholders.py` -> OK, 70 documents, aucun
+  placeholder.

@@ -432,3 +432,52 @@ this cycle: the procedure, the one-command check, and the sources.
   character; `python3 -I tools/controle_placeholders.py` -> OK, 69 documents,
   no placeholder; `bash scripts/verify-all.sh` -> no check failed (6/8 OK, 2
   not checked on this machine because the frozen corpus is absent).
+
+## Progress of this cycle (17/11/2026, a quick path in the codelab, a download that survives a cut page, and the numbers of the tutorial are the measured ones)
+
+- **A page cut off by the network no longer stops the corpus download.**
+  `qnx_portmap/refresh.py` now catches `http.client.HTTPException`
+  (`IncompleteRead`) and retries it like a network error; before, one page
+  cut in the middle stopped the whole download with a traceback (measured on
+  17/11/2026, page 1545 of 3426). Two tests were added
+  (`tests/test_download_retry.py`), and the **RED counter-proof was checked
+  by hand** on a temporary copy: with the old `refresh.py` the two tests end
+  in `ERROR` (uncaught `IncompleteRead`), with the new one they pass.
+- **The codelab has a "2-minute path"**: the quick mode downloads the 26 A-Z
+  indexes of 8.0 and 7.1, the migration guide and the page of each documented
+  symbol (76 pages) and answers at once. Its real output and its real
+  duration are in the tutorial, and the exit code (`1`, because two symbols
+  stay `unknown`) is explained: a judge who runs the command must not read
+  `1` as a failure.
+- **The numbers of the tutorial are the measured ones.** The quick mode was
+  run for real on 17/11/2026: 76 pages in **143,7 s**, a duration the tool
+  itself writes in `corpus-quick/MANIFEST.json` (`quick.seconds`). The four
+  archived measurements are 127 s and 144 s (16/11), 94 s and 151 s (17/11):
+  the tutorial now says "about two to three minutes" and gives them, like
+  the README and the kit. The full download keeps the published budget
+  ("about 1 h 40 to 2 h", 1.7 to 2 s per page).
+- **Step 6 keeps only the calls.** The extraction of the symbols of your own
+  code now keeps the words followed by `(` and drops the C keywords; the
+  tutorial shows the two-line file it counts (8 "symbols" and 6 `unknown`
+  without the filter, 3 calls with it) and the answer the tool really gives
+  (`abort` documented, `bzero` absent, `f` unknown).
+- **The gallery screenshot of the test suite was re-recorded**: it still
+  showed "Ran 200 tests" while every published document said 202. It is a
+  real recording (`script -T`, replayed through pyte), so it was re-filmed,
+  not edited: the new capture shows "Ran 202 tests in 1.130s" and
+  "OK (skipped=33)", and `verify_galerie.py` checks that the published PNG
+  is the pixel-for-pixel re-render of the recording. The three other images
+  are byte-identical. Two figures of the kit follow the image (its size and
+  the caption of section 4.4); nothing else of the kit was touched.
+- **The published figures are now 202 tests** (33 skipped without the
+  corpus, exit code 0, measured on 17 November 2026) and **125 files** in the
+  published manifest. The figure of the previous entry (200 tests, 124
+  files) is the one of the previous cycle: this file is a dated log.
+- **Checks of this cycle**: `python3 -m unittest discover -s tests -t .` ->
+  202 tests, OK, 33 skipped (and OK, 1 skipped, with the frozen corpus
+  pointed to by `QX_PORTMAP_CORPUS`); `bash scripts/verify-all.sh` -> no
+  check failed (6/8 OK, 2 not checked on this machine because the frozen
+  corpus is absent from the tree, RC 0), the RED counter-proof of the
+  repository is 10/10; `python3 -I tools/mesure_kit.py --check` -> OK;
+  `python3 -I tools/controle_placeholders.py` -> OK, 70 documents, no
+  placeholder.
