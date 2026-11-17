@@ -146,6 +146,20 @@ https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/qx-p
   terminal output of the tool, never retyped.
 - The URL was checked from outside the build environment on 17/11/2026:
   HTTP 200, `image/png`, 172 092 bytes.
+- **A 3:2 thumbnail is committed too**, for the field that asks for the 3:2
+  ratio "for best results" (article 126). It is the same screen, rendered in
+  3:2, and it is the alternative to upload in this field:
+
+```text
+https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-miniature-3x2.png
+```
+
+- Measured on 17/11/2026: PNG, 161 276 bytes, 1500 x 1000, **exactly 3:2**,
+  under the 5 MB limit. The URL was checked from outside the build
+  environment on 17/11/2026: HTTP 200, `image/png`, 161 276 bytes.
+- The choice between the two files (16:9 thumbnail of the video, 3:2
+  thumbnail of the gallery) is the owner's; both are public and both show
+  the real output of the tool.
 
 ---
 
@@ -352,8 +366,7 @@ repository. The 11 rules and their output are in `docs/contre-epreuve-rouge.txt`
   licence, file `LICENSE` at the top of the repository page).
 - The QNX documentation is not redistributed with the repository; see
   `LICENCE-DOCS-QNX.md` and `CORPUS-NON-PUBLIE.txt`.
-- Codelab draft for community.qnx.com: `docs/CODELAB-COMMUNITY-QNX.md` in the
-  repository.
+- Codelab / tutorial, published in this repository: https://github.com/tgg49099-dotcom/qnx-qx-portmap/blob/main/docs/CODELAB-COMMUNITY-QNX.md
 
 ## AI-assisted development
 
@@ -365,7 +378,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 11554 characters
+- Length (measured): 11604 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to
@@ -417,14 +430,36 @@ https://github.com/tgg49099-dotcom/qnx-qx-portmap
 ### 4.4 Image Gallery
 
 Not a text field, no limit published (Devpost help, article 126, read
-15/11/2026). **Status: no screenshot is committed to the repository yet.**
-The three screenshots to produce, with the exact command that fills each one:
+15/11/2026). **The four images are committed to the repository and are
+publicly readable.** Each one is a real recording of a real command: every
+line drawn in them is the verbatim output of the tool, never retyped.
 
-| screenshot | command | what it shows |
-|---|---|---|
-| 1 | `qnx-portmap abort accept bzero` | the four statuses, with the official page and the quotation |
-| 2 | `qnx-portmap --format json abort` | the same answer in JSON, with English field names |
-| 3 | `python3 -m unittest discover -s tests -t .` | the test suite result |
+| file | public URL | bytes | size | Devpost field |
+|---|---|---:|---|---|
+| `media/galerie-miniature-3x2.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-miniature-3x2.png` | 161 276 | 1500 x 1000 (3:2) | Thumbnail image for the Project Gallery |
+| `media/galerie-1-statuts.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-1-statuts.png` | 154 689 | 1300 x 949 | Image Gallery |
+| `media/galerie-2-json.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-2-json.png` | 87 887 | 1300 x 1033 | Image Gallery |
+| `media/galerie-3-tests.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-3-tests.png` | 9 813 | 1300 x 151 | Image Gallery |
+
+- The three gallery screenshots are the three screenshots of the table
+  below, taken on 17/11/2026, in this order:
+
+| screenshot | file | command | what it shows |
+|---|---|---|---|
+| 1 | `media/galerie-1-statuts.png` | `python3 -m qnx_portmap abort accept bzero` | the three statuses (documented / described elsewhere / absent), the official page, the exact quotation and the upgrade work list |
+| 2 | `media/galerie-2-json.png` | `python3 -m qnx_portmap --format json abort` | the same answer in JSON, with English field names |
+| 3 | `media/galerie-3-tests.png` | `python3 -m unittest discover -s tests -t .` | the test suite result: `Ran 200 tests`, `OK (skipped=33)` |
+
+- The 3:2 thumbnail is the same screen as screenshot 1, with a title bar
+  and a footer; it is the file to upload in the field of section 3.3.
+- All four files are PNG, under the 5 MB limit of Devpost (the biggest one
+  is 161 276 bytes). The URLs were checked from outside the build
+  environment on 17/11/2026: HTTP 200, `image/png`, the size announced
+  above.
+- What the images do **not** show: the tool running on a QNX 8.0 target.
+  It is a host tool, and the SDP 8.0 licence is not available in the build
+  environment (section "Honest limits" of block 4.1 says so too). No QNX
+  screen is simulated in them.
 
 ### 4.5 Video demo link
 
@@ -641,21 +676,32 @@ analyse and manage software for QNX 8.0.
 <!-- BLOC:4_8 -->
 
 ```text
+https://github.com/tgg49099-dotcom/qnx-qx-portmap/blob/main/docs/CODELAB-COMMUNITY-QNX.md
 ```
 
-- Length (measured): 0 characters
+- Length (measured): 89 characters
 - Field limit: no limit published. The requirement comes from the rules: "If
   you are entering the Best Codelab/Tutorial bonus prize: Provide the URL of
   your codelab or tutorial in the designated field on the submission form."
   (`https://qnx.devpost.com/rules`, section "Submission Requirements", read
   15/11/2026).
-- **This field is left empty**: nothing is pasted from the block above. The
-  codelab text is ready in the repository (`docs/CODELAB-COMMUNITY-QNX.md`)
-  but it is **not published** on community.qnx.com, so there is no URL to
-  give; the block is empty rather than a placeholder. If the codelab is
-  published before the deadline (15/12/2026 20:00 CET), replace the block by
-  the published URL and re-measure the length with
-  `python3 tools/mesure_kit.py`. The bonus is 3,500 USD, 1 winner
+- **The tutorial is published in the public repository**, at the URL of the
+  block above: `docs/CODELAB-COMMUNITY-QNX.md` is a codelab / tutorial
+  written during the submission period (first committed on 15/11/2026,
+  published version of 17/11/2026), in English, with the commands and the
+  expected output of every step. It teaches a task **for QNX 8.0**: find
+  out which of the QNX calls your project makes are still documented in
+  QNX 8.0 - first by hand on the official documentation, then with the tool
+  of this project. The rules accept a tutorial that does not have to be
+  related to the project ("The codelab is not required to relate to the
+  Entrant's Project"), and this URL is a public URL of the repository the
+  rules already ask for in the field of block 5.4.
+- The URL was checked from outside the build environment on 17/11/2026:
+  HTTP 200, and the file it points to is the tutorial itself.
+- The proposal of a post on community.qnx.com is kept in the repository
+  (`docs/CODELAB-FORUM-PROPOSITION.md`). The owner may post it there; the
+  tutorial does not depend on it.
+- The bonus is 3,500 USD, 1 winner
   (`https://qnx.devpost.com/`, section "Prizes", read 15/11/2026).
 
 ### 5.9 File upload (optional field, not used)
@@ -694,7 +740,8 @@ step 6, read 15/11/2026):
 | Category | `Developer Tooling & Host Tools` |
 | Repository URL | the public repository URL of block 5.4 |
 | Licence | the MIT file is visible at the top of the repository page |
-| Thumbnail and gallery | the thumbnail file of section 3.3, and the three screenshots listed in block 4.4 |
+| Thumbnail and gallery | the thumbnail file of section 3.3 (`media/galerie-miniature-3x2.png`, 3:2), and the three screenshots of block 4.4 (`media/galerie-1-statuts.png`, `media/galerie-2-json.png`, `media/galerie-3-tests.png`) |
+| Codelab URL (bonus) | the URL of block 5.8, and the page it points to is the tutorial |
 | No secret in the text | no token, no account identifier, no private URL |
 
 ## 8. Deadlines

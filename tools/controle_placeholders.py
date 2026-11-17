@@ -6,20 +6,24 @@ into the Devpost form: a placeholder left in it is a field that would be
 pasted as-is, and a placeholder left in the README is a promise the repository
 does not keep.  This control looks for the placeholder tokens used by this
 project (``*_TO_BE_FILLED*``, ``*_A_COMPLETER*`` and the length placeholder
-``__LEN_*`` of the submission kit) in every published document, and checks
-that the demonstration video URL written in the README is also written in the
-submission kit.
+``__LEN_*`` of the submission kit) in every published document, checks that
+the demonstration video URL written in the README is also written in the
+submission kit, and checks that neither the codelab nor the submission kit
+announces the tutorial as a draft any more: it is published since
+17 November 2026.
 
 The control is a **control**: it must be able to fail.  On the state of the
 tree before the video was published (17 November 2026), it prints the three
-placeholders it found and exits 1.
+placeholders it found and exits 1.  On a tree where the draft banner of the
+codelab comes back, it prints the line that carries it and exits 1.
 
 Usage::
 
     python3 tools/controle_placeholders.py            # exit 1 if a placeholder is left
     python3 tools/controle_placeholders.py --tree DIR # check another tree
 
-Exit code: 0 when every published document is free of placeholder, 1 otherwise.
+Exit code: 0 when every published document is free of placeholder and no
+draft banner is left, 1 otherwise.
 """
 
 import argparse
@@ -47,6 +51,16 @@ PLACEHOLDERS = [
 
 # The two files that must carry the same demonstration video URL.
 VIDEO_URL_FILES = ("README.md", "KIT-SOUMISSION-QNX.md")
+
+# The two files that must not announce the codelab as a draft any more: the
+# tutorial is published in the public repository since 17 November 2026, and
+# the submission kit points to it (block 5.8).  A banner saying the opposite
+# would make the judge read a draft and lose the "Best Codelab / Tutorial"
+# bonus, so it is a failure of this control, like a placeholder.
+PUBLISHED_FILES = ("docs/CODELAB-COMMUNITY-QNX.md", "KIT-SOUMISSION-QNX.md")
+
+# The markers of a draft, in any case.
+DRAFT_MARKERS = ("draft", "not published")
 
 # A URL of a video on YouTube, in the form used in this repository.
 VIDEO_URL = re.compile(r"https://youtu\.be/[A-Za-z0-9_-]+")
@@ -76,6 +90,29 @@ def find_placeholders(tree):
                 for token, _why in PLACEHOLDERS:
                     if token in line:
                         found.append((rel, number, token, line.strip()))
+    return found
+
+
+def find_draft_markers(tree):
+    """Returns [(path, line number, marker, line)] for every draft marker.
+
+    Only the two files of ``PUBLISHED_FILES`` are checked: they are the ones
+    a judge reads to know whether the codelab is published.
+    """
+    found = []
+    for rel in PUBLISHED_FILES:
+        path = os.path.join(tree, rel)
+        try:
+            with open(path, encoding="utf-8") as handle:
+                lines = handle.read().split("\n")
+        except OSError:
+            continue
+        for number, line in enumerate(lines, start=1):
+            low = line.lower()
+            for marker in DRAFT_MARKERS:
+                if marker in low:
+                    found.append((rel, number, marker, line.strip()))
+                    break
     return found
 
 
@@ -118,6 +155,16 @@ def main(argv=None):
     else:
         print("OK : no placeholder in the %d published documents." % len(documents))
 
+    drafts = find_draft_markers(tree)
+    if drafts:
+        failed = True
+        print("\nKO : %d draft marker(s) left in the published files:" % len(drafts))
+        for rel, number, marker, line in drafts:
+            print("  - %s:%d: [%s] %s" % (rel, number, marker, line))
+    else:
+        print("OK : the codelab and the submission kit announce a published "
+              "tutorial, not a draft (%d files checked)." % len(PUBLISHED_FILES))
+
     urls = video_urls(tree)
     kit = urls.get("KIT-SOUMISSION-QNX.md")
     readme = urls.get("README.md")
@@ -137,8 +184,9 @@ def main(argv=None):
               % readme)
 
     if failed:
-        print("\nVERDICT: FAILED - a placeholder is left, or the video URL is "
-              "not the same in the README and in the kit (RC 1)")
+        print("\nVERDICT: FAILED - a placeholder is left, a draft banner is "
+              "back, or the video URL is not the same in the README and in "
+              "the kit (RC 1)")
         return 1
     print("\nVERDICT: NO PLACEHOLDER LEFT (RC 0)")
     return 0

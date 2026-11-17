@@ -210,11 +210,20 @@ output is kept in
 - [`VIDEO-YOUTUBE-QNX-PORTMAP.md`](VIDEO-YOUTUBE-QNX-PORTMAP.md) - the plan of
   the demonstration video, minute by minute, and the one segment that is
   still missing.
+- [`media/`](media/) - the demonstration video, its thumbnail, and the four
+  images of the Devpost gallery: `galerie-miniature-3x2.png` (the thumbnail
+  of the project gallery, 3:2), and the three screenshots
+  `galerie-1-statuts.png`, `galerie-2-json.png`, `galerie-3-tests.png`.
+  Every line drawn in them is the verbatim output of a real command.
 
-Usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md). A codelab draft for
-`community.qnx.com` is in [`docs/CODELAB-COMMUNITY-QNX.md`](docs/CODELAB-COMMUNITY-QNX.md)
-(text only, **not published yet**: the URL of the published codelab will be
-added here and in the submission kit when it goes online).
+Usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md). The codelab /
+tutorial is **published** in this repository:
+[`docs/CODELAB-COMMUNITY-QNX.md`](docs/CODELAB-COMMUNITY-QNX.md)
+(<https://github.com/tgg49099-dotcom/qnx-qx-portmap/blob/main/docs/CODELAB-COMMUNITY-QNX.md>)
+- it teaches a task for QNX 8.0: find out which of the QNX calls your
+project makes are still documented in QNX 8.0. The proposal of a post on
+`community.qnx.com` is kept in
+[`docs/CODELAB-FORUM-PROPOSITION.md`](docs/CODELAB-FORUM-PROPOSITION.md).
 
 ### Demo video
 
@@ -547,9 +556,10 @@ of the corpus, the published manifest, the published numbers (every test and
 file count written in this README and in the two LISEZMOI files must be the
 real one), the parity of the output block of this README, the RED
 counter-proof, the measured lengths of the submission kit, and the
-placeholders of the published documents (no field of the submission kit and
-no section of the README may keep a placeholder, and the demonstration video
-URL must be the same in the README and in the kit). The command writes nothing in the repository: the RED counter-proof,
+placeholders and draft banners of the published documents (no field of the
+submission kit and no section of the README may keep a placeholder, the
+published tutorial may not announce itself as a draft any more, and the
+demonstration video URL must be the same in the README and in the kit). The command writes nothing in the repository: the RED counter-proof,
 which breaks a rule of the code on purpose, is replayed on a temporary copy
 of the tree, never on the checkout of the reader.
 
@@ -574,12 +584,12 @@ VERIFICATION                               RESULT       DETAIL                  
 ------------------------------------------ ------------ ------------------------------------------------ ----
 unit test suite                            OK           200 tests, 33 skipped                          0
 anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
-published manifest                         OK           MANIFESTE-PUBLIE.txt lists 119 files           0
+published manifest                         OK           MANIFESTE-PUBLIE.txt lists 124 files           0
 published numbers of the README            OK           every published count is the real one          0
 parity of the README output block          NOT CHECKED  the frozen corpus is absent here               0
 RED counter-proof                          OK           10 / 10 rules counter-proved                   0
 lengths of the submission kit              OK           every measured length matches the text         0
-placeholders of the documents              OK           no placeholder in the 69 published documents   0
+placeholders and draft banners             OK           nothing left in the 70 published documents     0
 ======================================================================================================
 VERDICT: NO CHECK FAILED - 6/8 OK, 2 NOT CHECKED (RC 0)
          the check(s) that could not run on this machine are named in the

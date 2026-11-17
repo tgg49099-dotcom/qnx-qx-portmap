@@ -158,6 +158,30 @@ class TestVerifyAllContract(unittest.TestCase):
             failed = [r[0] for r in summary_rows(out) if r[1] == "FAILED"]
             self.assertEqual(failed, ["published numbers of the README"], out)
 
+            # 6. the red run of the codelab: the draft banner comes back in
+            # the published tutorial -> the control of the placeholders and
+            # of the draft banners must catch it, and the command must fail
+            # (17 November 2026: the codelab announced itself as a draft in
+            # the file the judge opens from the URL of the submission form)
+            red3 = os.path.join(tmp, "red3")
+            copy_tree(red3)
+            path = os.path.join(red3, "docs", "CODELAB-COMMUNITY-QNX.md")
+            with open(path, encoding="utf-8") as handle:
+                text = handle.read()
+            banner = ("# CODELAB (draft) - community.qnx.com\n\n"
+                      "**Status: DRAFT, not published.**\n\n")
+            self.assertTrue(text.startswith("# Codelab:"), text[:40])
+            with open(path, "w", encoding="utf-8") as handle:
+                handle.write(banner + text)
+            # the manifest is regenerated so that the draft banner is the
+            # only false proof of the tree
+            subprocess.run(["python3", "-B", "scripts/manifeste_publie.py"],
+                           cwd=red3, capture_output=True, check=True)
+            code, out = run_verify_all(red3)
+            self.assertEqual(code, 1, "a draft banner must fail:\n%s" % out)
+            failed = [r[0] for r in summary_rows(out) if r[1] == "FAILED"]
+            self.assertEqual(failed, ["placeholders and draft banners"], out)
+
 
 if __name__ == "__main__":
     unittest.main()

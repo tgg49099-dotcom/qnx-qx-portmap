@@ -146,10 +146,14 @@ output is kept in
   the demonstration video, minute by minute, and the one segment that is
   still missing.
 
-Usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md). A codelab draft for
-`community.qnx.com` is in [`docs/CODELAB-COMMUNITY-QNX.md`](docs/CODELAB-COMMUNITY-QNX.md)
-(text only, **not published yet**: the URL of the published codelab will be
-added here and in the submission kit when it goes online).
+Usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md). The codelab /
+tutorial is **published** in this repository:
+[`docs/CODELAB-COMMUNITY-QNX.md`](docs/CODELAB-COMMUNITY-QNX.md)
+(<https://github.com/tgg49099-dotcom/qnx-qx-portmap/blob/main/docs/CODELAB-COMMUNITY-QNX.md>)
+- it teaches a task for QNX 8.0: find out which of the QNX calls your
+project makes are still documented in QNX 8.0. The proposal of a post on
+`community.qnx.com` is kept in
+[`docs/CODELAB-FORUM-PROPOSITION.md`](docs/CODELAB-FORUM-PROPOSITION.md).
 
 ### Demo video
 

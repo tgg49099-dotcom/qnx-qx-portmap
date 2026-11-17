@@ -240,11 +240,11 @@ rc=$?
 n_place=$(sed -n 's/^CONTROL OF THE PLACEHOLDERS - \([0-9][0-9]*\) published documents.*/\1/p' "$log" | head -1)
 [ -n "$n_place" ] || n_place="?"
 if [ "$rc" -eq 0 ]; then
-    record "placeholders of the documents" "OK" \
-           "no placeholder in the $n_place published documents" "$rc" "$log"
+    record "placeholders and draft banners" "OK" \
+           "nothing left in the $n_place published documents" "$rc" "$log"
 else
-    record "placeholders of the documents" "FAILED" \
-           "a placeholder is left in a published document" "$rc" "$log"
+    record "placeholders and draft banners" "FAILED" \
+           "a placeholder or a draft banner is left" "$rc" "$log"
 fi
 
 # ------------------------------------------------------------------ the table

@@ -1,13 +1,33 @@
-# CODELAB (draft) - community.qnx.com
+# Codelab: find out which QNX calls your project makes are still documented in QNX 8.0
 
-**Status: DRAFT, not published.** This file is the text proposed for a codelab
-post on `community.qnx.com`. The owner publishes it (the forum needs an
-account); the tool itself does not create accounts and does not post.
+**Codelab / tutorial - QNX 8.0 - 17 November 2026**
 
-Suggested title: **"Codelab: map every QNX 8.0 symbol of your project to the
-official documentation"**
+Published as a tutorial in this repository; the owner may also post it on
+community.qnx.com.
+
+URL of this tutorial:
+<https://github.com/tgg49099-dotcom/qnx-qx-portmap/blob/main/docs/CODELAB-COMMUNITY-QNX.md>
 
 ---
+
+## The task
+
+You maintain C code that calls the QNX C Library, and you have to move it to
+QNX 8.0. The call itself is not the hard part. The hard part is knowing
+**which of the calls your code makes still exist in the QNX 8.0
+documentation**, which ones have moved to another book, and which ones have
+disappeared - because each case needs a different decision in your port.
+
+**In this codelab you will do exactly that job**, on a small but real task:
+take a list of QNX symbols, find out for each one whether QNX 8.0 still
+documents it, and produce the work list of the calls you have to deal with.
+
+You will do it twice:
+
+- **by hand**, on the official QNX 8.0 documentation (about 10 minutes) - this
+  is the method that works when you have no tool at all;
+- **with QX PORTMAP**, the tool of this repository (about 5 minutes) - the
+  same work, automated, reproducible and quotable.
 
 ## What you will build
 
@@ -16,7 +36,8 @@ each one, **whether the symbol is still documented in QNX 8.0, and where
 exactly**: the official page, the exact quotation, and the SHA-256 of the page
 the quotation comes from.
 
-No guessing, no search engine, no account, no network access.
+No guessing, no search engine, no account, no network access once the
+documentation snapshot is built.
 
 ## Why it is useful
 
@@ -45,7 +66,44 @@ priority, with the page to read for each.
   the tool works offline.
 - No QNX SDP, no QNX board, no QNX account, no API key.
 
-## Step 1 - Get the tool
+---
+
+## Step 1 - Do it by hand, once (the QNX 8.0 documentation)
+
+Before any tool, look at the documentation yourself. The QNX 8.0 C Library
+Reference has one A-Z index page per letter:
+
+```text
+https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/lib-a.html
+https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/lib-b.html
+```
+
+(there are 26 of them, `lib-a.html` to `lib-z.html`).
+
+**You should see:** the page titled `B` is the index of the symbols that start
+with a `b`.
+
+Now look for two symbols in it:
+
+1. **`abort`** - open
+   <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/lib-a.html>
+   and search for `abort`.
+   **You should see:** one entry, `abort`, whose link points to
+   `topic/a/abort.html`. Open it: the page of the function, with its
+   synopsis and its description. The call is **documented in QNX 8.0**.
+
+2. **`bzero`** - search for `bzero` in the `B` index of the 8.0 reference.
+   **You should see: nothing.** No entry, no link.
+   Now open the same index of the **7.1** reference:
+   <https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/lib-b.html>
+   **You should see:** one entry, `bzero`, pointing to
+   `topic/b/bzero.html`. The call **was documented in 7.1 and is not in 8.0**:
+   that is the call you have to deal with in your port.
+
+This is the whole method. It works, but it is slow, and it does not scale:
+a project calls hundreds of symbols.
+
+## Step 2 - Get the tool
 
 ```bash
 git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git
@@ -54,7 +112,23 @@ pip install .
 qnx-portmap --help
 ```
 
-## Step 2 - Rebuild the QNX documentation corpus (once)
+**You should see:** the usage of the command, ending with
+
+```text
+Examples: qnx-portmap abort pthread_create bzero qnx-portmap --file
+symbols.txt --format markdown cat symbols.txt | qnx-portmap --stdin --format
+json qnx-portmap --verify-corpus
+```
+
+If `pip` refuses to install (PEP 668), use a virtual environment instead:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install .
+```
+
+## Step 3 - Build the snapshot of the QNX documentation (once)
 
 The QNX documentation is proprietary and is **not** redistributed with the
 repository. One command downloads the official pages (QNX 7.1 and 8.0), keeps a
@@ -71,20 +145,94 @@ measured on 15 November 2026):
 bash scripts/bootstrap_corpus.sh --out /tmp/essai --max-pages 3 --delay 1.0
 ```
 
-## Step 3 - Ask about your symbols
+**You should see** (the trial):
+
+```text
+bootstrap_corpus : sortie   /tmp/essai
+bootstrap_corpus : cache    /tmp/essai/cache
+bootstrap_corpus : journal  /tmp/essai/download.log
+bootstrap_corpus : delai    1.0s entre deux requetes
+bootstrap_corpus : versions 8.0,7.1
+```
+
+and at the end, the list of the pages that were downloaded, one line per page
+in `corpus-downloaded/download.log`, with the SHA-256 of each one.
+
+The full run downloads the 3 426 pages of the frozen snapshot used by the
+project (1 200 pages of 7.1, 2 226 pages of 8.0), at one request per second.
+After that, the tool never uses the network again.
+
+## Step 4 - Ask about your symbols
 
 ```bash
 QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
 ```
 
-or, on a real project:
+**You should see** (the `<CORPUS>` line is the path where you built the
+snapshot, it is the only line that changes from one machine to another):
 
-```bash
-grep -o '[A-Za-z_][A-Za-z0-9_]*' mon_code.c | sort -u \
-  | qnx-portmap --stdin --format json > state.json
+```text
+QX PORTMAP - status of QNX symbols in the 8.0 documentation
+frozen corpus: <CORPUS>
+pages: 3426 (7.1: 1200, 8.0: 2226) - consulted on 2026-11-14 - offline mode
+
+  abort                        documented
+    page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
+    citation (index C Library Reference 8.0) :
+      Raise the SIGABRT signal to terminate program execution
+    detail :
+      The abort() function causes abnormal process termination to occur by means of the function
+      call raise ( SIGABRT ) , unless the signal SIGABRT is caught and the signal handler doesn't
+      return. If the signal SIGABRT is caught and the signal handler returns, the signal handler is
+      removed and raise ( SIGABRT ) is called again. Note that prior to calling raise() , abort()
+      ensures that SIGABRT isn't ignored or blocked.
+    note   : present in 7.1 and in 8.0
+
+  accept                       described elsewhere
+    page   : https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
+    see    : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
+    citation (index C Library Reference 8.0, section "described elsewhere") :
+      FreeBSD documentation (
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports ) and
+      Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
+    * cited by the official migration guide 8.0: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
+    note   : described in the 8.0 documentation but without a page of its own in the C Library Reference
+
+  bzero                        absent
+    page   : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
+    citation (index C Library Reference 7.1, index entry) :
+      Set the first part of an object to null bytes
+    note   : present in the C Library Reference 7.1, absent from the whole 8.0 corpus
+
+--- Upgrade worklist (2 symbol(s)) ---
+P2  bzero                      absent
+      https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
+      Set the first part of an object to null bytes
+P3  accept                     described elsewhere
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
+      FreeBSD documentation (
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports )
+      and Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
+      cited by the migration guide: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
+(+ 1 unknown symbol(s), not in this list: zzz_fonction_inexistante - check the spelling, or a symbol added after the corpus date)
 ```
 
-## Step 4 - Read the answer
+and the exit code:
+
+```bash
+echo $?
+```
+
+**You should see:** `1` - one symbol (`bzero`) is `absent`. That is the
+expected code, not a failure of the tool.
+
+Compare with what you found by hand in step 1: `abort` is documented,
+`bzero` has disappeared, and `accept` - which you would not have found in the
+A-Z index of the C Library Reference - is described elsewhere in the QNX 8.0
+documentation, in the io-sock User's Guide and in the FreeBSD manuals. The
+migration guide of QNX 8.0 points to it explicitly.
+
+## Step 5 - Read the answer
 
 For each symbol, the output gives the status, the official page, the exact
 quotation and the SHA-256 of the page. Four statuses:
@@ -99,7 +247,88 @@ quotation and the SHA-256 of the page. Four statuses:
 The exit code tells you the same thing: `0` if every symbol is documented,
 `1` if at least one is `absent` or `unknown`, `2` if the corpus is missing.
 
-## Step 5 - How well does it work?
+## Step 6 - Work on your own project
+
+The point of the tool is your own code. Extract the symbols your project
+calls, and give them to the tool:
+
+```bash
+grep -o '[A-Za-z_][A-Za-z0-9_]*' my_code.c | sort -u \
+  | qnx-portmap --stdin --format json > state.json
+```
+
+**You should see:** a `state.json` file with one entry per symbol. Each entry
+has the `status`, the `url` of the official page, the `citation` (the exact
+quotation) and the `note`, for example:
+
+```json
+{
+  "symbol": "abort",
+  "status": "documented",
+  "kind": "function",
+  "in_71": true,
+  "in_80": true,
+  "url": "https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html",
+  "citation": "Raise the SIGABRT signal to terminate program execution",
+  "citation_source": "index C Library Reference 8.0",
+  "note": "present in 7.1 and in 8.0",
+  "priority": 0
+}
+```
+
+The JSON uses English field names in both languages (`--lang fr` translates
+the console messages, not the JSON), so it can be diffed in a CI job.
+
+To see only the calls you have to deal with, ask for the work list:
+
+```bash
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap --worklist
+```
+
+**You should see:** the symbols to deal with, sorted by priority (`P1` first,
+then `P2`, `P3`), each one with the page to read and the reason.
+
+## Step 7 - Check that the tool tells the truth
+
+```bash
+python3 -m unittest discover -s tests -t .
+```
+
+**You should see:**
+
+```text
+Ran 200 tests in 1.0s
+
+OK (skipped=33)
+```
+
+The 33 skipped tests are the ones that need the complete frozen snapshot; with
+the snapshot in `corpus/` next to the package, they run too. The suite also
+contains a RED -> GREEN proof: `tools/contre_epreuve.py` breaks one rule of
+the code at a time and checks that the matching test turns red, then restores
+the repository.
+
+The corpus itself can be verified, page by page, against the SHA-256 of the
+official pages:
+
+```bash
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap --verify-corpus
+```
+
+**You should see:**
+
+```text
+corpus: <CORPUS>
+pages checked: 3426
+page SHA-256: OK
+SHA256SUMS: OK (3427 files)
+```
+
+that is: every page of the snapshot matches the fingerprint of the official
+page it was downloaded from, and the checksum file of the snapshot matches
+too.
+
+## Step 8 - How well does it work?
 
 On the reference sample - the 100 QNX symbols really called by **five public
 QNX repositories** (the official QNX BSP for Raspberry Pi 5, another QNX BSP
@@ -118,6 +347,8 @@ commits and the method are in `docs/mesure-J5.md` in the repository.
 - It does not distribute the QNX documentation.
 - It does not guess: `unknown` stays `unknown`.
 - It does not need the network once the corpus is built.
+- It is a **host** tool: it does not run on a QNX 8.0 target, it reads the
+  QNX 8.0 documentation from your own machine.
 
 ## AI-assisted development
 
@@ -134,6 +365,7 @@ test and compared with the number in the documentation.
 - Usage guide: `docs/UTILISATION.md` in the repository
 - Measurement: `docs/mesure-J5.md` in the repository
 - QNX 8.0 documentation: <https://www.qnx.com/developers/docs/8.0/>
+- QNX 8.0 C Library Reference index: <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/lib-a.html>
 
 ## Licence and copyright
 
