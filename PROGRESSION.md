@@ -368,3 +368,24 @@ this cycle: the procedure, the one-command check, and the sources.
   the host, not on a target. The published figures are unchanged: **194
   tests** (33 skipped without the corpus), **117 files** in the published
   manifest.
+
+
+## Progress of this cycle (17/11/2026, the submission text now says how this project differs from our other entry)
+
+- **The Multiple Submissions rule is now answered in the submission text itself.** The
+  rules of the QNX Global Hackathon (`https://qnx.devpost.com/rules`, read on
+  17 November 2026) say that an entrant may submit several projects, but that each
+  submission must be unique and substantially different from each of the entrant's
+  other submissions. The project story of `KIT-SOUMISSION-QNX.md` now says, in the
+  text the entrant pastes into Devpost, how QX PORTMAP differs from QX-PROBE:
+  different input (the QNX symbols a source tree calls vs the C source of a
+  resource manager), different output (the state of the documentation vs the access
+  gates and dispatch tables), different user, and no shared code, rule or document.
+- **The published figures are now 200 tests** (33 skipped without the corpus, exit
+  code 0, measured on 17 November 2026) and **118 files** in the published manifest.
+  The figures of the previous entry (194 tests, 117 files) are the ones of
+  16 November 2026 and are left as they are: this file is a dated log.
+- **Checks of this cycle**: `python3 -m unittest discover -s tests -t .` -> 200 tests,
+  OK, 33 skipped; `python3 -I tools/mesure_kit.py --check` -> OK, 14 blocks, tagline
+  138/140, tags 11/25; `bash scripts/verify-all.sh` -> no check failed (4/7 OK,
+  3 not checked on this machine because the frozen corpus is absent).

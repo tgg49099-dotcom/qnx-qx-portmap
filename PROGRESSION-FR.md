@@ -238,3 +238,25 @@ Points d'honnetete traites cette fois :
   sortie de l'outil sur l'hote, pas sur une cible. Les chiffres publies sont
   inchanges : **194 tests** (33 ignores sans le corpus), **117 fichiers** dans
   le manifeste publie.
+
+
+## Progression de ce cycle (17/11/2026, le texte de soumission dit comment ce projet differe de notre autre entree)
+
+- **La regle "Multiple Submissions" est desormais repondue dans le texte de soumission
+  lui-meme.** Les regles du QNX Global Hackathon (`https://qnx.devpost.com/rules`, lues
+  le 17 novembre 2026) disent qu'un entrant peut soumettre plusieurs projets, mais que
+  chaque soumission doit etre unique et substantiellement differente des autres
+  soumissions du meme entrant. Le recit de projet de `KIT-SOUMISSION-QNX.md` dit
+  maintenant, dans le texte que l'entrant colle dans Devpost, en quoi QX PORTMAP
+  differe de QX-PROBE : entree differente (les symboles QNX appeles par un arbre de
+  sources contre le code C d'un resource manager), sortie differente (l'etat de la
+  documentation contre les portes d'acces et les tables de dispatch), utilisateur
+  different, et aucun code, aucune regle et aucun document partage.
+- **Les chiffres publies sont maintenant 200 tests** (33 ignores sans le corpus, code
+  de sortie 0, mesures le 17 novembre 2026) et **118 fichiers** dans le manifeste
+  publie. Les chiffres de l'entree precedente (194 tests, 117 fichiers) sont ceux du
+  16 novembre 2026 : ce fichier est un journal date, ils ne sont donc pas reecrits.
+- **Controles de ce cycle** : `python3 -m unittest discover -s tests -t .` -> 200
+  tests, OK, 33 ignores ; `python3 -I tools/mesure_kit.py --check` -> OK, 14 blocs,
+  tagline 138/140, tags 11/25 ; `bash scripts/verify-all.sh` -> aucun controle en
+  echec (4/7 OK, 3 non verifiables sur cette machine, le corpus fige est absent).
