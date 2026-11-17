@@ -440,7 +440,7 @@ line drawn in them is the verbatim output of the tool, never retyped.
 | `media/galerie-miniature-3x2.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-miniature-3x2.png` | 161 276 | 1500 x 1000 (3:2) | Thumbnail image for the Project Gallery |
 | `media/galerie-1-statuts.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-1-statuts.png` | 154 689 | 1300 x 949 | Image Gallery |
 | `media/galerie-2-json.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-2-json.png` | 87 887 | 1300 x 1033 | Image Gallery |
-| `media/galerie-3-tests.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-3-tests.png` | 9 813 | 1300 x 151 | Image Gallery |
+| `media/galerie-3-tests.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-3-tests.png` | 9 375 | 1300 x 151 | Image Gallery |
 
 - The three gallery screenshots are the three screenshots of the table
   below, taken on 17/11/2026, in this order:
@@ -449,7 +449,7 @@ line drawn in them is the verbatim output of the tool, never retyped.
 |---|---|---|---|
 | 1 | `media/galerie-1-statuts.png` | `python3 -m qnx_portmap abort accept bzero` | the three statuses (documented / described elsewhere / absent), the official page, the exact quotation and the upgrade work list |
 | 2 | `media/galerie-2-json.png` | `python3 -m qnx_portmap --format json abort` | the same answer in JSON, with English field names |
-| 3 | `media/galerie-3-tests.png` | `python3 -m unittest discover -s tests -t .` | the test suite result: `Ran 200 tests`, `OK (skipped=33)` |
+| 3 | `media/galerie-3-tests.png` | `python3 -m unittest discover -s tests -t .` | the test suite result: `Ran 202 tests`, `OK (skipped=33)` |
 
 - The 3:2 thumbnail is the same screen as screenshot 1, with a title bar
   and a footer; it is the file to upload in the field of section 3.3.
