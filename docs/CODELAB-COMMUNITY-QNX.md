@@ -129,6 +129,39 @@ python3 -m venv .venv
 pip install .
 ```
 
+## Short on time? The 2-minute path (quick mode)
+
+Step 3 builds the full snapshot, which takes more than an hour at one request
+per second. If you only want to see the tool answer first, the **quick mode**
+downloads only the 26 A-Z index pages of 8.0 and of 7.1, the migration guide
+and the page of each documented symbol (76 pages, 94 seconds measured on
+17 November 2026), and answers at once:
+
+```bash
+qnx-portmap --quick abort accept bzero zzz_fonction_inexistante
+```
+
+**You should see** (the four symbol lines; the details are the same as in
+step 4):
+
+```text
+  abort                        documented
+  accept                       described elsewhere
+  bzero                        unknown
+  zzz_fonction_inexistante     unknown
+```
+
+and at the end:
+
+```text
+(+ 2 unknown symbol(s), not decided by the quick mode: bzero, zzz_fonction_inexistante - the full corpus decides them)
+```
+
+`bzero` is `unknown` here, not `absent`: the quick mode has read only the
+indexes, so it cannot prove that no other 8.0 book describes the call. It
+**never** says `absent`; only the full snapshot of step 3 can. That is the
+same rule as in step 1: what you have not read, you do not claim.
+
 ## Step 3 - Build the snapshot of the QNX documentation (once)
 
 The QNX documentation is proprietary and is **not** redistributed with the
@@ -160,7 +193,13 @@ and at the end, the list of the pages that were downloaded, one line per page
 in `corpus-downloaded/download.log`, with the SHA-256 of each one.
 
 The full run downloads the 3 426 pages of the frozen snapshot used by the
-project (1 200 pages of 7.1, 2 226 pages of 8.0), at one request per second.
+project (1 200 pages of 7.1, 2 226 pages of 8.0), at one request per second:
+plan **more than an hour** (about 45 pages a minute measured on 17 November
+2026, slower when the QNX site is busy). Start it, and do step 5 while it runs.
+
+If the last line says `N echec(s)` (pages the network cut off), run **the same
+command again**: the pages already downloaded are kept in the `cache/` folder
+and are not downloaded twice; only the missing ones are fetched.
 After that, the tool never uses the network again.
 
 ## Step 4 - Ask about your symbols
@@ -278,12 +317,21 @@ The point of the tool is your own code. Extract the symbols your project
 calls, and give them to the tool:
 
 ```bash
-grep -o '[A-Za-z_][A-Za-z0-9_]*' my_code.c | sort -u \
-  | QX_PORTMAP_CORPUS=$PWD/corpus-downloaded \
-      qnx-portmap --stdin --format json > state.json
+grep -ohE '[A-Za-z_][A-Za-z0-9_]*[[:space:]]*\(' my_code.c \
+  | tr -d '( \t' | sort -u \
+  | grep -vxE 'if|for|while|switch|return|sizeof|main' > calls.txt
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded \
+  qnx-portmap --stdin --format json < calls.txt > state.json
 ```
 
-**You should see:** a `state.json` file with one entry per symbol. Here is the
+The first command keeps only the words followed by `(` - the calls - and
+drops the C keywords and `main`. Without it, every word of the file (types,
+variables, `include`, `h`...) would come back as `unknown` and hide the real
+work list: on a 2-line test file, 11 "symbols" and 9 `unknown` instead of 2
+calls (`abort`, `bzero`). Check `calls.txt` by eye: your own functions will
+also be there, and the tool will rightly call them `unknown`.
+
+**You should see:** a `state.json` file with one entry per call. Here is the
 real output for one symbol (`qnx-portmap --format json abort`), so that you
 know every field it gives:
 
@@ -367,7 +415,7 @@ python3 -m unittest discover -s tests -t .
 **You should see:**
 
 ```text
-Ran 200 tests in 1.0s
+Ran 202 tests in 1.0s
 
 OK (skipped=33)
 ```

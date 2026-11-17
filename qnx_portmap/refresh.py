@@ -11,6 +11,7 @@ The download is done with the public API of the QNX documentation site
 import collections
 import gzip
 import hashlib
+import http.client
 import json
 import os
 import re
@@ -69,7 +70,12 @@ class Downloader(object):
                 self.fetched += 1
                 time.sleep(self.delay)
                 return body
-            except (urllib.error.URLError, OSError, ValueError) as exc:
+            except (urllib.error.URLError, http.client.HTTPException,
+                    OSError, ValueError) as exc:
+                # http.client.HTTPException covers IncompleteRead (a page cut
+                # off in the middle by the network): it is not an OSError, and
+                # without it one cut page stopped the whole corpus download
+                # with a traceback (measured on 17/11/2026, page 1545 of 3426).
                 if attempt == self.retries - 1:
                     self.failed.append((url, str(exc)))
                     return ""

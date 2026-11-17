@@ -111,14 +111,14 @@ pip install .                     # or, without installing: python3 -m qnx_portm
 python3 -m unittest discover -s tests -t .
 ```
 
-Result measured on 17 November 2026: **200 tests, exit code 0**, without any
+Result measured on 17 November 2026: **202 tests, exit code 0**, without any
 network access and without any third-party dependency.
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/`, next to the package | 200 tests, **0 skipped**, exit code 0 |
-| Corpus through `QX_PORTMAP_CORPUS` | 200 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 200 tests, **33 skipped**, exit code 0 |
+| Corpus in `corpus/`, next to the package | 202 tests, **0 skipped**, exit code 0 |
+| Corpus through `QX_PORTMAP_CORPUS` | 202 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 202 tests, **33 skipped**, exit code 0 |
 
 The skipped tests are the ones that need the corpus: they are skipped, never
 failed. A test that always passes tests nothing, so the repository also
@@ -400,13 +400,13 @@ echoue si l'outil change.
 python3 -m unittest discover -s tests -t .
 ```
 
-200 tests, aucune dependance, **aucun acces reseau**. Trois cas :
+202 tests, aucune dependance, **aucun acces reseau**. Trois cas :
 
 | Situation | Resultat |
 |---|---|
-| Corpus dans `corpus/` (a cote du paquet) | 200 tests, **0 skip**, code de sortie 0 |
-| Corpus via `QX_PORTMAP_CORPUS` | 200 tests, **1 skip**, code de sortie 0 |
-| Corpus absent | 200 tests, **33 skip**, code de sortie 0 |
+| Corpus dans `corpus/` (a cote du paquet) | 202 tests, **0 skip**, code de sortie 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | 202 tests, **1 skip**, code de sortie 0 |
+| Corpus absent | 202 tests, **33 skip**, code de sortie 0 |
 
 Avec le corpus fourni par `QX_PORTMAP_CORPUS`, le seul test saute est celui
 qui exige le corpus **dans le paquet installe** (absent du depot, la
@@ -423,7 +423,7 @@ sur des symboles reels). Ils sont **sautes, jamais en echec**, avec le message :
 corpus absent : lancer scripts/bootstrap_corpus.sh
 ```
 
-Les 167 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
+Les 169 autres tests passent **sans corpus**. Parmi eux, les 21 tests de
 `tests/test_fixtures.py` travaillent sur les **fixtures miniatures** : 12
 extraits courts (1 a 3 lignes) de pages QNX reelles, ranges dans
 `tests/fixtures/`, avec l'URL source, la date de consultation et l'empreinte
