@@ -585,7 +585,7 @@ VERIFICATION                               RESULT       DETAIL                  
 ------------------------------------------ ------------ ------------------------------------------------ ----
 unit test suite                            OK           202 tests, 33 skipped                          0
 anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
-published manifest                         OK           MANIFESTE-PUBLIE.txt lists 125 files           0
+published manifest                         OK           MANIFESTE-PUBLIE.txt lists 126 files           0
 published numbers of the README            OK           every published count is the real one          0
 parity of the README output block          NOT CHECKED  the frozen corpus is absent here               0
 RED counter-proof                          OK           10 / 10 rules counter-proved                   0

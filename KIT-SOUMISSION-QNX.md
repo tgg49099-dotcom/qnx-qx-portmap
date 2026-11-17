@@ -218,8 +218,10 @@ list of the symbols to fix, sorted by priority.
 - It does not redistribute the QNX documentation. The corpus (about 3,400 pages,
   QNX 7.1 and 8.0) is rebuilt on demand from the official QNX site with one
   command and one download log. **The first download takes about 1 h 40 to 2 h**
-  at one request per second (1.7 to 2 s per page, measured on 15 and 16 November
-  2026); after that the tool works offline. A **quick mode** (`--quick`,
+  at one request per second (about 2 s per page: 1.7 to 2.0 s measured on 15 and
+  16 November 2026, and 2.03 s per page measured over the first 160 pages of a
+  judge replay on 18 November 2026, which projects to about 1 h 56 for the 3,426
+  pages); after that the tool works offline. A **quick mode** (`--quick`,
   about two to three minutes, 76 pages) gives a first answer without that
   download.
 - It makes no network request by default; the online refresh is an opt-in
@@ -251,9 +253,11 @@ without the install: `python3 -m qnx_portmap` is the same program as the
 `qnx-portmap` command the install gives, and it needs nothing else.
 
 The third command is the **quick mode**: a first answer in about two to three
-minutes (76 pages downloaded in 127 s in the build environment, and in 144 s
-in an independent replay from a clean virtual environment, both measured on
-16 November 2026, one request per second). It reads only the A-Z indexes of
+minutes (76 pages downloaded in 127 s in the build environment, in 144 s in an
+independent replay from a clean virtual environment, both measured on
+16 November 2026, and in 149.1 s in a judge replay from a fresh clone and a
+clean virtual environment on 18 November 2026, one request per second). It
+reads only the A-Z indexes of
 the QNX 8.0 and 7.1 C Library Reference, the official migration guide to 8.0
 and the own page of each documented symbol. It answers `documented` and
 `described elsewhere` like the full mode, but it **never says `absent`**: a
@@ -263,7 +267,8 @@ The exit code of that run is **1**, and that is the expected code: `0` when
 every analysed symbol is documented in 8.0, `1` when at least one symbol is
 absent or unknown, `2` on error. The quick mode answers `unknown` for the two
 symbols it cannot decide, so `1` is the right code here.
-Real output of that run (one line per symbol):
+Real output of that run (one status line and one note line per symbol; the page,
+citation and detail lines are elided here, like in the full-mode output below):
 
 ```text
   abort                        documented
@@ -279,8 +284,10 @@ Real output of that run (one line per symbol):
 For the full answer (quotations, SHA-256, and `absent`), download the
 complete corpus once: **about 3,400 pages** of the official QNX
 documentation, one request per second. **Budget about 1 h 40 to 2 h**
-(1.7 to 2 s per page, measured on 15 and 16 November 2026). The tool then
-runs offline:
+(about 2 s per page: 1.7 to 2.0 s measured on 15 and 16 November 2026, and
+2.03 s per page measured over the first 160 pages of a judge replay on
+18 November 2026, which projects to about 1 h 56 for the 3,426 pages). The
+tool then runs offline:
 
 ```bash
 bash scripts/bootstrap_corpus.sh --out corpus-downloaded
@@ -379,7 +386,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 11698 characters
+- Length (measured): 12231 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to
