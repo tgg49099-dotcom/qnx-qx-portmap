@@ -31,6 +31,13 @@
 #   0  the check passed (the corpus is intact and the tool answered).
 #   1  the check failed (no corpus, corrupted corpus, or the tool errored).
 #   2  the check could not run at all (no Python 3 on this system).
+#   3  QX_PORTMAP_REQUIRE_QNX8=1 was set and this system is not QNX 8:
+#      the check itself passed, but it is a rehearsal, not the QNX 8.0 proof.
+#
+# The verdict line never lets a rehearsal look like the proof: it says
+# "PASS - on a QNX 8 target" only when uname reports QNX with a release
+# 8.x; on any other system (Linux, macOS, or QNX 7.1) it says
+# "PASS (rehearsal only - this is NOT a run on QNX 8.0)".
 #
 # See docs/QNX-8.0-CIBLE.md for the whole procedure.
 
@@ -63,9 +70,18 @@ SYS=$(uname -s 2>/dev/null || echo unknown)
 REL=$(uname -r 2>/dev/null || echo unknown)
 ARCH=$(uname -m 2>/dev/null || echo unknown)
 printf 'system      : %s %s (%s)\n' "$SYS" "$REL" "$ARCH"
+QNX8=no
 case "$SYS" in
     QNX*)
-        printf 'target      : QNX system detected\n'
+        case "$REL" in
+            8.*)
+                QNX8=yes
+                printf 'target      : QNX 8 system detected (release %s)\n' "$REL"
+                ;;
+            *)
+                printf 'target      : QNX system detected, but release %s is not 8.x - this run is NOT the QNX 8.0 proof\n' "$REL"
+                ;;
+        esac
         ;;
     *)
         printf 'target      : NOT a QNX system - this run is a rehearsal on %s\n' "$SYS"
@@ -138,8 +154,17 @@ printf '\n-- verdict --\n'
 printf 'verify-corpus exit code : %s (0 = every page matches its SHA-256)\n' "$rc_verify"
 printf 'symbols exit code       : %s (0 = every symbol documented, 1 = at least one absent or unknown, 2 = error)\n' "$rc_symbols"
 printf 'compat exit code        : %s (0 = the interpreter is new enough for the package)\n' "${RC_COMPAT:-1}"
+printf 'QNX 8 target            : %s (%s %s)\n' "$QNX8" "$SYS" "$REL"
 if [ "$rc_verify" -eq 0 ] && [ "${RC_COMPAT:-1}" -eq 0 ] && { [ "$rc_symbols" -eq 0 ] || [ "$rc_symbols" -eq 1 ]; }; then
-    printf 'RESULT      : PASS\n'
+    if [ "$QNX8" = yes ]; then
+        printf 'RESULT      : PASS - on a QNX 8 target\n'
+        exit 0
+    fi
+    printf 'RESULT      : PASS (rehearsal only - this is NOT a run on QNX 8.0)\n'
+    if [ "${QX_PORTMAP_REQUIRE_QNX8:-0}" = 1 ]; then
+        printf '              QX_PORTMAP_REQUIRE_QNX8=1: exit code 3 (not the QNX 8.0 proof)\n'
+        exit 3
+    fi
     exit 0
 fi
 printf 'RESULT      : FAIL\n'

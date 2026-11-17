@@ -64,6 +64,17 @@ server with the accounts `root`, `qnxuser` and `user1` to `user6`. The x86_64
 target of the SDP is also where the target-side Python of section 1 comes
 from.
 
+**Not verified for route (b): Python inside the QEMU image.** The
+`mkqnximage` page of the QNX 8.0 documentation (read on 17/11/2026) lists no
+option that adds Python to the image; own files go in with full paths or
+`--repos`, or through the snippet files `local/snippets/system_files.custom`
+(system partition) and `local/snippets/ifs_files.custom` (IFS), and
+`mkqnximage --help=brief` lists every option. So on route (b), check first,
+on the running image, that `python3 --version` answers; if it does not, add
+the target-side Python of section 1 through `system_files.custom` (or use
+route (a)). The check script says `python : NOT FOUND` and ends with the
+exit code 2 in that case: it never reports a pass without an interpreter.
+
 Route (a) is the one that needs the least: a Raspberry Pi 4 or 5, a
 microSD card, and the free licence. Route (b) stays on x86_64, on the same
 PC as the SDP and the video capture. Both need the licence; neither needs
@@ -85,10 +96,22 @@ the verdict:
     verify-corpus exit code : 0 (0 = every page matches its SHA-256)
     symbols exit code       : 1 (0 = every symbol documented, 1 = at least one absent or unknown, 2 = error)
     compat exit code        : 0 (0 = the interpreter is new enough for the package)
-    RESULT      : PASS
+    QNX 8 target            : yes (QNX 8.0.0)
+    RESULT      : PASS - on a QNX 8 target
 
 The exit code 1 of the second line is the expected one: it means the tool
 answered and that at least one symbol is not documented in 8.0.
+
+**A rehearsal can never look like the proof** (17/11/2026). The verdict says
+`PASS - on a QNX 8 target` only when `uname -s` reports QNX **and**
+`uname -r` reports a release 8.x. Anywhere else - Linux, macOS, or a QNX 7.1
+target - the same checks print `PASS (rehearsal only - this is NOT a run on
+QNX 8.0)`. With `QX_PORTMAP_REQUIRE_QNX8=1` the script also ends with the exit
+code **3** on such a system, so a host-side script that drives the target can
+refuse a rehearsal by its exit code alone. The four cases (QNX 8.0, QNX 7.1,
+Linux, corrupted corpus on QNX 8.0) are tested in
+`tests/test_target_check.py`, with a fake `uname` and a fake interpreter, on
+any machine.
 
 Two variables replace the arguments when needed: `QX_PORTMAP_CORPUS` for the
 directory of the corpus, and `QX_PORTMAP_PYTHON` for the path of the
@@ -151,13 +174,18 @@ corpus, not a transcription):
     compat exit code        : 0 (0 = the interpreter is new enough for the package)
     RESULT      : PASS
 
+(That was the output of 16/11/2026. Since 17/11/2026 the same run ends with
+`QNX 8 target            : no (Linux ...)` and `RESULT      : PASS (rehearsal
+only - this is NOT a run on QNX 8.0)`.)
+
 What this proves today: the script is POSIX shell, it runs from any
 directory, it detects the system and the interpreter, it checks that the
 interpreter is new enough for the package, it verifies the corpus page by
 page, and it runs the tool and reports its real exit code. What it does
 **not** prove: that a QNX 8.0 system answers the same way. The `target` line
 is the one that changes on a real target, and the day it says
-`QNX system detected`, the segment is filmed.
+`QNX 8 system detected` and the verdict says `PASS - on a QNX 8 target`,
+the segment is filmed.
 
 The complete output of this rehearsal (64 lines) is kept in
 `/work/preuves-qnx13/rehearsal-cible-16-11-2026.txt` (working copy); the same
@@ -179,7 +207,8 @@ All of them were read on 16/11/2026.
   `https://qnx.software/en/blog/2026/qnx-everywhere-september-release`
 - Guide of the Quick Start Target Image for Raspberry Pi 4 and 5:
   `https://www.qnx.com/developers/docs/qnxeverywhere/com.qnx.doc.target_images/topic/qsti/intro.html`
-- `mkqnximage`, the builder of the QEMU system image:
+- `mkqnximage`, the builder of the QEMU system image (read again on
+  17/11/2026 for its options: no Python option, `--repos`, snippet files):
   `https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.utilities/topic/m/mkqnximage.html`
 - The rules of the contest (the segment that is missing, and the acceptance
   of host tools): `https://qnx.devpost.com/rules`, read on 15/11/2026.
