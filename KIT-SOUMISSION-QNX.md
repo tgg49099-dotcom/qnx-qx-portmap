@@ -146,6 +146,20 @@ produced and uploaded before the submission is sent.
 
 ```markdown
 QX PORTMAP - a documentation map for the QNX 8.0 symbols your code calls
+## How this differs from our other entry
+
+The rules of this hackathon allow one entrant to submit several projects, but
+"each Submission must be unique and substantially different from each of the
+Entrant's other Submissions". This project is not a variant of our other entry,
+QX-PROBE. QX-PROBE is a source checker: it reads the C source of a QNX 8.0
+resource manager and reports the access gates and dispatch tables that the QNX 8.0
+documentation requires (11 rules, in the QX-PROBE repository). QX PORTMAP is a
+documentation mapper: it reads the list of QNX symbols that a C or SDK source tree
+calls and answers, for each one, whether it is still documented in QNX 8.0, with
+the official page and the exact quotation. The first one audits resource-manager
+code, the second one guides the port of existing code to QNX 8.0; they read
+different inputs, produce different outputs, share no code, no rule and no
+document, and each one is a complete submission on its own.
 
 ## The problem
 
@@ -340,7 +354,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 10584 characters
+- Length (measured): 11554 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to
