@@ -225,7 +225,8 @@ three minutes the contest rules ask for.
 What it shows: the tool running in a real terminal, filmed from a fresh clone
 of this public repository - the quick mode against the official QNX
 documentation (the A-Z indexes of the QNX 7.1 and 8.0 C Library Reference and
-of the 8.0 migration guide, 76 pages, one request per second), the status of
+of the 8.0 migration guide, 76 pages, one request per second, the wait
+shortened in the video), the status of
 each symbol with the official page and the exact quotation, the JSON output,
 the upgrade work list and the test suite. It is not a title card, and it
 states its own limit: QX PORTMAP is a host tool, so it is not filmed running
