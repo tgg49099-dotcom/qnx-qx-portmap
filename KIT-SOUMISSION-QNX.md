@@ -658,6 +658,17 @@ analyse and manage software for QNX 8.0.
   `python3 tools/mesure_kit.py`. The bonus is 3,500 USD, 1 winner
   (`https://qnx.devpost.com/`, section "Prizes", read 15/11/2026).
 
+### 5.9 File upload (optional field, not used)
+
+No file is uploaded. The field is optional ("File upload (if any)", 35 MB max,
+zip, pdf, word or apk - Devpost help, article 126, section "Step 4:
+Additional Details", read 15/11/2026). The rules ask for "a URL to your
+public code repository for judging and testing on either GitHub, GitLab, or
+Bitbucket" (`https://qnx.devpost.com/rules`, section "Submission
+Requirements", read 15/11/2026), and that URL is the one of block 4.4. The
+repository is public and can be cloned without an account, so nothing has to
+be uploaded.
+
 ---
 
 ## 6. Step 5 - Submit
@@ -679,11 +690,11 @@ step 6, read 15/11/2026):
 | Project story | the block 4.1 text, at the length measured in block 4.1 |
 | Built with tags | the 11 tags of block 4.2 |
 | Try it out | the public repository URL of block 4.3 |
-| Video demo link | the public YouTube URL, replacing the placeholder of block 4.5 |
+| Video demo link | the public YouTube URL of block 4.5 (`https://youtu.be/UMmxNlxkEi0`) |
 | Category | `Developer Tooling & Host Tools` |
 | Repository URL | the public repository URL of block 5.4 |
 | Licence | the MIT file is visible at the top of the repository page |
-| Thumbnail and gallery | the three screenshots listed in block 4.4 |
+| Thumbnail and gallery | the thumbnail file of section 3.3, and the three screenshots listed in block 4.4 |
 | No secret in the text | no token, no account identifier, no private URL |
 
 ## 8. Deadlines
