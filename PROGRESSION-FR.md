@@ -260,3 +260,51 @@ Points d'honnetete traites cette fois :
   tests, OK, 33 ignores ; `python3 -I tools/mesure_kit.py --check` -> OK, 14 blocs,
   tagline 138/140, tags 11/25 ; `bash scripts/verify-all.sh` -> aucun controle en
   echec (4/7 OK, 3 non verifiables sur cette machine, le corpus fige est absent).
+
+## Progression de ce cycle (17/11/2026, la video est publiee et son URL est dans le kit)
+
+- **La video de demonstration est publiee et publique** sur YouTube depuis le
+  17/11/2026 : `https://youtu.be/UMmxNlxkEi0` - identifiant `UMmxNlxkEi0`,
+  titre "QX PORTMAP - is every QNX symbol your code calls still documented in
+  QNX 8.0 ?", chaine "Tgg Labs", **1 min 52 s** (111,04 s, mesure sur le
+  fichier par le Studio le 17/11/2026), donc sous les trois minutes demandees
+  par le reglement. Verifie depuis l'exterieur de l'environnement de build le
+  17/11/2026 : HTTP 200 sur l'oEmbed YouTube de cette URL, avec ce titre et
+  cette chaine.
+- **L'URL est dans le kit de soumission** : le bloc 4.5 de
+  `KIT-SOUMISSION-QNX.md` porte maintenant `https://youtu.be/UMmxNlxkEi0` et sa
+  longueur reelle mesuree (28 caracteres). Le paragraphe qui disait "the
+  placeholder is deliberate: no video is published yet" est remplace par les
+  faits ci-dessus et par ce que la video montre : l'outil en fonctionnement dans
+  un vrai terminal (le mode rapide contre la documentation QNX officielle, l'etat
+  de chaque symbole avec la page officielle et la citation exacte, la sortie
+  JSON, la liste de travail, la suite de tests).
+- **Plus aucun placeholder dans les documents publies** (nouveau controle,
+  verification 8 de `scripts/verify-all.sh`) :
+  `tools/controle_placeholders.py` cherche les trois marqueurs de placeholder
+  de ce projet (le marqueur d'un champ a remplir, le marqueur d'un texte a
+  completer, et le marqueur de longueur du kit) dans les 69 documents
+  publies, et verifie que l'URL de la video de demonstration est la meme dans
+  le README et dans le kit.
+  Il **echoue sur l'etat d'avant ce cycle** (les trois placeholders de l'arbre
+  du 17/11, code de sortie 1) et **passe apres** (code de sortie 0). Le champ
+  codelab (bloc 4.8 du kit) est maintenant **vide** : le codelab n'est pas
+  publie sur community.qnx.com, il n'y a donc aucune URL a donner, et la note
+  dit quoi faire s'il passe en ligne avant la date limite.
+- **La vignette de la galerie est desormais committee et publique** : la
+  section 3.3 du kit donne l'URL publique de
+  `media/qx-portmap-demo-thumbnail.png` (PNG, 172 092 octets, 1280 x 720),
+  verifiee HTTP 200 depuis l'exterieur de l'environnement de build le
+  17/11/2026. La section disait avant qu'aucune miniature n'etait committee :
+  c'etait vrai quand elle a ete ecrite et c'est faux maintenant.
+- **Les chiffres publies sont toujours 200 tests** (33 ignores sans le corpus,
+  code de sortie 0, mesures le 17 novembre 2026) et **119 fichiers** dans le
+  manifeste publie (le controle des placeholders est le 119e fichier). Le
+  chiffre de l'entree precedente (118 fichiers) est celui du cycle precedent :
+  ce fichier est un journal date, il n'est donc pas reecrit.
+- **Controles de ce cycle** : `python3 -m unittest discover -s tests -t .` -> 200
+  tests, OK, 33 ignores ; `python3 -I tools/mesure_kit.py --check` -> OK, 14
+  blocs, tagline 138/140, tags 11/25, URL de la video 28 caracteres, codelab 0
+  caractere ; `python3 -I tools/controle_placeholders.py` -> OK, 69 documents,
+  aucun placeholder ; `bash scripts/verify-all.sh` -> aucun controle en echec
+  (6/8 OK, 2 non verifiables sur cette machine, le corpus fige est absent).

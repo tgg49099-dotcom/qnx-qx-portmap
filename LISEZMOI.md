@@ -28,6 +28,27 @@ python3 tools/mesure_j4.py --clones <folder>      # re-measure J4 (public QNX cl
 qnx-portmap abort accept bzero                    # real example (see README.md)
 ```
 
+## Demo video
+
+The demonstration video is **published and public** on YouTube since
+17/11/2026: **https://youtu.be/UMmxNlxkEi0** (identifier `UMmxNlxkEi0`, channel
+"Tgg Labs", **1 min 52 s**, under the three minutes the rules ask for). Checked
+from outside the build environment on 17/11/2026: HTTP 200 on the YouTube
+oEmbed, with that title and that channel.
+
+It shows the tool running in a real terminal, filmed from a fresh clone of the
+public repository: the quick mode against the official QNX documentation (the
+A-Z indexes of the QNX 7.1 and 8.0 C Library Reference and of the 8.0
+migration guide, 76 pages), the status of each symbol with the official page
+and the exact quotation, the JSON output, the upgrade work list and the test
+suite. The video states its own limit: QX PORTMAP is a host tool, so it is not
+filmed running on a QNX 8.0 target.
+
+The video file is downloadable from the repository:
+`media/qx-portmap-demo-final.mp4` (1 832 957 bytes), with its thumbnail
+`media/qx-portmap-demo-thumbnail.png`. The same URL is in the submission kit
+(`KIT-SOUMISSION-QNX.md`, section 4.5) and in the README.
+
 ## Tree
 
 The repository is **publishable**: it no longer contains the QNX documentation.
@@ -37,7 +58,7 @@ The repository is **publishable**: it no longer contains the QNX documentation.
 | `qnx_portmap/` | the package (6 modules, standard library only) | ~66 KB |
 | `tests/` | 200 tests, among them 21 on the miniature fixtures and 16 on the J4 measurement | ~130 KB |
 | `tests/fixtures/` | 12 short extracts (1 to 3 lines) of QNX pages, with URL and date | ~4 KB |
-| `tools/` | corpus construction, fixtures, RED counter-proof, J4 measurement | ~136 KB |
+| `tools/` | corpus construction, fixtures, RED counter-proof, J4 measurement, control of the placeholders | ~136 KB |
 | `scripts/` | corpus bootstrap, published manifest, anti-leak control | ~30 KB |
 | `docs/` | RED counter-proof, demonstration, proofs, J4 and J5 measurements | ~170 KB |
 | `PROGRESSION.md` | one line per function of the tool (state + the test that proves it) | ~16 KB |

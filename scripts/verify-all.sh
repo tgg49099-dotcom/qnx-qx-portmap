@@ -17,6 +17,7 @@
 #   5  the parity of the README output block the published example of the README
 #   6  the RED counter-proof                 the published proofs (c) and (i)
 #   7  the lengths of the submission kit     KIT-SOUMISSION-QNX.md
+#   8  the placeholders of the documents      no placeholder left, same video URL
 #
 # THREE STATES, NEVER MIXED
 #
@@ -110,7 +111,7 @@ copy_tree() {
 echo "======================================================================================================"
 echo "QX PORTMAP - replay every published proof of this repository"
 echo "======================================================================================================"
-echo "checks     : 7"
+echo "checks     : 8"
 echo
 
 # ---------------------------------------------------------------- 1. the suite
@@ -229,6 +230,21 @@ if [ "$rc" -eq 0 ]; then
 else
     record "lengths of the submission kit" "FAILED" \
            "a measured length does not match the text" "$rc" "$log"
+fi
+
+# ------------------------------------------ 8. the placeholders of the documents
+nb_check=$((nb_check + 1))
+log="$TMP/log-$nb_check"
+python3 -B tools/controle_placeholders.py > "$log" 2>&1
+rc=$?
+n_place=$(sed -n 's/^CONTROL OF THE PLACEHOLDERS - \([0-9][0-9]*\) published documents.*/\1/p' "$log" | head -1)
+[ -n "$n_place" ] || n_place="?"
+if [ "$rc" -eq 0 ]; then
+    record "placeholders of the documents" "OK" \
+           "no placeholder in the $n_place published documents" "$rc" "$log"
+else
+    record "placeholders of the documents" "FAILED" \
+           "a placeholder is left in a published document" "$rc" "$log"
 fi
 
 # ------------------------------------------------------------------ the table

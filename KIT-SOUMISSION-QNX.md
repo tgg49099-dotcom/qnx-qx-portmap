@@ -131,10 +131,21 @@ QX PORTMAP tells you, for every QNX symbol your code calls, whether QNX 8.0 stil
 ### 3.3 Thumbnail image for the Project Gallery
 
 Not a text field. Format JPG, PNG or GIF, 5 MB max, 3:2 ratio (Devpost help,
-article 126, read 15/11/2026). **Status: no thumbnail is committed to the
-repository yet.** A 3:2 image of the terminal output of
-`qnx-portmap abort accept bzero` is the intended one; the file has to be
-produced and uploaded before the submission is sent.
+article 126, read 15/11/2026). **The thumbnail is committed to the repository
+and is publicly readable**; this is the file to upload:
+
+```text
+https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/qx-portmap-demo-thumbnail.png
+```
+
+- Measured on 17/11/2026: PNG, 172 092 bytes, 1280 x 720 (16:9), which is
+  under the 5 MB limit. Devpost asks for a 3:2 ratio "for best results"
+  (article 126) and accepts PNG, JPG and GIF: the ratio of this one is 16:9,
+  the format and the size are accepted.
+- The image is the thumbnail of the demonstration video (section 4.5): the
+  terminal output of the tool, never retyped.
+- The URL was checked from outside the build environment on 17/11/2026:
+  HTTP 200, `image/png`, 172 092 bytes.
 
 ---
 
@@ -420,10 +431,10 @@ The three screenshots to produce, with the exact command that fills each one:
 <!-- BLOC:3_5 -->
 
 ```text
-<YOUTUBE_URL_TO_BE_FILLED_AFTER_THE_VIDEO_IS_UPLOADED>
+https://youtu.be/UMmxNlxkEi0
 ```
 
-- Length (measured): 54 characters
+- Length (measured): 28 characters
 - Field limit: no character limit published. The **video** must be under three
   (3) minutes and public on YouTube: "Include a demonstration video of your
   Project. The video portion of the Submission: should be less than three (3)
@@ -435,9 +446,26 @@ The three screenshots to produce, with the exact command that fills each one:
   or other material unless the Entrant has permission to use such material."
   (`https://qnx.devpost.com/rules`, section "Submission Requirements", read
   15/11/2026).
-- The placeholder is deliberate: no video is published yet, so no URL is
-  claimed. The plan of the video is in `VIDEO-YOUTUBE-QNX-PORTMAP.md` in the
-  repository.
+- The video **is published and public** on YouTube since 17/11/2026: identifier
+  `UMmxNlxkEi0`, title "QX PORTMAP - is every QNX symbol your code calls still
+  documented in QNX 8.0?", channel "Tgg Labs", duration **1 min 52 s**
+  (111.04 s, measured on the file by the Studio on 17/11/2026), so it is under
+  the three minutes the rules ask for. The URL above was checked from outside
+  the build environment on 17/11/2026: HTTP 200 on the YouTube oEmbed of
+  `https://youtu.be/UMmxNlxkEi0`, with that title and that channel.
+- It is not a title card: the video shows the tool running in a real
+  terminal, filmed from a fresh clone of this public repository - the quick
+  mode against the official QNX documentation (the A-Z indexes of the QNX 7.1
+  and 8.0 C Library Reference and of the 8.0 migration guide, 76 pages at one
+  request per second), the status of each symbol with the official page and
+  the exact quotation, the JSON output, the upgrade work list and the test
+  suite. The video states its own limit: QX PORTMAP is a host tool, so it is
+  not filmed running on a QNX 8.0 target (that would need the SDP 8.0
+  licence).
+- The video file itself is downloadable from this repository:
+  `media/qx-portmap-demo-final.mp4` (1 832 957 bytes), with its thumbnail
+  `media/qx-portmap-demo-thumbnail.png`. The plan of the video and the
+  YouTube fields are in `VIDEO-YOUTUBE-QNX-PORTMAP.md`.
 
 ---
 
@@ -612,18 +640,21 @@ analyse and manage software for QNX 8.0.
 <!-- BLOC:4_8 -->
 
 ```text
-<CODELAB_URL_TO_BE_FILLED_AFTER_THE_CODELAB_IS_PUBLISHED_ON_COMMUNITY.QNX.COM>
 ```
 
-- Length (measured): 78 characters
+- Length (measured): 0 characters
 - Field limit: no limit published. The requirement comes from the rules: "If
   you are entering the Best Codelab/Tutorial bonus prize: Provide the URL of
   your codelab or tutorial in the designated field on the submission form."
   (`https://qnx.devpost.com/rules`, section "Submission Requirements", read
   15/11/2026).
-- The placeholder is deliberate: the codelab text is ready in the repository
-  (`docs/CODELAB-COMMUNITY-QNX.md`) but is not published on community.qnx.com
-  yet, so no URL is claimed. The bonus is 3,500 USD, 1 winner
+- **This field is left empty**: nothing is pasted from the block above. The
+  codelab text is ready in the repository (`docs/CODELAB-COMMUNITY-QNX.md`)
+  but it is **not published** on community.qnx.com, so there is no URL to
+  give; the block is empty rather than a placeholder. If the codelab is
+  published before the deadline (15/12/2026 20:00 CET), replace the block by
+  the published URL and re-measure the length with
+  `python3 tools/mesure_kit.py`. The bonus is 3,500 USD, 1 winner
   (`https://qnx.devpost.com/`, section "Prizes", read 15/11/2026).
 
 ---

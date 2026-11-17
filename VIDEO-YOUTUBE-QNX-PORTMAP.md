@@ -27,7 +27,7 @@ What this means for the shooting:
 |---|---|
 | less than three (3) minutes | 160 s planned, checked with `ffprobe` on the file before it is uploaded |
 | shows the Project functioning | the tool is run on screen, for real, on a Linux workstation - that is the device the tool is built for (it is a host tool) |
-| public on YouTube | visibility "Public" at upload; the URL replaces the placeholder of block 4.5 of `KIT-SOUMISSION-QNX.md` |
+| public on YouTube | visibility "Public" at upload; the URL is in block 4.5 of `KIT-SOUMISSION-QNX.md` (`https://youtu.be/UMmxNlxkEi0`, published 17/11/2026) |
 | no third-party trademarks | the only logo on screen is the one of the project; no QNX logo, no BlackBerry logo, no browser tab of a third-party site |
 | no copyrighted music | no music track at all; the voice-over only |
 | in English | every line of the voice-over is written in English below; the console speaks English by default, so the video shows the real English console (`--lang fr` shows the French one) |
@@ -303,8 +303,8 @@ build, analyze, test, deploy, debug, or manage software for QNX 8.0"
 | no music, no third-party logo | `ffprobe -v error -show_streams -of default=nw=1 video.mp4` (no audio stream), and every frame looked at once |
 | no secret on screen | the whole capture looked at once: no token, no account name, no private path, no browser tab |
 | English | the voice-over text of this file is the text to record |
-| public on YouTube | the video is uploaded as "Public", and the URL replaces the placeholder of block 4.5 of `KIT-SOUMISSION-QNX.md` |
-| the URL is in the kit | `python3 tools/mesure_kit.py --check` still passes after the placeholder is replaced |
+| public on YouTube | the video is uploaded as "Public", and the URL is in block 4.5 of `KIT-SOUMISSION-QNX.md` |
+| the URL is in the kit | `python3 tools/mesure_kit.py --check` still passes with the URL written in the block |
 | the URL is in the repository | the same URL is added to the README and to the description block 4.1 |
 
 ## Update 2026-11-15 - the filmed console now speaks English
@@ -398,5 +398,24 @@ The video file itself, downloadable: https://raw.githubusercontent.com/tgg49099-
 Thumbnail: https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/qx-portmap-demo-thumbnail.png
 ```
 
-The URL that YouTube gives replaces `<YOUTUBE_URL_TO_BE_FILLED_AFTER_THE_VIDEO_IS_UPLOADED>`
-in `KIT-SOUMISSION-QNX.md`.
+The video is published and public on YouTube since 17/11/2026: the URL to paste
+in `KIT-SOUMISSION-QNX.md` (section 4.5) is `https://youtu.be/UMmxNlxkEi0`
+(identifier `UMmxNlxkEi0`, channel "Tgg Labs", 1 min 52 s).
+
+## Update 2026-11-17 - the video is published
+
+- **Public on YouTube**: `https://youtu.be/UMmxNlxkEi0` - identifier
+  `UMmxNlxkEi0`, title "QX PORTMAP - is every QNX symbol your code calls still
+  documented in QNX 8.0?", channel "Tgg Labs", visibility Public. Checked from
+  outside the build environment on 17/11/2026: HTTP 200 on the YouTube oEmbed
+  (`https://www.youtube.com/oembed?url=https://youtu.be/UMmxNlxkEi0&format=json`),
+  with that title and that channel.
+- **Duration**: 111.04 s (1 min 52 s), measured on the file by the Studio on
+  17/11/2026 - under the three minutes the rules ask for. The file uploaded
+  is the one committed in the repository
+  (`media/qx-portmap-demo-final.mp4`, 1 832 957 bytes).
+- **The URL is in the kit**: block 4.5 of `KIT-SOUMISSION-QNX.md` now carries
+  the URL and its measured length; `python3 tools/mesure_kit.py --check`
+  passes.
+- The plan and the YouTube fields above are left as they were written before
+  the upload: they are the record of how the video was made.

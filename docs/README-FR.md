@@ -151,6 +151,28 @@ Usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md). A codelab draft for
 (text only, **not published yet**: the URL of the published codelab will be
 added here and in the submission kit when it goes online).
 
+### Demo video
+
+**https://youtu.be/UMmxNlxkEi0** - published and public on YouTube on
+17 November 2026 (channel "Tgg Labs"), **1 min 52 s** (111.04 s), under the
+three minutes the contest rules ask for.
+
+What it shows: the tool running in a real terminal, filmed from a fresh clone
+of this public repository - the quick mode against the official QNX
+documentation (the A-Z indexes of the QNX 7.1 and 8.0 C Library Reference and
+of the 8.0 migration guide, 76 pages, one request per second), the status of
+each symbol with the official page and the exact quotation, the JSON output,
+the upgrade work list and the test suite. It is not a title card, and it
+states its own limit: QX PORTMAP is a host tool, so it is not filmed running
+on a QNX 8.0 target.
+
+The video file itself is downloadable from this repository:
+[`media/qx-portmap-demo-final.mp4`](../media/qx-portmap-demo-final.mp4)
+(1 832 957 bytes), with its thumbnail
+[`media/qx-portmap-demo-thumbnail.png`](../media/qx-portmap-demo-thumbnail.png).
+The plan of the video and the YouTube fields are in
+[`VIDEO-YOUTUBE-QNX-PORTMAP.md`](../VIDEO-YOUTUBE-QNX-PORTMAP.md).
+
 ### Honest limits (English)
 
 - The project **has not been run on a QNX 8.0 machine yet**: that needs the QNX

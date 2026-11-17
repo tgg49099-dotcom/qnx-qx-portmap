@@ -114,7 +114,7 @@ class TestVerifyAllContract(unittest.TestCase):
                             "the checks that could not run must never be "
                             "presented as successes")
             rows = summary_rows(out)
-            self.assertEqual(len(rows), 7)
+            self.assertEqual(len(rows), 8)
             self.assertEqual([r[1] for r in rows].count("FAILED"), 0,
                              "no check may fail on a sound tree:\n%s" % out)
 

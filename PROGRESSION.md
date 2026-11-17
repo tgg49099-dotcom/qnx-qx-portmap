@@ -389,3 +389,46 @@ this cycle: the procedure, the one-command check, and the sources.
   OK, 33 skipped; `python3 -I tools/mesure_kit.py --check` -> OK, 14 blocks, tagline
   138/140, tags 11/25; `bash scripts/verify-all.sh` -> no check failed (4/7 OK,
   3 not checked on this machine because the frozen corpus is absent).
+
+## Progress of this cycle (17/11/2026, the video is published and its URL is in the kit)
+
+- **The demonstration video is published and public** on YouTube since 17/11/2026:
+  `https://youtu.be/UMmxNlxkEi0` - identifier `UMmxNlxkEi0`, title "QX PORTMAP -
+  is every QNX symbol your code calls still documented in QNX 8.0?", channel
+  "Tgg Labs", **1 min 52 s** (111.04 s, measured on the file by the Studio on
+  17/11/2026), so it is under the three minutes the rules ask for. Checked from
+  outside the build environment on 17/11/2026: HTTP 200 on the YouTube oEmbed
+  of that URL, with that title and that channel.
+- **The URL is in the submission kit**: block 4.5 of `KIT-SOUMISSION-QNX.md`
+  now carries `https://youtu.be/UMmxNlxkEi0` and its real measured length (28
+  characters). The paragraph that said "the placeholder is deliberate: no video
+  is published yet" is replaced by the facts above and by what the video shows:
+  the tool running in a real terminal (the quick mode against the official QNX
+  documentation, the status of each symbol with the official page and the exact
+  quotation, the JSON output, the upgrade work list, the test suite).
+- **No placeholder is left in the published documents** (new control, check 8
+  of `scripts/verify-all.sh`): `tools/controle_placeholders.py` looks for the
+  three placeholder markers of this project (the marker of a field to fill, the
+  marker of a text to complete, and the length marker of the kit) in the 69
+  published documents, and checks that the demonstration video URL is the same
+  in the README and in the kit. It **fails on the state before this cycle** (the
+  three placeholders of the tree of 17/11, exit code 1) and **passes after**
+  (exit code 0). The codelab field (block 4.8 of the kit) is now **empty**: the
+  codelab is not published on community.qnx.com, so there is no URL to give,
+  and the note says what to do if it goes online before the deadline.
+- **The thumbnail of the gallery is now committed and public**: section 3.3 of
+  the kit gives the public URL of `media/qx-portmap-demo-thumbnail.png` (PNG,
+  172 092 bytes, 1280 x 720), checked HTTP 200 from outside the build
+  environment on 17/11/2026. The section said before that no thumbnail was
+  committed: that was true when it was written and is false now.
+- **The published figures are now 200 tests** (33 skipped without the corpus,
+  exit code 0, measured on 17 November 2026) and **119 files** in the published
+  manifest (the control of the placeholders is the 119th file). The figure of
+  the previous entry (118 files) is the one of the previous cycle: this file is
+  a dated log.
+- **Checks of this cycle**: `python3 -m unittest discover -s tests -t .` -> 200
+  tests, OK, 33 skipped; `python3 -I tools/mesure_kit.py --check` -> OK, 14
+  blocks, tagline 138/140, tags 11/25, video URL 28 characters, codelab 0
+  character; `python3 -I tools/controle_placeholders.py` -> OK, 69 documents,
+  no placeholder; `bash scripts/verify-all.sh` -> no check failed (6/8 OK, 2
+  not checked on this machine because the frozen corpus is absent).

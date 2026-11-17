@@ -216,6 +216,28 @@ Usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md). A codelab draft for
 (text only, **not published yet**: the URL of the published codelab will be
 added here and in the submission kit when it goes online).
 
+### Demo video
+
+**https://youtu.be/UMmxNlxkEi0** - published and public on YouTube on
+17 November 2026 (channel "Tgg Labs"), **1 min 52 s** (111.04 s), under the
+three minutes the contest rules ask for.
+
+What it shows: the tool running in a real terminal, filmed from a fresh clone
+of this public repository - the quick mode against the official QNX
+documentation (the A-Z indexes of the QNX 7.1 and 8.0 C Library Reference and
+of the 8.0 migration guide, 76 pages, one request per second), the status of
+each symbol with the official page and the exact quotation, the JSON output,
+the upgrade work list and the test suite. It is not a title card, and it
+states its own limit: QX PORTMAP is a host tool, so it is not filmed running
+on a QNX 8.0 target.
+
+The video file itself is downloadable from this repository:
+[`media/qx-portmap-demo-final.mp4`](media/qx-portmap-demo-final.mp4)
+(1 832 957 bytes), with its thumbnail
+[`media/qx-portmap-demo-thumbnail.png`](media/qx-portmap-demo-thumbnail.png).
+The plan of the video and the YouTube fields are in
+[`VIDEO-YOUTUBE-QNX-PORTMAP.md`](VIDEO-YOUTUBE-QNX-PORTMAP.md).
+
 ### Honest limits
 
 - The project **has not been run on a QNX 8.0 machine yet**: that needs the QNX
@@ -519,11 +541,14 @@ documentation is not redistributed - is reported `NOT CHECKED`: it is never
 counted as `OK`, and it never makes the exit code fail. The verdict counts the
 two apart, so `0` means "nothing was disproved", not "everything was checked".
 
-The seven checks, in this order: the unit test suite, the anti-leak control
+The eight checks, in this order: the unit test suite, the anti-leak control
 of the corpus, the published manifest, the published numbers (every test and
 file count written in this README and in the two LISEZMOI files must be the
 real one), the parity of the output block of this README, the RED
-counter-proof, and the measured lengths of the submission kit. The command writes nothing in the repository: the RED counter-proof,
+counter-proof, the measured lengths of the submission kit, and the
+placeholders of the published documents (no field of the submission kit and
+no section of the README may keep a placeholder, and the demonstration video
+URL must be the same in the README and in the kit). The command writes nothing in the repository: the RED counter-proof,
 which breaks a rule of the code on purpose, is replayed on a temporary copy
 of the tree, never on the checkout of the reader.
 
@@ -539,7 +564,7 @@ bash scripts/verify-all.sh
 ======================================================================================================
 QX PORTMAP - replay every published proof of this repository
 ======================================================================================================
-checks     : 7
+checks     : 8
 
 ======================================================================================================
 SUMMARY - one line per verification
@@ -548,13 +573,14 @@ VERIFICATION                               RESULT       DETAIL                  
 ------------------------------------------ ------------ ------------------------------------------------ ----
 unit test suite                            OK           200 tests, 33 skipped                          0
 anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
-published manifest                         OK           MANIFESTE-PUBLIE.txt lists 118 files           0
+published manifest                         OK           MANIFESTE-PUBLIE.txt lists 119 files           0
 published numbers of the README            OK           every published count is the real one          0
 parity of the README output block          NOT CHECKED  the frozen corpus is absent here               0
 RED counter-proof                          OK           10 / 10 rules counter-proved                   0
 lengths of the submission kit              OK           every measured length matches the text         0
+placeholders of the documents              OK           no placeholder in the 69 published documents   0
 ======================================================================================================
-VERDICT: NO CHECK FAILED - 5/7 OK, 2 NOT CHECKED (RC 0)
+VERDICT: NO CHECK FAILED - 6/8 OK, 2 NOT CHECKED (RC 0)
          the check(s) that could not run on this machine are named in the
          table above and are never reported as OK: nothing was disproved,
          but these proofs were NOT re-run here.
