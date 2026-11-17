@@ -205,10 +205,11 @@ answers, for each one, with the state of its documentation in QNX 8.0:
 | `absent` | it was in the C Library Reference 7.1 and is gone from the 8.0 corpus; the tool still shows its 7.1 page |
 | `unknown` | not in the frozen corpus: a typo, a macro of your project, or a symbol published after 14 November 2026. The tool never guesses. |
 
-For every symbol it resolves, QX PORTMAP prints the official page, the exact
-quotation taken from that page, and the SHA-256 of the page, so a reviewer can
-check the answer without trusting the tool. It then prints a work list of the
-symbols to fix, sorted by priority.
+For every symbol it resolves, QX PORTMAP prints the official page and the exact
+quotation taken from that page. The SHA-256 of every page of the snapshot is
+recorded in the corpus index and checked by `qnx-portmap --verify-corpus`, so a
+reviewer can check the answer without trusting the tool. It then prints a work
+list of the symbols to fix, sorted by priority.
 
 ## What it does not do
 
@@ -378,7 +379,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 11604 characters
+- Length (measured): 11698 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to
@@ -621,14 +622,16 @@ https://github.com/tgg49099-dotcom/qnx-qx-portmap :
   "described elsewhere" case is what links a symbol to the page of the QNX 8.0
   io-sock User's Guide or of the QNX SDP 8.0 migration guide that describes
   it.
-- `qnx_portmap/corpus.py` reads the frozen corpus (`corpus/index/pages.jsonl`)
-  and verifies the SHA-256 of every page against `corpus/SHA256SUMS`, so the
+- `qnx_portmap/corpus.py` reads the frozen corpus (`corpus/index/pages.jsonl`),
+  where the SHA-256 of every page is recorded, and checks them against
+  `corpus/SHA256SUMS` on demand (`qnx-portmap --verify-corpus`), so the
   quotation comes from the page it names.
 - `qnx_portmap/cli.py` and `qnx_portmap/report.py` produce the output.
 
-The output to look at: for each symbol, the official QNX 8.0 page, the exact
-quotation taken from that page, and the SHA-256 of the page. Example, executed
-on 15 November 2026:
+The output to look at: for each symbol, the official QNX 8.0 page and the exact
+quotation taken from that page; the SHA-256 of that page is in
+`corpus/index/pages.jsonl`, and `qnx-portmap --verify-corpus` checks every page
+of the snapshot against its fingerprint. Example, executed on 15 November 2026:
 
   abort    documented
     page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
@@ -658,7 +661,7 @@ with the standard library only, and its output is specifically intended to
 analyse and manage software for QNX 8.0.
 ```
 
-- Length (measured): 2661 characters
+- Length (measured): 2854 characters
 - Field limit: no limit published for this field. The requirement comes from
   the rules: "Evidence of QNX use : Your submission must explain how the
   project uses or supports QNX. Evidence may include QNX-specific source code

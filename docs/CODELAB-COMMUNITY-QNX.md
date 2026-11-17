@@ -33,8 +33,9 @@ You will do it twice:
 
 A command that takes the symbols your QNX 8.0 code calls and tells you, for
 each one, **whether the symbol is still documented in QNX 8.0, and where
-exactly**: the official page, the exact quotation, and the SHA-256 of the page
-the quotation comes from.
+exactly**: the official page and the exact quotation taken from it. The
+SHA-256 of every page of the snapshot is recorded in the corpus index, and
+step 7 shows how to check them.
 
 No guessing, no search engine, no account, no network access once the
 documentation snapshot is built.
@@ -62,7 +63,7 @@ priority, with the page to read for each.
 ## Prerequisites
 
 - Python 3.8 or later (standard library only, no dependency to install).
-- A network connection **for step 2 only** (the corpus download). After that,
+- A network connection **for step 3 only** (the corpus download). After that,
   the tool works offline.
 - No QNX SDP, no QNX board, no QNX account, no API key.
 
@@ -214,7 +215,6 @@ P3  accept                     described elsewhere
       https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports )
       and Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
       cited by the migration guide: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
-(+ 1 unknown symbol(s), not in this list: zzz_fonction_inexistante - check the spelling, or a symbol added after the corpus date)
 ```
 
 and the exit code:
@@ -232,10 +232,35 @@ A-Z index of the C Library Reference - is described elsewhere in the QNX 8.0
 documentation, in the io-sock User's Guide and in the FreeBSD manuals. The
 migration guide of QNX 8.0 points to it explicitly.
 
+And if one of the symbols does not exist at all - a typo, or a macro of your
+own project?
+
+```bash
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap zzz_fonction_inexistante
+```
+
+**You should see:**
+
+```text
+QX PORTMAP - status of QNX symbols in the 8.0 documentation
+frozen corpus: <CORPUS>
+pages: 3426 (7.1: 1200, 8.0: 2226) - consulted on 2026-11-14 - offline mode
+
+  zzz_fonction_inexistante     unknown
+    note   : not found in the frozen 8.0 corpus: unknown symbol, typo, or added after 2026-11-14
+
+--- Upgrade worklist (0 symbol(s)) ---
+(nothing to migrate among the decided symbols)
+(+ 1 unknown symbol(s), not in this list: zzz_fonction_inexistante - check the spelling, or a symbol added after the corpus date)
+```
+
+The tool does **not** invent a page for it, and it does not drop it silently:
+an unknown symbol is always named after the work list.
+
 ## Step 5 - Read the answer
 
-For each symbol, the output gives the status, the official page, the exact
-quotation and the SHA-256 of the page. Four statuses:
+For each symbol, the output gives the status, the official page and the exact
+quotation. Four statuses:
 
 | Status | Meaning |
 |---|---|
@@ -254,39 +279,84 @@ calls, and give them to the tool:
 
 ```bash
 grep -o '[A-Za-z_][A-Za-z0-9_]*' my_code.c | sort -u \
-  | qnx-portmap --stdin --format json > state.json
+  | QX_PORTMAP_CORPUS=$PWD/corpus-downloaded \
+      qnx-portmap --stdin --format json > state.json
 ```
 
-**You should see:** a `state.json` file with one entry per symbol. Each entry
-has the `status`, the `url` of the official page, the `citation` (the exact
-quotation) and the `note`, for example:
+**You should see:** a `state.json` file with one entry per symbol. Here is the
+real output for one symbol (`qnx-portmap --format json abort`), so that you
+know every field it gives:
 
 ```json
 {
-  "symbol": "abort",
-  "status": "documented",
-  "kind": "function",
-  "in_71": true,
-  "in_80": true,
-  "url": "https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html",
-  "citation": "Raise the SIGABRT signal to terminate program execution",
-  "citation_source": "index C Library Reference 8.0",
-  "note": "present in 7.1 and in 8.0",
-  "priority": 0
+ "tool": "QX PORTMAP",
+ "version": "8.0",
+ "previous_version": "7.1",
+ "corpus": {
+  "path": "<CORPUS>",
+  "pages_total": 3426,
+  "pages_by_version": {
+   "7.1": 1200,
+   "8.0": 2226
+  },
+  "consulted": "2026-11-14",
+  "offline": true,
+  "mode": "full"
+ },
+ "symbols": [
+  {
+   "symbol": "abort",
+   "status": "documented",
+   "kind": "function",
+   "in_71": true,
+   "in_80": true,
+   "url": "https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html",
+   "citation": "Raise the SIGABRT signal to terminate program execution",
+   "citation_source": "index C Library Reference 8.0",
+   "citation_kind": "",
+   "see_urls": [],
+   "mentioned_in_migration_guide": false,
+   "migration_urls": [],
+   "detail": "The abort() function causes abnormal process termination to occur by means of the function call raise ( SIGABRT ) , unless the signal SIGABRT is caught and the signal handler doesn't return. If the signal SIGABRT is caught and the signal handler returns, the signal handler is removed and raise ( SIGABRT ) is called again. Note that prior to calling raise() , abort() ensures that SIGABRT isn't ignored or blocked.",
+   "note": "present in 7.1 and in 8.0",
+   "priority": 0
+  }
+ ],
+ "worklist": [],
+ "counts": {
+  "symbols": 1,
+  "documented": 1,
+  "described_elsewhere": 0,
+  "absent": 0,
+  "unknown": 0
+ }
 }
 ```
+
+With your own list, the `symbols` array holds one entry per symbol, and
+`counts` gives the number of symbols in each status.
 
 The JSON uses English field names in both languages (`--lang fr` translates
 the console messages, not the JSON), so it can be diffed in a CI job.
 
-To see only the calls you have to deal with, ask for the work list:
+To see only the calls you have to deal with, ask for the work list (the
+symbols are still needed: `--worklist` is a filter, not a source):
 
 ```bash
-QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap --worklist
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap --worklist abort accept bzero
 ```
 
-**You should see:** the symbols to deal with, sorted by priority (`P1` first,
-then `P2`, `P3`), each one with the page to read and the reason.
+**You should see:** the same answer, and at the end the work list - the
+symbols to deal with, sorted by priority, each one with the page to read and
+the reason:
+
+| Priority | Meaning |
+|---|---|
+| `P1` | absent from the 8.0 documentation **and** cited by the official migration guide: the vendor says it is gone |
+| `P2` | absent from the 8.0 documentation, with no official mention |
+| `P3` | described elsewhere in the 8.0 documentation (index cross-reference) |
+
+In the example above, `bzero` is `P2` and `accept` is `P3`.
 
 ## Step 7 - Check that the tool tells the truth
 
@@ -354,10 +424,11 @@ commits and the method are in `docs/mesure-J5.md` in the repository.
 
 The code, the tests and this codelab were written with an AI coding assistant
 (**AI-assisted development**). Every claim about a QNX symbol is backed by an
-exact quotation of an official page (URL, consultation date, SHA-256 of the
-page), the behaviour of the tool is verified by an automated test suite, and
-the published resolution rate is counted by hand on ten symbols given in the
-test and compared with the number in the documentation.
+exact quotation of an official page (URL, consultation date, and the SHA-256 of
+the page recorded in the corpus index), the behaviour of the tool is verified
+by an automated test suite, and the published resolution rate is counted by
+hand on ten symbols given in the test and compared with the number in the
+documentation.
 
 ## Links
 
