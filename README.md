@@ -94,11 +94,15 @@ on error. The quick mode never says `absent` (that is a statement about the
 whole 8.0 documentation, which it has not read): `bzero` stays `unknown`.
 
 **The full answer** (quotations, SHA-256 of every page, and `absent`) needs
-the complete corpus: **about 3,400 pages** of the official QNX documentation,
+the complete corpus: **about 4,000 pages** of the official QNX documentation,
 downloaded once from the official QNX site (the frozen snapshot used for the
-proofs below holds 3,426 pages). **Budget about 1 h 40 to 2 h** at one
+proofs below holds 3,426 pages). **Budget about two hours** at one
 request per second (1.7 to 2 s per page, measured on 15 and 16 November
-2026). After that download the tool runs offline, with no network request:
+2026; a complete judge replay on 18 November 2026 downloaded **3,973 pages in
+2 h 03**, 1.87 s per page, 0 failure -- the live documentation now serves 547
+more pages than the frozen snapshot, all of them in the 7.1 C Library
+Reference). After that download the tool runs offline, with no network
+request:
 
 ```bash
 bash scripts/bootstrap_corpus.sh --out corpus-downloaded
@@ -738,9 +742,11 @@ The script:
 
 **Time measured** with a 1.0 s delay: on 15/11/2026, **27 pages in 51 s**
 (about 2 s per page, request included), 0 failure; on 16/11/2026, **592 pages in
-1 030 s** in two tranches (about 1.7 s per page), 0 failure. For the complete
-corpus (about 3,400 pages; the frozen snapshot used for the proofs below holds
-3,426 pages), count on **about 1 h 40 to 2 h** at this rate. The command stops at any
+1 030 s** in two tranches (about 1.7 s per page), 0 failure; on 18/11/2026, a
+complete judge replay downloaded **3,973 pages in 7,413 s** (2 h 03, 1.87 s per
+page), 0 failure. For the complete corpus (about 4,000 pages, 3,973 measured on
+18 November 2026; the frozen snapshot used for the proofs below holds 3,426
+pages), count on **about two hours** at this rate. The command stops at any
 time: `--max-pages N` limits the number of pages per book (useful for a test).
 
 ```bash

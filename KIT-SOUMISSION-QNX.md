@@ -215,13 +215,14 @@ list of the symbols to fix, sorted by priority.
 
 - It does not analyse a binary and it does not run on the target: it analyses
   the documentation.
-- It does not redistribute the QNX documentation. The corpus (about 3,400 pages,
+- It does not redistribute the QNX documentation. The corpus (about 4,000 pages,
   QNX 7.1 and 8.0) is rebuilt on demand from the official QNX site with one
-  command and one download log. **The first download takes about 1 h 40 to 2 h**
+  command and one download log. **The first download takes about two hours**
   at one request per second (about 2 s per page: 1.7 to 2.0 s measured on 15 and
-  16 November 2026, and 2.03 s per page measured over the first 160 pages of a
-  judge replay on 18 November 2026, which projects to about 1 h 56 for the 3,426
-  pages); after that the tool works offline. A **quick mode** (`--quick`,
+  16 November 2026, and 1.87 s per page measured over a complete judge replay on
+  18 November 2026: 3,973 pages in 2 h 03, 0 failure -- 547 more pages than the
+  frozen snapshot of 14 November, all of them in the 7.1 C Library Reference);
+  after that the tool works offline. A **quick mode** (`--quick`,
   about two to three minutes, 76 pages) gives a first answer without that
   download.
 - It makes no network request by default; the online refresh is an opt-in
@@ -282,11 +283,11 @@ citation and detail lines are elided here, like in the full-mode output below):
 ```
 
 For the full answer (quotations, SHA-256, and `absent`), download the
-complete corpus once: **about 3,400 pages** of the official QNX
-documentation, one request per second. **Budget about 1 h 40 to 2 h**
+complete corpus once: **about 4,000 pages** of the official QNX
+documentation, one request per second. **Budget about two hours**
 (about 2 s per page: 1.7 to 2.0 s measured on 15 and 16 November 2026, and
-2.03 s per page measured over the first 160 pages of a judge replay on
-18 November 2026, which projects to about 1 h 56 for the 3,426 pages). The
+1.87 s per page measured over a complete judge replay on 18 November 2026:
+3,973 pages in 2 h 03, 0 failure). The
 tool then runs offline:
 
 ```bash
@@ -386,7 +387,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 12231 characters
+- Length (measured): 12263 characters
 - Field limit: **no character limit published** (Devpost help, articles 145
   and 126, read 15/11/2026). Observation on the same platform: 120 public
   project pages measured on 15/11/2026, published descriptions from 637 to

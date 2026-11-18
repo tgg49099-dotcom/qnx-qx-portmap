@@ -198,10 +198,13 @@ bootstrap_corpus : versions 8.0,7.1
 and at the end, the list of the pages that were downloaded, one line per page
 in `corpus-downloaded/download.log`, with the SHA-256 of each one.
 
-The full run downloads the 3 426 pages of the frozen snapshot used by the
-project (1 200 pages of 7.1, 2 226 pages of 8.0), at one request per second:
-plan **about 1 h 40 to 2 h** (1.7 to 2 s per page, measured on 15 and 16
-November 2026). Start it, and do step 5 while it runs.
+The full run downloads about 4 000 pages of the official documentation
+(3 973 pages measured on 18 November 2026: 1 747 pages of 7.1 and 2 226 pages
+of 8.0; the frozen snapshot used by the project holds 3 426 pages), at one
+request per second: plan **about two hours** (1.7 to 2 s per page, measured on
+15 and 16 November 2026; 1.87 s per page over the complete judge replay of
+18 November 2026: 3 973 pages in 2 h 03, 0 failure). Start it, and do step 5
+while it runs.
 
 If the last line says `N echec(s)` (pages the network cut off), run **the same
 command again**: the pages already downloaded are kept in the `cache/` folder

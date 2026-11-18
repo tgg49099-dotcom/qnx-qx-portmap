@@ -2,14 +2,18 @@
 """Freezes the QNX documentation corpus in the QX PORTMAP repository.
 
 The corpus is a copy, page by page, of the official QNX documentation
-downloaded on 14/11/2026 (versions 7.1 and 8.0). Every page is stored
-compressed (gzip) as it was downloaded, and its SHA-256 fingerprint is written
-in ``corpus/index/pages.jsonl``.
+(versions 7.1 and 8.0) as it was downloaded on the day of the build: the
+frozen snapshot of the project was downloaded on 14/11/2026, a corpus rebuilt
+by ``scripts/bootstrap_corpus.sh`` carries the date of its own download log.
+Every page is stored compressed (gzip) as it was downloaded, and its SHA-256
+fingerprint is written in ``corpus/index/pages.jsonl``.
 
 Usage:
     python3 tools/build_corpus.py --cache /path/to/cache --out corpus
 
-The script is deterministic: same cache, same corpus.
+The script is deterministic: same cache, same corpus.  The date written in the
+manifest is the date of the download log of that build (``download.log`` in
+the output directory), the day of the build when there is no log.
 """
 
 import argparse
@@ -19,11 +23,31 @@ import json
 import os
 import re
 import sys
+import time
 
 OUT_RELPATH = re.compile(r'name="wh-out-relpath"\s+content="([^"]+)"')
 VERSION_RE = re.compile(r"_docs_(\d+\.\d+)_")
 DOCS_ROOT = "https://www.qnx.com/developers/docs/%s/"
-CONSULTED = "2026-11-14"
+
+
+def consulted_date(out_root):
+    """Date on which the pages of this corpus were downloaded.
+
+    The log of the download carries the real date of every page; the last one
+    is the date of the corpus.  Without a log, the day of the build is used.
+    A corpus rebuilt today must not claim the date of the frozen snapshot.
+    """
+    dates = []
+    try:
+        with open(os.path.join(out_root, "download.log"), encoding="utf-8") as fh:
+            for line in fh:
+                if "\tOK\t" in line:
+                    dates.append(line[:10])
+    except OSError:
+        dates = []
+    if dates:
+        return max(dates)
+    return time.strftime("%Y-%m-%d")
 
 
 def sha256_bytes(data):
@@ -129,11 +153,12 @@ def main():
     for rec in records:
         books[rec["book"]] = books.get(rec["book"], 0) + 1
 
+    consulted = consulted_date(out_root)
     manifest = {
         "corpus": "QNX documentation (C Library Reference et livres lies)",
         "tool": "QX PORTMAP",
-        "built": CONSULTED,
-        "consulted": CONSULTED,
+        "built": consulted,
+        "consulted": consulted,
         "docs_root": {v: DOCS_ROOT % v for v in sorted(by_version)},
         "versions": sorted(by_version),
         "pages_total": len(records),
