@@ -5,6 +5,15 @@ screen, the commands, and the English text of the voice-over, minute by
 minute. **No video is produced and no screen capture is taken in this cycle**;
 this is the script the person who films needs.
 
+**Status, 18 November 2026: the video has been filmed and published.** The
+plan below is kept as it was written on 15 November; the two updates at the
+end of this file tell what was really filmed (16/11/2026) and published
+(17/11/2026). The figures of sections 2 and 3 are the *planned* ones (160 s,
+170 tests); the filming shows 111.04 s and 194 tests, which are the figures of
+the suite on the day it was filmed; the published suite answers 202 tests
+today. No figure of this file contradicts the repository: they are figures of
+three different days, each one labelled.
+
 Target duration: **2 minutes 40 seconds (160 s)**, which leaves 20 seconds of
 margin under the limit of the contest.
 
@@ -355,9 +364,9 @@ the screen says so (">> wait shortened").
 |---|---|---|
 | duration | **111.04 s** (under the 3-minute limit) | `ffprobe` on the file |
 | streams | one H.264 video stream, 1920x1080, 25 fps, **no audio track** (no music) | `ffprobe` |
-| quick mode, first run | 76 pages downloaded from qnx.com in 151.2 s, exit code 1 | shown on screen |
+| quick mode, first run | 76 pages downloaded from qnx.com in 151.2 s, exit code 1 - the filming machine; the README quotes 127 s and 144 s, measured on the build machine on the same day | shown on screen |
 | quick mode, second run | cached, 77 pages in 2.5 s, exit code 0 | shown on screen |
-| test suite on the fresh clone | 194 tests, OK (skipped=33) | shown on screen |
+| test suite on the fresh clone | 194 tests, OK (skipped=33) - the suite of that day; the published suite has grown to 202 tests since | shown on screen |
 
 Scenes: title card; clone and Python version; `--quick abort bzero
 zzz_fonction_inexistante` (`abort` documented with its official page, `bzero`
