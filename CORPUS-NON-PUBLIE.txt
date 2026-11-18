@@ -65,9 +65,11 @@ directory placed under an archive bearing the CORPUS-FIGE.txt marker.
 
 Time measured with a 1.0 s delay: on 14/11/2026, 27 pages in 53 s
 (about 2 s per page, request included); on 16/11/2026, 592 pages in
-1 030 s in two tranches (about 1.7 s per page), 0 failure. For the complete
-corpus (about 3,400 pages; the frozen snapshot holds 3,426 pages), count on
-about 1 h 40 to 2 h at this rate.
+1 030 s in two tranches (about 1.7 s per page), 0 failure; on 18/11/2026, a
+complete replay downloaded 3,973 pages in 7,413 s (2 h 03, 1.87 s per page),
+0 failure. For the complete corpus (about 4,000 pages, 3,973 measured on
+18 November 2026; the frozen snapshot holds 3,426 pages), count on
+about two hours at this rate.
 
 To use the rebuilt corpus:
 
