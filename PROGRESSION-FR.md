@@ -415,3 +415,40 @@ Points d'honnetete traites cette fois :
   juge de concours et lister chaque affirmation qui ne correspond pas a la
   sortie reelle du programme ; verifier que chaque chiffre du README, du kit
   et de `VIDEO-YOUTUBE-QNX-PORTMAP.md` est identique dans les trois fichiers.
+
+## Progression de ce cycle (18/11/2026, 02:00, la legende du README et celle du kit ne peuvent plus diverger)
+- **La legende fausse est desormais gardee par un test publie.** Le README et
+  le kit de soumission doivent decrire les lignes elidees avec les memes
+  mots ; le test publie `test_readme_and_kit_show_the_same_quick_output`
+  compare maintenant les deux legendes caractere par caractere, et echoue
+  des qu'elles different. La contre-epreuve a ete jouee sur une copie de
+  l'arbre : un README dont la legende dit a nouveau "one line per symbol"
+  fait echouer le test, avec les deux textes l'un a cote de l'autre.
+  **Aucun chiffre publie ne bouge** : l'assertion a ete ajoutee a un test
+  existant, la suite repond donc toujours **202 tests, 33 ignores**.
+- **Les deux legendes sont identiques, et c'est desormais prouve a chaque
+  run.** La legende du README (ligne 77) et celle du kit (ligne 270) sont le
+  meme texte, avec la meme coupure de ligne : "(one status line and one note
+  line per symbol; the page, / citation and detail lines are elided here,
+  like in the full-mode output below):". La seule difference est le debut de
+  la phrase, qui est sur une autre ligne ("Real output of the quick mode",
+  ligne 76), qu'aucune consigne n'autorise a toucher.
+- **Les deux taches pour Jules pointaient vers un dossier qui n'existe
+  pas.** Le premier champ d'une tache est le dossier de travail : il doit
+  exister dans `/work` et contenir un `LISEZMOI.md`. Les taches ecrites ce
+  matin pointaient vers `qnx-qx-portmap`, le nom du depot sur GitHub, qui
+  n'est pas un dossier ici : la pompe les aurait comptees "dossier absent",
+  comme le 14 novembre. Elles pointent maintenant vers `qnx-portmap`, le
+  vrai dossier, qui contient un `LISEZMOI.md`.
+- **Controles de ce cycle** : `python3 -B tools/controle_placeholders.py` ->
+  OK, 70 documents, aucun placeholder ; `bash scripts/verify-all.sh` ->
+  **RC 0**, **6/8 OK et 2 NOT CHECKED** (le controle anti-fuite et la parite
+  du bloc README, qui ont besoin du corpus : le rejeu tourne encore), la
+  suite **202 tests, 33 ignores**, la contre-epreuve ROUGE **10/10**, les
+  longueurs du kit conformes, le manifeste **126 fichiers**.
+- **Le rejeu du corpus tourne encore** : **2 292 pages et 0 erreur** a
+  02:00:38, **1,740 s par page** depuis 00:54:09, soit une projection
+  d'environ **1 h 40** pour les 3 426 pages -- le rythme du README, et plus
+  rapide que le « about 1 h 56 » du kit, qui est une projection mesuree sur
+  les 160 premieres pages. **Le nombre exact de pages n'est pas encore
+  connu : rien n'a ete ecrit dans le kit ni dans le README.**

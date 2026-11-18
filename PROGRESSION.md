@@ -532,3 +532,39 @@ this cycle: the procedure, the one-command check, and the sources.
   of the contest and list every claim that does not match the real output;
   check that every figure of the README, of the kit and of
   `VIDEO-YOUTUBE-QNX-PORTMAP.md` is the same in the three files.
+
+## Progress of this cycle (18/11/2026, 02:00, the legend of the README and the legend of the kit can no longer drift apart)
+- **The false legend is now guarded by a published test.** The README and the
+  submission kit must describe the elided lines in the same words; the
+  published test `test_readme_and_kit_show_the_same_quick_output` now
+  compares the two legends character by character, and fails when they
+  differ. The counter-proof was played on a copy of the tree: a README whose
+  legend says "one line per symbol" again makes the test fail, with the two
+  texts side by side. **No published figure moves**: the assertion was added
+  to an existing test, so the suite still answers **202 tests, 33 skipped**.
+- **The two legends are identical, and it is now proved on every run.** The
+  legend of the README (line 77) and the legend of the kit (line 270) are the
+  same text, with the same line break: "(one status line and one note line per
+  symbol; the page, / citation and detail lines are elided here, like in the
+  full-mode output below):". The only difference is the lead-in of the
+  sentence, and it is on another line ("Real output of the quick mode", line
+  76), which no order allows to touch.
+- **The two tasks for Jules pointed at a folder that does not exist.** The
+  first field of a task is the working folder: it must exist in `/work` and
+  hold a `LISEZMOI.md`. The tasks written this morning pointed at
+  `qnx-qx-portmap`, the name of the repository on GitHub, which is not a
+  folder here: the pump would have counted them as "dossier absent", like it
+  did on 14 November. They now point at `qnx-portmap`, the real folder, which
+  holds a `LISEZMOI.md`.
+- **Checks of this cycle**: `python3 -B tools/controle_placeholders.py` -> OK,
+  70 documents, no placeholder; `bash scripts/verify-all.sh` -> **RC 0**,
+  **6/8 OK and 2 NOT CHECKED** (the anti-leak control and the parity of the
+  README block, which need the corpus: the replay is still running), the unit
+  test suite **202 tests, 33 skipped**, the RED counter-proof **10/10**, the
+  lengths of the kit conform, the manifest **126 files**.
+- **The corpus replay is still running**: **2 292 pages and 0 error** at
+  02:00:38, **1,740 s per page** since 00:54:09, which projects to about
+  **1 h 40** for the 3 426 pages -- the rate of the README, and faster than
+  the "about 1 h 56" of the kit, which is a projection measured on the first
+  160 pages. **The exact number of pages is not known yet, so nothing was
+  written in the kit or in the README.**

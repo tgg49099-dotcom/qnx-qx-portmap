@@ -353,3 +353,21 @@ class TestJudgePathInReadme(unittest.TestCase):
         self.assertEqual(readme, kit)
         self.assertIn(JUDGE_COMMAND, open(os.path.join(ROOT, "KIT-SOUMISSION-QNX.md"),
                                           encoding="utf-8").read())
+        # The legend that introduces the block must be the same, word for word,
+        # in the README and in the kit: it says which lines of the real output
+        # are elided (the real output prints one status line and one note line
+        # per symbol; the page, citation and detail lines are elided here).  A
+        # legend that said "one line per symbol" would be false, and it is the
+        # kind of sentence a judge reads first.
+        legends = []
+        for path, marker in (("README.md", "Real output of the quick mode"),
+                             ("KIT-SOUMISSION-QNX.md", "Real output of that run")):
+            with open(os.path.join(ROOT, path), encoding="utf-8") as fh:
+                text = fh.read()
+            pos = text.index(marker)
+            start = text.index("(", pos)
+            end = text.index("below):", start) + len("below):")
+            legends.append(text[start:end])
+        self.assertEqual(legends[0], legends[1],
+                         "the legend of the README and the legend of the kit "
+                         "must be the same, word for word")
