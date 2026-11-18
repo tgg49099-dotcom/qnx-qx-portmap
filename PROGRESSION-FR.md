@@ -452,3 +452,8 @@ Points d'honnetete traites cette fois :
   rapide que le « about 1 h 56 » du kit, qui est une projection mesuree sur
   les 160 premieres pages. **Le nombre exact de pages n'est pas encore
   connu : rien n'a ete ecrit dans le kit ni dans le README.**
+
+## Progression de ce cycle (18/11/2026, 02:12, le controle de coherence rejoue sur un arbre propre, le rejeu du corpus tourne encore)
+- **Le controle de coherence a ete rejoue sur un arbre propre** : `python3 -B tools/controle_placeholders.py` -> OK, 70 documents, aucun placeholder ; `bash scripts/verify-all.sh` -> **RC 0**, **6/8 OK et 2 NOT CHECKED**, la suite **202 tests, 33 ignores**, le manifeste **126 fichiers**, la contre-epreuve ROUGE **10/10**, les longueurs du kit conformes. Les deux lignes NOT CHECKED sont le controle anti-fuite et la parite du bloc README : les deux ont besoin du corpus fige, et le rejeu de juge qui le reconstruit tourne encore. Un controle qui n'a pas tourne n'est jamais rapporte comme OK.
+- **Le bloc publie du README est toujours la sortie reelle** : le bloc delimite qui suit "Real output, on a fresh clone without the corpus:" est identique octet pour octet a la sortie de `bash scripts/verify-all.sh` sur cette machine. La comparaison a ete faite sans toucher au fichier, donc le point fixe n'a pas ete derange.
+- **Le rejeu du corpus tourne encore** : **2 609 pages et 0 erreur** a 02:11:09, **1 771 ms par page** depuis 00:54:09, soit une projection d'environ **1 h 41** pour les 3 426 pages -- le rythme du README, et plus rapide que le « about 1 h 56 » du kit, qui est une projection mesuree sur les 160 premieres pages. **Le nombre exact de pages n'est pas encore connu : rien n'a ete ecrit dans le kit ni dans le README.**

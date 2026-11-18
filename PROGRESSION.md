@@ -568,3 +568,8 @@ this cycle: the procedure, the one-command check, and the sources.
   the "about 1 h 56" of the kit, which is a projection measured on the first
   160 pages. **The exact number of pages is not known yet, so nothing was
   written in the kit or in the README.**
+
+## Progress of this cycle (18/11/2026, 02:12, the coherence check replayed on a clean tree, the corpus replay still running)
+- **The coherence check was replayed from a clean tree**: `python3 -B tools/controle_placeholders.py` -> OK, 70 documents, no placeholder; `bash scripts/verify-all.sh` -> **RC 0**, **6/8 OK and 2 NOT CHECKED**, the unit test suite **202 tests, 33 skipped**, the published manifest **126 files**, the RED counter-proof **10/10**, the lengths of the kit conform. The two NOT CHECKED rows are the anti-leak control and the parity of the README block: both need the frozen corpus, and the judge replay that rebuilds it is still running. A check that did not run is never reported as OK.
+- **The published block of the README is still the real output**: the fenced block that follows "Real output, on a fresh clone without the corpus:" is byte-identical to the output of `bash scripts/verify-all.sh` on this machine. The comparison was made without touching the file, so the fixed point was not disturbed.
+- **The corpus replay is still running**: **2,609 pages and 0 error** at 02:11:09, **1,771 ms per page** since 00:54:09, which projects to about **1 h 41** for the 3,426 pages -- the rate of the README, and faster than the "about 1 h 56" of the kit, which is a projection measured on the first 160 pages. **The exact number of pages is not known yet, so nothing was written in the kit or in the README.**
