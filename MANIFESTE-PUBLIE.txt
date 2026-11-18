@@ -1,9 +1,9 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
 Tree            : /work/qnx-portmap
-Generated on    : 2026-11-18 03:07:41
+Generated on    : 2026-11-18 04:56:31
 Files           : 126
-Total size      : 3808722 bytes
+Total size      : 3841677 bytes
 
 The 3 biggest files:
     1832957 bytes  media/qx-portmap-demo-final.mp4
@@ -14,7 +14,7 @@ Detail (path, size in bytes, SHA-256):
 
 .gitignore	108	2f22a3834102ea229a1904665d78ed928bc4a0e90a2632241a3de7697421c620
 CORPUS-NON-PUBLIE.txt	3771	c2d6d484ccd15a4e41450a19d568889ae113258633139f243f2122edd1ec9883
-KIT-SOUMISSION-QNX.md	37973	a1c35ccc17617cacd8860d991f72902b62b9485f96f8e843271f6bc36039c550
+KIT-SOUMISSION-QNX.md	38866	7526967d529bb6ebd86898f1a9f87f48bff8788fd79eb838f0b8ffd90d47a142
 LICENCE-DOCS-QNX.md	2679	8d7331c75216152ee70f8811e14e27c97dfc9466a810b08d3728e7bc57d07a8a
 LICENSE	1456	26befdf3e8be04b98bf210122275d05d0dca063519589bdc12a0ad6f12b93c30
 LISEZMOI.md	5728	5a8d8213a5a601fde155b5f937504a0220b358e84b3bfb7880904d22fde02d83
@@ -70,7 +70,7 @@ docs/preuves/k-formulaire-devpost-302-401.txt	1246	6a4894233b15f34b97383efd5a86b
 docs/preuves/l-rapport-anglais-rouge.txt	8451	0abda06fe1b54d87d39186795494c9e22722b7b1553676f358d55588d4f219bb
 media/galerie-1-statuts.png	154689	45c0ecd162254e74b7a42156dbb88c3dd9cad684959b82d7b8050d113f35a637
 media/galerie-2-json.png	87887	e8f08a1571c5c3a2d3fdf0f52055cbcc2b27e8fa550a35df4d6c7eda6f2aafc0
-media/galerie-3-tests.png	9375	527f101a556540c25bb9ce093994b3bf7ca2b21a56a4ae6b38e10c769cabdd4b
+media/galerie-3-tests.png	41437	151b7767585fa1aa3d6053fc376cabadfe68184baa85099a277e08faeadf4a7b
 media/galerie-miniature-3x2.png	161276	4b6a1a8081f9b009aa769038bde40cc14f817fc9baf657d85877edd9b9c34e27
 media/qx-portmap-demo-final.mp4	1832957	edbcc4a09ee16b874ebbf95dad7656e08d42a77d61bb4f391f7e3a303270b697
 media/qx-portmap-demo-thumbnail.png	172092	1640b7e43efe87b1bf05017a3f12675bf25f8d5ac0b1601305a59ff08f77acea

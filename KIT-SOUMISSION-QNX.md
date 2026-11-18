@@ -441,17 +441,21 @@ https://github.com/tgg49099-dotcom/qnx-qx-portmap
 Not a text field, no limit published (Devpost help, article 126, read
 15/11/2026). **The four images are committed to the repository and are
 publicly readable.** Each one is a real recording of a real command: every
-line drawn in them is the verbatim output of the tool, never retyped.
+line drawn in them is the verbatim output of the tool, never retyped. The
+only texts that are not the output of the tool are the title bars and the
+footers of the two 3:2 images, and each of them repeats a fact that the
+capture it belongs to already prints.
 
-| file | public URL | bytes | size | Devpost field |
-|---|---|---:|---|---|
-| `media/galerie-miniature-3x2.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-miniature-3x2.png` | 161 276 | 1500 x 1000 (3:2) | Thumbnail image for the Project Gallery |
-| `media/galerie-1-statuts.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-1-statuts.png` | 154 689 | 1300 x 949 | Image Gallery |
-| `media/galerie-2-json.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-2-json.png` | 87 887 | 1300 x 1033 | Image Gallery |
-| `media/galerie-3-tests.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-3-tests.png` | 9 375 | 1300 x 151 | Image Gallery |
+| file | public URL | bytes | size | md5 | Devpost field |
+|---|---|---:|---|---|---|
+| `media/galerie-miniature-3x2.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-miniature-3x2.png` | 161 276 | 1500 x 1000 (3:2) | `a95afc6864ab55327f3e62fe6f1645f3` | Thumbnail image for the Project Gallery |
+| `media/galerie-1-statuts.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-1-statuts.png` | 154 689 | 1300 x 949 | `eb705e77ed1acb942f305a66f8746431` | Image Gallery |
+| `media/galerie-2-json.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-2-json.png` | 87 887 | 1300 x 1033 | `0ec556c674ddd603a5b341f8da07295e` | Image Gallery |
+| `media/galerie-3-tests.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-3-tests.png` | 41 437 | 1500 x 1000 (3:2) | `c2bf2015c1e8ca80f4cd599d232f227a` | Image Gallery |
 
 - The three gallery screenshots are the three screenshots of the table
-  below, taken on 17/11/2026, in this order:
+  below, taken on 17/11/2026 (screenshot 3 was put back on a 3:2 canvas on
+  18/11/2026, from the same recorded session), in this order:
 
 | screenshot | file | command | what it shows |
 |---|---|---|---|
@@ -461,10 +465,16 @@ line drawn in them is the verbatim output of the tool, never retyped.
 
 - The 3:2 thumbnail is the same screen as screenshot 1, with a title bar
   and a footer; it is the file to upload in the field of section 3.3.
+- Screenshot 3 is in the exact 3:2 ratio too (1500 x 1000), like the
+  thumbnail: Devpost shows the gallery images in a fixed frame, and a 3:2
+  image is not cropped. It was re-rendered on a 3:2 canvas from the same
+  recording: the lines drawn are still the verbatim lines of the recording,
+  and its title bar and its footer only repeat what the capture already
+  prints (`Ran 202 tests`, `OK (skipped=33)`).
 - All four files are PNG, under the 5 MB limit of Devpost (the biggest one
   is 161 276 bytes). The URLs were checked from outside the build
-  environment on 17/11/2026: HTTP 200, `image/png`, the size announced
-  above.
+  environment on 17/11/2026 and again on 18/11/2026: HTTP 200,
+  `image/png`, the size and the md5 announced above.
 - What the images do **not** show: the tool running on a QNX 8.0 target.
   It is a host tool, and the SDP 8.0 licence is not available in the build
   environment (section "Honest limits" of block 4.1 says so too). No QNX
