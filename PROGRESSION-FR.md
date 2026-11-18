@@ -361,3 +361,57 @@ Points d'honnetete traites cette fois :
   `python3 -I tools/mesure_kit.py --check` -> OK ;
   `python3 -I tools/controle_placeholders.py` -> OK, 70 documents, aucun
   placeholder.
+
+## Progression de ce cycle (18/11/2026, le kit rejoue en juge, et la legende du README corrigee)
+- **Le kit a ete rejoue, pas relu.** Clone neuf (`/tmp/juge`), environnement
+  virtuel neuf, `pip install .`, puis **toutes les commandes du kit, dans
+  l'ordre du kit** : pour chaque affirmation, la sortie reelle, la duree
+  reelle et le code de sortie reel. **63 affirmations verifiees, 1 fausse** :
+  la legende du mode rapide annoncait « one line per symbol », alors que le
+  programme affiche six lignes par symbole (statut, page, citation, detail,
+  note) et que le bloc publie n'en montre que deux, les trois du milieu etant
+  elidees. La legende du kit dit maintenant ce qui est elide : « one status
+  line and one note line per symbol; the page, citation and detail lines are
+  elided here, like in the full-mode output below ». Deux chiffres ont ete
+  ajoutes sur la meme mesure : le mode rapide a pris **149,1 s** dans ce
+  replay, et le corpus complet tourne a **2,03 s par page** sur ses 160
+  premieres pages, ce qui projette environ 1 h 56 pour les 3 426 pages. Le
+  tableau complet des 63 affirmations est dans
+  `/work/NOTES-KIT-JUGE-20261118.md`.
+- **La meme phrase fausse etait dans `README.md` ligne 77.** Elle est
+  corrigee et publiee : la legende du README est celle du kit, **mot pour
+  mot**, avec la meme coupure de ligne. Un programme compare les deux
+  parenthèses et repond `True` ; « one line per symbol » et « header elided »
+  ont disparu du README. **Aucune autre ligne du README n'a ete touchee.**
+- **Le manifeste publie hache le README.** Le premier `verify-all.sh` apres
+  la correction a repondu **RC 1**, sur deux lignes qui ne sont pas des bugs :
+  `published manifest FAILED` (« MANIFESTE-PUBLIE.txt est obsolete :
+  regenerez-le. ») et `RED counter-proof NOT CHECKED` (« the working copy is
+  not clean »). Il fallait regenerer le manifeste
+  (`python3 -B scripts/manifeste_publie.py`, **126 fichiers**) et commiter
+  **avant** la verification. L'ordre qui marche est desormais : editer,
+  regenerer le manifeste, commiter, verifier, pousser.
+- **Controles de ce cycle** : `python3 -B tools/controle_placeholders.py` ->
+  OK, 70 documents, aucun placeholder ; `bash scripts/verify-all.sh` ->
+  **RC 0**, **6/8 OK et 2 NOT CHECKED** (le controle anti-fuite et la parite
+  du bloc README, qui ont besoin du corpus), la suite **202 tests, 33
+  ignores**, la contre-epreuve ROUGE **10/10**, les longueurs du kit
+  conformes. Les deux lignes NOT CHECKED ne sont pas relancees avant la fin
+  du rejeu du corpus : un controle qui n'a pas tourne n'est jamais compte
+  comme OK.
+- **Publie** : `0172402` -> **`1716cca`**, fast-forward, 0 --force, 0 amend
+  apres un push, 0 secret dans l'arbre ; verifie **par l'API GitHub sans
+  jeton** (`commits/main` -> sha
+  `1716cca3c2415bff112c82d5c84b739516a67453`, `contents/README.md` -> blob
+  `b5ede5e9377011925af2fea34a7946045bd62b9d`, dont le contenu decode contient
+  la legende corrigee et ne contient plus la phrase fausse).
+- **Le rejeu du corpus tourne encore** : 1 927 pages et 0 erreur a 01:48,
+  1,705 s par page depuis 00:54, soit une projection d'environ **1 h 37**
+  pour les 3 426 pages, plus rapide que le « about 1 h 56 » du kit, qui est
+  une projection mesuree sur les 160 premieres pages. **Le nombre exact de
+  pages n'est pas encore connu : rien n'a ete ecrit dans le kit ni dans le
+  README.**
+- **Deux taches restent pour Jules** : relire le README et le kit comme un
+  juge de concours et lister chaque affirmation qui ne correspond pas a la
+  sortie reelle du programme ; verifier que chaque chiffre du README, du kit
+  et de `VIDEO-YOUTUBE-QNX-PORTMAP.md` est identique dans les trois fichiers.
