@@ -74,7 +74,8 @@ the same program as the `qnx-portmap` command that the install adds.
 The third command is the **quick mode** (76 pages downloaded in 127 s and, in
 an independent replay from a clean environment, in 144 s, both measured on
 16 November 2026 at one request per second). Real output of the quick mode
-(one line per symbol, header elided):
+(one status line and one note line per symbol; the page,
+citation and detail lines are elided here, like in the full-mode output below):
 
 ```text
   abort                        documented
