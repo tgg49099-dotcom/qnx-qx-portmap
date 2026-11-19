@@ -44,11 +44,11 @@
 --- InterruptAttach ---
 # repository : varghes/Raspberry-QNX
 # called 3 times in the repository
-# status     : described_elsewhere (J4 state: resolved but described elsewhere, J5 state: resolved and cited)
+# status     : absent (J4 state: resolved but described elsewhere, J5 state: not resolved)
 # source     : com.qnx.doc.qnxsdp.migration, kernel.html
 # page       : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html
 # sha256 of the source page : a3b329c6f9a04bdd8e8b0d6d29af2987b9ff73c77cbb58d4577ce4ba4d7f6d1c
-# citation   : ... InterruptLock() InterruptMask() InterruptUnlock() InterruptUnmask() InterruptWait() The following functions have been removed: InterruptAttach() InterruptAttachArray() InterruptHookIdle2() InterruptHookTrace() The new InterruptAttachThread() function allows you to attach a thread to an interrupt ...
+# citation   : The following functions have been removed: InterruptAttach() InterruptAttachArray() InterruptHookIdle2() InterruptHookTrace()
 
 --- InterruptUnlock ---
 # repository : varghes/Raspberry-QNX

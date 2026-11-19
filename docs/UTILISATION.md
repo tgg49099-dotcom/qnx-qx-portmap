@@ -1,7 +1,7 @@
 # USAGE - QX PORTMAP
 
 Short usage guide: what the tool does, how to run it, and what exactly the
-96 % figure means. For the complete explanation of the behaviour (8.0 index,
+95 % figure means. For the complete explanation of the behaviour (8.0 index,
 "described elsewhere" cross-references, two search passes), see the
 [README](../README.md); for the detail of the measurement, see
 [`mesure-J5.md`](mesure-J5.md).
@@ -106,7 +106,7 @@ bash scripts/bootstrap_corpus.sh --out /tmp/essai --max-pages 3 --delay 1.0
 
 The rebuilt corpus is verifiable: `qnx-portmap --verify-corpus`.
 
-## 5. The 96 % figure: what it means
+## 5. The 95 % figure: what it means
 
 On the reference sample (100 QNX symbols really called by **five public QNX
 repositories**, pinned commits, list of the 100 symbols in
@@ -114,19 +114,24 @@ repositories**, pinned commits, list of the 100 symbols in
 
 | state | number |
 |---|---:|
-| resolved and quoted (QNX 8.0 page + quotation + SHA-256) | **96** |
+| resolved and quoted (QNX 8.0 page + quotation + SHA-256) | **95** |
 | resolved but described elsewhere | 0 |
-| not resolved | 4 |
-| **rate** | **96 %** |
+| not resolved | 5 |
+| **rate** | **95 %** |
 
-The 4 unresolved symbols are **honest**: they had a page in the 7.1 C
+The 5 unresolved symbols are **honest**: four of them had a page in the 7.1 C
 Library Reference and have none in 8.0 (`ND_NODE_CMP`,
-`pthread_sleepon_lock`, `pthread_sleepon_unlock`, `fcfgopen`). The tool
-declares them `absent` with the link to their 7.1 page: it does not invent
-them, it does not erase them. This is the **honest ceiling** of the rate on
-this sample.
+`pthread_sleepon_lock`, `pthread_sleepon_unlock`, `fcfgopen`); the fifth,
+`InterruptAttach`, is reported as **removed in 8.0 according to the official
+migration guide** - the tool quotes the sentence: "The following functions
+have been removed: InterruptAttach() InterruptAttachArray() InterruptHookIdle2()
+InterruptHookTrace()". The tool declares them `absent` with the link to their
+7.1 page or to the page of the guide: it does not invent them, it does not
+erase them. This is the **honest ceiling** of the rate on this sample: when
+the official guide says a function was removed, the tool says so instead of
+counting it resolved (the rate was 96 % before that rule, on 19/11/2026).
 
-**What 96 % does not mean**:
+**What 95 % does not mean**:
 
 - it is not a guarantee for your project: a sample is a sample;
 - the tool analyses the **documentation**, not the binary: `absent` means
@@ -143,9 +148,9 @@ this sample.
 python3 -m unittest discover -s tests -t .
 ```
 
-Without the corpus: 184 tests, 32 of them skipped (the test says so, it does
-not lie). With the corpus: 184 tests, 1 skipped, exit code 0.
-(Figures re-measured on 15/11/2026.)
+Without the corpus: 202 tests, 33 of them skipped (the test says so, it does
+not lie). With the corpus: 202 tests, 1 skipped, exit code 0.
+(Figures re-measured on 19/11/2026.)
 
 The **RED -> GREEN** proof (a rule is broken, the test fails, the code is
 restored, the test passes again) is in [`preuves/`](preuves/); the detail of

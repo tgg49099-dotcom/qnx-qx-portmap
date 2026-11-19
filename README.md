@@ -30,10 +30,13 @@ is rebuilt on demand from the official QNX site with one command and one
 download log (see [QNX corpus](#qnx-corpus-not-redistributed)).
 
 **Measured on real code**: on the 100 QNX symbols really called by five public
-QNX repositories, the tool resolves and quotes **96 %** of them
+QNX repositories, the tool resolves and quotes **95 %** of them
 ([`docs/mesure-J5.md`](docs/mesure-J5.md)). The first measurement, on the same
 sample, resolved 93 % ([`docs/mesure-J4.md`](docs/mesure-J4.md)): the
-difference is explained further down.
+difference is explained further down. One of the symbols that J5 first
+resolved, `InterruptAttach`, is now reported as **removed in 8.0 according to
+the official migration guide**, with the sentence of the guide quoted: that is
+the honest answer, and the rate follows it down.
 
 ### The three things the contest rules ask a submission to state
 
@@ -90,8 +93,12 @@ citation and detail lines are elided here, like in the full-mode output below):
 
 The exit code of that run is **1**, and that is expected: `0` when every
 symbol is documented in 8.0, `1` when at least one is absent or unknown, `2`
-on error. The quick mode never says `absent` (that is a statement about the
-whole 8.0 documentation, which it has not read): `bzero` stays `unknown`.
+on error. The quick mode says `absent` **only** when the official migration
+guide - which the quick mode reads in full - announces the removal of the
+symbol, and it then quotes the sentence of the guide; for any other symbol of
+the 7.1 index that it cannot resolve (a statement about the whole 8.0
+documentation, which it has not read), it stays prudent: `bzero` stays
+`unknown`.
 
 **The full answer** (quotations, SHA-256 of every page, and `absent`) needs
 the complete corpus: **about 4,000 pages** of the official QNX documentation,
@@ -275,7 +282,7 @@ The plan of the video and the YouTube fields are in
   never guessed.
 - The tool analyses the **documentation**, not a binary: `absent` means
   "absent from the frozen 8.0 documentation", not "absent from the system".
-- The 96 % figure is a measurement on one sample of 100 symbols; it is not a
+- The 95 % figure is a measurement on one sample of 100 symbols; it is not a
   guarantee for another project.
 - The console messages are in English by default and in French with
   `--lang fr`; the JSON output (`--format json`) uses English field names in
@@ -339,7 +346,7 @@ code 2.
 ## Usage
 
 Short usage guide: [`docs/UTILISATION.md`](docs/UTILISATION.md) (running the
-tool, what it does, what the 96 % figure means exactly).
+tool, what it does, what the 95 % figure means exactly).
 
 ```bash
 # symbols on the command line
@@ -693,7 +700,7 @@ python3 tools/contre_epreuve.py
 | a prose mention only counts for a name that looks like an API | `test_english_word_mentioned_in_prose_is_not_a_symbol` |
 | detection of the symbols cited in bold | `test_symbol_cited_in_bold` |
 | the J4 rate only counts the resolved and quoted symbols | `test_le_taux_du_script_egale_le_taux_compte_a_la_main` |
-| the J5 rate is 96 % on the same sample as J4 | `test_le_taux_publie_est_96_pour_cent` |
+| the J5 rate is 95 % on the same sample as J4 | `test_le_taux_publie_est_95_pour_cent` |
 | the J5 sample is strictly the one of J4 | `test_echantillon_identique_a_j4` |
 | a verified QNX 8.0 page of the frozen corpus is required for every conversion | `test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256` |
 
@@ -855,7 +862,7 @@ is in `docs/preuves/`:
 | `f-manifeste-publie.txt` | `MANIFESTE-PUBLIE.txt`: number of files, total size, 3 biggest files |
 | `garde-fou-bootstrap.txt` | the rebuild script refuses to write into a frozen corpus |
 | `g-mesure-j4-rouge.txt` | the J4 measurement: the test fails when the rate or the published data is faked, then passes again |
-| `h-mesure-j5-rouge.txt` | the J5 measurement: the test fails on the previous state (93 %) and when the published data is broken, then passes again (96 %) |
+| `h-mesure-j5-rouge.txt` | the J5 measurement: the test fails on the previous state (93 %) and when the published data is broken, then passes again (95 %) |
 | `i-contre-epreuve-rouge-avec-corpus.txt` | RED counter-proof with the corpus in the tree: 11/11 conclusive |
 | `j-mesure-champs-devpost.txt` | the 120 published Devpost project pages measured: observed field lengths |
 | `k-formulaire-devpost-302-401.txt` | the contest form is behind a session: HTTP 302 and HTTP 401 |
@@ -874,7 +881,7 @@ All consulted on **14/11/2026**:
 
 ## Measurement on real public QNX repositories (J4 criterion, then J5)
 
-**96 % of the QNX symbols really used by real QNX projects are resolved and
+**95 % of the QNX symbols really used by real QNX projects are resolved and
 quoted by the tool.** The complete detail (sample, pinned commits, method, the
 100 symbols) is in [`docs/mesure-J5.md`](docs/mesure-J5.md).
 
@@ -885,26 +892,36 @@ repository, the symbols **really called** in the `.c`/`.h` files are collected
 (the symbols defined by the project itself are discarded), 20 of them are kept,
 and the sample counts exactly **100 distinct symbols**.
 
-| state | J4 (14/11, dated measurement) | J5 (14/11, same sample) |
+| state | J4 (14/11, dated measurement) | J5 (19/11, same sample) |
 |---|---:|---:|
-| resolved and quoted | 93 | **96** |
+| resolved and quoted | 93 | **95** |
 | resolved but described elsewhere | 3 | **0** |
-| not resolved | 4 | **4** |
-| **rate** | **93 %** | **96 %** |
+| not resolved | 4 | **5** |
+| **rate** | **93 %** | **95 %** |
 
-The 4 symbols that do not count have disappeared from the 8.0 reference: they
-were in the 7.1 reference, the tool says so and does not invent them. This is
-the **honest ceiling** of the rate on this sample.
+The 5 symbols that do not count: four of them have disappeared from the 8.0
+reference (they were in the 7.1 reference, the tool says so and does not
+invent them), and the fifth, `InterruptAttach`, is reported as **removed in
+8.0 according to the official migration guide** - quoted by the tool: "The
+following functions have been removed: InterruptAttach() InterruptAttachArray()
+InterruptHookIdle2() InterruptHookTrace()". This is the **honest ceiling** of
+the rate on this sample: when the official guide says a function was removed,
+the tool says so instead of counting it resolved.
 
 What changes between the two measurements: in J4, three symbols
 (`InterruptAttach`, `if_freenameindex`, `setsockopt`) were returned by the 8.0
 index towards **external** documentation (FreeBSD pages) or towards another
 QNX page, and therefore counted as "not resolved". In J5, the tool is asked on
-the QNX 8.0 page that really describes these three symbols - the migration
+the QNX 8.0 page that really describes these symbols - the migration
 guide for `InterruptAttach`, the io-sock guide for the two socket functions -
-and quotes that page with its SHA-256 fingerprint. The **same sample**, the
-same 100 symbols, the same order: the test checks the strict equality of the
-two lists.
+and quotes that page with its SHA-256 fingerprint. **In a real public
+repository, the tool finds a call to `InterruptAttach()`, a function that the
+official migration guide says was removed in QNX 8.0**: since 19/11/2026 the
+tool reports it `absent`, priority 1, quoting the sentence of the guide,
+instead of counting it as merely "described elsewhere" (the rate goes from
+96 % down to 95 % because the answer is now the honest one). The **same
+sample**, the same 100 symbols, the same order: the test checks the strict
+equality of the two lists.
 
 The J4 measurement remains a **dated measurement** and is not rewritten:
 [`docs/mesure-J4.md`](docs/mesure-J4.md).

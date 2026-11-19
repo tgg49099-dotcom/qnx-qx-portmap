@@ -1,6 +1,6 @@
 """Quick mode (option ``--quick``): a first answer in minutes, not hours.
 
-The full corpus holds about 3,400 pages and takes 1 h 40 to 2 h to download
+The full corpus holds about 3,400 pages and takes about two hours to download
 at one request per second. Most of the answers of the tool only need a small
 part of it:
 

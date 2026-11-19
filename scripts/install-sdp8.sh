@@ -820,7 +820,7 @@ if [ ! -f "$CORPUS/MANIFEST.json" ]; then
     say "STOP: there is no corpus here, so the proof cannot run."
     say "The QNX documentation is not redistributed with this repository (see"
     say "CORPUS-NON-PUBLIE.txt).  Build it on this host with:"
-    say "    bash scripts/bootstrap_corpus.sh --out corpus      (about 1 h 40 to 2 h)"
+    say "    bash scripts/bootstrap_corpus.sh --out corpus      (about two hours)"
     say "or point QX_PORTMAP_CORPUS at an existing one."
     say "The SDP 8.0 is installed; the proof is the next step, and it is not"
     say "simulated here."

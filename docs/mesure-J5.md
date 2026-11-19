@@ -1,32 +1,40 @@
 # Measurement J5 - QX PORTMAP resolution rate, same sample as J4
 
-Measured on 2026-11-14 by `tools/mesure_j5.py` (reproducible: see the "Reproduce" section below). The French version of this report is kept byte-identical in `docs/mesure-J5-FR.md`.
+Measured on 2026-11-19 by `tools/mesure_j5.py` (reproducible: see the "Reproduce" section below). Repositories consulted on 2026-11-14 (sample unchanged). The French version of this report is kept byte-identical in `docs/mesure-J5-FR.md`.
 
 ## The figure
 
-**J5 rate = 96 % (96 symbols resolved and cited out of 100).**
+**J5 rate = 95 % (95 symbols resolved and cited out of 100).**
 
 | state | count | counted in the criterion ? |
 |---|---:|---|
-| resolved and cited | 96 | yes |
+| resolved and cited | 95 | yes |
 | resolved but described elsewhere | 0 | **no** |
-| not resolved | 4 | **no** |
+| not resolved | 5 | **no** |
 
 Total of the three states: 100. The J4 measurement (93 %, same sample) remains a **dated measurement**: J5 does not modify it.
 
-The 3 symbols that were "described elsewhere" in the J4 measurement have become "resolved and cited": each one now points to the **exact page of the QNX 8.0 book that describes it**, with the SHA-256 fingerprint of that page.
+The 2 symbols that were "described elsewhere" in the J4 measurement have become "resolved and cited": each one now points to the **exact page of the QNX 8.0 book that describes it**, with the SHA-256 fingerprint of that page.
 
-## The 3 conversions
+## The 2 conversions
 
 | symbol | repository | QNX 8.0 book | cited page | page sha256 | kind of mention |
 |---|---|---|---|---|---|
-| `InterruptAttach` | `varghes/Raspberry-QNX` | `com.qnx.doc.qnxsdp.migration` | `kernel.html` | `a3b329c6f9a04bdd` | function call |
 | `if_freenameindex` | `qnx/socketcan` | `com.qnx.doc.neutrino.io_sock` | `socket_api.html` | `23dca276b71539a2` | function call |
 | `setsockopt` | `qnx/socketcan` | `com.qnx.doc.neutrino.io_sock` | `socket_api.html` | `23dca276b71539a2` | function call |
 
-- `InterruptAttach`: **com.qnx.doc.qnxsdp.migration**, page `kernel.html` (https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html). The tool already pointed to this page; J5 adds the verification in the frozen corpus, the citation and the SHA-256 fingerprint (full SHA-256 in `docs/mesure-J5/citations-*.txt`).
 - `if_freenameindex`: **com.qnx.doc.neutrino.io_sock**, page `socket_api.html` (https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html). The 8.0 index pointed to https://man.freebsd.org/cgi/man.cgi?query=if_freenameindex&manpath=FreeBSD+14.4-RELEASE+and+Ports; the QNX 8.0 page that describes the symbol is https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html, verified in the frozen corpus (full SHA-256 in `docs/mesure-J5/citations-*.txt`).
 - `setsockopt`: **com.qnx.doc.neutrino.io_sock**, page `socket_api.html` (https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html). The 8.0 index pointed to https://man.freebsd.org/cgi/man.cgi?query=setsockopt&manpath=FreeBSD+14.4-RELEASE+and+Ports; the QNX 8.0 page that describes the symbol is https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html, verified in the frozen corpus (full SHA-256 in `docs/mesure-J5/citations-*.txt`).
+
+## The removal announced by the official guide
+
+1 symbol of the sample changes state in another way than a conversion: the official QNX 8.0 migration guide announces its removal. The tool does not guess: it quotes the sentence of the guide.
+
+- `InterruptAttach` (varghes/Raspberry-QNX): `resolved but described elsewhere` in J4 (dated measurement), **`not resolved`: removed in 8.0 according to the official migration guide** today, priority 1.
+  sentence of the guide, quoted by the tool: "The following functions have been removed: InterruptAttach() InterruptAttachArray() InterruptHookIdle2() InterruptHookTrace()"
+  guide page: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html (SHA-256 `a3b329c6f9a04bdd...`)
+
+In a real public repository, the tool finds a call to a function that the official guide says was **removed in QNX 8.0**: still found, still quoted and at the top of the work list, even though the function no longer has a page in the 8.0 C Library Reference.
 
 ## What has not changed
 
@@ -37,7 +45,7 @@ The 4 "not resolved" symbols of J4 remain so: they had a page in the C Library R
 - `pthread_sleepon_unlock` (qnx/bsp_raspberrypi-bcm2712-rpi5): 7.1 page `https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/p/pthread_sleepon_unlock.html` - absent from 8.0.
 - `fcfgopen` (varghes/Raspberry-QNX): 7.1 page `https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/f/fcfgopen.html` - absent from 8.0.
 
-The 93 "resolved and cited" symbols of J4 are **unchanged**: same page, same SHA-256, same citation. No rule of the tool (`qnx_portmap/`) was modified.
+The 93 "resolved and cited" symbols of J4 are **unchanged**: same page, same SHA-256, same citation. The J4 measurement remains a dated measurement; the only tool rule that changed since is the classification of the removals announced by the official migration guide (section above).
 
 ## The sample: unchanged
 
@@ -63,7 +71,7 @@ A symbol "described elsewhere" counts as "resolved and cited" if the QNX 8.0 ind
 
 | family | resolved and cited | total | rate |
 |---|---:|---:|---:|
-| QNX-specific | 87 | 91 | 95.6 % |
+| QNX-specific | 86 | 91 | 94.5 % |
 | standard C/POSIX | 9 | 9 | 100.0 % |
 
 ## The 100 measured symbols
@@ -116,7 +124,7 @@ One line per symbol: name, repository, tool status, J4 state, J5 state, cited pa
 | 42 | `basename` | `varghes/Raspberry-QNX` | qnx | `documented` | resolved and cited | resolved and cited | 5 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/b/basename.html | index C Library Reference 8.0 | `3206dee3df07faae` |
 | 43 | `ThreadCtl` | `varghes/Raspberry-QNX` | qnx | `documented` | resolved and cited | resolved and cited | 4 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/t/threadctl.html | index C Library Reference 8.0 | `62ba371a368bc96a` |
 | 44 | `mmap_device_io` | `varghes/Raspberry-QNX` | qnx | `documented` | resolved and cited | resolved and cited | 4 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mmap_device_io.html | index C Library Reference 8.0 | `947e733be70ed59b` |
-| 45 | `InterruptAttach` | `varghes/Raspberry-QNX` | qnx | `described_elsewhere` | resolved but described elsewhere | resolved and cited | 3 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html | com.qnx.doc.qnxsdp.migration, kernel.html | `a3b329c6f9a04bdd` |
+| 45 | `InterruptAttach` | `varghes/Raspberry-QNX` | qnx | `absent` | resolved but described elsewhere | not resolved | 3 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html | com.qnx.doc.qnxsdp.migration, kernel.html | `a3b329c6f9a04bdd` |
 | 46 | `InterruptUnlock` | `varghes/Raspberry-QNX` | qnx | `documented` | resolved and cited | resolved and cited | 3 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptunlock.html | index C Library Reference 8.0 | `92d547215685ae36` |
 | 47 | `_exit` | `varghes/Raspberry-QNX` | qnx | `documented` | resolved and cited | resolved and cited | 3 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/e/_exit.html | index C Library Reference 8.0 | `bcba6288c4673fd7` |
 | 48 | `nanospin_ns` | `varghes/Raspberry-QNX` | qnx | `documented` | resolved and cited | resolved and cited | 3 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/n/nanospin_ns.html | index C Library Reference 8.0 | `980664032e70b205` |
@@ -193,4 +201,4 @@ python3 tools/mesure_j5.py \
 # (docs/mesure-J5-FR.md, byte-identical to the historical one).
 ```
 
-The test `tests/test_mesure_j5.py` verifies the published figure, the strict equality of the J4 and J5 samples, the fact that only the 3 converted symbols changed state, and that the fingerprint of each cited page is the one of the frozen corpus. The RED -> GREEN proof is in `docs/preuves/h-mesure-j5-rouge.txt`.
+The test `tests/test_mesure_j5.py` verifies the published figure, the strict equality of the J4 and J5 samples, the fact that only the converted symbols and the removals announced by the official guide changed state, and that the fingerprint of each cited page is the one of the frozen corpus. The RED -> GREEN proof is in `docs/preuves/h-mesure-j5-rouge.txt`.

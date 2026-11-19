@@ -13,6 +13,8 @@ clear
 run cd "git clone -q $REPO && cd qnx-qx-portmap && git log -1 --format=%h && python3 --version"
 run quick "python3 -m qnx_portmap --quick abort bzero zzz_fonction_inexistante; echo \"exit code: \$?\""
 clear
+run removed "python3 -m qnx_portmap --quick InterruptAttach itoa; echo \"exit code: \$?\""
+clear
 run qnx "python3 -m qnx_portmap --quick accept MsgSend; echo \"exit code: \$?\""
 clear
 run json "python3 -m qnx_portmap --quick --format json MsgSend 2>/dev/null | head -30"

@@ -28,10 +28,13 @@ is rebuilt on demand from the official QNX site with one command and one
 download log (see [Corpus QNX](#corpus-qnx--non-distribue)).
 
 **Measured on real code**: on the 100 QNX symbols really called by five public
-QNX repositories, the tool resolves and quotes **96 %** of them
+QNX repositories, the tool resolves and quotes **95 %** of them
 ([`docs/mesure-J5-FR.md`](mesure-J5-FR.md)). The first measurement, on the same
 sample, resolved 93 % ([`docs/mesure-J4-FR.md`](mesure-J4-FR.md)): the
-difference is explained further down.
+difference is explained further down. One of the symbols that J5 first
+resolved, `InterruptAttach`, is now reported as **removed in 8.0 according to
+the official migration guide**, with the sentence of the guide quoted: that is
+the honest answer, and the rate follows it down.
 
 ### The three things the contest rules ask a submission to state
 
@@ -191,7 +194,7 @@ The plan of the video and the YouTube fields are in
   never guessed.
 - The tool analyses the **documentation**, not a binary: `absent` means
   "absent from the frozen 8.0 documentation", not "absent from the system".
-- The 96 % figure is a measurement on one sample of 100 symbols; it is not a
+- The 95 % figure is a measurement on one sample of 100 symbols; it is not a
   guarantee for another project.
 - The console messages are in French; the JSON output (`--format json`) uses
   English field names, and the status table above is in English.
@@ -231,10 +234,13 @@ Le depot contient le code, les tests, 12 **fixtures miniatures** (extraits
 courts de pages QNX, avec URL et date) et la procedure de reconstruction.
 
 **Mesure sur du code reel** : sur 100 symboles QNX reellement appeles par
-cinq depots QNX publics, l'outil en resout et cite **96 %**
+cinq depots QNX publics, l'outil en resout et cite **95 %**
 ([`docs/mesure-J5-FR.md`](mesure-J5-FR.md)). La premiere mesure, sur le meme
 echantillon, en resolvait 93 % ([`docs/mesure-J4-FR.md`](mesure-J4-FR.md)) :
-la difference est expliquee plus bas.
+la difference est expliquee plus bas. Un des symboles que la J5 resolvait,
+`InterruptAttach`, est desormais signale **retire de la 8.0 selon le guide
+officiel de migration**, phrase du guide citee : c'est la reponse honnete,
+et le taux descend avec elle.
 
 ---
 
@@ -288,15 +294,18 @@ sort avec le code 2.
 26 pages d'index A-Z des C Library Reference 8.0 et 7.1, le guide de
 migration 8.0 et la page propre de chaque symbole documente (dans
 `corpus-quick/`). Il repond `documente` et `decrit ailleurs` comme le mode
-complet, mais **ne dit jamais `absent`** : un symbole de la 7.1 absent de
-l'index 8.0 (ici `bzero`) sort `inconnu du corpus`, avec sa page 7.1 et une
+complet, mais ne dit `absent` **que** lorsque le guide officiel de migration
+- qu'il lit en entier - annonce le retrait du symbole, en citant la phrase du
+guide ; pour tout autre symbole de la 7.1 absent de l'index 8.0, il reste
+prudent (une affirmation sur toute la documentation 8.0, qu'il n'a pas lue) :
+`bzero` sort `inconnu du corpus`, avec sa page 7.1 et une
 note qui l'explique. `tests/test_quick.py` verifie sur le corpus fige que le
 mode rapide ne contredit jamais le mode complet.
 
 ## Utilisation
 
 Guide d'usage court : [`docs/UTILISATION.md`](docs/UTILISATION.md) (lancer
-l'outil, ce qu'il fait, ce que signifie la limite de 96 %).
+l'outil, ce qu'il fait, ce que signifie la limite de 95 %).
 
 ```bash
 # symboles en ligne de commande
@@ -469,7 +478,7 @@ python3 tools/contre_epreuve.py
 | la mention en prose ne vaut que pour un nom qui ressemble a une API | `test_english_word_mentioned_in_prose_is_not_a_symbol` |
 | detection des symboles cites en gras | `test_symbol_cited_in_bold` |
 | le taux J4 ne compte que les symboles resolus et cites | `test_le_taux_du_script_egale_le_taux_compte_a_la_main` |
-| le taux J5 vaut 96 % sur le meme echantillon que J4 | `test_le_taux_publie_est_96_pour_cent` |
+| le taux J5 vaut 95 % sur le meme echantillon que J4 | `test_le_taux_publie_est_95_pour_cent` |
 | l'echantillon J5 est strictement celui de J4 | `test_echantillon_identique_a_j4` |
 | une page QNX 8.0 verifiee dans le corpus fige est exigee pour chaque conversion | `test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256` |
 
@@ -632,7 +641,7 @@ sont dans `docs/preuves/` :
 | `f-manifeste-publie.txt` | `MANIFESTE-PUBLIE.txt` : nombre de fichiers, taille totale, 3 plus gros fichiers |
 | `garde-fou-bootstrap.txt` | le script de reconstruction refuse d'ecrire dans un corpus fige |
 | `g-mesure-j4-rouge.txt` | la mesure J4 : le test echoue quand on truque le taux ou les donnees publiees, puis repasse au vert |
-| `h-mesure-j5-rouge.txt` | la mesure J5 : le test echoue sur l'etat d'avant (93 %) et quand la donnee publiee est cassee, puis repasse au vert (96 %) |
+| `h-mesure-j5-rouge.txt` | la mesure J5 : le test echoue sur l'etat d'avant (93 %) et quand la donnee publiee est cassee, puis repasse au vert (95 %) |
 | `i-contre-epreuve-rouge-avec-corpus.txt` | contre-epreuve ROUGE avec le corpus dans l'arbre : 11/11 concluantes |
 | `j-mesure-champs-devpost.txt` | les 120 pages de projets Devpost publies mesurees : longueurs observees des champs |
 | `k-formulaire-devpost-302-401.txt` | le formulaire du concours QNX est derriere une session : HTTP 302 et HTTP 401 |
@@ -651,7 +660,7 @@ Toutes consultees le **14/11/2026** :
 
 ## Mesure sur de vrais depots QNX publics (critere J4, puis J5)
 
-**96 % des symboles QNX reellement utilises par de vrais projets QNX sont
+**95 % des symboles QNX reellement utilises par de vrais projets QNX sont
 resolus et cites par l'outil.** Le detail complet (echantillon, commits
 epingles, methode, les 100 symboles) est dans
 [`docs/mesure-J5-FR.md`](mesure-J5-FR.md).
@@ -663,26 +672,35 @@ Pour chaque depot, on releve les symboles **reellement appeles** dans les
 `.c`/`.h` (les symboles definis par le projet lui-meme sont ecartes), on en
 retient 20, et l'echantillon compte exactement **100 symboles distincts**.
 
-| etat | J4 (14/11, mesure datee) | J5 (14/11, meme echantillon) |
+| etat | J4 (14/11, mesure datee) | J5 (19/11, meme echantillon) |
 |---|---:|---:|
-| resolu et cite | 93 | **96** |
+| resolu et cite | 93 | **95** |
 | resolu mais decrit ailleurs | 3 | **0** |
-| non resolu | 4 | **4** |
-| **taux** | **93 %** | **96 %** |
+| non resolu | 4 | **5** |
+| **taux** | **93 %** | **95 %** |
 
-Les 4 symboles qui ne comptent pas ont disparu de la reference 8.0 : ils
-etaient dans la reference 7.1, l'outil le dit et ne les invente pas. C'est le
-**plafond honnete** du taux sur cet echantillon.
+Les 5 symboles qui ne comptent pas : quatre ont disparu de la reference 8.0
+(ils etaient dans la reference 7.1, l'outil le dit et ne les invente pas), et
+le cinquieme, `InterruptAttach`, est signale **retire de la 8.0 selon le guide
+officiel de migration** - cite par l'outil : « The following functions have
+been removed: InterruptAttach() InterruptAttachArray() InterruptHookIdle2()
+InterruptHookTrace() ». C'est le **plafond honnete** du taux sur cet
+echantillon : quand le guide officiel dit qu'une fonction a ete retiree,
+l'outil le dit au lieu de la compter resolue.
 
 Ce qui change entre les deux mesures : en J4, trois symboles
 (`InterruptAttach`, `if_freenameindex`, `setsockopt`) etaient renvoyes par
 l'index 8.0 vers une documentation **externe** (pages FreeBSD) ou vers une
 autre page de QNX, et comptaient donc "non resolus". En J5, l'outil est
-interroge sur la page QNX 8.0 qui decrit reellement ces trois symboles -
-le guide de migration pour `InterruptAttach`, le guide io-sock pour les deux
-fonctions socket - et cite cette page avec son empreinte SHA-256. Le
-**meme echantillon**, les memes 100 symboles, le meme ordre : le test
-verifie l'egalite stricte des deux listes.
+interroge sur la page QNX 8.0 qui decrit reellement ces symboles - le guide
+io-sock pour les deux fonctions socket - et cite cette page avec son empreinte
+SHA-256. **Dans un vrai depot public, l'outil trouve un appel a
+`InterruptAttach()`, une fonction que le guide officiel de migration dit
+retiree en QNX 8.0** : depuis le 19/11/2026 l'outil la signale `absent`,
+priorite 1, en citant la phrase du guide, au lieu de la compter simplement
+"decrite ailleurs" (le taux passe de 96 % a 95 % parce que la reponse est
+maintenant la reponse honnete). Le **meme echantillon**, les memes 100
+symboles, le meme ordre : le test verifie l'egalite stricte des deux listes.
 
 La mesure J4 reste une **mesure datee** et n'est pas reecrite :
 [`docs/mesure-J4-FR.md`](mesure-J4-FR.md).

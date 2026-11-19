@@ -1,10 +1,14 @@
 """La mesure J5 doit etre vraie, pas seulement ecrite.
 
-J5 porte le taux de resolution de QX PORTMAP de 93/100 a 96/100 **sur le meme
-echantillon** que J4 : les 3 symboles « decrit ailleurs » deviennent « resolu
-et cite », chacun avec la **page exacte du livre QNX 8.0 qui le decrit** et
-l'empreinte SHA-256 de cette page. Les 4 symboles absents de la 8.0 ne
-bougent pas.
+J5 portait le taux de resolution de QX PORTMAP de 93/100 a 96/100 **sur le
+meme echantillon** que J4 : les 3 symboles « decrit ailleurs » devenaient
+« resolu et cite », chacun avec la **page exacte du livre QNX 8.0 qui le
+decrit** et l'empreinte SHA-256 de cette page. Depuis le 19/11/2026, l'outil
+classe les fonctions dont le guide officiel de migration annonce le retrait
+comme « absent », priorite 1, avec la phrase du guide citee : `InterruptAttach`
+(« The following functions have been removed: ... ») passe de « resolu et
+cite » a **« non resolu : retire en 8.0 selon le guide officiel »** et le taux
+publie est **95/100**. Les 4 symboles absents de la 8.0 ne bougent pas.
 
 Un taux se peut etre maquiller de trois manieres :
 
@@ -19,9 +23,10 @@ Les tests de ce fichier ferment ces trois portes :
    egale a celle de J4 (memes symboles, memes depots, meme ordre) ;
 2. **Meme resultat** : le taux calcule par le script est identique au taux
    compte a la main sur dix symboles donnes dans le test ;
-3. **Conversions reelles** : les 3 symboles convertis ont une page de la
+3. **Conversions reelles** : les 2 symboles convertis ont une page de la
    documentation QNX 8.0, presente dans le corpus fige, dont l'empreinte
-   SHA-256 est verifiee, et une citation extraite de cette page ;
+   SHA-256 est verifiee, et une citation extraite de cette page ; le retrait
+   annonce par le guide est cite phrase a l'appui ;
 4. **Rien d'autre ne bouge** : les 97 autres symboles ont le meme etat qu'en
    J4, et le statut de l'outil lui-meme est inchange (aucune fonction de
    ``qnx_portmap/`` n'a ete ajoutee ni modifiee).
@@ -63,17 +68,21 @@ ROW_RE = re.compile(
     r"(?P<etat_j5>[^|]+?) \| (?P<appels>\d+) \| (?P<page>[^|]+?) \| "
     r"(?P<source>[^|]+?) \| `(?P<sha>[^`]*)` \|$")
 
-# Les 3 symboles « decrit ailleurs » de la mesure J4, et les 4 « non resolu ».
-CONVERTIS = ("InterruptAttach", "if_freenameindex", "setsockopt")
+# Les 2 symboles « decrit ailleurs » de la mesure J4 devenus « resolu et
+# cite », le symbole dont le guide officiel annonce le retrait, et les
+# 4 « non resolu » historiques.
+CONVERTIS = ("if_freenameindex", "setsockopt")
+RETIRES = ("InterruptAttach",)
 ABSENTS = ("ND_NODE_CMP", "pthread_sleepon_lock", "pthread_sleepon_unlock",
            "fcfgopen")
-TAUX_J5 = 96.0
+TAUX_J5 = 95.0
 
 # Les dix symboles du controle a la main. Chacun a ete relu dans la
 # documentation QNX 8.0 (voir docs/mesure-J5.md et les pages de citations
-# docs/mesure-J5/citations-*.txt) : neuf sont resolus et cites - dont les
-# trois converts en J5 - et un a disparu de la reference 8.0. Le taux compte
-# a la main est donc 9 / 10 = 90 % (il etait de 70 % en J4).
+# docs/mesure-J5/citations-*.txt) : huit sont resolus et cites - dont les
+# deux convertis en J5 - et deux ne le sont pas (un retrait annonce par le
+# guide officiel de migration, un disparu de la reference 8.0). Le taux
+# compte a la main est donc 8 / 10 = 80 % (il etait de 70 % en J4).
 MAIN_DIX = [
     ("GETIOVLEN", RESOLU),
     ("resmgr_attach", RESOLU),
@@ -82,11 +91,11 @@ MAIN_DIX = [
     ("devctl", RESOLU),
     ("slogf", RESOLU),
     ("ConnectAttach", RESOLU),
-    ("InterruptAttach", RESOLU),
+    ("InterruptAttach", NON_RESOLU),
     ("setsockopt", RESOLU),
     ("fcfgopen", NON_RESOLU),
 ]
-TAUX_MAIN = 90.0
+TAUX_MAIN = 80.0
 
 
 def load_mesure_module():
@@ -196,12 +205,14 @@ class TestEchantillonJ5(unittest.TestCase):
         self.assertEqual(compte.get(AILLEURS, 0), publie[AILLEURS])
         self.assertEqual(compte.get(NON_RESOLU, 0), publie[NON_RESOLU])
 
-    def test_le_taux_publie_est_96_pour_cent(self):
-        """Le but de la tranche J5 : 96 symboles resolus et cites sur 100."""
-        self.assertEqual(compte_resolu(self.data), 96)
+    def test_le_taux_publie_est_95_pour_cent(self):
+        """Le chiffre publie le 19/11/2026 : 95 symboles resolus et cites
+        sur 100 (96 avant la prise en compte du retrait d'InterruptAttach,
+        annonce par le guide officiel de migration)."""
+        self.assertEqual(compte_resolu(self.data), 95)
         self.assertAlmostEqual(mesure.taux(self.data["symbols"]), TAUX_J5,
                                places=6,
-                               msg="le taux J5 publie n'est pas 96 %% "
+                               msg="le taux J5 publie n'est pas 95 %% "
                                    "(%.1f %%)" % mesure.taux(self.data["symbols"]))
         self.assertAlmostEqual(self.data["principal"]["taux"], TAUX_J5, places=6)
 
@@ -210,8 +221,14 @@ class TestEchantillonJ5(unittest.TestCase):
             self.assertNotEqual(rec["etat"], AILLEURS,
                                 "%s est encore 'decrit ailleurs'" % rec["symbol"])
 
-    def test_seul_les_trois_symboles_convertis_ont_change_d_etat(self):
-        """Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4."""
+    def test_seuls_les_convertis_et_le_retrait_ont_change_d_etat(self):
+        """Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4.
+
+        Deux changements d'etat sont possibles : une conversion (decrit
+        ailleurs -> resolu et cite) et le retrait annonce par le guide
+        officiel de migration (decrit ailleurs -> non resolu, priorite 1,
+        phrase du guide citee).
+        """
         par_symbole = {r["symbol"]: r for r in self.data["symbols"]}
         j4 = {r["symbol"]: r for r in self.j4["symbols"]}
         changes = []
@@ -222,10 +239,23 @@ class TestEchantillonJ5(unittest.TestCase):
             if rec["etat"] != etat_j4:
                 changes.append(symbole)
                 self.assertEqual(etat_j4, AILLEURS, symbole)
-                self.assertEqual(rec["etat"], RESOLU, symbole)
-        self.assertEqual(sorted(changes), sorted(CONVERTIS),
+                if symbole in RETIRES:
+                    # retrait annonce par le guide officiel de migration
+                    self.assertEqual(rec["etat"], NON_RESOLU, symbole)
+                    self.assertEqual(rec["status"], "absent", symbole)
+                    self.assertIn("retire", rec["note"], symbole)
+                    self.assertTrue(rec["retrait"]["phrase"], symbole)
+                    self.assertIn("have been removed",
+                                  rec["retrait"]["phrase"], symbole)
+                    self.assertTrue(rec["url"].startswith(
+                        "https://www.qnx.com/developers/docs/8.0/"
+                        "com.qnx.doc.qnxsdp.migration/"), symbole)
+                    self.assertTrue(rec["in_71"], symbole)
+                else:
+                    self.assertEqual(rec["etat"], RESOLU, symbole)
+        self.assertEqual(sorted(changes), sorted(CONVERTIS + RETIRES),
                          "les seuls symboles qui peuvent changer d'etat en J5 "
-                         "sont %s" % (CONVERTIS,))
+                         "sont %s" % (CONVERTIS + RETIRES,))
 
     def test_les_quatre_absents_restent_absents(self):
         par_symbole = {r["symbol"]: r for r in self.data["symbols"]}
@@ -239,7 +269,7 @@ class TestEchantillonJ5(unittest.TestCase):
                             % symbole)
             self.assertIn("/7.1/", rec["url"], symbole)
 
-    def test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256(self):
+    def test_les_deux_convertis_ont_une_page_qnx_8_0_et_son_sha256(self):
         par_symbole = {r["symbol"]: r for r in self.data["symbols"]}
         for symbole in CONVERTIS:
             rec = par_symbole[symbole]
@@ -258,7 +288,7 @@ class TestEchantillonJ5(unittest.TestCase):
             self.assertTrue(rec["citation_source"].startswith(rec["resolution_j5"]["book"]),
                             symbole)
 
-    def test_les_pages_des_trois_convertis_sont_des_livres_qnx(self):
+    def test_les_pages_des_deux_convertis_sont_des_livres_qnx(self):
         """Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD."""
         par_symbole = {r["symbol"]: r for r in self.data["symbols"]}
         for symbole in CONVERTIS:
@@ -537,13 +567,27 @@ class TestMesureReproductible(unittest.TestCase):
         self.assertEqual(mesure.taux(records), TAUX_J5)
 
     def test_les_statuts_de_l_outil_sont_inchanges(self):
-        """J5 ne touche pas l'outil : les statuts sont ceux de J4."""
+        """J5 ne touche pas l'outil : les statuts sont ceux de J4, sauf les
+        retraits annonces par le guide officiel de migration (19/11/2026) :
+        pour ceux-la, l'ecart avec la mesure J4 datee est exactement le
+        classement ``absent`` avec la phrase du guide citee."""
         symbols = [r["symbol"] for r in self.j4["symbols"]]
         results = {r.symbol: r for r in self.classifier.classify(symbols)}
         j4 = {r["symbol"]: r for r in self.j4["symbols"]}
+        retires = 0
         for symbole, rec in results.items():
+            if getattr(rec, "removed_by_migration_guide", False):
+                retires += 1
+                self.assertEqual(j4[symbole]["status"], "described_elsewhere",
+                                 symbole)
+                self.assertEqual(rec.status, "absent", symbole)
+                self.assertEqual(rec.url, j4[symbole]["url"], symbole)
+                self.assertIn("have been removed", rec.citation, symbole)
+                continue
             self.assertEqual(rec.status, j4[symbole]["status"], symbole)
             self.assertEqual(rec.url, j4[symbole]["url"], symbole)
+        self.assertEqual(retires, len(RETIRES),
+                         "les retraits attendus sont %s" % (RETIRES,))
 
     def test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256(self):
         par_symbole = {r["symbol"]: r for r in self.data["symbols"]}

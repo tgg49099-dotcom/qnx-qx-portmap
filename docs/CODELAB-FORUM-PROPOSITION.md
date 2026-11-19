@@ -112,11 +112,13 @@ On the reference sample - the 100 QNX symbols really called by **five public
 QNX repositories** (the official QNX BSP for Raspberry Pi 5, another QNX BSP
 for Raspberry Pi, the QNX Neutrino resource-manager sources, the QNX Signal
 Framework and a SocketCAN driver), with pinned commits - the tool resolves and
-quotes **96 %** of the symbols.
+quotes **95 %** of the symbols.
 
-The four it does not resolve are honest misses: they had a page in the 7.1
-reference and have none in the 8.0 one. The tool says so and gives the 7.1
-link; it does not invent a page. The full list of the 100 symbols, the pinned
+The five it does not resolve are honest misses: four had a page in the 7.1
+reference and have none in the 8.0 one, and the fifth, `InterruptAttach`, is
+reported as **removed in 8.0 according to the official migration guide**, with
+the sentence of the guide quoted. The tool says so and gives the 7.1 link; it
+does not invent a page. The full list of the 100 symbols, the pinned
 commits and the method are in `docs/mesure-J5.md` in the repository.
 
 ## What it does not do

@@ -428,3 +428,22 @@ in `KIT-SOUMISSION-QNX.md` (section 4.5) is `https://youtu.be/UMmxNlxkEi0`
   passes.
 - The plan and the YouTube fields above are left as they were written before
   the upload: they are the record of how the video was made.
+
+## Update 2026-11-19 - the removals announced by the guide are in the tool
+
+- **The published rate is now 95 %, not 96 %** (`docs/mesure-J5.md`,
+  measured on 19/11/2026): the official 8.0 migration guide says
+  "The following functions have been removed: InterruptAttach()
+  InterruptAttachArray() InterruptHookIdle2() InterruptHookTrace()", and the
+  tool now reports a call to such a removed function as `absent`, priority 1,
+  with that sentence quoted, instead of counting it "described elsewhere".
+  The rate goes down because the answer is the honest one.
+- **The video of 17/11 stays true for its day**: it says 96 %, which was the
+  published figure on 17/11/2026. Every figure of this file keeps its date;
+  none contradicts the repository.
+- **If the video is filmed again**, one segment is new and shows the point in
+  ten seconds: `python3 -m qnx_portmap --quick InterruptAttach itoa` answers
+  `absent` for both symbols, quoting the sentence of the guide, with exit
+  code 1 (the quick mode says `absent` only in that case; every other symbol
+  stays `unknown` in quick mode). `scripts/video/record_demo.sh` was updated
+  accordingly (a `removed` run between the `quick` and `qnx` runs).

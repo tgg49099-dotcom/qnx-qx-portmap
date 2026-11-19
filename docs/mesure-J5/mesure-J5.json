@@ -10,10 +10,11 @@
   "taux": 93.0,
   "total": 100
  },
- "methode": "meme echantillon que la mesure J4 (100 symboles, 5 depots QNX publics aux commits epingles de J4), classes par QX PORTMAP sur le corpus fige (hors ligne) ; regle J5 : un symbole 'decrit ailleurs' compte comme resolu et cite si la page QNX 8.0 qui le decrit est dans le corpus fige, avec son empreinte SHA-256",
+ "mesure_le": "2026-11-19",
+ "methode": "meme echantillon que la mesure J4 (100 symboles, 5 depots QNX publics aux commits epingles de J4), classes par QX PORTMAP sur le corpus fige (hors ligne) ; regle J5 : un symbole 'decrit ailleurs' compte comme resolu et cite si la page QNX 8.0 qui le decrit est dans le corpus fige, avec son empreinte SHA-256 ; un retrait annonce par le guide officiel de migration 8.0 classe le symbole non resolu (priorite 1, phrase du guide citee)",
  "par_famille": {
   "qnx": {
-   "resolu": 87,
+   "resolu": 86,
    "total": 91
   },
   "standard": {
@@ -24,11 +25,11 @@
  "per_repo": 20,
  "principal": {
   "counts": {
-   "non_resolu": 4,
-   "resolu_et_cite": 96,
+   "non_resolu": 5,
+   "resolu_et_cite": 95,
    "resolu_mais_decrit_ailleurs": 0
   },
-  "taux": 96.0,
+  "taux": 95.0,
   "total": 100
  },
  "repos": [
@@ -976,27 +977,24 @@
   },
   {
    "calls": 3,
-   "citation_kind": "appel de fonction",
-   "citation_octets": 304,
-   "citation_sha256": "b0226be6c286d0f469cf9ce4a10d54dff4939a4ffbcb9d1c5c75ecfe118bb0cb",
+   "citation_kind": "retrait annonce",
+   "citation_octets": 125,
+   "citation_sha256": "550c1797450f096bbca052d15fa25d8cd06905282922e88d407849afc77211ac",
    "citation_source": "com.qnx.doc.qnxsdp.migration, kernel.html",
-   "etat": "resolu_et_cite",
+   "etat": "non_resolu",
    "etat_j4": "resolu_mais_decrit_ailleurs",
    "famille": "qnx",
    "in_71": true,
    "in_80": false,
-   "note": "decrit dans la documentation QNX 8.0 (livre com.qnx.doc.qnxsdp.migration, page kernel.html) : resolu et cite en J5",
+   "note": "retire en 8.0 selon le guide officiel de migration (phrase citee ci-dessus)",
    "page_in_corpus": true,
    "page_sha256": "a3b329c6f9a04bdd8e8b0d6d29af2987b9ff73c77cbb58d4577ce4ba4d7f6d1c",
    "repo": "varghes/Raspberry-QNX",
-   "resolution_j5": {
-    "book": "com.qnx.doc.qnxsdp.migration",
-    "kind": "appel de fonction",
-    "page": "https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html",
-    "topic": "kernel.html",
-    "url_avant_j5": "https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html"
+   "resolution_j5": null,
+   "retrait": {
+    "phrase": "The following functions have been removed: InterruptAttach() InterruptAttachArray() InterruptHookIdle2() InterruptHookTrace()"
    },
-   "status": "described_elsewhere",
+   "status": "absent",
    "symbol": "InterruptAttach",
    "url": "https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html"
   },

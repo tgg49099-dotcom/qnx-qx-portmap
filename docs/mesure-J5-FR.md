@@ -1,32 +1,40 @@
 # Mesure J5 - taux de resolution de QX PORTMAP, meme echantillon que J4
 
-Mesure faite le 2026-11-14 par `tools/mesure_j5.py` (reproductible : voir la section Reproduire plus bas).
+Mesure faite le 2026-11-19 par `tools/mesure_j5.py` (reproductible : voir la section Reproduire plus bas). Depots consultes le 2026-11-14 (echantillon inchange).
 
 ## Le chiffre
 
-**Taux J5 = 96 % (96 symboles resolus et cites sur 100).**
+**Taux J5 = 95 % (95 symboles resolus et cites sur 100).**
 
 | etat | nombre | compte dans le critere ? |
 |---|---:|---|
-| resolu et cite | 96 | oui |
+| resolu et cite | 95 | oui |
 | resolu mais decrit ailleurs | 0 | **non** |
-| non resolu | 4 | **non** |
+| non resolu | 5 | **non** |
 
 Cumul des trois etats : 100. La mesure J4 (93 %, meme echantillon) reste une **mesure datee** : elle n'est pas modifiee par J5.
 
-Les 3 symboles « decrit ailleurs » de la mesure J4 sont devenus « resolu et cite » : chacun pointe desormais la **page exacte du livre QNX 8.0 qui le decrit**, avec l'empreinte SHA-256 de cette page.
+Les 2 symboles « decrit ailleurs » de la mesure J4 sont devenus « resolu et cite » : chacun pointe desormais la **page exacte du livre QNX 8.0 qui le decrit**, avec l'empreinte SHA-256 de cette page.
 
-## Les 3 conversions
+## Les 2 conversions
 
 | symbole | depot | livre QNX 8.0 | page citee | sha256 de la page | genre de mention |
 |---|---|---|---|---|---|
-| `InterruptAttach` | `varghes/Raspberry-QNX` | `com.qnx.doc.qnxsdp.migration` | `kernel.html` | `a3b329c6f9a04bdd` | appel de fonction |
 | `if_freenameindex` | `qnx/socketcan` | `com.qnx.doc.neutrino.io_sock` | `socket_api.html` | `23dca276b71539a2` | appel de fonction |
 | `setsockopt` | `qnx/socketcan` | `com.qnx.doc.neutrino.io_sock` | `socket_api.html` | `23dca276b71539a2` | appel de fonction |
 
-- `InterruptAttach` : **com.qnx.doc.qnxsdp.migration**, page `kernel.html` (https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html). L'outil pointait deja vers cette page ; J5 y ajoute la verification dans le corpus fige, la citation et l'empreinte SHA-256 (SHA-256 complet dans `docs/mesure-J5/citations-*.txt`).
 - `if_freenameindex` : **com.qnx.doc.neutrino.io_sock**, page `socket_api.html` (https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html). L'index 8.0 renvoyait a https://man.freebsd.org/cgi/man.cgi?query=if_freenameindex&manpath=FreeBSD+14.4-RELEASE+and+Ports ; la page QNX 8.0 qui decrit le symbole est https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html, verifiee dans le corpus fige (SHA-256 complet dans `docs/mesure-J5/citations-*.txt`).
 - `setsockopt` : **com.qnx.doc.neutrino.io_sock**, page `socket_api.html` (https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html). L'index 8.0 renvoyait a https://man.freebsd.org/cgi/man.cgi?query=setsockopt&manpath=FreeBSD+14.4-RELEASE+and+Ports ; la page QNX 8.0 qui decrit le symbole est https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html, verifiee dans le corpus fige (SHA-256 complet dans `docs/mesure-J5/citations-*.txt`).
+
+## Le retrait annonce par le guide officiel
+
+1 symbole de l'echantillon change d'etat d'une autre maniere que par une conversion : le guide officiel de migration vers QNX 8.0 annonce son retrait. L'outil ne devine pas : il cite la phrase du guide.
+
+- `InterruptAttach` (varghes/Raspberry-QNX) : `resolu_mais_decrit_ailleurs` en J4 (mesure datee), **`non_resolu` : retire en 8.0 selon le guide officiel de migration** aujourd'hui, priorite 1.
+  phrase du guide, citee par l'outil : "The following functions have been removed: InterruptAttach() InterruptAttachArray() InterruptHookIdle2() InterruptHookTrace()"
+  page du guide : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html (SHA-256 `a3b329c6f9a04bdd...`)
+
+C'est le point voulu par la regle : un appel a une fonction **retiree de la 8.0 selon le guide officiel** reste trouve, cite et prioritaire dans la liste de travail, meme si la fonction n'a plus de page dans la C Library Reference 8.0.
 
 ## Ce qui n'a pas bouge
 
@@ -37,7 +45,7 @@ Les 4 symboles « non resolu » de J4 le restent : ils avaient une page dans la 
 - `pthread_sleepon_unlock` (qnx/bsp_raspberrypi-bcm2712-rpi5) : page 7.1 `https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/p/pthread_sleepon_unlock.html` - absent de la 8.0.
 - `fcfgopen` (varghes/Raspberry-QNX) : page 7.1 `https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/f/fcfgopen.html` - absent de la 8.0.
 
-Les 93 symboles « resolu et cite » de J4 sont **inchanges** : meme page, meme SHA-256, meme citation. Aucune regle de l'outil (`qnx_portmap/`) n'a ete modifiee.
+Les 93 symboles « resolu et cite » de J4 sont **inchanges** : meme page, meme SHA-256, meme citation. La mesure J4 reste une mesure datee ; la seule regle de l'outil qui a change depuis est le classement des retraits annonces par le guide officiel de migration (section precedente).
 
 ## L'echantillon : inchange
 
@@ -63,7 +71,7 @@ Un symbole « decrit ailleurs » compte comme « resolu et cite » si l'index QN
 
 | famille | resolus et cites | total | taux |
 |---|---:|---:|---:|
-| specifiques a QNX | 87 | 91 | 95.6 % |
+| specifiques a QNX | 86 | 91 | 94.5 % |
 | standards C/POSIX | 9 | 9 | 100.0 % |
 
 ## Les 100 symboles mesures
@@ -116,7 +124,7 @@ Une ligne par symbole : nom, depot, statut de l'outil, etat J4, etat J5, page ci
 | 42 | `basename` | `varghes/Raspberry-QNX` | qnx | `documented` | resolu_et_cite | resolu_et_cite | 5 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/b/basename.html | index C Library Reference 8.0 | `3206dee3df07faae` |
 | 43 | `ThreadCtl` | `varghes/Raspberry-QNX` | qnx | `documented` | resolu_et_cite | resolu_et_cite | 4 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/t/threadctl.html | index C Library Reference 8.0 | `62ba371a368bc96a` |
 | 44 | `mmap_device_io` | `varghes/Raspberry-QNX` | qnx | `documented` | resolu_et_cite | resolu_et_cite | 4 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/m/mmap_device_io.html | index C Library Reference 8.0 | `947e733be70ed59b` |
-| 45 | `InterruptAttach` | `varghes/Raspberry-QNX` | qnx | `described_elsewhere` | resolu_mais_decrit_ailleurs | resolu_et_cite | 3 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html | com.qnx.doc.qnxsdp.migration, kernel.html | `a3b329c6f9a04bdd` |
+| 45 | `InterruptAttach` | `varghes/Raspberry-QNX` | qnx | `absent` | resolu_mais_decrit_ailleurs | non_resolu | 3 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html | com.qnx.doc.qnxsdp.migration, kernel.html | `a3b329c6f9a04bdd` |
 | 46 | `InterruptUnlock` | `varghes/Raspberry-QNX` | qnx | `documented` | resolu_et_cite | resolu_et_cite | 3 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/i/interruptunlock.html | index C Library Reference 8.0 | `92d547215685ae36` |
 | 47 | `_exit` | `varghes/Raspberry-QNX` | qnx | `documented` | resolu_et_cite | resolu_et_cite | 3 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/e/_exit.html | index C Library Reference 8.0 | `bcba6288c4673fd7` |
 | 48 | `nanospin_ns` | `varghes/Raspberry-QNX` | qnx | `documented` | resolu_et_cite | resolu_et_cite | 3 | https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/n/nanospin_ns.html | index C Library Reference 8.0 | `980664032e70b205` |
@@ -190,4 +198,4 @@ python3 tools/mesure_j5.py \
     --citations-dir docs/mesure-J5
 ```
 
-Le test `tests/test_mesure_j5.py` verifie le chiffre publie, l'egalite stricte des echantillons J4 et J5, le fait que seuls les 3 symboles convertis ont change d'etat, et que l'empreinte de chaque page citee est bien celle du corpus fige. La preuve ROUGE -> VERT est dans `docs/preuves/h-mesure-j5-rouge.txt`.
+Le test `tests/test_mesure_j5.py` verifie le chiffre publie, l'egalite stricte des echantillons J4 et J5, le fait que que seuls les symboles convertis et les retraits annonces par le guide officiel ont change d'etat, et que l'empreinte de chaque page citee est bien celle du corpus fige. La preuve ROUGE -> VERT est dans `docs/preuves/h-mesure-j5-rouge.txt`.

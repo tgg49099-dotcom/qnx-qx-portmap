@@ -37,6 +37,7 @@ import hashlib
 import json
 import os
 import sys
+import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -50,6 +51,12 @@ from mesure_j4 import (AILLEURS, CORPUS_SHA256, CONSULTED, ETAT_CITATION_EN,  # 
                        ETAT_EN, FAMILLE_EN, NON_RESOLU,
                        PER_REPO, REPOS, RESOLU, etat as etat_j4,
                        load_standard_symbols, select_sample)
+
+# Date of THIS run of the measurement. CONSULTED (from mesure_j4) is the day
+# the 5 repositories were consulted (2026-11-14): the sample does not change.
+# The J5 report is dated with the day the tool actually measured it, so that
+# a re-measurement after a rule change is visible as such.
+MESURE_LE = time.strftime("%Y-%m-%d")
 
 # -- English version of the report --------------------------------------------
 # The public report is in English; the French version (output of the tool,
@@ -141,8 +148,14 @@ def comparer_echantillons(choix_a, choix_b):
     return clef(choix_a) == clef(choix_b)
 
 
-def measure(classifier, corpus, choix):
-    """Classifies a sample and returns the records (J5 states)."""
+def measure(classifier, corpus, choix, etats_publies=None):
+    """Classifies a sample and returns the records (J5 states).
+
+    ``etat_j4`` is the state PUBLISHED by the J4 measurement (a dated
+    measurement: it is read as published, not re-derived), given by
+    ``etats_publies`` ({symbol: state}). Without ``etats_publies`` the J4
+    rule is replayed with the tool of the day (fallback for the tests).
+    """
     symbols = [c["symbol"] for c in choix]
     results = classifier.classify(symbols)
     by_symbol = {r.symbol: r for r in results}
@@ -153,13 +166,14 @@ def measure(classifier, corpus, choix):
         # the J5 resolution only concerns the "described elsewhere" symbols
         resolution = (resoudre_page(corpus, res) if res.status == ELSEWHERE
                       else None)
+        etat_publie = (etats_publies or {}).get(c["symbol"])
         rec = {
             "symbol": c["symbol"],
             "repo": c["repo"],
             "calls": c["calls"],
             "famille": c["famille"],
             "status": res.status,
-            "etat_j4": etat_j4(res, page is not None),
+            "etat_j4": etat_publie or etat_j4(res, page is not None),
             "etat": etat_j5(res, page is not None, resolution),
             "url": res.url,
             "page_sha256": page.sha256 if page is not None else "",
@@ -190,6 +204,10 @@ def measure(classifier, corpus, choix):
             }
         else:
             rec["resolution_j5"] = None
+        if getattr(res, "removed_by_migration_guide", False):
+            # published in the JSON too: the report quotes the sentence, so
+            # the report must be re-writable from the published JSON alone
+            rec["retrait"] = {"phrase": res.citation}
         records.append(rec)
     return records
 
@@ -206,11 +224,16 @@ def write_markdown_fr(path, data, records):
     prim = data["principal"]
     j4 = data["mesure_j4"]
     convertis = [r for r in records if r.get("resolution_j5")]
+    deja_absents = [r for r in records
+                    if r["etat"] == NON_RESOLU and r["etat_j4"] == NON_RESOLU]
+    retires = [r for r in records
+               if r["etat"] == NON_RESOLU and r["etat_j4"] != NON_RESOLU]
     lignes = []
     lignes.append("# Mesure J5 - taux de resolution de QX PORTMAP, meme echantillon que J4")
     lignes.append("")
     lignes.append("Mesure faite le %s par `tools/mesure_j5.py` (reproductible : voir "
-                 "la section Reproduire plus bas)." % CONSULTED)
+                 "la section Reproduire plus bas). Depots consultes le %s "
+                 "(echantillon inchange)." % (MESURE_LE, CONSULTED))
     lignes.append("")
     lignes.append("## Le chiffre")
     lignes.append("")
@@ -261,20 +284,50 @@ def write_markdown_fr(path, data, records):
                       % (rec["symbol"], r5["book"], r5["topic"], rec["url"],
                          origine))
     lignes.append("")
+    if retires:
+        lignes.append("## Le retrait annonce par le guide officiel")
+        lignes.append("")
+        lignes.append("%d symbole de l'echantillon change d'etat d'une autre "
+                      "maniere que par une conversion : le guide officiel de "
+                      "migration vers QNX 8.0 annonce son retrait. L'outil ne "
+                      "devine pas : il cite la phrase du guide."
+                      % len(retires))
+        lignes.append("")
+        for rec in retires:
+            lignes.append("- `%s` (%s) : `%s` en J4 (mesure datee), "
+                          "**`%s` : retire en 8.0 selon le guide officiel de "
+                          "migration** aujourd'hui, priorite 1."
+                          % (rec["symbol"], rec["repo"], rec["etat_j4"],
+                             rec["etat"]))
+            lignes.append("  phrase du guide, citee par l'outil : \"%s\""
+                          % (rec.get("retrait", {}).get("phrase")
+                             or rec.get("citation") or ""))
+            lignes.append("  page du guide : %s (SHA-256 `%s...`)"
+                          % (rec["url"], rec["page_sha256"][:16]))
+        lignes.append("")
+        lignes.append("C'est le point voulu par la regle : un appel a une "
+                      "fonction **retiree de la 8.0 selon le guide officiel** "
+                      "reste trouve, cite et prioritaire dans la liste de "
+                      "travail, meme si la fonction n'a plus de page dans la "
+                      "C Library Reference 8.0.")
+        lignes.append("")
     lignes.append("## Ce qui n'a pas bouge")
     lignes.append("")
-    lignes.append("Les 4 symboles « non resolu » de J4 le restent : ils avaient une "
+    lignes.append("Les %d symboles « non resolu » de J4 le restent : ils avaient une "
                   "page dans la C Library Reference **7.1** et n'en ont plus dans la "
-                  "8.0. Ils ne sont pas inventes, pas effaces :")
+                  "8.0. Ils ne sont pas inventes, pas effaces :"
+                  % len(deja_absents))
     lignes.append("")
-    for rec in records:
-        if rec["etat"] == NON_RESOLU:
-            lignes.append("- `%s` (%s) : page 7.1 `%s` - absent de la 8.0."
-                          % (rec["symbol"], rec["repo"], rec["url"]))
+    for rec in deja_absents:
+        lignes.append("- `%s` (%s) : page 7.1 `%s` - absent de la 8.0."
+                      % (rec["symbol"], rec["repo"], rec["url"]))
     lignes.append("")
-    lignes.append("Les 93 symboles « resolu et cite » de J4 sont **inchanges** : "
-                  "meme page, meme SHA-256, meme citation. Aucune regle de "
-                  "l'outil (`qnx_portmap/`) n'a ete modifiee.")
+    lignes.append("Les %d symboles « resolu et cite » de J4 sont **inchanges** : "
+                  "meme page, meme SHA-256, meme citation. La mesure J4 reste "
+                  "une mesure datee ; la seule regle de l'outil qui a change "
+                  "depuis est le classement des retraits annonces par le guide "
+                  "officiel de migration (section precedente)."
+                  % j4["counts"][RESOLU])
     lignes.append("")
     lignes.append("## L'echantillon : inchange")
     lignes.append("")
@@ -356,7 +409,8 @@ def write_markdown_fr(path, data, records):
     lignes.append("")
     lignes.append("Le test `tests/test_mesure_j5.py` verifie le chiffre publie, "
                   "l'egalite stricte des echantillons J4 et J5, le fait que "
-                  "seuls les 3 symboles convertis ont change d'etat, et que "
+                  "que seuls les symboles convertis et les retraits annonces "
+                  "par le guide officiel ont change d'etat, et que "
                   "l'empreinte de chaque page citee est bien celle du corpus "
                   "fige. La preuve ROUGE -> VERT est dans "
                   "`docs/preuves/h-mesure-j5-rouge.txt`.")
@@ -376,14 +430,19 @@ def write_markdown_en(path, data, records):
     j4 = data["mesure_j4"]
     convertis = [r for r in records if r.get("resolution_j5")]
     absents = [r for r in records if r["etat"] == NON_RESOLU]
+    deja_absents = [r for r in records
+                    if r["etat"] == NON_RESOLU and r["etat_j4"] == NON_RESOLU]
+    retires = [r for r in records
+               if r["etat"] == NON_RESOLU and r["etat_j4"] != NON_RESOLU]
     lignes = []
     lignes.append("# Measurement J5 - QX PORTMAP resolution rate, same sample as "
                   "J4")
     lignes.append("")
     lignes.append("Measured on %s by `tools/mesure_j5.py` (reproducible: see "
-                  "the \"Reproduce\" section below). The French version of this "
+                  "the \"Reproduce\" section below). Repositories consulted "
+                  "on %s (sample unchanged). The French version of this "
                   "report is kept byte-identical in `docs/mesure-J5-FR.md`."
-                  % CONSULTED)
+                  % (MESURE_LE, CONSULTED))
     lignes.append("")
     lignes.append("## The figure")
     lignes.append("")
@@ -435,20 +494,50 @@ def write_markdown_en(path, data, records):
                       % (rec["symbol"], r5["book"], r5["topic"], rec["url"],
                          origine))
     lignes.append("")
+    if retires:
+        lignes.append("## The removal announced by the official guide")
+        lignes.append("")
+        lignes.append("%d symbol of the sample changes state in another way "
+                      "than a conversion: the official QNX 8.0 migration "
+                      "guide announces its removal. The tool does not guess: "
+                      "it quotes the sentence of the guide."
+                      % len(retires))
+        lignes.append("")
+        for rec in retires:
+            lignes.append("- `%s` (%s): `%s` in J4 (dated measurement), "
+                          "**`%s`: removed in 8.0 according to the official "
+                          "migration guide** today, priority 1."
+                          % (rec["symbol"], rec["repo"],
+                             ETAT_EN[rec["etat_j4"]], ETAT_EN[rec["etat"]]))
+            lignes.append("  sentence of the guide, quoted by the tool: \"%s\""
+                          % (rec.get("retrait", {}).get("phrase")
+                             or rec.get("citation") or ""))
+            lignes.append("  guide page: %s (SHA-256 `%s...`)"
+                          % (rec["url"], rec["page_sha256"][:16]))
+        lignes.append("")
+        lignes.append("In a real public repository, the tool finds a call to a "
+                      "function that the official guide says was **removed in "
+                      "QNX 8.0**: still found, still quoted and at the top of "
+                      "the work list, even though the function no longer has "
+                      "a page in the 8.0 C Library Reference.")
+        lignes.append("")
     lignes.append("## What has not changed")
     lignes.append("")
     lignes.append("The %d \"not resolved\" symbols of J4 remain so: they had a "
                   "page in the C Library Reference **7.1** and no longer have "
                   "one in 8.0. They are not invented, not erased:"
-                  % len(absents))
+                  % len(deja_absents))
     lignes.append("")
-    for rec in absents:
+    for rec in deja_absents:
         lignes.append("- `%s` (%s): 7.1 page `%s` - absent from 8.0."
                       % (rec["symbol"], rec["repo"], rec["url"]))
     lignes.append("")
     lignes.append("The %d \"resolved and cited\" symbols of J4 are "
-                  "**unchanged**: same page, same SHA-256, same citation. No "
-                  "rule of the tool (`qnx_portmap/`) was modified."
+                  "**unchanged**: same page, same SHA-256, same citation. The "
+                  "J4 measurement remains a dated measurement; the only tool "
+                  "rule that changed since is the classification of the "
+                  "removals announced by the official migration guide "
+                  "(section above)."
                   % j4["counts"][RESOLU])
     lignes.append("")
     lignes.append("## The sample: unchanged")
@@ -534,7 +623,8 @@ def write_markdown_en(path, data, records):
     lignes.append("")
     lignes.append("The test `tests/test_mesure_j5.py` verifies the published "
                   "figure, the strict equality of the J4 and J5 samples, the "
-                  "fact that only the 3 converted symbols changed state, and "
+                  "fact that only the converted symbols and the removals "
+                  "announced by the official guide changed state, and "
                   "that the fingerprint of each cited page is the one of the "
                   "frozen corpus. The RED -> GREEN proof is in "
                   "`docs/preuves/h-mesure-j5-rouge.txt`.")
@@ -612,6 +702,7 @@ def write_public_json(path, data, records):
     out = {
         "methode": data["methode"],
         "consulte_le": CONSULTED,
+        "mesure_le": MESURE_LE,
         "per_repo": data["per_repo"],
         "repos": data["repos"],
         "principal": data["principal"],
@@ -673,7 +764,9 @@ def main(argv=None):
                   " le taux J5 ne serait pas comparable.")
             return 1
 
-    records = measure(classifier, corpus, choix)
+    records = measure(classifier, corpus, choix,
+                      etats_publies={r["symbol"]: r["etat"]
+                                     for r in j4["symbols"]})
     r = resume(records)
     fam = collections.Counter()
     fam_ok = collections.Counter()
@@ -711,7 +804,9 @@ def main(argv=None):
                    "PORTMAP sur le corpus fige (hors ligne) ; regle J5 : un "
                    "symbole 'decrit ailleurs' compte comme resolu et cite si la "
                    "page QNX 8.0 qui le decrit est dans le corpus fige, avec son "
-                   "empreinte SHA-256",
+                   "empreinte SHA-256 ; un retrait annonce par le guide officiel "
+                   "de migration 8.0 classe le symbole non resolu (priorite 1, "
+                   "phrase du guide citee)",
         "per_repo": PER_REPO,
         "repos": [dict(repo, consulte_le=CONSULTED, sha256_corpus=CORPUS_SHA256)
                   for repo in REPOS],

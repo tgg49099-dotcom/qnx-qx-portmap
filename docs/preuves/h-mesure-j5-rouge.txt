@@ -1,7 +1,7 @@
 PREUVE ROUGE -> VERT DE LA MESURE J5
 ===========================
 
-But : prouver que le taux J5 publie (96 %) n'est pas un chiffre maquille, et que le test echoue bien sur l'etat d'avant (93 %).
+But : prouver que le taux J5 publie (95 %) n'est pas un chiffre maquille, et que le test echoue bien sur l'etat d'avant (93 %).
 Les sorties ci-dessous sont reelles.
 
 Copie de travail : /tmp/preuve-j5
@@ -25,13 +25,13 @@ Commande de regeneration des artefacts :
 
 ------------------------------------------------------------------------
 ETAPE 1 - l'etat d'AVANT : la regle J5 n'est pas appliquee.
-          La mesure retombe sur la regle J4 (3 symboles
+          La mesure retombe sur la regle J4 (2 symboles
           'decrit ailleurs'), les artefacts publies passent a
           93 %, et le test doit echouer (ROUGE).
 ------------------------------------------------------------------------
 
 SHA-256 de tools/mesure_j5.py avant la manipulation :
-  3375c6fd1bf8cd12fa2e455643b0c6d3eb584f868f1b69b98e4a91492fe73ccc
+  c3a24e0024d64e1ded7d38114ee2e8cc3dbfee77bbbbe5eb6990d0c04c96bca1
 
 Ligne cassee dans tools/mesure_j5.py :
   - resolution = (resoudre_page(corpus, res) if res.status == ELSEWHERE
@@ -56,22 +56,22 @@ test_echantillon_identique_a_j4 (tests.test_mesure_j5.TestEchantillonJ5.test_ech
 Memes 100 symboles, meme ordre, meme depot, meme nombre d'appels. ... ok
 test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_du_markdown_vaut_le_taux_calcule)
 Le chiffre publie doit etre celui des donnees publiees. ... ok
-test_le_taux_publie_est_96_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_96_pour_cent)
-Le but de la tranche J5 : 96 symboles resolus et cites sur 100. ... ok
+test_le_taux_publie_est_95_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_95_pour_cent)
+Le chiffre publie le 19/11/2026 : 95 symboles resolus et cites ... ok
 test_le_texte_des_citations_est_identique_en_anglais_et_en_francais (tests.test_mesure_j5.TestEchantillonJ5.test_le_texte_des_citations_est_identique_en_anglais_et_en_francais)
 Les extraits QNX cites sont byte-identiques dans les deux versions. ... ok
+test_les_deux_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_deux_convertis_ont_une_page_qnx_8_0_et_son_sha256) ... ok
 test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j5.TestEchantillonJ5.test_les_etats_sont_exclusifs_et_complets) ... ok
 test_les_pages_de_citations_contiennent_chaque_symbole_resolu (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_contiennent_chaque_symbole_resolu) ... ok
 test_les_pages_de_citations_en_et_fr_ont_les_memes_nombres (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_en_et_fr_ont_les_memes_nombres)
 La traduction des etiquettes ne doit pas bouger un chiffre. ... ok
 test_les_pages_de_citations_publiees_sont_en_anglais (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_publiees_sont_en_anglais)
 Aucune etiquette francaise ne doit rester dans les pages publiees. ... ok
-test_les_pages_des_trois_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_trois_convertis_sont_des_livres_qnx)
+test_les_pages_des_deux_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_deux_convertis_sont_des_livres_qnx)
 Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD. ... ok
 test_les_quatre_absents_restent_absents (tests.test_mesure_j5.TestEchantillonJ5.test_les_quatre_absents_restent_absents) ... ok
-test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256) ... ok
 test_plus_aucun_symbole_decrit_ailleurs (tests.test_mesure_j5.TestEchantillonJ5.test_plus_aucun_symbole_decrit_ailleurs) ... ok
-test_seul_les_trois_symboles_convertis_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seul_les_trois_symboles_convertis_ont_change_d_etat)
+test_seuls_les_convertis_et_le_retrait_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seuls_les_convertis_et_le_retrait_ont_change_d_etat)
 Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4. ... ok
 test_un_taux_sur_zero_leve_une_erreur (tests.test_mesure_j5.TestEchantillonJ5.test_un_taux_sur_zero_leve_une_erreur) ... ok
 test_la_citation_vient_de_la_page_citee (tests.test_mesure_j5.TestMesureReproductible.test_la_citation_vient_de_la_page_citee)
@@ -79,7 +79,7 @@ La citation publiee est bien un extrait de la page citee. ... ok
 test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j5.TestMesureReproductible.test_le_taux_recalcule_vaut_le_taux_publie) ... FAIL
 test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256 (tests.test_mesure_j5.TestMesureReproductible.test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256) ... ok
 test_les_statuts_de_l_outil_sont_inchanges (tests.test_mesure_j5.TestMesureReproductible.test_les_statuts_de_l_outil_sont_inchanges)
-J5 ne touche pas l'outil : les statuts sont ceux de J4. ... ok
+J5 ne touche pas l'outil : les statuts sont ceux de J4, sauf les ... ok
 test_chaque_genre_de_mention_est_traduit_en_anglais (tests.test_mesure_j5.TestRapportAnglais.test_chaque_genre_de_mention_est_traduit_en_anglais) ... ok
 test_la_liste_des_absents_est_complete (tests.test_mesure_j5.TestRapportAnglais.test_la_liste_des_absents_est_complete) ... ok
 test_le_chiffre_anglais_est_celui_du_json_publie (tests.test_mesure_j5.TestRapportAnglais.test_le_chiffre_anglais_est_celui_du_json_publie) ... ok
@@ -97,24 +97,24 @@ test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesur
 FAIL: test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j5.TestMesureReproductible.test_le_taux_recalcule_vaut_le_taux_publie)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 535, in test_le_taux_recalcule_vaut_le_taux_publie
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 565, in test_le_taux_recalcule_vaut_le_taux_publie
     self.assertAlmostEqual(mesure.taux(records),
-AssertionError: 93.0 != 96.0 within 6 places (3.0 difference)
+AssertionError: 93.0 != 95.0 within 6 places (2.0 difference)
 
 ----------------------------------------------------------------------
-Ran 30 tests in 1.733s
+Ran 30 tests in 1.869s
 
 FAILED (failures=1)
 
 >>> RC = 1 (attendu : different de 0, le test est ROUGE)
 
 SHA-256 de tools/mesure_j5.py apres restauration :
-  3375c6fd1bf8cd12fa2e455643b0c6d3eb584f868f1b69b98e4a91492fe73ccc
+  c3a24e0024d64e1ded7d38114ee2e8cc3dbfee77bbbbe5eb6990d0c04c96bca1
   identique a l'empreinte d'avant la manipulation : oui
 
 ------------------------------------------------------------------------
 ETAPE 2 - la donnee publiee est cassee : la conversion
-          'InterruptAttach' est remise a 'decrit ailleurs'.
+          'if_freenameindex' est remise a 'decrit ailleurs'.
 ------------------------------------------------------------------------
 
 Regeneration des artefacts J5 avec la regle J5 (etat correct) :
@@ -127,9 +127,9 @@ Sortie reelle de l'outil
 >>> RC = 1 (attendu : 0, l'outil tourne)
 
 SHA-256 de docs/mesure-J5/mesure-J5.json avant la manipulation :
-  54548e0e6ac7cb65b1c3286051fc8e178f26f5cc80296b3e70ef371f4d9e3869
+  da8553c9d929a031280e915ecacf1ee40c1eaba7f614b197e91a9f56792a00ad
 
-Donnee cassee : symbole 'InterruptAttach', etat passe de
+Donnee cassee : symbole 'if_freenameindex', etat passe de
   'resolu_et_cite' a 'resolu_mais_decrit_ailleurs'.
 
 
@@ -141,22 +141,22 @@ test_echantillon_identique_a_j4 (tests.test_mesure_j5.TestEchantillonJ5.test_ech
 Memes 100 symboles, meme ordre, meme depot, meme nombre d'appels. ... ok
 test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_du_markdown_vaut_le_taux_calcule)
 Le chiffre publie doit etre celui des donnees publiees. ... FAIL
-test_le_taux_publie_est_96_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_96_pour_cent)
-Le but de la tranche J5 : 96 symboles resolus et cites sur 100. ... FAIL
+test_le_taux_publie_est_95_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_95_pour_cent)
+Le chiffre publie le 19/11/2026 : 95 symboles resolus et cites ... FAIL
 test_le_texte_des_citations_est_identique_en_anglais_et_en_francais (tests.test_mesure_j5.TestEchantillonJ5.test_le_texte_des_citations_est_identique_en_anglais_et_en_francais)
 Les extraits QNX cites sont byte-identiques dans les deux versions. ... ok
+test_les_deux_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_deux_convertis_ont_une_page_qnx_8_0_et_son_sha256) ... FAIL
 test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j5.TestEchantillonJ5.test_les_etats_sont_exclusifs_et_complets) ... FAIL
 test_les_pages_de_citations_contiennent_chaque_symbole_resolu (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_contiennent_chaque_symbole_resolu) ... ok
 test_les_pages_de_citations_en_et_fr_ont_les_memes_nombres (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_en_et_fr_ont_les_memes_nombres)
 La traduction des etiquettes ne doit pas bouger un chiffre. ... ok
 test_les_pages_de_citations_publiees_sont_en_anglais (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_publiees_sont_en_anglais)
 Aucune etiquette francaise ne doit rester dans les pages publiees. ... ok
-test_les_pages_des_trois_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_trois_convertis_sont_des_livres_qnx)
+test_les_pages_des_deux_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_deux_convertis_sont_des_livres_qnx)
 Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD. ... ERROR
 test_les_quatre_absents_restent_absents (tests.test_mesure_j5.TestEchantillonJ5.test_les_quatre_absents_restent_absents) ... ok
-test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256) ... FAIL
 test_plus_aucun_symbole_decrit_ailleurs (tests.test_mesure_j5.TestEchantillonJ5.test_plus_aucun_symbole_decrit_ailleurs) ... FAIL
-test_seul_les_trois_symboles_convertis_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seul_les_trois_symboles_convertis_ont_change_d_etat)
+test_seuls_les_convertis_et_le_retrait_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seuls_les_convertis_et_le_retrait_ont_change_d_etat)
 Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4. ... FAIL
 test_un_taux_sur_zero_leve_une_erreur (tests.test_mesure_j5.TestEchantillonJ5.test_un_taux_sur_zero_leve_une_erreur) ... ok
 test_la_citation_vient_de_la_page_citee (tests.test_mesure_j5.TestMesureReproductible.test_la_citation_vient_de_la_page_citee)
@@ -164,7 +164,7 @@ La citation publiee est bien un extrait de la page citee. ... ok
 test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j5.TestMesureReproductible.test_le_taux_recalcule_vaut_le_taux_publie) ... ok
 test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256 (tests.test_mesure_j5.TestMesureReproductible.test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256) ... ok
 test_les_statuts_de_l_outil_sont_inchanges (tests.test_mesure_j5.TestMesureReproductible.test_les_statuts_de_l_outil_sont_inchanges)
-J5 ne touche pas l'outil : les statuts sont ceux de J4. ... ok
+J5 ne touche pas l'outil : les statuts sont ceux de J4, sauf les ... ok
 test_chaque_genre_de_mention_est_traduit_en_anglais (tests.test_mesure_j5.TestRapportAnglais.test_chaque_genre_de_mention_est_traduit_en_anglais) ... ok
 test_la_liste_des_absents_est_complete (tests.test_mesure_j5.TestRapportAnglais.test_la_liste_des_absents_est_complete) ... ok
 test_le_chiffre_anglais_est_celui_du_json_publie (tests.test_mesure_j5.TestRapportAnglais.test_le_chiffre_anglais_est_celui_du_json_publie) ... FAIL
@@ -175,15 +175,15 @@ test_le_tableau_des_etats_anglais_est_celui_du_json_publie (tests.test_mesure_j5
 test_le_tableau_des_familles_anglais_est_celui_du_json_publie (tests.test_mesure_j5.TestRapportAnglais.test_le_tableau_des_familles_anglais_est_celui_du_json_publie) ... ok
 test_les_100_lignes_du_rapport_anglais_sont_celles_du_json (tests.test_mesure_j5.TestRapportAnglais.test_les_100_lignes_du_rapport_anglais_sont_celles_du_json) ... FAIL
 test_les_deux_versions_ont_exactement_les_memes_nombres (tests.test_mesure_j5.TestRapportAnglais.test_les_deux_versions_ont_exactement_les_memes_nombres) ... ok
-test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j5.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main) ... FAIL
-test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j5.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test) ... FAIL
+test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j5.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main) ... ok
+test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j5.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test) ... ok
 
 ======================================================================
-ERROR: test_les_pages_des_trois_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_trois_convertis_sont_des_livres_qnx)
+ERROR: test_les_pages_des_deux_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_deux_convertis_sont_des_livres_qnx)
 Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 266, in test_les_pages_des_trois_convertis_sont_des_livres_qnx
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 296, in test_les_pages_des_deux_convertis_sont_des_livres_qnx
     self.assertIsNotNone(rec["resolution_j5"],
                          ~~~^^^^^^^^^^^^^^^^^
 KeyError: 'resolution_j5'
@@ -193,132 +193,113 @@ FAIL: test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEc
 Le chiffre publie doit etre celui des donnees publiees.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 296, in test_le_taux_du_markdown_vaut_le_taux_calcule
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 326, in test_le_taux_du_markdown_vaut_le_taux_calcule
     self.assertEqual(taux_md, int(round(calcule)),
-AssertionError: 96 != 95 : le taux du Markdown (docs/mesure-J5.md) ne vaut pas le taux calcule sur les donnees publiees
+AssertionError: 95 != 94 : le taux du Markdown (docs/mesure-J5.md) ne vaut pas le taux calcule sur les donnees publiees
 
 ======================================================================
-FAIL: test_le_taux_publie_est_96_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_96_pour_cent)
-Le but de la tranche J5 : 96 symboles resolus et cites sur 100.
+FAIL: test_le_taux_publie_est_95_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_95_pour_cent)
+Le chiffre publie le 19/11/2026 : 95 symboles resolus et cites
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 201, in test_le_taux_publie_est_96_pour_cent
-    self.assertEqual(compte_resolu(self.data), 96)
-AssertionError: 95 != 96
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 212, in test_le_taux_publie_est_95_pour_cent
+    self.assertEqual(compte_resolu(self.data), 95)
+AssertionError: 94 != 95
+
+======================================================================
+FAIL: test_les_deux_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_deux_convertis_ont_une_page_qnx_8_0_et_son_sha256)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 276, in test_les_deux_convertis_ont_une_page_qnx_8_0_et_son_sha256
+    self.assertEqual(rec["etat"], RESOLU, symbole)
+AssertionError: 'resolu_mais_decrit_ailleurs' != 'resolu_et_cite'
+- resolu_mais_decrit_ailleurs
++ resolu_et_cite
+ : if_freenameindex
 
 ======================================================================
 FAIL: test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j5.TestEchantillonJ5.test_les_etats_sont_exclusifs_et_complets)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 195, in test_les_etats_sont_exclusifs_et_complets
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 204, in test_les_etats_sont_exclusifs_et_complets
     self.assertEqual(compte.get(RESOLU, 0), publie[RESOLU])
-AssertionError: 95 != 96
-
-======================================================================
-FAIL: test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 246, in test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256
-    self.assertEqual(rec["etat"], RESOLU, symbole)
-AssertionError: 'resolu_mais_decrit_ailleurs' != 'resolu_et_cite'
-- resolu_mais_decrit_ailleurs
-+ resolu_et_cite
- : InterruptAttach
+AssertionError: 94 != 95
 
 ======================================================================
 FAIL: test_plus_aucun_symbole_decrit_ailleurs (tests.test_mesure_j5.TestEchantillonJ5.test_plus_aucun_symbole_decrit_ailleurs)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 210, in test_plus_aucun_symbole_decrit_ailleurs
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 221, in test_plus_aucun_symbole_decrit_ailleurs
     self.assertNotEqual(rec["etat"], AILLEURS,
-AssertionError: 'resolu_mais_decrit_ailleurs' == 'resolu_mais_decrit_ailleurs' : InterruptAttach est encore 'decrit ailleurs'
+AssertionError: 'resolu_mais_decrit_ailleurs' == 'resolu_mais_decrit_ailleurs' : if_freenameindex est encore 'decrit ailleurs'
 
 ======================================================================
-FAIL: test_seul_les_trois_symboles_convertis_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seul_les_trois_symboles_convertis_ont_change_d_etat)
+FAIL: test_seuls_les_convertis_et_le_retrait_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seuls_les_convertis_et_le_retrait_ont_change_d_etat)
 Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 226, in test_seul_les_trois_symboles_convertis_ont_change_d_etat
-    self.assertEqual(sorted(changes), sorted(CONVERTIS),
-AssertionError: Lists differ: ['if_freenameindex', 'setsockopt'] != ['InterruptAttach', 'if_freenameindex', 'setsockopt']
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 256, in test_seuls_les_convertis_et_le_retrait_ont_change_d_etat
+    self.assertEqual(sorted(changes), sorted(CONVERTIS + RETIRES),
+AssertionError: Lists differ: ['InterruptAttach', 'setsockopt'] != ['InterruptAttach', 'if_freenameindex', 'setsockopt']
 
-First differing element 0:
+First differing element 1:
+'setsockopt'
 'if_freenameindex'
-'InterruptAttach'
 
 Second list contains 1 additional elements.
 First extra element 2:
 'setsockopt'
 
-- ['if_freenameindex', 'setsockopt']
+- ['InterruptAttach', 'setsockopt']
 + ['InterruptAttach', 'if_freenameindex', 'setsockopt']
-?  +++++++++++++++++++
- : les seuls symboles qui peuvent changer d'etat en J5 sont ('InterruptAttach', 'if_freenameindex', 'setsockopt')
+?                     ++++++++++++++++++++
+ : les seuls symboles qui peuvent changer d'etat en J5 sont ('if_freenameindex', 'setsockopt', 'InterruptAttach')
 
 ======================================================================
 FAIL: test_le_chiffre_anglais_est_celui_du_json_publie (tests.test_mesure_j5.TestRapportAnglais.test_le_chiffre_anglais_est_celui_du_json_publie)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 386, in test_le_chiffre_anglais_est_celui_du_json_publie
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 416, in test_le_chiffre_anglais_est_celui_du_json_publie
     self.assertEqual(taux_md, int(round(calcule)))
-AssertionError: 96 != 95
+AssertionError: 95 != 94
 
 ======================================================================
 FAIL: test_le_rapport_anglais_est_celui_produit_par_l_outil (tests.test_mesure_j5.TestRapportAnglais.test_le_rapport_anglais_est_celui_produit_par_l_outil)
 Le rapport publie est celui que l'outil ecrit, octet pour octet.
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 486, in test_le_rapport_anglais_est_celui_produit_par_l_outil
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 516, in test_le_rapport_anglais_est_celui_produit_par_l_outil
     self.assertEqual(regenere, publie,
-AssertionError: b'# M[645 chars]nThe 2 symbols that were "described elsewhere"[32937 chars]`.\n' != b'# M[645 chars]nThe 3 symbols that were "described elsewhere"[33402 chars]`.\n' : le rapport anglais publie n'est pas celui que l'outil produit a partir des donnees publiees
+AssertionError: b'# M[702 chars]nThe 1 symbols that were "described elsewhere"[33469 chars]`.\n' != b'# M[702 chars]nThe 2 symbols that were "described elsewhere"[34105 chars]`.\n' : le rapport anglais publie n'est pas celui que l'outil produit a partir des donnees publiees
 
 ======================================================================
 FAIL: test_le_tableau_des_conversions_est_celui_du_json_publie (tests.test_mesure_j5.TestRapportAnglais.test_le_tableau_des_conversions_est_celui_du_json_publie)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 443, in test_le_tableau_des_conversions_est_celui_du_json_publie
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 473, in test_le_tableau_des_conversions_est_celui_du_json_publie
     self.assertEqual(len(convertis), len(CONVERTIS))
-AssertionError: 2 != 3
+AssertionError: 1 != 2
 
 ======================================================================
 FAIL: test_les_100_lignes_du_rapport_anglais_sont_celles_du_json (tests.test_mesure_j5.TestRapportAnglais.test_les_100_lignes_du_rapport_anglais_sont_celles_du_json)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 431, in test_les_100_lignes_du_rapport_anglais_sont_celles_du_json
+  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 461, in test_les_100_lignes_du_rapport_anglais_sont_celles_du_json
     self.assertEqual(m.group("etat_j5").strip(),
 AssertionError: 'resolved and cited' != 'resolved but described elsewhere'
 - resolved and cited
 + resolved but described elsewhere
- : InterruptAttach
-
-======================================================================
-FAIL: test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j5.TestTauxCompteALaMain.test_le_taux_du_script_egale_le_taux_compte_a_la_main)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 505, in test_le_taux_du_script_egale_le_taux_compte_a_la_main
-    self.assertAlmostEqual(calcule, a_la_main, places=6,
-AssertionError: 80.0 != 90.0 within 6 places (10.0 difference) : le taux du script (80.0) n'est pas celui compte a la main (90.0)
-
-======================================================================
-FAIL: test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j5.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/tmp/preuve-j5/tests/test_mesure_j5.py", line 513, in test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test
-    self.assertEqual(par_symbole[symbole]["etat"], etat,
-AssertionError: 'resolu_mais_decrit_ailleurs' != 'resolu_et_cite'
-- resolu_mais_decrit_ailleurs
-+ resolu_et_cite
- : etat publie incorrect pour InterruptAttach
+ : if_freenameindex
 
 ----------------------------------------------------------------------
-Ran 30 tests in 1.780s
+Ran 30 tests in 1.875s
 
-FAILED (failures=12, errors=1)
+FAILED (failures=10, errors=1)
 
 >>> RC = 1 (attendu : different de 0, le test est ROUGE)
 
 SHA-256 de docs/mesure-J5/mesure-J5.json apres restauration :
-  54548e0e6ac7cb65b1c3286051fc8e178f26f5cc80296b3e70ef371f4d9e3869
+  da8553c9d929a031280e915ecacf1ee40c1eaba7f614b197e91a9f56792a00ad
   identique a l'empreinte d'avant la manipulation : oui
 
 ------------------------------------------------------------------------
@@ -344,8 +325,8 @@ Comparaison des artefacts regeneres avec les fichiers publies
   docs/mesure-J5/citations-varghes-Raspberry-QNX.txt identique
   docs/mesure-J5/citations-vocho-openqnx.txt     identique
 
-SHA-256 de tools/mesure_j5.py : 3375c6fd1bf8cd12fa2e455643b0c6d3eb584f868f1b69b98e4a91492fe73ccc
-SHA-256 de docs/mesure-J5/mesure-J5.json : 54548e0e6ac7cb65b1c3286051fc8e178f26f5cc80296b3e70ef371f4d9e3869
+SHA-256 de tools/mesure_j5.py : c3a24e0024d64e1ded7d38114ee2e8cc3dbfee77bbbbe5eb6990d0c04c96bca1
+SHA-256 de docs/mesure-J5/mesure-J5.json : da8553c9d929a031280e915ecacf1ee40c1eaba7f614b197e91a9f56792a00ad
 
 
 Sortie reelle du test
@@ -356,22 +337,22 @@ test_echantillon_identique_a_j4 (tests.test_mesure_j5.TestEchantillonJ5.test_ech
 Memes 100 symboles, meme ordre, meme depot, meme nombre d'appels. ... ok
 test_le_taux_du_markdown_vaut_le_taux_calcule (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_du_markdown_vaut_le_taux_calcule)
 Le chiffre publie doit etre celui des donnees publiees. ... ok
-test_le_taux_publie_est_96_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_96_pour_cent)
-Le but de la tranche J5 : 96 symboles resolus et cites sur 100. ... ok
+test_le_taux_publie_est_95_pour_cent (tests.test_mesure_j5.TestEchantillonJ5.test_le_taux_publie_est_95_pour_cent)
+Le chiffre publie le 19/11/2026 : 95 symboles resolus et cites ... ok
 test_le_texte_des_citations_est_identique_en_anglais_et_en_francais (tests.test_mesure_j5.TestEchantillonJ5.test_le_texte_des_citations_est_identique_en_anglais_et_en_francais)
 Les extraits QNX cites sont byte-identiques dans les deux versions. ... ok
+test_les_deux_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_deux_convertis_ont_une_page_qnx_8_0_et_son_sha256) ... ok
 test_les_etats_sont_exclusifs_et_complets (tests.test_mesure_j5.TestEchantillonJ5.test_les_etats_sont_exclusifs_et_complets) ... ok
 test_les_pages_de_citations_contiennent_chaque_symbole_resolu (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_contiennent_chaque_symbole_resolu) ... ok
 test_les_pages_de_citations_en_et_fr_ont_les_memes_nombres (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_en_et_fr_ont_les_memes_nombres)
 La traduction des etiquettes ne doit pas bouger un chiffre. ... ok
 test_les_pages_de_citations_publiees_sont_en_anglais (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_de_citations_publiees_sont_en_anglais)
 Aucune etiquette francaise ne doit rester dans les pages publiees. ... ok
-test_les_pages_des_trois_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_trois_convertis_sont_des_livres_qnx)
+test_les_pages_des_deux_convertis_sont_des_livres_qnx (tests.test_mesure_j5.TestEchantillonJ5.test_les_pages_des_deux_convertis_sont_des_livres_qnx)
 Chaque conversion cite un livre QNX 8.0, pas un index ni FreeBSD. ... ok
 test_les_quatre_absents_restent_absents (tests.test_mesure_j5.TestEchantillonJ5.test_les_quatre_absents_restent_absents) ... ok
-test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256 (tests.test_mesure_j5.TestEchantillonJ5.test_les_trois_convertis_ont_une_page_qnx_8_0_et_son_sha256) ... ok
 test_plus_aucun_symbole_decrit_ailleurs (tests.test_mesure_j5.TestEchantillonJ5.test_plus_aucun_symbole_decrit_ailleurs) ... ok
-test_seul_les_trois_symboles_convertis_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seul_les_trois_symboles_convertis_ont_change_d_etat)
+test_seuls_les_convertis_et_le_retrait_ont_change_d_etat (tests.test_mesure_j5.TestEchantillonJ5.test_seuls_les_convertis_et_le_retrait_ont_change_d_etat)
 Les 97 autres symboles ont exactement l'etat qu'ils avaient en J4. ... ok
 test_un_taux_sur_zero_leve_une_erreur (tests.test_mesure_j5.TestEchantillonJ5.test_un_taux_sur_zero_leve_une_erreur) ... ok
 test_la_citation_vient_de_la_page_citee (tests.test_mesure_j5.TestMesureReproductible.test_la_citation_vient_de_la_page_citee)
@@ -379,7 +360,7 @@ La citation publiee est bien un extrait de la page citee. ... ok
 test_le_taux_recalcule_vaut_le_taux_publie (tests.test_mesure_j5.TestMesureReproductible.test_le_taux_recalcule_vaut_le_taux_publie) ... ok
 test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256 (tests.test_mesure_j5.TestMesureReproductible.test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256) ... ok
 test_les_statuts_de_l_outil_sont_inchanges (tests.test_mesure_j5.TestMesureReproductible.test_les_statuts_de_l_outil_sont_inchanges)
-J5 ne touche pas l'outil : les statuts sont ceux de J4. ... ok
+J5 ne touche pas l'outil : les statuts sont ceux de J4, sauf les ... ok
 test_chaque_genre_de_mention_est_traduit_en_anglais (tests.test_mesure_j5.TestRapportAnglais.test_chaque_genre_de_mention_est_traduit_en_anglais) ... ok
 test_la_liste_des_absents_est_complete (tests.test_mesure_j5.TestRapportAnglais.test_la_liste_des_absents_est_complete) ... ok
 test_le_chiffre_anglais_est_celui_du_json_publie (tests.test_mesure_j5.TestRapportAnglais.test_le_chiffre_anglais_est_celui_du_json_publie) ... ok
@@ -394,7 +375,7 @@ test_le_taux_du_script_egale_le_taux_compte_a_la_main (tests.test_mesure_j5.Test
 test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test (tests.test_mesure_j5.TestTauxCompteALaMain.test_les_etats_publies_des_dix_symboles_sont_bien_ceux_du_test) ... ok
 
 ----------------------------------------------------------------------
-Ran 30 tests in 1.776s
+Ran 30 tests in 1.859s
 
 OK
 

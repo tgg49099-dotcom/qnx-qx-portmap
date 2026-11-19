@@ -336,7 +336,7 @@ class TestJudgePathInReadme(unittest.TestCase):
 
     Measured on 16 November 2026: on a system Python protected by PEP 668,
     ``pip install .`` fails, so ``qnx-portmap`` does not exist; and without the
-    corpus (about 1 h 40 to download) the full mode can only say ``corpus not
+    corpus (about two hours to download) the full mode can only say ``corpus not
     found``.  The quick start therefore starts with the quick mode through
     ``python3 -m``, and any install line in it is marked optional.
     """

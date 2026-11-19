@@ -468,15 +468,37 @@ class TestMesureReproductible(unittest.TestCase):
         cls.classifier = Classifier(cls.corpus)
 
     def test_les_statuts_publies_sont_reproduits(self):
+        """La mesure J4 est datee : elle n'est pas reecrite.
+
+        Rejouer l'outil du jour la reproduit, a l'exception **prevue et
+        mesuree** des retraits annonces par le guide officiel de migration
+        8.0 (adaptation du 19/11/2026) : pour ces symboles la, la mesure J4
+        publiee dit ``described_elsewhere`` et l'outil du jour doit
+        repondre exactement ``absent`` avec la phrase du guide citee.
+        L'ecart est verifie, pas tolere.
+        """
         symbols = [r["symbol"] for r in self.data["symbols"]]
         results = self.classifier.classify(symbols)
         par_symbole = {r.symbol: r for r in results}
+        retires = 0
         for rec in self.data["symbols"]:
             res = par_symbole[rec["symbol"]]
+            if getattr(res, "removed_by_migration_guide", False):
+                retires += 1
+                self.assertEqual(rec["status"], "described_elsewhere",
+                                 rec["symbol"])
+                self.assertEqual(res.status, "absent", rec["symbol"])
+                self.assertEqual(res.url, rec["url"], rec["symbol"])
+                self.assertTrue(res.citation, rec["symbol"])
+                self.assertIn("have been removed", res.citation, rec["symbol"])
+                continue
             self.assertEqual(res.status, rec["status"], rec["symbol"])
             self.assertEqual(res.url, rec["url"], rec["symbol"])
             self.assertEqual(res.citation_source, rec["citation_source"],
                              rec["symbol"])
+        self.assertEqual(retires, 1,
+                         "un seul retrait annonce par le guide est attendu "
+                         "dans l'echantillon J4 (InterruptAttach)")
 
     def test_les_pages_citees_sont_dans_le_corpus_fige(self):
         for rec in self.data["symbols"]:
