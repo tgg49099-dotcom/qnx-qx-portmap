@@ -47,7 +47,7 @@ HELP_STRINGS = {
         "lang": "langue de sortie (defaut : en)",
         "quick": "mode rapide : telecharge seulement les index A-Z 8.0 et 7.1, "
                  "le guide de migration et les pages des symboles (environ 80 "
-                 "requetes, quelques minutes) ; ne dit jamais \"absent\"",
+                 "requetes, quelques minutes) ; \"absent\" seulement si le guide de migration annonce le retrait",
         "quick_out": "repertoire du petit corpus du mode rapide (defaut : corpus-quick)",
     },
     "en": {
@@ -77,7 +77,7 @@ HELP_STRINGS = {
         "lang": "output language (default: en)",
         "quick": "quick mode: download only the 8.0 and 7.1 A-Z indexes, the "
                  "migration guide and the pages of the symbols (about 80 "
-                 "requests, a few minutes); never says \"absent\"",
+                 "requests, a few minutes); says \"absent\" only when the migration guide announces the removal",
         "quick_out": "directory of the small quick-mode corpus (default: corpus-quick)",
     },
 }

@@ -19,7 +19,9 @@ same classifier on it.
 
 What the quick mode can NOT say: ``absent`` and "mentioned in another 8.0
 book" are statements about the WHOLE 8.0 documentation. Without the other
-books, the quick mode never prints ``absent``: a symbol found only in the
+books, the quick mode prints ``absent`` only for a symbol that the official
+migration guide (read in full) says was removed, quoting that sentence; any
+other symbol found only in the
 7.1 index, or in no index at all, is reported ``unknown`` with a note that
 says why and how to get the definitive answer (the full corpus). The quick
 mode therefore never contradicts the full mode: each ``documented`` or
@@ -132,6 +134,11 @@ def apply_quick_limits(results, version="8.0", previous="7.1", lang="en"):
     """
     n = QUICK_NOTES[lang if lang in QUICK_NOTES else "en"]
     for res in results:
+        if res.status == ABSENT and getattr(res, "removed_by_migration_guide", False):
+            # the removal is stated by the official migration guide, which
+            # the quick mode has read in full: this "absent" is a quotation,
+            # not a conclusion drawn from the books it did not read
+            continue
         if res.status == ABSENT:
             res.status = UNKNOWN
             res.note = n["absent"] % (previous, version, version)

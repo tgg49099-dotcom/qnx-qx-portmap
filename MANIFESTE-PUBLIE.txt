@@ -1,9 +1,9 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
-Tree            : /work/qnx-portmap
-Generated on    : 2026-11-18 04:56:31
+Tree            : /tmp/claude-0/w/p2
+Generated on    : 2026-11-19 03:21:19
 Files           : 126
-Total size      : 3841677 bytes
+Total size      : 3848619 bytes
 
 The 3 biggest files:
     1832957 bytes  media/qx-portmap-demo-final.mp4
@@ -79,13 +79,13 @@ qnx_portmap/LISEZMOI-FR.md	782	c2ab59c8b7f12cb2d557e917db3cd7e2857612d5522d4480e
 qnx_portmap/LISEZMOI.md	849	4ec43a5065bc2928da8fcc9b549378cda1f6498a54eaf49477174a718dbe6402
 qnx_portmap/__init__.py	385	fb0a7d26903562acc28075650cc00ad00e66ec80aab944a86390fd09a810669e
 qnx_portmap/__main__.py	131	646687eab6b4ac778f4dd765b29b1b8bf5804c7731c32281a719c69084bd79b6
-qnx_portmap/classify.py	15690	92c9860dd708cb7da3c10ec4367496fba26a61b16d1487ce9228731d9caee3c2
-qnx_portmap/cli.py	15901	5e775166bc77077fc2668b5437c00848f64671dc4f9e2e0500432117be0a81ec
+qnx_portmap/classify.py	18653	41e16952292a6cb471ade0ba4114f61ce65717e36de6127fe7c4693071a253f3
+qnx_portmap/cli.py	15987	909222a279c3f0f3485acc368b93a375f8a7bcbb74b8d4875375028a3a12c789
 qnx_portmap/corpus.py	8994	573f0f6b1104e2fff13523f317684a4f7c081d4f7d77b143d65788fac19a2f85
 qnx_portmap/extract.py	10537	2db2129ba498b70c317e4660b7f6a40a91404e7328a66ec60bedcfa9cee35629
-qnx_portmap/quick.py	6092	2b32a6c52f8c358ce9827a8359e1ad4797d88a260183a3654398190e2db9b0c2
+qnx_portmap/quick.py	6529	f1f914888bf23affa338853027f062e7acf00d3d50569aec7e07e7a9d8138796
 qnx_portmap/refresh.py	8588	07782da3f9128c6da385eed312ffb4b1d443eae0bb3e0268a25e6277d64296d9
-qnx_portmap/report.py	12005	88369d94c5010220770a0bdbdefab7c6914a0b0ab4a00b6ee82be13c7a1178b6
+qnx_portmap/report.py	12146	f397fdefdf03dac56f2489acc65accebc4207028d235e7f0cfa53f4350a61cdc
 scripts/bootstrap_corpus.sh	5288	dd52938560f7f5c59d728bdd082e876854a58a6e43f45457339a73e22d69d1f2
 scripts/controle_fuite_corpus.py	16319	bfe579a8747fc734dfb1677bfb798799b2b6e64aceb15209f0e46f58e1efa7b8
 scripts/install-sdp8.sh	36904	5c158f0d5768143141c1982db66627a5da82c476e849c7ac07487853fb7eb3c8
@@ -114,13 +114,13 @@ tests/test_cli.py	4835	7622a4b14ad4312877dfa67aa5ffa7b1bd26ae4c50256e84de6723ecb
 tests/test_corpus.py	5195	8aefd0485c2f935b86daf8fb24378c75acbcd18589ede86a217064dce00f7bb4
 tests/test_download_retry.py	1837	5cb712ba2089eb9f6196938b8962ff1daaa96f1f639f8c08bd754aa2fdf0ae27
 tests/test_extract.py	5614	efb9dc285c2dc379848c8e7eca02fc6d88f0d90483e6e94198b785de13e5ed3d
-tests/test_fixtures.py	8566	be71375d071c8141c3d4f9b4a498000d82a91ffc59310c06f28b4f8edb34e3a1
-tests/test_frozen_corpus.py	5955	dd52af288fb09e4ffe06e5dd75036e59d67223a0b09815941f700d17e46edac8
-tests/test_lang_en.py	10831	d07cdce9141a97fee4b38be6eb7c5e9cb72ffa533c02a52de7ba5348799b4912
+tests/test_fixtures.py	10982	5cb3d47776160060a4560e316b7b11f7df06c8f0b0b7e6423ea738f87d29a038
+tests/test_frozen_corpus.py	6200	5262cf85b3456dd31c37ae91b60287959f6af276f149a608c4f42d41cc0b83c4
+tests/test_lang_en.py	10863	08cb2899fbb968dad4b8f2efc18b8c0f755a0f1bee68e107b489ccafea4af8d5
 tests/test_mesure_j4.py	22516	5ed267007df9fa57ff81665a640a8ad7efc3e0e1817ba6d31b4570adc9233000
 tests/test_mesure_j5.py	27425	d963a22bf2badf5458b937250ffe7567e6ff2b280417f667a3c5da3b61e04c36
 tests/test_published_counts.py	5954	126685528049aee7f35226f294f312c166322671be65276f3fae71ba89164847
-tests/test_quick.py	16744	49dc0b9dbfbdc3fd74f6017f71020046087f222da4ceb50a5087513729349488
+tests/test_quick.py	17366	65b1958aa4a5f29241da325801fea215bacf337b298158fa385e41c3bd167cb8
 tests/test_readme.py	4771	d0f24f2fcf7971c5791001b0cb2ee90a1de3060e338496d13b743bdd5e357fb4
 tests/test_readme_en.py	3468	c1351aa652720e49ba7dd0dc0ac07f95aa2965bcc88f3b1ca8473d65e075bbce
 tests/test_target_check.py	4491	da0f7a4800c92a5e81ce701982b8ff5f419490d48526584813367919c4a2794b

@@ -54,6 +54,9 @@ NOTES = {
         "kind_bold": "cite en gras",
         "kind_mention": "mention",
         "kind_index": "entree d'index",
+        "kind_removed": "retrait annonce",
+        "removed_note": "retire en %s selon le guide officiel de migration "
+                        "(phrase citee ci-dessus)",
     },
     "en": {
         "present_both": "present in 7.1 and in 8.0",
@@ -72,6 +75,9 @@ NOTES = {
         "kind_bold": "cited in bold",
         "kind_mention": "mention",
         "kind_index": "index entry",
+        "kind_removed": "announced removal",
+        "removed_note": "removed in %s according to the official migration "
+                        "guide (sentence quoted above)",
     },
 }
 
@@ -80,6 +86,18 @@ NOTES = {
 # in lower case without an underscore ("argument", "any") is an English
 # word, not a symbol.
 _API_SHAPED = re.compile(r"[A-Z_]")
+
+# A removal announced by the official migration guide, in the form used by
+# the 8.0 guide: "The following functions have been removed from libc :
+# _smalloc() , _scalloc() ..." or "... removed from stdlib.h : itoa() , ...".
+# Only the names of the list that follows the colon are taken, each written
+# as a call "name()"; the list stops at the first word that is not such a
+# name (the next sentence of the guide). A symbol only cited by such a
+# sentence has NOT been described elsewhere: it has been removed.
+_REMOVAL = re.compile(
+    r"(?:have|has) been (?:removed|discontinued)\b[^:]{0,80}:\s*"
+    r"((?:[A-Za-z_][A-Za-z0-9_]*\s*\(\s*\)\s*,?\s*)+)")
+_REMOVED_NAME = re.compile(r"([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)")
 
 # Priority of the work list (1 = the most urgent).
 WORKLIST_PRIORITY = {
@@ -106,6 +124,7 @@ class SymbolResult(object):
         self.see_urls = []
         self.mentioned_in_migration_guide = False
         self.migration_urls = []
+        self.removed_by_migration_guide = False
         self.detail = ""
         self.note = ""
 
@@ -156,6 +175,7 @@ class Classifier(object):
         self._scan_cache = {}
         self._bold_cache = {}
         self._migration_text = None
+        self._removals = None
 
     # -- index ------------------------------------------------------------
     def _load_indexes(self):
@@ -264,6 +284,28 @@ class Classifier(object):
                 out[sym] = hits
         return out
 
+    def _migration_removals(self):
+        """Symbols that the official migration guide says were removed.
+
+        Returns {symbol: (page, sentence)}; the sentence is the removal
+        sentence itself, from "The following" (when present) to the end of
+        the list of names.
+        """
+        if self._removals is None:
+            out = {}
+            for page in self.corpus.migration_pages(self.version):
+                text = self._article_text(page)
+                if not text:
+                    continue
+                for m in _REMOVAL.finditer(text):
+                    head = text.rfind("The following", max(0, m.start() - 120), m.start())
+                    start = head if head >= 0 else m.start()
+                    sentence = text[start:m.end()].strip().rstrip(",").strip()
+                    for name in _REMOVED_NAME.findall(m.group(1)):
+                        out.setdefault(name, (page, sentence))
+            self._removals = out
+        return self._removals
+
     # -- classification --------------------------------------------------
     def classify(self, symbols):
         """Classifies a list of symbols and returns a list of SymbolResult."""
@@ -303,6 +345,21 @@ class Classifier(object):
                 pending.append(sym)
             results.append(res)
 
+        if pending:
+            # 0th pass: a removal announced by the official migration guide
+            # wins over any other mention of the symbol in 8.0
+            removals = self._migration_removals()
+            for res in results:
+                if res.symbol in pending and res.symbol in removals:
+                    page, sentence = removals[res.symbol]
+                    res.status = ABSENT
+                    res.removed_by_migration_guide = True
+                    res.url = page.url
+                    res.citation = sentence
+                    res.citation_source = "%s, %s" % (page.book, page.topic)
+                    res.citation_kind = n["kind_removed"]
+                    res.note = n["removed_note"] % self.version
+            pending = [s for s in pending if s not in removals]
         if pending:
             # 1st pass: the symbol is called as a function
             found = self._scan_corpus(pending, call_form=True)

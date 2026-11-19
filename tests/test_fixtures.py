@@ -185,10 +185,45 @@ class TestClassifierOnRealQnxExcerpts(unittest.TestCase):
         self.assertIn("io_sock", res.url)
 
     def test_symbol_removed_and_cited_by_the_migration_guide(self):
+        # Studio 19/11/2026 : le guide officiel dit « The following functions
+        # have been removed from libc : _smalloc() ... ». Ce symbole n'est pas
+        # « decrit ailleurs » (ancienne reponse, priorite 3) : il est retire,
+        # priorite 1, et la phrase du retrait est citee.
         res = self.classify_one("_smalloc")
-        self.assertEqual(res.status, ELSEWHERE)
-        self.assertEqual(res.citation_kind, "appel de fonction")
+        self.assertEqual(res.status, ABSENT)
+        self.assertEqual(res.citation_kind, "retrait annonce")
+        self.assertTrue(res.removed_by_migration_guide)
         self.assertTrue(res.mentioned_in_migration_guide)
+        self.assertEqual(res.priority, 1)
+        self.assertIn("have been removed from libc", res.citation)
+        self.assertIn("_smalloc()", res.citation)
+        self.assertIn("migration", res.url)
+        # Les deux listes reelles du guide 8.0 (c_apps.html, lu le 19/11/2026) :
+        # « stdlib.h » contient un point, la liste s'arrete a la phrase
+        # suivante, « moved » n'est pas un retrait, une simple mention non plus.
+        from qnx_portmap import classify as cl
+        from qnx_portmap.classify import SymbolResult
+        from qnx_portmap.quick import apply_quick_limits
+        guide = ("Libraries The following functions have been removed from libc : "
+                 "_smalloc() , _scalloc() , _srealloc() , _sfree() The inotify_* "
+                 "functions (e.g., inotify_add_watch() , inotify_init() ) have moved "
+                 "from libc to a new library, libfsnotify.so The following functions "
+                 "have been removed from stdlib.h : itoa() , ltoa() , lltoa() , "
+                 "ultoa() , ulltoa() , utoa() . Instead, you can use snprintf () .")
+        names = lambda t: [n for m in cl._REMOVAL.finditer(t)
+                           for n in cl._REMOVED_NAME.findall(m.group(1))]
+        self.assertEqual(names(guide), ["_smalloc", "_scalloc", "_srealloc", "_sfree",
+                                        "itoa", "ltoa", "lltoa", "ultoa", "ulltoa", "utoa"])
+        self.assertEqual(names("The following functions have moved from libc : "
+                               "inotify_init() ."), [])
+        self.assertEqual(names("You can call itoa() to convert."), [])
+        # le mode rapide garde ce « absent » (phrase citee du guide, lu en
+        # entier) ; un « absent » ordinaire y devient toujours « unknown »
+        quoted, plain = SymbolResult("itoa"), SymbolResult("bzero")
+        quoted.status = plain.status = ABSENT
+        quoted.removed_by_migration_guide = True
+        apply_quick_limits([quoted, plain])
+        self.assertEqual((quoted.status, plain.status), (ABSENT, UNKNOWN))
 
     def test_unknown_symbol(self):
         res = self.classify_one("symbole_qui_nexiste_pas_qnx")

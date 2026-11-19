@@ -34,7 +34,7 @@ FRENCH_MARKERS = [
     "aucun symbole", "documente", "decrit", "absent de la", "absent de tout",
     "inconnu", "voir", "liste de travail", "mise a niveau", "rien a migrer",
     "cite par le guide", "entree d'index", "en gras", "appel de fonction",
-    "present en", "nouveau en", "erreur de saisie", "seulement mentionne",
+    "retrait annonce", "retire en", "present en", "nouveau en", "erreur de saisie", "seulement mentionne",
     "appele", "introuvable", "analyser", "analyse", "symbole", "symboles",
     "statut", "page officielle", "citation exacte", "priorite", "verifiees",
     "attendu", "obtenu", "echec", "racine", "livres", "repertoire",

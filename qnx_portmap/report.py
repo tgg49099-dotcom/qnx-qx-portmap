@@ -30,7 +30,7 @@ TEXT_STRINGS = {
         "pages": "pages : %d (7.1 : %d, 8.0 : %d) - consulte le %s - mode hors ligne",
         "corpus_quick": "petit corpus du mode rapide : %s",
         "pages_quick": "pages : %d (7.1 : %d, 8.0 : %d) - telecharge le %s - mode rapide "
-                       "(index A-Z et guide de migration seulement ; jamais \"absent\")",
+                       "(index A-Z et guide de migration seulement ; \"absent\" seulement si le guide annonce le retrait)",
         "empty": "(aucun symbole a analyser)",
         "page": "    page   : %s",
         "see": "    voir   : %s",
@@ -59,7 +59,7 @@ TEXT_STRINGS = {
         "pages": "pages: %d (7.1: %d, 8.0: %d) - consulted on %s - offline mode",
         "corpus_quick": "quick-mode small corpus: %s",
         "pages_quick": "pages: %d (7.1: %d, 8.0: %d) - downloaded on %s - quick mode "
-                       "(A-Z indexes and migration guide only; never \"absent\")",
+                       "(A-Z indexes and migration guide only; \"absent\" only when the guide announces the removal)",
         "empty": "(no symbol to analyze)",
         "page": "    page   : %s",
         "see": "    see    : %s",
@@ -84,7 +84,7 @@ MD_STRINGS = {
         "title": "## QX PORTMAP - etat des symboles dans la documentation QNX %s",
         "header": "Corpus fige : %d pages (%s), consulte le %s, lecture hors ligne.",
         "header_quick": "Mode rapide : %d pages (%s), telechargees le %s : index A-Z et "
-                        "guide de migration seulement, jamais \"absent\".",
+                        "guide de migration seulement ; \"absent\" seulement si le guide annonce le retrait.",
         "by_version": "%s : %d pages",
         "empty": "_Aucun symbole analyse._",
         "table_head": "| Symbole | Statut %s | En 7.1 | Page officielle | Citation exacte |",
@@ -106,7 +106,7 @@ MD_STRINGS = {
         "title": "## QX PORTMAP - status of symbols in the QNX %s documentation",
         "header": "Frozen corpus: %d pages (%s), consulted on %s, offline reading.",
         "header_quick": "Quick mode: %d pages (%s), downloaded on %s: A-Z indexes and "
-                        "migration guide only, never \"absent\".",
+                        "migration guide only; \"absent\" only when the guide announces the removal.",
         "by_version": "%s: %d pages",
         "empty": "_No symbol analyzed._",
         "table_head": "| Symbol | Status %s | In 7.1 | Official page | Exact citation |",

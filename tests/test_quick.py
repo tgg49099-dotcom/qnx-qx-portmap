@@ -250,8 +250,17 @@ class TestQuickAgainstFrozenCorpus(unittest.TestCase):
                  and self.quick_res[s] != self.full_res[s]]
         self.assertEqual(wrong, [])
 
-    def test_quick_never_says_absent(self):
-        self.assertFalse([s for s, st in self.quick_res.items() if st == ABSENT])
+    def test_quick_says_absent_only_for_quoted_removals(self):
+        # Studio 19/11/2026 : le mode rapide ne dit « absent » que pour les
+        # 14 fonctions que le guide officiel de migration 8.0 dit « removed »
+        # (kernel.html et c_apps.html du corpus fige), et le mode complet dit
+        # la meme chose pour chacune.
+        said = sorted(s for s, st in self.quick_res.items() if st == ABSENT)
+        self.assertEqual(said, [
+            "InterruptAttach", "InterruptAttachArray", "InterruptHookIdle2",
+            "InterruptHookTrace", "_scalloc", "_sfree", "_smalloc", "_srealloc",
+            "itoa", "lltoa", "ltoa", "ulltoa", "ultoa", "utoa"])
+        self.assertEqual([s for s in said if self.full_res[s] != ABSENT], [])
 
     def test_every_documented_symbol_is_found_by_quick(self):
         missed = [s for s, st in self.full_res.items()

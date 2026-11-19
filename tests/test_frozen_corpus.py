@@ -125,8 +125,11 @@ class TestFrozenCorpus(unittest.TestCase):
         self.assertEqual(len(gaps), 206)
         results = self.classifier.classify(gaps)
         self.assertEqual([r for r in results if r.status == UNKNOWN], [])
-        self.assertEqual(len([r for r in results if r.status == ELSEWHERE]), 132)
-        self.assertEqual(len([r for r in results if r.status == ABSENT]), 74)
+        # Studio 19/11/2026 : 14 de ces ecarts sont annonces « removed » par
+        # le guide officiel de migration ; ils passent de ELSEWHERE a ABSENT.
+        self.assertEqual(len([r for r in results if r.status == ELSEWHERE]), 118)
+        self.assertEqual(len([r for r in results if r.status == ABSENT]), 88)
+        self.assertEqual(len([r for r in results if r.removed_by_migration_guide]), 14)
 
     def test_worklist_is_ordered_by_priority(self):
         results = self.classifier.classify(["bzero", "accept", "abort"])
