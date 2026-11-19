@@ -1,9 +1,9 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
 Tree            : /work/qnx-portmap
-Generated on    : 2026-11-19 23:02:48
+Generated on    : 2026-11-20 00:30:07
 Files           : 127
-Total size      : 3918698 bytes
+Total size      : 3919657 bytes
 
 The 3 biggest files:
     1832957 bytes  media/qx-portmap-demo-final.mp4
@@ -119,7 +119,7 @@ tests/test_fixtures.py	10982	5cb3d47776160060a4560e316b7b11f7df06c8f0b0b7e6423ea
 tests/test_frozen_corpus.py	6200	5262cf85b3456dd31c37ae91b60287959f6af276f149a608c4f42d41cc0b83c4
 tests/test_lang_en.py	10863	08cb2899fbb968dad4b8f2efc18b8c0f755a0f1bee68e107b489ccafea4af8d5
 tests/test_mesure_j4.py	23713	92b1d383c517ae5d9512176820b3ce41f7af6bd383e3c388b0d1ca67634c7c12
-tests/test_mesure_j5.py	30056	273a83e88b778e07d35ce3c24e7fc29e046df6e59ca37d3441d19837d961776b
+tests/test_mesure_j5.py	31015	b1ee599b6d347399cad0d490e1954f97b913375077ca5d51207e5bfc1a357c3a
 tests/test_published_counts.py	5954	126685528049aee7f35226f294f312c166322671be65276f3fae71ba89164847
 tests/test_quick.py	17369	da9826d831845734171a1783e9152aa17f7309723c4dd322db2f15861ab9e4f4
 tests/test_readme.py	4771	d0f24f2fcf7971c5791001b0cb2ee90a1de3060e338496d13b743bdd5e357fb4

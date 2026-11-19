@@ -505,14 +505,32 @@ class TestRapportAnglais(unittest.TestCase):
 
         On rejoue l'ecriture du rapport anglais a partir du JSON publie (la
         sortie de l'outil) et on compare les deux fichiers octet par octet.
+
+        La mesure est datee : le rapport publie porte le jour ou la mesure a
+        ete faite, et l'outil estampille le jour de sa propre execution. On
+        rejoue donc l'ecriture avec CE jour-la, lu dans le rapport publie.
+        Sans cela, la comparaison ne tient que le jour de la generation du
+        rapport : mesure le 20/11/2026, ce test echouait avec un rapport
+        publie le 19/11/2026, et la suite du depot etait rouge pour tout
+        le monde sauf pour la machine qui l'avait produit.
         """
-        with tempfile.TemporaryDirectory() as tmp:
-            chemin = os.path.join(tmp, "mesure-J5.md")
-            mesure.write_markdown_en(chemin, self.data, self.data["symbols"])
-            with open(chemin, "rb") as fh:
-                regenere = fh.read()
         with open(MESURE_MD, "rb") as fh:
             publie = fh.read()
+        m = re.search(rb"Measured on (\d{4}-\d{2}-\d{2}) by `tools/mesure_j5\.py`",
+                      publie)
+        self.assertIsNotNone(m, "le rapport publie ne porte pas sa date de "
+                                "mesure")
+        ancien = mesure.MESURE_LE
+        mesure.MESURE_LE = m.group(1).decode("ascii")
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                chemin = os.path.join(tmp, "mesure-J5.md")
+                mesure.write_markdown_en(chemin, self.data,
+                                         self.data["symbols"])
+                with open(chemin, "rb") as fh:
+                    regenere = fh.read()
+        finally:
+            mesure.MESURE_LE = ancien
         self.assertEqual(regenere, publie,
                          "le rapport anglais publie n'est pas celui que "
                          "l'outil produit a partir des donnees publiees")
