@@ -45,7 +45,7 @@ It answers with four statuses, and never with anything else:
 | `documented` | the symbol has its own page in the QNX 8.0 C Library Reference |
 | `described_elsewhere` | no page of its own in 8.0, but the 8.0 documentation still describes it |
 | `absent` | it was in the C Library Reference 7.1 and is gone from the 8.0 corpus |
-| `unknown` | not in the frozen corpus: a typo, a macro of your project, or a symbol published after 14 November 2026 - the tool does not guess |
+| `unknown` | not in the corpus you gave it: a typo, a macro of your project, or a symbol published after the corpus was frozen - the tool does not guess |
 
 ---
 
@@ -74,7 +74,8 @@ json qnx-portmap --verify-corpus
 
 `python3 -m qnx_portmap` is the same program as the `qnx-portmap` command that
 `pip install .` adds, so installing is optional. A system Python protected by
-PEP 668 refuses `pip install .`: use `python3 -m venv .venv` in that case.
+PEP 668 refuses `pip install .`: use
+`python3 -m venv .venv && .venv/bin/pip install .` in that case.
 
 ## Step 3 - Your first answer, in quick mode (about 3 minutes)
 
@@ -520,12 +521,10 @@ is kept in
 
 ## Next step
 
-Run the tool on the calls of your own project (steps 8 and 9) and work
-through the work list: `P1` means the official migration guide of QNX 8.0
-announces the removal of the call, `P2` that it has disappeared without any
-official mention - the demonstration of the tool on a real QNX 8.0 target is
-still pending the SDP 8.0 licence, **to be confirmed on QNX 8.0 on 20 November
-2026**.
+Run the tool on the calls of your own project (steps 8 and 9) and work through
+the work list, priority by priority - the demonstration of the tool on a real
+QNX 8.0 target is still pending the SDP 8.0 licence, **to be confirmed on
+QNX 8.0 on 20 November 2026**.
 
 ---
 
