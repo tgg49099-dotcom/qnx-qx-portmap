@@ -1,5 +1,31 @@
 # QX PORTMAP - Devpost submission kit (QNX Global Hackathon)
 
+**Version 4 - 19 November 2026.** This file replaces the kit of 15/11/2026,
+which stays in the git history of this repository at commit `1b46b69`. The
+version of 18/11/2026 (md5 `3d57c6aae4b9efe06407aef5e1ce9c79`) was never
+added to this repository: only the current version is published here. What
+changed in the version of 18/11, and what changed on top of it:
+
+| # | Change | Why | Evidence |
+|---|---|---|---|
+| C1 | The project story is now given in **two blocks ready to paste**: **4.1a** (1 170 characters, for the "Text Description" field) and **4.1c** (1 187 characters, for the "Project story" field). Both are under the 1 200 characters of the reference table (tableau 1.1). | The story of the 15/11 kit is 12 263 characters: ten times the 1 200 characters of the reference table. Devpost publishes no limit for this field and 119 public descriptions measured go from 637 to 48 663 characters, so the form would accept the long one - but no paste must exceed the declared limit, so two short versions are given instead. | § 1.4, § 4.1a, § 4.1c |
+| C2 | A new block **5.8b** gives the text of the bonus field (1 176 characters). | The kit of 15/11 prepared only a URL for the "Best Codelab / Tutorial" field. The form asks for a text as well; the kit now prepares it. | § 5.8b |
+| C3 | The list of excluded countries is quoted verbatim. | The kit of 15/11 put a paraphrase between quotation marks. | § 5.2, the rules page of 18/11/2026 |
+| C4 | A table "champ par champ" with the measured length, the limit and the verdict of the 10 fields. | The owner pastes on Sunday: the table says what to paste, how long it is and whether it fits. | § 1.4 |
+| C5 | The complete story (12 263 characters, unchanged in the version of 18/11; 12 645 characters in this version after C8) stays in the kit but is **not a block to paste** any more: it is declared as documentation. | The form has no field for it: the two fields of the form get 4.1a and 4.1c, both under the declared limit. The long text is kept as the source of the codelab and of the repository documentation. | § 4.1b |
+| C6 | **Every block now declares the field it goes into** ("- Devpost field: **Description**"). | The verifier must not guess where a block goes: the official help gives two names ("Text Description", article 145, and "Project story", article 126) and the form of the contest is behind a session, so the kit says which block goes where. | § 1.4 and the output of the verifier |
+| C7 | A new block **4.1d** gives the testing instructions ready to paste (2 552 characters in the version of 18/11; 2 673 characters in this version after C8), added on 19/11/2026. | The kit of 15/11 carried the testing instructions only inside the 12 263-character story; the reference table gives the "Instructions d'installation" field a 3 000-character limit and no short block existed for it. The block is the same text, same commands, same measured numbers, shortened to fit. | § 4.1d |
+| **C8** | **The rate is 95 %, not 96 %: `InterruptAttach` is reported "retiré selon le guide".** The blocks that quote the J5 measurement (4.1a, 4.1b, 4.1c, 5.7) now say 95 resolved and quoted, 5 not resolved, and name `InterruptAttach` as removed in 8.0 according to the official migration guide, with the sentence of the guide quoted. | The tool was changed on 19/11/2026: it now reports a function that the official 8.0 migration guide says was removed as `absent`, priority 1, quoting the sentence of the guide - the honest answer. The rate follows it down, from 96 % to 95 %. | § 4.1a, § 4.1b, § 4.1c, § 5.7, `docs/mesure-J5.md` |
+
+The verifier that produced this table is the author's own program (one program,
+one kit at a time); its register of facts and its measurement log are kept
+outside this repository. The lengths of the blocks of this file are recomputed
+by a command of this repository, which fails if one of them is wrong:
+
+```
+python3 tools/mesure_kit.py --check
+```
+
 Prepared on 15 November 2026. Every block below is the text to paste into the
 Devpost submission form, in the order of the form. All the text to paste is in
 English, because the contest rules require English submission materials:
@@ -18,8 +44,13 @@ page "What to Submit" section (`https://qnx.devpost.com/`, read 15/11/2026).
 
 **How the lengths are measured**: the length of a block is the number of
 characters of the text between the ``` fences, as pasted, without the final
-newline. `python3 tools/mesure_kit.py --check` recomputes every length in this
-file and fails if one of them is wrong.
+newline. The verifier of 19/11/2026 recomputes every length of this file and
+fails if one of them is wrong (section 6 of its output), and the tool of the
+repository does the same, with the command below:
+
+```
+python3 tools/mesure_kit.py --check
+```
 
 ---
 
@@ -95,6 +126,32 @@ yet**: its gallery `https://qnx.devpost.com/project-gallery` (read 15/11/2026,
 HTTP 200) says "The hackathon managers haven't published this gallery yet, but
 hang tight!", so the observation is made on the platform, not on this contest.
 
+### 1.4 The 10 fields of the form, block by block
+
+What to paste on Sunday, its measured length, the declared limit (tableau 1.1)
+and the verdict. Measured by `verif-kit-devpost.py` on 19/11/2026 on this
+file; the published limits are in § 1.1 and the observations in § 1.3.
+
+| Devpost field | Block | Measured | Declared limit | Verdict |
+|---|---|---|---|---|
+| Titre ("Submission name") | § 3.1 / 2_1 | 10 | 60 | OK |
+| Tagline ("Submission tagline") | § 3.2 / 2_2 | 138 | 140 | OK |
+| Description ("Text Description") | § 4.1a / 3_1a | 1 170 | 1 200 | OK |
+| Description etendue ("Project story") | § 4.1c / 3_1c | 1 187 | 1 200 | OK |
+| Instructions d'installation (testing) | § 4.1d / 3_1d | 2 673 | 3 000 | OK |
+| Mots-cles ("Built with tags", 11 tags) | § 4.2 / 3_2 | 104 | 200 | OK |
+| Video ("Video demo link") | § 4.5 / 3_5 | 28 | 1 000 | OK |
+| Categorie ("Category") | § 5.3 / 4_3 | 30 | 120 | OK |
+| Lien d'installation ("URL to your code repository") | § 5.4 / 4_4 | 49 | 2 000 | OK |
+| Description du bonus ("Best Codelab / Tutorial") | § 5.8b / 4_8b | 1 176 | 1 200 | OK |
+| Liens/URL ("Try it Out links") | § 4.3 + § 5.8 / 3_3 + 4_8 | 139 | 4 000 | OK |
+
+Two blocks are not fields of the form: block 4.1b (the complete story,
+12 645 characters, kept as documentation) and block 4.7 (evidence of QNX use,
+2 959 characters, a required attachment of the QNX contest, not a Devpost
+text field). No block exceeds the declared limit: the closest to its limit is
+the Project story block (1 187 of 1 200 characters, 99 %).
+
 ---
 
 ## 2. Step 1 - Manage your team
@@ -108,6 +165,8 @@ single person: see block 4.1.
 
 ### 3.1 Project name
 
+- Devpost field: **Titre** ("Submission name", step 2)
+
 <!-- BLOC:2_1 -->
 
 ```text
@@ -118,6 +177,8 @@ QX PORTMAP
 - Field limit: no limit published (Devpost help, article 145, read 15/11/2026)
 
 ### 3.2 Project tagline
+
+- Devpost field: **Tagline** ("Submission tagline", step 2)
 
 <!-- BLOC:2_2 -->
 
@@ -165,9 +226,47 @@ https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/gale
 
 ## 4. Step 3 - Project Details
 
-### 4.1 Project story (Text Description)
+### 4.1a Description courte - the block to paste in "Text Description" / "About the project"
 
-<!-- BLOC:3_1 -->
+- Devpost field: **Description** ("Text Description", step 3)
+
+<!-- BLOC:3_1a -->
+
+```markdown
+QX PORTMAP - a documentation map for the QNX 8.0 symbols your code calls
+
+## How this differs from our other entry
+
+The rules allow one entrant to submit several projects, but "each Submission must be unique and substantially different from each of the Entrant's other Submissions". Our other entry, QX-PROBE, is a source checker: it reads the C source of a QNX 8.0 resource manager and reports the access gates and dispatch tables the QNX 8.0 documentation requires. QX PORTMAP is a documentation mapper: it reads the QNX symbols a source tree calls and answers, for each one, whether it is still documented in QNX 8.0, with the official page and the exact quotation. Different inputs, different outputs, no shared code and no shared document.
+
+## What the tool does
+
+For each symbol it resolves, QX PORTMAP prints the official page, the exact quotation and the SHA-256 of the page, then a work list of the symbols to fix, sorted by priority. A symbol it cannot decide stays `unknown`: the tool never guesses.
+
+## Measured
+
+On 100 QNX symbols really called by five public QNX repositories: 95 resolved and quoted. 202 tests, no failure. Pure Python 3, no SDK, no board.
+```
+
+- Length (measured): 1170 characters
+- Field limit: **1 200 characters** (tableau 1.1, the reference table measured
+  on another form and relayed by the owner on 14/11/2026 22:20; see
+  `/consignes/SAVOIR/devpost.md`). Devpost publishes **no** limit for this
+  field: the "Text Description*" question of the help article 145 carries no
+  number, and 119 public project descriptions measured on 15/11/2026 go from
+  637 to 48 663 characters (median 3 659). This block is the one that fits
+  the declared limit; block 4.1b is the same story with every section, for
+  the judge who has the room for it.
+- The paragraph "How this differs from our other entry" is kept in this short
+  version on purpose: the rules ask for it ("each Submission must be unique
+  and substantially different from each of the Entrant's other Submissions",
+  `https://qnx.devpost.com/rules`, read 18/11/2026).
+
+### 4.1b The complete story (12 645 characters) - kept in the kit, not a block to paste
+
+- Devpost field: **documentation** (not a field of the form: this text is the complete story, kept for the codelab and the repository)
+
+<!-- BLOC:3_1b -->
 
 ```markdown
 QX PORTMAP - a documentation map for the QNX 8.0 symbols your code calls
@@ -261,9 +360,10 @@ clean virtual environment on 18 November 2026, one request per second). It
 reads only the A-Z indexes of
 the QNX 8.0 and 7.1 C Library Reference, the official migration guide to 8.0
 and the own page of each documented symbol. It answers `documented` and
-`described elsewhere` like the full mode, but it **never says `absent`**: a
-symbol that only the full corpus can decide is reported `unknown`, with a note
-that says why.
+`described elsewhere` like the full mode, and it says `absent` **only** for a
+symbol that the official migration guide (read in full) says was removed,
+quoting the sentence of the guide; any other symbol that only the full corpus
+can decide is reported `unknown`, with a note that says why.
 The exit code of that run is **1**, and that is the expected code: `0` when
 every analysed symbol is documented in 8.0, `1` when at least one symbol is
 absent or unknown, `2` on error. The quick mode answers `unknown` for the two
@@ -329,13 +429,17 @@ prints the same messages in French (see the README), and the JSON output
 ## Measured on real QNX code
 
 The 100 QNX symbols really called by five public QNX repositories (pinned
-commits) are classified by the tool: **96 of them are resolved and quoted**
-(96 %), 4 are not, and the 4 are honest: they had a page in the 7.1 C Library
+commits) are classified by the tool: **95 of them are resolved and quoted**
+(95 %), 5 are not, and the 5 are honest: four had a page in the 7.1 C Library
 Reference and have none in the 8.0 corpus, so the tool reports them as
-`absent` with their 7.1 page rather than dropping them. The list of the 100
+`absent` with their 7.1 page rather than dropping them; and the fifth,
+`InterruptAttach`, is reported as **removed in 8.0 according to the official
+migration guide** - quoted by the tool: "The following functions have been
+removed: InterruptAttach() InterruptAttachArray() InterruptHookIdle2()
+InterruptHookTrace()". The list of the 100
 symbols, the citation of each one and the SHA-256 of the cited page are in
 `docs/mesure-J5.md` and `docs/mesure-J5/`. The figure was reproduced on
-15 November 2026 with `tools/mesure_j5.py`.
+19 November 2026 with `tools/mesure_j5.py`.
 
 ## Tests
 
@@ -361,7 +465,7 @@ repository. The 11 rules and their output are in `docs/contre-epreuve-rouge.txt`
   that requires the QNX SDP 8.0 licence, which is not available in this
   environment. The code is Python 3 standard library only and POSIX-compatible,
   but this has not been demonstrated on a QNX 8.0 machine.
-- The 96 % figure is a measurement on one sample of 100 symbols; it is not a
+- The 95 % figure is a measurement on one sample of 100 symbols; it is not a
   guarantee for another project.
 - The corpus is a snapshot of the official QNX documentation taken on
   14 November 2026. A symbol published since then is reported as `unknown`
@@ -387,13 +491,151 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 12263 characters
-- Field limit: **no character limit published** (Devpost help, articles 145
-  and 126, read 15/11/2026). Observation on the same platform: 120 public
-  project pages measured on 15/11/2026, published descriptions from 637 to
-  48 663 characters, median 3 659; no truncation observed at any lower bound.
+- Length (measured): 12645 characters
+- **This block is not pasted in the form.** It is the complete story: every
+  section, with the details the two short versions leave out. The two fields
+  of the form get block 4.1a (1 170 characters) and block 4.1c (1 187
+  characters), both under the 1 200 characters of the reference table. This
+  text is kept here because it is the source of the codelab and of the
+  repository documentation, and because the verifier checks its announced
+  length (the line above is exact).
+- Devpost publishes **no** character limit for the description field (help
+  articles 145 and 126, read 15/11/2026). Observation on the same platform:
+  120 public project pages measured on 15/11/2026, published descriptions from
+  637 to 48 663 characters, median 3 659; no truncation observed at any lower
+  bound. So the platform would accept this text too: pasting it is the
+  owner's decision, not a technical necessity.
+
+### 4.1c Description etendue - the block to paste in the "Project story" field, if the form shows one
+
+- Devpost field: **Description etendue** ("Project story", step 3)
+
+<!-- BLOC:3_1c -->
+
+```markdown
+QX PORTMAP - a documentation map for the QNX 8.0 symbols your code calls
+
+## How this differs from our other entry
+
+The rules ask for entries that are "unique and substantially different". QX PORTMAP is not a version of our QX-PROBE entry: QX-PROBE reads the C source of a QNX 8.0 resource manager and reports the access gates and dispatch tables the documentation requires; QX PORTMAP reads the QNX symbols a source tree calls and answers, for each, whether it is still documented in QNX 8.0, with the official page and the quotation. Different inputs, different outputs, no shared code.
+
+## What the tool does
+
+For each symbol, QX PORTMAP prints the official page, the exact quotation and the SHA-256 of the page, then a work list of the symbols to fix, by priority. A symbol it cannot decide stays `unknown`: it never guesses.
+
+## Run it in three commands
+
+```bash
+git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git
+cd qnx-qx-portmap
+python3 -m qnx_portmap --quick abort accept bzero
+```
+
+Pure Python 3, standard library only: no SDK, no board.
+
+## Measured
+
+On 100 QNX symbols really called by five public QNX repositories: 95 resolved and quoted. 202 tests, no failure.
+```
+
+- Length (measured): 1187 characters
+- Field limit: **1 200 characters** (tableau 1.1, the reference table measured
+  on another form and relayed by the owner on 14/11/2026 22:20; see
+  `/consignes/SAVOIR/devpost.md`). Devpost publishes **no** limit for this
+  field: the "Project story*" question of the help article 126 carries no
+  number, and 119 public project descriptions measured on 15/11/2026 go from
+  637 to 48 663 characters (median 3 659).
+- **Which one to paste**: the form of the contest is behind a session, so the
+  two names of the official help ("Text Description", article 145, and
+  "Project story", article 126) cannot be told apart before Sunday. If the
+  form shows ONE description field, paste block 4.1a (1 170 characters). If it
+  shows TWO, paste 4.1a in the "Text Description" field and this block (1 187
+  characters) in the "Project story" field. Both are under the 1 200
+  characters of the reference table, so no paste can overflow it.
+
+### 4.1d Testing instructions - the block to paste in the "testing instructions" part of the description
+
+- Devpost field: **Instructions d'installation**
+
+<!-- BLOC:3_1d -->
+
+```markdown
+## Run it in three commands
+
+```bash
+git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git
+cd qnx-portmap && pip install .   # optional: the tool needs only the standard library
+python3 -m qnx_portmap --quick abort accept bzero zzz_fonction_inexistante
+```
+
+The install is optional and can fail on a locked-down Python (a system Python
+protected by PEP 668 refuses it, measured on 16 November 2026): the tool is
+pure standard library, the third command works with or without it, and
+`python3 -m qnx_portmap` is the same program as the `qnx-portmap` command an
+install gives.
+
+The third command is the **quick mode**: a first answer in about two to three
+minutes (76 pages in 127 s in the build environment, in 144 s in an
+independent replay, both measured on 16 November 2026, and in 149.1 s in a
+judge replay from a fresh clone on 18 November 2026, one request per second).
+It reads only the A-Z indexes of the QNX 8.0 and 7.1 C Library Reference, the
+official migration guide to 8.0 and the own page of each documented symbol.
+It says `absent` only for a symbol that the official migration guide (read in
+full) says was removed, quoting the sentence of the guide; any other symbol
+that only the full corpus can decide is reported `unknown`. Exit code **1** is
+expected here: `0` when every analysed symbol is documented in 8.0, `1` when
+at least one is absent or unknown, `2` on error.
+
+Real output of that run (one status line per symbol; the note, page, citation
+and detail lines are elided here; the complete session is in the repository
+README):
+
+```text
+  abort                        documented
+  accept                       described elsewhere
+  bzero                        unknown
+  zzz_fonction_inexistante     unknown
+```
+
+For the full answer (quotations, SHA-256, and `absent`), download the complete
+corpus once: **about 4,000 pages** of the official QNX documentation, one
+request per second, **budget about two hours** (1.7 to 2.0 s per page measured
+on 15 and 16 November 2026, and 1.87 s per page over a complete judge replay
+on 18 November 2026: 3,973 pages in 2 h 03, 0 failure). The tool then runs
+offline:
+
+```bash
+bash scripts/bootstrap_corpus.sh --out corpus-downloaded
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
+```
+
+Real output, executed on 15 November 2026 against the 3,426-page corpus
+(status lines only; the complete session is in the repository README):
+
+```text
+  abort                        documented
+  accept                       described elsewhere
+  bzero                        absent
+```
+
+Without a corpus the tool prints `corpus not found` and exits with code 2: it
+never invents an answer.
+```
+
+- Length (measured): 2673 characters
+- Field limit: **3 000 characters** (tableau 1.1). Devpost publishes no
+  separate limit for this field: the help article 126 lists the testing
+  instructions with the project story, and the form is behind a session.
+- This block is the testing-instructions part of the complete story (block
+  4.1b, unchanged), shortened to fit the declared limit: same commands, same
+  measured numbers, shorter prose. If the form has no separate field for
+  testing instructions, paste it at the end of the "Project story" field
+  (4.1a + 4.1d = 3 722 characters, far under the 48 663 characters observed
+  on public pages).
 
 ### 4.2 Built with tags
+
+- Devpost field: **Mots-cles** ("Built with tags", step 3)
 
 <!-- BLOC:3_2 -->
 
@@ -418,6 +660,8 @@ cli
   public project pages measured on 15/11/2026.
 
 ### 4.3 Try it Out links
+
+- Devpost field: **Liens/URL** ("Try it Out links", step 3)
 
 <!-- BLOC:3_3 -->
 
@@ -481,6 +725,8 @@ capture it belongs to already prints.
   screen is simulated in them.
 
 ### 4.5 Video demo link
+
+- Devpost field: **Video** ("Video demo link", step 3)
 
 <!-- BLOC:3_5 -->
 
@@ -555,11 +801,15 @@ Switzerland
 - Field limit: no limit published. The question is listed as "Countries of
   Residence*" in the Devpost help, article 126, read 15/11/2026. Switzerland is
   not an excluded country: the QNX rules exclude "Brazil, Russia, Crimea,
-  Cuba, Iran, North Korea" and the countries sanctioned by OFAC, and
+  Cuba, Iran, and North Korea and any other country which is comprehensively
+  sanctioned by the U.S. Treasury's Office of Foreign Assets Control", and
   Switzerland is not among them (`https://qnx.devpost.com/rules`, section
-  "Eligibility", read 15/11/2026).
+  "Eligibility", re-read on 18/11/2026; the page does not contain the word
+  "Switzerland": `grep -ci Switzerland` returns 0).
 
 ### 5.3 Category
+
+- Devpost field: **Categorie** ("Category", step 4)
 
 <!-- BLOC:4_3 -->
 
@@ -576,6 +826,8 @@ Developer Tooling & Host Tools
   (`https://qnx.devpost.com/`, read 15/11/2026).
 
 ### 5.4 URL to your code repository
+
+- Devpost field: **Lien d'installation** ("URL to your code repository", step 4)
 
 <!-- BLOC:4_4 -->
 
@@ -621,6 +873,8 @@ Yes - the repository is public and can be cloned without an account.
   available*" in the Devpost help, article 126, read 15/11/2026.
 
 ### 5.7 Evidence of QNX use
+
+- Devpost field: **Preuve QNX** ("Evidence of QNX use", step 4; not one of the 10 fields of tableau 1.1)
 
 <!-- BLOC:4_7 -->
 
@@ -669,8 +923,10 @@ README.
 
 The measurement on real QNX code is in `docs/mesure-J5.md`: 100 QNX symbols
 really called by five public QNX repositories, pinned commits, classified by
-the tool, 96 resolved and quoted with the URL and the SHA-256 of the cited
-page. The cited pages are in `docs/mesure-J5/citations-*.txt`.
+the tool, 95 resolved and quoted with the URL and the SHA-256 of the cited
+page; `InterruptAttach` is reported removed in 8.0 according to the official
+migration guide, sentence quoted. The cited pages are in
+`docs/mesure-J5/citations-*.txt`.
 
 What is not claimed: the project has not been compiled or executed on a QNX
 8.0 target, because the QNX SDP 8.0 licence is not available in this
@@ -679,7 +935,7 @@ with the standard library only, and its output is specifically intended to
 analyse and manage software for QNX 8.0.
 ```
 
-- Length (measured): 2854 characters
+- Length (measured): 2959 characters
 - Field limit: no limit published for this field. The requirement comes from
   the rules: "Evidence of QNX use : Your submission must explain how the
   project uses or supports QNX. Evidence may include QNX-specific source code
@@ -693,6 +949,8 @@ analyse and manage software for QNX 8.0.
   "Submission Requirements", read 15/11/2026).
 
 ### 5.8 Codelab URL (only if the Best Codelab / Tutorial bonus is claimed)
+
+- Devpost field: **Liens/URL** ("Codelab URL", step 4)
 
 <!-- BLOC:4_8 -->
 
@@ -724,6 +982,32 @@ https://github.com/tgg49099-dotcom/qnx-qx-portmap/blob/main/docs/CODELAB-COMMUNI
   tutorial does not depend on it.
 - The bonus is 3,500 USD, 1 winner
   (`https://qnx.devpost.com/`, section "Prizes", read 15/11/2026).
+
+### 5.8b Description du bonus (the text of the "Best Codelab / Tutorial" field)
+
+- Devpost field: **Description du bonus** ("Best Codelab / Tutorial", step 4)
+
+<!-- BLOC:4_8b -->
+
+```text
+This tutorial is a codelab for QNX 8.0: find out which of the QNX calls your project makes are still documented in QNX 8.0.
+
+You maintain C code that calls the QNX C Library and you have to move it to QNX 8.0. The call itself is not the hard part; knowing which of the calls your code makes still exist in the QNX 8.0 documentation, which ones moved to another book, and which ones disappeared - each case needs a different decision in your port.
+
+In about 30 minutes you do that job twice: by hand on the official QNX 8.0 documentation (about 10 minutes, the method that works with no tool at all), then with QX PORTMAP, the tool of this repository (about 5 minutes): the same work, automated, reproducible and quotable. Every answer comes with the official page, the exact quotation taken from it and the SHA-256 of the page, so a reader can check the answer without trusting the tool.
+
+The tutorial is in English, published in the public repository during the submission period, and needs nothing but Python 3: no QNX SDP, no board, no licence, no account. It ends with the work list of the calls that need a decision, which is exactly the deliverable of a port to QNX 8.0.
+```
+
+- Length (measured): 1176 characters
+- Field limit: 1 200 characters (tableau 1.1, the reference table relayed by
+  the owner on 14/11/2026 22:20). Devpost publishes no limit for this field.
+- The URL of the codelab is the block above (5.8); this block is the text
+  that goes with it. The kit of 15/11/2026 prepared only the URL.
+- Every fact of this text is measured: the codelab is published in the public
+  repository (`docs/CODELAB-COMMUNITY-QNX.md`, HTTP 200 on 17/11/2026), it is
+  in English, it needs nothing but Python 3, and it ends with the work list
+  of the calls that need a decision.
 
 ### 5.9 File upload (optional field, not used)
 
