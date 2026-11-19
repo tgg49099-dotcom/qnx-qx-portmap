@@ -1,9 +1,10 @@
 # QX PORTMAP - Devpost submission kit (QNX Global Hackathon)
 
-**Version 4 - 19 November 2026.** This file replaces the kit of 15/11/2026,
-which stays in the git history of this repository at commit `1b46b69`. The
-version of 18/11/2026 (md5 `3d57c6aae4b9efe06407aef5e1ce9c79`) was never
-added to this repository: only the current version is published here. What
+**Published version of 19 November 2026.** This file replaces the kit of
+15/11/2026, which stays in the git history of this repository at commit
+`1b46b69`, and the version of 19/11/2026 published at commit `2b0704f`,
+which stays there too. The version of 18/11/2026 (md5
+`3d57c6aae4b9efe06407aef5e1ce9c79`) was never added to this repository. What
 changed in the version of 18/11, and what changed on top of it:
 
 | # | Change | Why | Evidence |
@@ -26,9 +27,10 @@ by a command of this repository, which fails if one of them is wrong:
 python3 tools/mesure_kit.py --check
 ```
 
-Prepared on 15 November 2026. Every block below is the text to paste into the
-Devpost submission form, in the order of the form. All the text to paste is in
-English, because the contest rules require English submission materials:
+Prepared on 15 November 2026, revised on 19 November 2026. Every block below
+is the text to paste into the Devpost submission form, in the order of the form.
+All the text to paste is in English, because the contest rules require English
+submission materials:
 
 > "All Submission materials must be in English or, if not in English, the
 > Entrant must provide an English translation of the demonstration video, text
@@ -250,11 +252,11 @@ On 100 QNX symbols really called by five public QNX repositories: 95 resolved an
 
 - Length (measured): 1170 characters
 - Field limit: **1 200 characters** (tableau 1.1, the reference table measured
-  on another form and relayed by the owner on 14/11/2026 22:20; see
-  `/consignes/SAVOIR/devpost.md`). Devpost publishes **no** limit for this
-  field: the "Text Description*" question of the help article 145 carries no
-  number, and 119 public project descriptions measured on 15/11/2026 go from
-  637 to 48 663 characters (median 3 659). This block is the one that fits
+  on another form and relayed by the owner on 14/11/2026 22:20). Devpost
+  publishes **no** limit for this field: the "Text Description*" question of
+  the help article 145 carries no number, and 119 public project descriptions
+  measured on 15/11/2026 go from 637 to 48 663 characters (median 3 659).
+  This block is the one that fits
   the declared limit; block 4.1b is the same story with every section, for
   the judge who has the room for it.
 - The paragraph "How this differs from our other entry" is kept in this short
@@ -540,11 +542,10 @@ On 100 QNX symbols really called by five public QNX repositories: 95 resolved an
 
 - Length (measured): 1187 characters
 - Field limit: **1 200 characters** (tableau 1.1, the reference table measured
-  on another form and relayed by the owner on 14/11/2026 22:20; see
-  `/consignes/SAVOIR/devpost.md`). Devpost publishes **no** limit for this
-  field: the "Project story*" question of the help article 126 carries no
-  number, and 119 public project descriptions measured on 15/11/2026 go from
-  637 to 48 663 characters (median 3 659).
+  on another form and relayed by the owner on 14/11/2026 22:20). Devpost
+  publishes **no** limit for this field: the "Project story*" question of the
+  help article 126 carries no number, and 119 public project descriptions
+  measured on 15/11/2026 go from 637 to 48 663 characters (median 3 659).
 - **Which one to paste**: the form of the contest is behind a session, so the
   two names of the official help ("Text Description", article 145, and
   "Project story", article 126) cannot be told apart before Sunday. If the
@@ -753,6 +754,11 @@ https://youtu.be/UMmxNlxkEi0
   the three minutes the rules ask for. The URL above was checked from outside
   the build environment on 17/11/2026: HTTP 200 on the YouTube oEmbed of
   `https://youtu.be/UMmxNlxkEi0`, with that title and that channel.
+- **The figures stated in the video are the figures of its day**: it says
+  96 %, which was the published rate on 17 November 2026, the day it was
+  published. The tool was changed on 19 November 2026 and the published rate
+  is now 95 % (change C8 above): the video shows the tool as it was on
+  17/11, the documents of this repository show the tool as it is.
 - It is not a title card: the video shows the tool running in a real
   terminal, filmed from a fresh clone of this public repository - the quick
   mode against the official QNX documentation (the A-Z indexes of the QNX 7.1
