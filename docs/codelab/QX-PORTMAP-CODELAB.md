@@ -291,14 +291,17 @@ cd qnx-qx-portmap && QX_PORTMAP_CORPUS=$PWD/corpus-downloaded python3 -m qnx_por
 corpus: <CORPUS>
 pages checked: <N>
 page SHA-256: OK
-SHA256SUMS: OK (<N>+1 files)
+SHA256SUMS: OK (<M> files)
 ```
 
 `<N>` is the number of pages your own download produced: 3 973 pages measured
 on 18 November 2026, while the frozen snapshot used for the proofs of this
-repository holds 3 426 pages. Every page is compared with the SHA-256 of the
-official page it was downloaded from, and the checksum file of the snapshot is
-checked too. The command exits with code 0.
+repository holds 3 426 pages. `<M>` is the number of files the checksum file
+of your snapshot lists: 3 427 for the frozen one (its 3 426 pages and its
+index), 7 948 for a snapshot rebuilt in step 5, which also lists the download
+cache and the log. Every page is compared with the SHA-256 of the official
+page it was downloaded from, and the checksum file of the snapshot is checked
+too. The command exits with code 0.
 
 ## Step 8 - Extract the calls of your own code
 
@@ -328,9 +331,11 @@ QX_PORTMAP_CORPUS=$PWD/corpus-downloaded python3 -m qnx_portmap --stdin --format
 ```
 
 **You should see:** a `state.json` file with one entry per call. Here is the
-real output for the three calls of step 8, measured on 19 November 2026
-against the frozen snapshot of the repository (with your own download, the
-path of the corpus, the page counts and the consultation date change):
+real output for the three calls of step 8, measured on 20 November 2026
+against the frozen snapshot of the repository. With your own download, the
+path of the corpus, the page counts and the consultation date change; the
+consultation date also appears inside the `note` of the symbols that are not
+found ("unknown symbol, typo, or added after `<your date>`").
 
 ```json
 {
@@ -358,28 +363,46 @@ path of the corpus, the page counts and the consultation date change):
    "url": "https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html",
    "citation": "Raise the SIGABRT signal to terminate program execution",
    "citation_source": "index C Library Reference 8.0",
+   "citation_kind": "",
+   "see_urls": [],
+   "mentioned_in_migration_guide": false,
+   "migration_urls": [],
+   "detail": "The abort() function causes abnormal process termination to occur by means of the function call raise ( SIGABRT ) , unless the signal SIGABRT is caught and the signal handler doesn't return. If the signal SIGABRT is caught and the signal handler returns, the signal handler is removed and raise ( SIGABRT ) is called again. Note that prior to calling raise() , abort() ensures that SIGABRT isn't ignored or blocked.",
+   "note": "present in 7.1 and in 8.0",
    "priority": 0
   },
   {
    "symbol": "bzero",
    "status": "absent",
-   "kind": "function",
+   "kind": "",
    "in_71": true,
    "in_80": false,
    "url": "https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html",
    "citation": "Set the first part of an object to null bytes",
    "citation_source": "index C Library Reference 7.1",
+   "citation_kind": "index entry",
+   "see_urls": [],
+   "mentioned_in_migration_guide": false,
+   "migration_urls": [],
+   "detail": "",
+   "note": "present in the C Library Reference 7.1, absent from the whole 8.0 corpus",
    "priority": 2
   },
   {
    "symbol": "f",
    "status": "unknown",
-   "kind": "function",
+   "kind": "",
    "in_71": false,
    "in_80": false,
    "url": "",
    "citation": "",
    "citation_source": "",
+   "citation_kind": "",
+   "see_urls": [],
+   "mentioned_in_migration_guide": false,
+   "migration_urls": [],
+   "detail": "",
+   "note": "not found in the frozen 8.0 corpus: unknown symbol, typo, or added after 2026-11-14",
    "priority": 0
   }
  ],
@@ -387,9 +410,19 @@ path of the corpus, the page counts and the consultation date change):
   {
    "symbol": "bzero",
    "status": "absent",
-   "priority": 2,
+   "kind": "",
+   "in_71": true,
+   "in_80": false,
    "url": "https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html",
-   "citation": "Set the first part of an object to null bytes"
+   "citation": "Set the first part of an object to null bytes",
+   "citation_source": "index C Library Reference 7.1",
+   "citation_kind": "index entry",
+   "see_urls": [],
+   "mentioned_in_migration_guide": false,
+   "migration_urls": [],
+   "detail": "",
+   "note": "present in the C Library Reference 7.1, absent from the whole 8.0 corpus",
+   "priority": 2
   }
  ],
  "counts": {
@@ -427,6 +460,26 @@ cd qnx-qx-portmap && bash scripts/verify-all.sh
 ```text
 VERDICT: NO CHECK FAILED - 6/8 OK, 2 NOT CHECKED (RC 0)
 ```
+
+**Run it on a fresh clone.** The checks compare the published tree with the
+published proofs, so they are meant to be run on a clone that has not been
+modified. If you run the command after the steps above, the steps have
+written `corpus-quick/`, `corpus-downloaded/`, `calls.txt`, `my_code.c` and
+`state.json` into the clone, the manifest no longer matches the tree, and the
+command prints (measured on 20 November 2026):
+
+```text
+VERDICT: FAILED AND NOT CHECKED - 1 check(s) FAILED and
+         4 check(s) could not run out of 8 (RC 1)
+         this is NOT a success: the table above says which row is which.
+```
+
+The failing row is `published manifest` ("the published manifest is
+obsolete") and the RED counter-proof is then `NOT CHECKED` ("the working copy
+is not clean"). Nothing is disproved: the same command on a fresh clone
+gives the verdict above. To check the tree after the steps, run
+`python3 scripts/manifeste_publie.py` to regenerate the manifest, and
+`git status` to see what the steps wrote.
 
 The eight checks are the unit test suite, the anti-leak control of the corpus,
 the published manifest, the published numbers, the parity of the README, the
@@ -502,7 +555,11 @@ is kept in
    `bash scripts/bootstrap_corpus.sh --out corpus-downloaded`, which writes
    `corpus-downloaded/index/pages.jsonl` and `corpus-downloaded/SHA256SUMS`.
    Without it the tool says `corpus not found` and exits with code 2 - that
-   is the correct behaviour, not a broken tool.
+   is the correct behaviour, not a broken tool. The script never overwrites
+   an existing corpus: if the directory you pass with `--out` already holds
+   one (a second run of step 4, for example), it stops with
+   `bootstrap_corpus: refus : ... contient deja un corpus fige` and asks for
+   `--force` or for another `--out`.
 2. **`unknown` is not `absent`.** In the quick mode, `bzero` is `unknown`,
    because only the A-Z indexes and the migration guide were read; only the
    complete snapshot can decide `absent` or `described_elsewhere` for a symbol

@@ -606,7 +606,7 @@ published numbers of the README            OK           every published count is
 parity of the README output block          NOT CHECKED  the frozen corpus is absent here               0
 RED counter-proof                          OK           10 / 10 rules counter-proved                   0
 lengths of the submission kit              OK           every measured length matches the text         0
-placeholders and draft banners             OK           nothing left in the 70 published documents     0
+placeholders and draft banners             OK           nothing left in the 71 published documents     0
 ======================================================================================================
 VERDICT: NO CHECK FAILED - 6/8 OK, 2 NOT CHECKED (RC 0)
          the check(s) that could not run on this machine are named in the
