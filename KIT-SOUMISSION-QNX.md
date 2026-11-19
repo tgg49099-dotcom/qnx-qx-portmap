@@ -890,26 +890,28 @@ QNX 8.0: it tells a QNX 8.0 developer whether each symbol their code calls is
 still documented in the official QNX SDP 8.0 documentation, and where.
 
 The relevant files, in the public repository
-https://github.com/tgg49099-dotcom/qnx-qx-portmap :
+https://github.com/tgg49099-dotcom/qnx-qx-portmap:
 
 - `qnx_portmap/extract.py` parses the index page of the QNX 8.0 C Library
   Reference (`parse_index_page`) and the topic pages (`parse_topic_page`), and
   extracts the "Description" section of a symbol page.
 - `qnx_portmap/classify.py` (`Classifier`) decides the four states of a symbol
   in QNX 8.0: documented, described elsewhere, absent, unknown. The
-  "described elsewhere" case is what links a symbol to the page of the QNX 8.0
+  "described elsewhere" case links a symbol to the page of the QNX 8.0
   io-sock User's Guide or of the QNX SDP 8.0 migration guide that describes
   it.
-- `qnx_portmap/corpus.py` reads the frozen corpus (`corpus/index/pages.jsonl`),
-  where the SHA-256 of every page is recorded, and checks them against
-  `corpus/SHA256SUMS` on demand (`qnx-portmap --verify-corpus`), so the
-  quotation comes from the page it names.
+- `qnx_portmap/corpus.py` reads the corpus snapshot: it is not redistributed
+  with this repository (licence). It is rebuilt by
+  `bash scripts/bootstrap_corpus.sh --out corpus-downloaded`, which writes
+  `corpus-downloaded/index/pages.jsonl` (the index) and
+  `corpus-downloaded/SHA256SUMS` (the fingerprints of the files).
+  `qnx-portmap --verify-corpus` compares the SHA-256 of every page with the
+  index, so the quotation comes from the page it names.
 - `qnx_portmap/cli.py` and `qnx_portmap/report.py` produce the output.
 
 The output to look at: for each symbol, the official QNX 8.0 page and the exact
-quotation taken from that page; the SHA-256 of that page is in
-`corpus/index/pages.jsonl`, and `qnx-portmap --verify-corpus` checks every page
-of the snapshot against its fingerprint. Example, executed on 15 November 2026:
+quotation taken from that page; its SHA-256 is in the snapshot index,
+`corpus-downloaded/index/pages.jsonl`. Example, executed on 15 November 2026:
 
   abort    documented
     page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
@@ -924,8 +926,7 @@ of the snapshot against its fingerprint. Example, executed on 15 November 2026:
     page   : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
 
 The same three symbols are shown in French with `--lang fr` in the
-description block, and the table of the console labels is in the repository
-README.
+description block; the console labels are in the repository README.
 
 The measurement on real QNX code is in `docs/mesure-J5.md`: 100 QNX symbols
 really called by five public QNX repositories, pinned commits, classified by
@@ -936,9 +937,8 @@ migration guide, sentence quoted. The cited pages are in
 
 What is not claimed: the project has not been compiled or executed on a QNX
 8.0 target, because the QNX SDP 8.0 licence is not available in this
-environment. The tool itself needs no QNX target to run, it is pure Python 3
-with the standard library only, and its output is specifically intended to
-analyse and manage software for QNX 8.0.
+environment. The tool itself needs no QNX target to run: it is pure Python 3,
+standard library only.
 ```
 
 - Length (measured): 2959 characters
