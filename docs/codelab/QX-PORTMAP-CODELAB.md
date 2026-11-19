@@ -424,15 +424,29 @@ cd qnx-qx-portmap && bash scripts/verify-all.sh
 **You should see:** a table with one row per check, and then the verdict:
 
 ```text
-VERDICT: EVERY CHECK PASSED - 8/8 OK (RC 0)
+VERDICT: NO CHECK FAILED - 6/8 OK, 2 NOT CHECKED (RC 0)
 ```
 
 The eight checks are the unit test suite, the anti-leak control of the corpus,
 the published manifest, the published numbers, the parity of the README, the
 RED counter-proof, the lengths of the submission kit and the placeholders of
-the documents. Without the frozen corpus next to the package, the rows that
-could not run are reported `NOT CHECKED` and never `OK` - the command still
-exits with code 0, because nothing was disproved.
+the documents. The two rows that need the corpus - the anti-leak control and
+the parity of the README - are reported `NOT CHECKED`, never `OK`, because the
+QNX documentation is not redistributed; the command still exits with code 0,
+because nothing was disproved.
+
+With the corpus of the project - the one the published proofs were made with,
+that the repository does not redistribute - the same command replays every
+proof and prints:
+
+```text
+VERDICT: EVERY CHECK PASSED - 8/8 OK (RC 0)
+```
+
+(measured on 19 November 2026: 202 tests and 1 skipped, 0 match with the QNX
+documentation, `MANIFESTE-PUBLIE.txt lists 127 files`, every published count
+is the real one, 10 / 10 rules counter-proved, nothing left in the 71
+published documents.)
 
 The unit test suite alone:
 
@@ -449,9 +463,16 @@ OK (skipped=33)
 ```
 
 (202 tests, 33 skipped, exit code 0 - measured on 19 November 2026; only the
-duration changes from one machine to another. With the corpus available, the
-same suite gives 202 tests, 1 skipped, exit code 0. The 33 skipped tests are
-the ones that need the corpus: they are skipped, never failed.)
+duration changes from one machine to another. The 33 skipped tests are the
+ones that need the corpus: they are skipped, never failed.)
+
+**One warning about the suite:** if you exported `QX_PORTMAP_CORPUS` in your
+shell, unset it first. The README example is the output of the project
+against *its* corpus, so the comparison test fails by design with another one
+(`FAIL: test_readme_shows_the_real_output`, measured on 19 November 2026 with
+a 76-page corpus). The commands of steps 6 and 7 set the variable for that
+command only, so a plain `unset QX_PORTMAP_CORPUS` is enough. The suite also
+needs room in the temporary directory (145 MB, see trap 4).
 
 And the RED counter-proof, which breaks one rule of the code at a time and
 checks that the matching test turns red:
@@ -460,12 +481,16 @@ checks that the matching test turns red:
 cd qnx-qx-portmap && python3 tools/contre_epreuve.py
 ```
 
-**You should see:** `11 / 11 contre-epreuves concluantes` (11 rules broken, 11
-tests caught them, exit code 0). The output of the day is kept in
+**You should see:** `10 / 10 contre-epreuves concluantes` (10 rules broken, 10
+tests caught them, exit code 0) and the line `regle non testable ici (corpus
+absent) : integrite du corpus fige livre`: the eleventh rule checks the
+SHA-256 of every page of the corpus shipped with the tool, and the corpus is
+not redistributed, so it cannot be tested in your clone. The output of the day
+is kept in
 [`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`](../preuves/i-contre-epreuve-rouge-avec-corpus.txt)
-(11/11 with the corpus) and in
+(11 / 11 with the corpus present) and in
 [`docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt`](../preuves/c-contre-epreuve-rouge-sans-corpus.txt)
-(10/10 without it).
+(10 / 10 without it).
 
 ## The traps
 
