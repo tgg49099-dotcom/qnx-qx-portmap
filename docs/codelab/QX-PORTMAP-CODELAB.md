@@ -82,29 +82,59 @@ PEP 668 refuses `pip install .`: use `python3 -m venv .venv` in that case.
 cd qnx-qx-portmap && python3 -m qnx_portmap --quick abort accept bzero zzz_fonction_inexistante
 ```
 
-**You should see** (the real output of 19 November 2026; only the path of
-the small corpus and the date of the run change from one machine to another):
+**You should see** (the real output of 19 November 2026, complete; only the
+path of the small corpus, the date and the duration of the run change from one
+machine to another):
 
 ```text
-qnx-portmap: quick mode, downloading to corpus-quick
+qnx-portmap: quick mode, downloading to <REPO>/corpus-quick
   index 8.0: 26 pages
   index 7.1: 26 pages
   migration guide 8.0: 23 pages
   own pages of the documented symbols: 1
 qnx-portmap: small corpus ready: 76 pages in 150.7 s
 QX PORTMAP - status of QNX symbols in the 8.0 documentation
-quick-mode small corpus: corpus-quick
+quick-mode small corpus: <REPO>/corpus-quick
 pages: 76 (7.1: 26, 8.0: 50) - downloaded on 2026-11-19 - quick mode (A-Z indexes and migration guide only; "absent" only when the guide announces the removal)
 
   abort                        documented
+    page   : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html
+    citation (index C Library Reference 8.0) :
+      Raise the SIGABRT signal to terminate program execution
+    detail :
+      The abort() function causes abnormal process termination to occur by means of the function
+      call raise ( SIGABRT ) , unless the signal SIGABRT is caught and the signal handler doesn't
+      return. If the signal SIGABRT is caught and the signal handler returns, the signal handler is
+      removed and raise ( SIGABRT ) is called again. Note that prior to calling raise() , abort()
+      ensures that SIGABRT isn't ignored or blocked.
     note   : present in 7.1 and in 8.0
+
   accept                       described elsewhere
+    page   : https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
+    see    : https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html
+    citation (index C Library Reference 8.0, section "described elsewhere") :
+      FreeBSD documentation (
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports ) and
+      Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
+    * cited by the official migration guide 8.0: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
     note   : described in the 8.0 documentation but without a page of its own in the C Library Reference
+
   bzero                        unknown
+    page   : https://www.qnx.com/developers/docs/7.1/com.qnx.doc.neutrino.lib_ref/topic/b/bzero.html
+    citation (index C Library Reference 7.1, index entry) :
+      Set the first part of an object to null bytes
     note   : quick mode: in the 7.1 C Library Reference index, not in the 8.0 index; the other 8.0 books were not read, so absent or described elsewhere is decided by the full corpus (scripts/bootstrap_corpus.sh)
+
   zzz_fonction_inexistante     unknown
     note   : quick mode: in neither the 8.0 nor the 7.1 index; the other 8.0 books were not read (full corpus: scripts/bootstrap_corpus.sh)
 
+--- Upgrade worklist (1 symbol(s)) ---
+P3  accept                     described elsewhere
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports
+      FreeBSD documentation (
+      https://man.freebsd.org/cgi/man.cgi?query=accept&manpath=FreeBSD+14.4-RELEASE+and+Ports )
+      and Networking APIs in the High-Performance Networking Stack (io-sock) User's Guide .
+      cited by the migration guide: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/migrate_app.html
 (+ 2 unknown symbol(s), not decided by the quick mode: bzero, zzz_fonction_inexistante - the full corpus decides them)
 ```
 
@@ -114,7 +144,8 @@ That is the expected answer, not a failure of the tool.
 The quick mode reads only the 26 A-Z index pages of the 8.0 and 7.1 C Library
 Reference, the 23 pages of the official migration guide and the page of each
 symbol it needs: 76 pages in total, 150.7 seconds at one request per second
-(measured on 19 November 2026; the tool prints the duration of **your** run).
+(measured on 19 November 2026; a second run in a fresh clone of the published
+commit took 147.5 s; the tool prints the duration of **your** run).
 It writes its small snapshot in `corpus-quick/`, which the tool prints on its
 first line; you can delete that directory at the end.
 
@@ -181,7 +212,9 @@ same command again**: the pages already downloaded are kept in
 cd qnx-qx-portmap && QX_PORTMAP_CORPUS=$PWD/corpus-downloaded python3 -m qnx_portmap abort accept bzero
 ```
 
-**You should see:**
+**You should see** (the real output measured on 19 November 2026 against the
+frozen snapshot of the repository, 3 426 pages; with your own download only the
+path, the page count and the consultation date change):
 
 ```text
 QX PORTMAP - status of QNX symbols in the 8.0 documentation
@@ -279,11 +312,13 @@ grep -ohE '[A-Za-z_][A-Za-z0-9_]*[[:space:]]*\(' my_code.c | tr -d '( \t' | sort
 void f(void) { abort(); bzero(p, 10); }
 ```
 
-`calls.txt` holds 3 lines: `abort`, `bzero` and `f`. Your own function `f` is
-in the list too - the tool will call it `unknown`, which is right: it is not a
-QNX call. Without the last filter of the pipeline, every word of the file
-(`include`, `stdlib`, `h`, `p`, `void`) would come back as an `unknown`
-symbol and hide the real work list.
+`calls.txt` holds 3 lines: `abort`, `bzero` and `f` (measured on 19 November
+2026). Your own function `f` is in the list too - the tool will call it
+`unknown`, which is right: it is not a QNX call. The last filter of the
+pipeline removes the C keywords that the pattern catches as well (`if`,
+`for`, `while`, `switch`, `return`, `sizeof`, `main`): on this three-line
+example it changes nothing, on a real file it keeps a dozen keywords out of
+the `unknown` symbols and out of the work list.
 
 ## Step 9 - Ask about your own calls
 
@@ -292,8 +327,9 @@ QX_PORTMAP_CORPUS=$PWD/corpus-downloaded python3 -m qnx_portmap --stdin --format
 ```
 
 **You should see:** a `state.json` file with one entry per call. Here is the
-real output for the three calls of step 8 (the corpus path is the only field
-that changes from one machine to another):
+real output for the three calls of step 8, measured on 19 November 2026
+against the frozen snapshot of the repository (with your own download, the
+path of the corpus, the page counts and the consultation date change):
 
 ```json
 {
@@ -407,15 +443,15 @@ cd qnx-qx-portmap && python3 -m unittest discover -s tests -t .
 **You should see:**
 
 ```text
-Ran 202 tests in 0.8s
+Ran 202 tests in 1.335s
 
 OK (skipped=33)
 ```
 
-(202 tests, 33 skipped, exit code 0 - measured on 19 November 2026. With the
-corpus available, the same suite gives 202 tests, 1 skipped, exit code 0. The
-33 skipped tests are the ones that need the corpus: they are skipped, never
-failed.)
+(202 tests, 33 skipped, exit code 0 - measured on 19 November 2026; only the
+duration changes from one machine to another. With the corpus available, the
+same suite gives 202 tests, 1 skipped, exit code 0. The 33 skipped tests are
+the ones that need the corpus: they are skipped, never failed.)
 
 And the RED counter-proof, which breaks one rule of the code at a time and
 checks that the matching test turns red:
