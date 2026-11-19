@@ -234,7 +234,11 @@ tutorial is **published** in this repository:
 [`docs/CODELAB-COMMUNITY-QNX.md`](docs/CODELAB-COMMUNITY-QNX.md)
 (<https://github.com/tgg49099-dotcom/qnx-qx-portmap/blob/main/docs/CODELAB-COMMUNITY-QNX.md>)
 - it teaches a task for QNX 8.0: find out which of the QNX calls your
-project makes are still documented in QNX 8.0. The proposal of a post on
+project makes are still documented in QNX 8.0. The same task, as a tutorial
+with numbered steps and one command per step, is
+[`docs/codelab/QX-PORTMAP-CODELAB.md`](docs/codelab/QX-PORTMAP-CODELAB.md)
+(<https://github.com/tgg49099-dotcom/qnx-qx-portmap/blob/main/docs/codelab/QX-PORTMAP-CODELAB.md>).
+The proposal of a post on
 `community.qnx.com` is kept in
 [`docs/CODELAB-FORUM-PROPOSITION.md`](docs/CODELAB-FORUM-PROPOSITION.md).
 
@@ -597,7 +601,7 @@ VERIFICATION                               RESULT       DETAIL                  
 ------------------------------------------ ------------ ------------------------------------------------ ----
 unit test suite                            OK           202 tests, 33 skipped                          0
 anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
-published manifest                         OK           MANIFESTE-PUBLIE.txt lists 126 files           0
+published manifest                         OK           MANIFESTE-PUBLIE.txt lists 127 files           0
 published numbers of the README            OK           every published count is the real one          0
 parity of the README output block          NOT CHECKED  the frozen corpus is absent here               0
 RED counter-proof                          OK           10 / 10 rules counter-proved                   0
