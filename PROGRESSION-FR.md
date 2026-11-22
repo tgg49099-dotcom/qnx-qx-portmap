@@ -4,6 +4,8 @@ Une ligne par fonction de l'outil : **nom**, ce qu'elle fait, son etat, le test 
 Etat = `fait` (implemente et teste) / `partiel` (fait mais incomplet) / `prevu` (non fait).
 
 Ce fichier est la carte de l'outil. Il est mis a jour a chaque cycle, avant le rapport.
+La version anglaise est dans `PROGRESSION.md` ; elle suit les memes sections, cycle par
+cycle, et les deux fichiers portent maintenant les memes sections dans le meme ordre.
 
 ---
 
@@ -191,6 +193,148 @@ Points d'honnetete traites cette fois :
    donc soumis au gel) ? Faut-il un README **integralement** en anglais ?
 3. Ne rien faire sans instruction : nouvelle fonction du moteur, publication Devpost, video,
    compte, message a Tgg.
+
+## Avance de ce cycle (15/11/2026, le depot public en anglais)
+
+**Un juge qui ouvre le depot public ne lit plus aucun francais**, sauf ce qui est
+volontaire : les versions francaises conservees a l'octet pres, la sortie brute de
+la console et les deux blocs VERBATIM du README.
+
+Ce qui a ete fait, sans toucher au moteur fige (`qnx_portmap/` est inchange depuis
+`395ffc2`) :
+
+- `PROGRESSION.md`, `qnx_portmap/LISEZMOI.md`, `docs/mesure-J4.md`, `docs/mesure-J5.md`
+  et les **10 pages de citations** des deux mesures sont maintenant en anglais ; leurs
+  originaux francais sont conserves a l'octet pres dans `PROGRESSION-FR.md`,
+  `qnx_portmap/LISEZMOI-FR.md`, `docs/mesure-J4-FR.md`, `docs/mesure-J5-FR.md` et
+  `docs/mesure-J4/citations-*-FR.txt`, `docs/mesure-J5/citations-*-FR.txt` ;
+- `tools/mesure_j4.py` et `tools/mesure_j5.py` ont gagne une option `--lang` : les
+  rapports **et** les pages de citations sont **produits par l'outil lui-meme** en
+  anglais (`--lang en`) et toujours en francais (`--lang fr`, a l'octet pres identique
+  aux fichiers historiques). Relancer l'outil avec `--lang fr` sur le meme corpus et
+  les memes 5 clones fixes reproduit les 10 pages de citations francaises **octet pour
+  octet** (preuve : `cmp` sur les 10 fichiers), et les pages anglaises portent
+  **exactement les memes chiffres et exactement les memes citations QNX** que les pages
+  francaises ;
+- les tests `tests/test_mesure_j4.py` / `tests/test_mesure_j5.py` verifient que
+  **chaque chiffre du rapport anglais est le chiffre du JSON publie** (la sortie de
+  l'outil lui-meme), que les deux versions contiennent les memes chiffres, et que les
+  pages de citations anglaises et francaises ont les memes chiffres et les memes
+  citations ;
+- la contre-epreuve ROUGE des rapports anglais est publiee dans
+  `docs/preuves/l-rapport-anglais-rouge.txt` : changer un chiffre de
+  `docs/mesure-J4.md` (93 % -> 94 %) et les tests echouent (4 echecs), restaurer le
+  fichier a l'octet pres et ils repassent ;
+- `MANIFESTE-PUBLIE.txt` est ecrit en anglais (`scripts/manifeste_publie.py`), il liste
+  les nouveaux fichiers et `scripts/manifeste_publie.py --check` renvoie 0.
+
+Resultat : **0 ligne francaise** dans l'arbre publie hors de la liste blanche (les
+versions francaises, la sortie brute de la console conservee dans les deux blocs
+VERBATIM du README et sa table de traduction). Les chiffres sont inchanges : **J4 = 93 %**,
+**J5 = 96 %**, **170 tests**.
+
+## Avance de ce cycle (15/11/2026, l'anglais devient la langue par defaut de la console)
+
+Direction du 15/11 21:26 : **un seul objectif pour deux cycles** - la langue par defaut
+de la console de QX PORTMAP devient **l'anglais**.
+
+- le defaut du CLI est maintenant l'anglais (`qnx_portmap/cli.py`) : `--lang` vaut `en`
+  par defaut, et les deux textes d'aide donnent le vrai defaut ("output language
+  (default: en)" et "langue de sortie (defaut : en)") ;
+- **les octets de la console n'ont pas change** : la sortie par defaut est la sortie
+  anglaise de la veille (`md5 3a4b722c9fd149c7a17abc88b81ab2fb`, 2 901 octets, code de
+  sortie 1) et `--lang fr` affiche toujours la sortie francaise de la veille
+  (`md5 6e0efa2ee1f4b8f920e51f8d6bbf8436`, 2 964 octets, code de sortie 1) - les deux
+  mesurees le 15/11/2026 avec le corpus fige, le chemin du corpus remplace par
+  `<CORPUS>` ;
+- les commentaires et les docstrings de `qnx_portmap/`, `tools/` et `scripts/` sont en
+  anglais (aucun changement de comportement, aucun chiffre ecrit a la main) ;
+- le README, le kit de soumission, le plan video, `docs/UTILISATION.md` et les deux
+  LISEZMOI decrivent le defaut anglais ; le demarrage rapide est la commande **sans**
+  `--lang` ;
+- `tests/test_readme_en.py` verifie maintenant la sortie **par defaut** (son marqueur a
+  change) et un nouveau test prouve que `--lang fr` rend toujours les octets
+  francais ;
+- `docs/mesure-J4.md` et `docs/mesure-J5.md` ont ete regeneres par
+  `tools/mesure_j4.py` et `tools/mesure_j5.py` (anglais) ; les versions francaises et
+  les 20 pages de citations n'ont pas bouge (octet pour octet) ;
+- les fichiers francais restent francais et inchanges (`docs/README-FR.md`,
+  `docs/mesure-J4-FR.md`, `docs/mesure-J5-FR.md`, `qnx_portmap/LISEZMOI-FR.md`,
+  `PROGRESSION-FR.md`), et les preuves archivees de `docs/preuves/` ne sont pas
+  reecrites.
+
+Resultat : la sortie par defaut de la console est la sortie anglaise de la veille, octet
+pour octet, et `--lang fr` est la sortie francaise de la veille, octet pour octet. Les
+chiffres publies sont inchanges : **J4 = 93 %**, **J5 = 96 %**, **170 tests** (170 tests,
+27 d'entre eux ignores sans le corpus, 1 ignore avec le corpus).
+
+## Avance de ce cycle (16/11/2026, le mode rapide et la premiere commande du juge)
+
+- `--quick` (index A-Z de la C Library Reference 8.0 et 7.1, guide de migration vers
+  8.0, page propre de chaque symbole documente) : **76 pages en 127 s** pour
+  `abort accept bzero zzz_fonction_inexistante`, mesure le 16/11/2026 a une requete
+  par seconde ; il ne dit jamais `absent` ; `tests/test_quick.py` verifie sur le corpus
+  fige qu'il ne contredit jamais le mode complet. C'est maintenant la premiere commande
+  du kit de soumission (section 4.1), et `tools/published_counts.py` verifie aussi le
+  README francais et le kit, ou des comptes de tests perimes (124 au lieu de 183)
+  n'etaient pas verifies.
+- 16/11/2026 (mere) : le chemin du juge rejoue dans un environnement virtuel propre
+  (venv, `pip install .`, puis le mode rapide) : **76 pages en 144,2 s**, code de sortie
+  **1** (le code attendu : le mode rapide repond `unknown` pour les deux symboles qu'il
+  ne peut pas decider), sortie identique a celle publiee dans le kit. `pip install .`
+  echoue dans un venv quand `PIP_USER` est defini, donc le kit propose maintenant le
+  chemin sans installation (`python3 -m qnx_portmap`).
+- 16/11/2026 (Studio) : le demarrage rapide du README, la premiere chose qu'un juge lit
+  sur GitHub, commencait encore par `pip install .` puis `qnx-portmap abort ...` : sur un
+  Python PEP 668 l'installation echoue et la commande n'existe pas, et sans le corpus le
+  mode complet ne peut que dire `corpus not found`. Il donne maintenant les memes trois
+  commandes que le kit (mode rapide par `python3 -m`, installation facultative), la vraie
+  sortie du mode rapide et le sens du code de sortie 1 ; le corpus complet vient
+  ensuite. `tests/test_quick.py` le garde : la commande de demarrage rapide,
+  l'installation facultative, le meme bloc de sortie dans le README et le kit, et (avec le
+  corpus fige) le bloc publie rejoue par la vraie ligne de commande.
+
+## Avance de ce cycle (16/11/2026, l'execution sur une cible QNX 8.0 est preparee)
+
+Le seul segment que la video de demonstration ne contient pas est l'execution de
+l'outil **sur une cible QNX 8.0**. Il est bloque par la licence SDP 8.0 (action du
+proprietaire), mais tout ce qui peut etre fait sans le SDP a ete fait ce cycle : la
+procedure, le controle en une commande, et les sources.
+
+- **Ce qui a ete verifie dans la documentation officielle QNX** (tout lu le
+  16/11/2026, les URL sont dans `docs/QNX-8.0-CIBLE.md`) : le SDP 8.0.3 livre un
+  **Python 3.13 pour les cibles QNX OS** (paquet `com.qnx.qnx800.target.utils.python3`,
+  version interne `3.13.7.00013T202603200501L`), donc la meme commande convient a une
+  cible QNX 8.0 ; la licence QNX Everywhere est gratuite pour un usage non commercial
+  (compte myQNX) et la **Quick Start Target Image for Raspberry Pi 4B** a deja **PIP
+  installe par defaut** (version du 11 septembre 2025), donc une cible avec Python est
+  accessible sans rien acheter ; l'image QEMU x86_64 est construite par
+  `mkqnximage --type=qemu --arch=x86_64 --run`.
+- **`scripts/qnx8_target_check.sh`** (nouveau) : une commande POSIX-shell, lancee depuis
+  la racine du depot, qui prouve sur la cible elle-meme que le systeme est un systeme
+  QNX, qu'un Python 3 est present, que chaque page du corpus correspond a son SHA-256, et
+  que l'outil repond. Il se termine par un verdict explicite (`RESULT      : PASS`). Il
+  n'installe rien, n'ecrit rien dans le depot, et ne touche jamais le reseau. Deux
+  variables remplacent les arguments quand il faut : `QX_PORTMAP_CORPUS` et
+  `QX_PORTMAP_PYTHON` (les notes de version ne publient pas le chemin de l'interpreteur
+  sur la cible).
+- **Rejoue, pas suppose** : le script a ete lance le 16/11/2026 avec `/bin/sh` (dash) et
+  avec `bash`, depuis la racine du depot et depuis un autre repertoire, avec le corpus
+  fige (3 426 pages verifiees, `page SHA-256: OK`, `SHA256SUMS: OK (3 427 files)`), avec
+  le corpus absent (echec explicite avec la procedure pour le reconstruire), et avec
+  `QX_PORTMAP_PYTHON`. La vraie sortie est dans `docs/QNX-8.0-CIBLE.md`, section 5.
+- **`docs/QNX-8.0-CIBLE.md`** (nouveau) : ce dont l'outil a besoin sur la cible, les
+  deux facons d'obtenir une cible QNX 8.0, la commande exacte a filmer, comment mettre
+  le corpus sur la cible (la documentation QNX n'est pas redistribuee), la repetition et
+  sa vraie sortie, et les sources avec leurs dates.
+- **La limite honnete ne bouge pas** : le projet **n'a toujours pas ete execute sur une
+  machine QNX 8.0**. Le README, le plan video et le nouveau document le disent ; le
+  script de controle dit `NOT a QNX system - this run is a rehearsal` quand il n'est pas
+  sur une cible. La date de l'execution sur une cible est le jour ou la licence arrive.
+- Le plan video (`VIDEO-YOUTUBE-QNX-PORTMAP.md`, section 4) liste maintenant les deux
+  besoins qui manquaient dans le tableau - un Python 3 sur la cible et le corpus sur la
+  cible - et donne la commande exacte a filmer. Les chiffres publies sont inchanges :
+  **194 tests** (33 ignores sans le corpus), **117 fichiers** dans le manifeste publie.
 
 ## Avance de ce cycle (16/11/2026, le controle cible mesure l'interpreteur, les images de la galerie sont pretes)
 
@@ -520,3 +664,4 @@ Points d'honnetete traites cette fois :
 - **Le codelab est rejoue par un lecteur sur l'arbre public, apres les corrections** : les neuf commandes du tutoriel sont executees telles qu'elles sont ecrites et chaque sortie annoncee est comparee a la sortie mesuree, puis les trois commandes de la section « How to verify » sont lancees. **13 controles, 13 OK** (les etapes 1 a 9, le verdict sur clone neuf `NO CHECK FAILED - 6/8 OK, 2 NOT CHECKED`, la suite `Ran 202 tests ... OK (skipped=33)`, la contre-epreuve rouge 10 / 10, et le verdict apres les etapes, qui est le `FAILED AND NOT CHECKED - 1 check(s) FAILED` que le codelab annonce pour un arbre sale).
 - **Les chiffres que le kit publie sur les medias sont toujours ceux des fichiers publies** : le md5 de chacune des quatre images de la galerie annonce dans le kit est le md5 du fichier du depot, et la video dure toujours 111,04 s (1 min 51 s) et montre a l'ecran `Ran 194 tests in 0.607s` / `OK (skipped=33)` - les deux chiffres que le document de la video date du jour du tournage.
 - **Une promesse perimee est corrigee dans le codelab** : il annoncait une demonstration sur une vraie cible QNX 8.0 « to be confirmed on QNX 8.0 on 20 November 2026 ». Cette date est passee et la licence SDP 8.0 manque toujours, donc le codelab dit desormais ce qui est vrai : **not done as of 22 November 2026**. Rien d'autre du codelab n'a ete touche, et la « Next step » est toujours d'une phrase.
+- **Le journal francais porte maintenant les memes sections que le journal anglais.** Les quatre sections anglaises des 15/11 et 16/11 - le depot public en anglais, l'anglais comme langue par defaut de la console, le mode rapide et la premiere commande du juge, l'execution sur une cible QNX 8.0 preparee - n'avaient jamais ete traduites ; elles le sont desormais, et les deux fichiers portent les memes sections dans le meme ordre. Le controle est mecanique : les sections sont appariees par date, puis les chiffres, les identifiants et les noms de fichiers de chaque paire sont compares : 0 difference de faits sur les 8 dates, les seules differences etant la virgule decimale francaise.

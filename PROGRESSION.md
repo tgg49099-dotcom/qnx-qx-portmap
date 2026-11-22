@@ -5,8 +5,7 @@ State = `done` (implemented and tested) / `partial` (done but incomplete) / `pla
 
 This file is the map of the tool. It is updated at every cycle, before the report.
 The French version is in `PROGRESSION-FR.md`; it follows the same sections, cycle
-by cycle, and the English one is currently ahead by four sections (the four
-English sections of 15/11 and 16/11 have not been translated yet).
+by cycle, and the two files now carry the same sections in the same order.
 
 ---
 
@@ -636,3 +635,4 @@ this cycle: the procedure, the one-command check, and the sources.
 - **The codelab is replayed by a reader on the public tree, after the corrections**: the nine commands of the tutorial are executed as they are written and every announced output is compared with the measured one, then the three commands of the "How to verify" section are run. **13 controls, 13 OK** (the steps 1 to 9, the fresh-clone verdict `NO CHECK FAILED - 6/8 OK, 2 NOT CHECKED`, the suite `Ran 202 tests ... OK (skipped=33)`, the red counter-proof 10 / 10, and the verdict after the steps, which is the `FAILED AND NOT CHECKED - 1 check(s) FAILED` that the codelab announces for a dirty tree).
 - **The figures the kit publishes about the media are still the figures of the published files**: the md5 of each of the four gallery images announced in the kit is the md5 of the file in the repository, and the video still lasts 111.04 s (1 min 51 s) and shows on screen `Ran 194 tests in 0.607s` / `OK (skipped=33)` - the two figures the video document dates to the filming day.
 - **One stale promise is corrected in the codelab**: it announced a demonstration on a real QNX 8.0 target "to be confirmed on QNX 8.0 on 20 November 2026". That date has passed and the SDP 8.0 licence is still missing, so the codelab now says what is true: **not done as of 22 November 2026**. Nothing else of the codelab was touched, and the "Next step" is still one sentence.
+- **The French log now carries the same sections as the English one.** The four English sections of 15/11 and 16/11 - the public repository in English, English as the default language of the console, the quick mode and the judge's first command, the run on a QNX 8.0 target prepared - had never been translated; they are now, and the two files carry the same sections in the same order. The check is mechanical: the sections are paired by date, then the figures, the identifiers and the file names of each pair are compared: 0 difference of facts on the 8 dates, the only differences being the French decimal comma.
