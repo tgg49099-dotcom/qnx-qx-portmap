@@ -656,7 +656,7 @@ def write_citations(dir_path, data, records, lang="fr"):
             out.append("# consulted on : %s" % CONSULTED)
             out.append("# Short extracts (one to three lines) from the QNX 8.0 "
                        "documentation, with the URL of the source page and its "
-                       "SHA-256 fingerprint: see LICENCE-DOCS-QNX.md.")
+                       "SHA-256 fingerprint: see NOTICES-DOCS-QNX.md.")
         else:
             out.append("# Citations des %d symboles mesures dans %s"
                        % (len(recs), repo["key"]))
@@ -666,7 +666,7 @@ def write_citations(dir_path, data, records, lang="fr"):
             out.append("# consultee le : %s" % CONSULTED)
             out.append("# Extraits courts (une a trois lignes) de la documentation "
                        "QNX 8.0, avec l'URL de la page source et son empreinte "
-                       "SHA-256 : voir LICENCE-DOCS-QNX.md.")
+                       "SHA-256 : voir NOTICES-DOCS-QNX.md.")
         out.append("")
         for rec in recs:
             out.append("--- %s ---" % rec["symbol"])

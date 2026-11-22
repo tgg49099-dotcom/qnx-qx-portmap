@@ -310,7 +310,7 @@ The plan of the video and the YouTube fields are in
   does not run on a target: it reads documentation.
 - **The corpus is not shipped with the repository.** The QNX documentation is
   (c) QNX Software Systems Ltd / BlackBerry Limited and is not redistributable:
-  see `LICENCE-DOCS-QNX.md` and `CORPUS-NON-PUBLIE.txt`. It is rebuilt with a
+  see `NOTICES-DOCS-QNX.md` and `CORPUS-NON-PUBLIE.txt`. It is rebuilt with a
   single command, which needs network access to
   `https://www.qnx.com/developers/docs/`:
   `bash scripts/bootstrap_corpus.sh --out corpus-downloaded`.
@@ -984,7 +984,7 @@ remain the property of QNX Software Systems Ltd / BlackBerry Limited. The 12
 fixtures of `tests/fixtures/` and the citations of the J4 and J5 measurements
 (`docs/mesure-J4/`, `docs/mesure-J5/`) are short extracts quoted with their
 URL, their consultation date and the SHA-256 fingerprint of the source page;
-the MIT licence does not cover them. See `LICENCE-DOCS-QNX.md` (official
+the MIT licence does not cover them. See `NOTICES-DOCS-QNX.md` (official
 copyright page, consulted on 14/11/2026) and `CORPUS-NON-PUBLIE.txt`.
 
 ## How the status is decided

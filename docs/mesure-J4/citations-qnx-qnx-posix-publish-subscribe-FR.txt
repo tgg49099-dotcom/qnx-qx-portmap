@@ -3,7 +3,7 @@
 # commit    : b5ca892f37464bea4ff88db3fdbbb2cc651da6a8 (2026-08-25)
 # sous-dossier retenu : (depot entier)
 # consultee le : 2026-11-14
-# Extraits courts (une a trois lignes) de la documentation QNX 8.0, avec l'URL de la page source et son empreinte SHA-256 : voir LICENCE-DOCS-QNX.md.
+# Extraits courts (une a trois lignes) de la documentation QNX 8.0, avec l'URL de la page source et son empreinte SHA-256 : voir NOTICES-DOCS-QNX.md.
 
 --- _RESMGR_NPARTS ---
 # depot    : qnx/qnx-posix-publish-subscribe

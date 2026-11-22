@@ -1,21 +1,21 @@
 # QX PORTMAP - Devpost submission kit (QNX Global Hackathon)
 
 **Published version of 19 November 2026.** This file replaces the kit of
-15/11/2026, which stays in the git history of this repository at commit
+18/11/2026, which stays in the git history of this repository at commit
 `1b46b69`, and the version of 19/11/2026 published at commit `2b0704f`,
-which stays there too. The version of 18/11/2026 (md5
+which stays there too. Another version of 18/11/2026 (md5
 `3d57c6aae4b9efe06407aef5e1ce9c79`) was never added to this repository. What
 changed in the version of 18/11, and what changed on top of it:
 
 | # | Change | Why | Evidence |
 |---|---|---|---|
-| C1 | The project story is now given in **two blocks ready to paste**: **4.1a** (1 170 characters, for the "Text Description" field) and **4.1c** (1 187 characters, for the "Project story" field). Both are under the 1 200 characters of the reference table (tableau 1.1). | The story of the 15/11 kit is 12 263 characters: ten times the 1 200 characters of the reference table. Devpost publishes no limit for this field and 119 public descriptions measured go from 637 to 48 663 characters, so the form would accept the long one - but no paste must exceed the declared limit, so two short versions are given instead. | § 1.4, § 4.1a, § 4.1c |
+| C1 | The project story is now given in **two blocks ready to paste**: **4.1a** (1 170 characters, for the "Text Description" field) and **4.1c** (1 187 characters, for the "Project story" field). Both are under the 1 200 characters of the reference table (tableau 1.1). | The story of the 18/11 kit is 12 263 characters: ten times the 1 200 characters of the reference table (the kits of 15/11 carried 6 816 to 7 566 characters, and the one published at 00:42 on 16/11 carried 8 146). Devpost publishes no limit for this field and 119 public descriptions measured go from 637 to 48 663 characters, so the form would accept the long one - but no paste must exceed the declared limit, so two short versions are given instead. | § 1.4, § 4.1a, § 4.1c |
 | C2 | A new block **5.8b** gives the text of the bonus field (1 176 characters). | The kit of 15/11 prepared only a URL for the "Best Codelab / Tutorial" field. The form asks for a text as well; the kit now prepares it. | § 5.8b |
 | C3 | The list of excluded countries is quoted verbatim. | The kit of 15/11 put a paraphrase between quotation marks. | § 5.2, the rules page of 18/11/2026 |
 | C4 | A table "champ par champ" with the measured length, the limit and the verdict of the 10 fields. | The owner pastes on Sunday: the table says what to paste, how long it is and whether it fits. | § 1.4 |
 | C5 | The complete story (12 263 characters, unchanged in the version of 18/11; 12 645 characters in this version after C8) stays in the kit but is **not a block to paste** any more: it is declared as documentation. | The form has no field for it: the two fields of the form get 4.1a and 4.1c, both under the declared limit. The long text is kept as the source of the codelab and of the repository documentation. | § 4.1b |
 | C6 | **Every block now declares the field it goes into** ("- Devpost field: **Description**"). | The verifier must not guess where a block goes: the official help gives two names ("Text Description", article 145, and "Project story", article 126) and the form of the contest is behind a session, so the kit says which block goes where. | § 1.4 and the output of the verifier |
-| C7 | A new block **4.1d** gives the testing instructions ready to paste (2 552 characters in the version of 18/11; 2 673 characters in this version after C8), added on 19/11/2026. | The kit of 15/11 carried the testing instructions only inside the 12 263-character story; the reference table gives the "Instructions d'installation" field a 3 000-character limit and no short block existed for it. The block is the same text, same commands, same measured numbers, shortened to fit. | § 4.1d |
+| C7 | A new block **4.1d** gives the testing instructions ready to paste (2 552 characters in the version of 18/11; 2 673 characters in this version after C8), added on 19/11/2026. | The kit of 15/11 carried the testing instructions only inside its own story, which measured 6 816 to 7 566 characters; the reference table gives the "Instructions d'installation" field a 3 000-character limit and no short block existed for it. The block is the same text, same commands, same measured numbers, shortened to fit. | § 4.1d |
 | **C8** | **The rate is 95 %, not 96 %: `InterruptAttach` is reported "retiré selon le guide".** The blocks that quote the J5 measurement (4.1a, 4.1b, 4.1c, 5.7) now say 95 resolved and quoted, 5 not resolved, and name `InterruptAttach` as removed in 8.0 according to the official migration guide, with the sentence of the guide quoted. | The tool was changed on 19/11/2026: it now reports a function that the official 8.0 migration guide says was removed as `absent`, priority 1, quoting the sentence of the guide - the honest answer. The rate follows it down, from 96 % to 95 %. | § 4.1a, § 4.1b, § 4.1c, § 5.7, `docs/mesure-J5.md` |
 
 The verifier that produced this table is the author's own program (one program,
@@ -357,8 +357,8 @@ without the install: `python3 -m qnx_portmap` is the same program as the
 The third command is the **quick mode**: a first answer in about two to three
 minutes (76 pages downloaded in 127 s in the build environment, in 144 s in an
 independent replay from a clean virtual environment, both measured on
-16 November 2026, and in 149.1 s in a judge replay from a fresh clone and a
-clean virtual environment on 18 November 2026, one request per second). It
+16 November 2026, and in 151.2 s on the filming machine the same day, from a
+fresh clone, shown on screen in the video, at one request per second). It
 reads only the A-Z indexes of
 the QNX 8.0 and 7.1 C Library Reference, the official migration guide to 8.0
 and the own page of each documented symbol. It answers `documented` and
@@ -480,7 +480,7 @@ repository. The 11 rules and their output are in `docs/contre-epreuve-rouge.txt`
 - Public repository: https://github.com/tgg49099-dotcom/qnx-qx-portmap (MIT
   licence, file `LICENSE` at the top of the repository page).
 - The QNX documentation is not redistributed with the repository; see
-  `LICENCE-DOCS-QNX.md` and `CORPUS-NON-PUBLIE.txt`.
+  `NOTICES-DOCS-QNX.md` and `CORPUS-NON-PUBLIE.txt`.
 - Codelab / tutorial, published in this repository: https://github.com/tgg49099-dotcom/qnx-qx-portmap/blob/main/docs/CODELAB-COMMUNITY-QNX.md
 
 ## AI-assisted development
@@ -577,8 +577,8 @@ install gives.
 
 The third command is the **quick mode**: a first answer in about two to three
 minutes (76 pages in 127 s in the build environment, in 144 s in an
-independent replay, both measured on 16 November 2026, and in 149.1 s in a
-judge replay from a fresh clone on 18 November 2026, one request per second).
+independent replay, both measured on 16 November 2026, and in 151.2 s on the
+filming machine that same day, from a fresh clone, one request per second).
 It reads only the A-Z indexes of the QNX 8.0 and 7.1 C Library Reference, the
 official migration guide to 8.0 and the own page of each documented symbol.
 It says `absent` only for a symbol that the official migration guide (read in
@@ -631,7 +631,7 @@ never invents an answer.
   4.1b, unchanged), shortened to fit the declared limit: same commands, same
   measured numbers, shorter prose. If the form has no separate field for
   testing instructions, paste it at the end of the "Project story" field
-  (4.1a + 4.1d = 3 722 characters, far under the 48 663 characters observed
+  (4.1a + 4.1d = 3 843 characters, far under the 48 663 characters observed
   on public pages).
 
 ### 4.2 Built with tags
@@ -749,7 +749,7 @@ https://youtu.be/UMmxNlxkEi0
   15/11/2026).
 - The video **is published and public** on YouTube since 17/11/2026: identifier
   `UMmxNlxkEi0`, title "QX PORTMAP - is every QNX symbol your code calls still
-  documented in QNX 8.0?", channel "Tgg Labs", duration **1 min 52 s**
+  documented in QNX 8.0?", channel "Tgg Labs", duration **1 min 51 s**
   (111.04 s, measured on the file by the Studio on 17/11/2026), so it is under
   the three minutes the rules ask for. The URL above was checked from outside
   the build environment on 17/11/2026: HTTP 200 on the YouTube oEmbed of

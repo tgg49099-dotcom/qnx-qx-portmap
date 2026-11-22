@@ -85,7 +85,7 @@ The tool looks for the frozen corpus in this order:
 3. the `corpus/` directory of the current working directory.
 
 The repository **does not contain** a `corpus/` directory: the QNX
-documentation is not redistributable (see `LICENCE-DOCS-QNX.md`). Without a
+documentation is not redistributable (see `NOTICES-DOCS-QNX.md`). Without a
 corpus, the tool prints `corpus not found` (`corpus introuvable` with
 `--lang fr`) and exits with code `2` - it guesses nothing.
 
@@ -169,4 +169,4 @@ the measurements and of the methods in [`mesure-J4.md`](mesure-J4.md) and
 ## 8. Licence
 
 The code is under the MIT licence (`LICENSE`). **The QNX documentation is not
-redistributed**: see `LICENCE-DOCS-QNX.md` and `CORPUS-NON-PUBLIE.txt`.
+redistributed**: see `NOTICES-DOCS-QNX.md` and `CORPUS-NON-PUBLIE.txt`.

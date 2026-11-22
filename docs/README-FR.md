@@ -253,7 +253,7 @@ et le taux descend avec elle.
   s'execute pas sur cible : il lit de la documentation.
 - **Le corpus n'est pas livre avec le depot.** La documentation QNX est (c) QNX
   Software Systems Ltd / BlackBerry Limited et n'est pas redistribuable : voir
-  `LICENCE-DOCS-QNX.md` et `CORPUS-NON-PUBLIE.txt`. Il se reconstruit avec une
+  `NOTICES-DOCS-QNX.md` et `CORPUS-NON-PUBLIE.txt`. Il se reconstruit avec une
   seule commande, qui demande un acces reseau a
   `https://www.qnx.com/developers/docs/` :
   `bash scripts/bootstrap_corpus.sh --out corpus-downloaded`.
@@ -759,7 +759,7 @@ fixtures de `tests/fixtures/` et les citations des mesures J4 et J5
 (`docs/mesure-J4/`, `docs/mesure-J5/`) sont
 des extraits courts cites avec leur URL, leur date de consultation et
 l'empreinte SHA-256 de la page source ; la licence MIT ne les couvre pas. Voir
-`LICENCE-DOCS-QNX.md` (page de copyright officielle, consultee le 14/11/2026)
+`NOTICES-DOCS-QNX.md` (page de copyright officielle, consultee le 14/11/2026)
 et `CORPUS-NON-PUBLIE.txt`.
 
 ## Comment le statut est decide

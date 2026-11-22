@@ -3,7 +3,7 @@
 # commit    : 573dda1a1ca387551e5413eeb84db5a4721e5ce3 (2026-01-19)
 # sous-dossier retenu : (depot entier)
 # consultee le : 2026-11-14
-# Extraits courts (une a trois lignes) de la documentation QNX 8.0, avec l'URL de la page source et son empreinte SHA-256 : voir LICENCE-DOCS-QNX.md.
+# Extraits courts (une a trois lignes) de la documentation QNX 8.0, avec l'URL de la page source et son empreinte SHA-256 : voir NOTICES-DOCS-QNX.md.
 
 --- in32 ---
 # depot    : qnx/bsp_raspberrypi-bcm2712-rpi5

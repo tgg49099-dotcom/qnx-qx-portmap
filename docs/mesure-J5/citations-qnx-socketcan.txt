@@ -3,7 +3,7 @@
 # commit     : 9db62b4747d84135a500dbfe3a318a4330f31654 (2026-09-29)
 # sub-directory used : (whole repository)
 # consulted on : 2026-11-14
-# Short extracts (one to three lines) from the QNX 8.0 documentation, with the URL of the source page and its SHA-256 fingerprint: see LICENCE-DOCS-QNX.md.
+# Short extracts (one to three lines) from the QNX 8.0 documentation, with the URL of the source page and its SHA-256 fingerprint: see NOTICES-DOCS-QNX.md.
 
 --- mtx_lock ---
 # repository : qnx/socketcan

@@ -609,4 +609,4 @@ The tool is MIT-licensed ([`LICENSE`](../../LICENSE)). The QNX documentation is
 (c) QNX Software Systems Ltd / BlackBerry Limited and is neither redistributed
 nor included in the repository; the short quotations in the tests and in the
 measurements are cited with their URL, their date and the SHA-256 of the
-source page ([`LICENCE-DOCS-QNX.md`](../../LICENCE-DOCS-QNX.md)).
+source page ([`NOTICES-DOCS-QNX.md`](../../NOTICES-DOCS-QNX.md)).

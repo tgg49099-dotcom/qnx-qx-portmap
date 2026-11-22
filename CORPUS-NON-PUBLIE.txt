@@ -21,7 +21,7 @@ redistribute the documentation pages:
 No request for permission is pending: the corpus is not published.
 
 What this repository contains instead:
-  - the CODE of the tool (MIT licence, see LICENSE and LICENCE-DOCS-QNX.md);
+  - the CODE of the tool (MIT licence, see LICENSE and NOTICES-DOCS-QNX.md);
   - the TESTS, including 12 MINIATURE FIXTURES (short extracts of 1 to 3
     lines of QNX pages, with source URL and consultation date) in
     tests/fixtures/;
