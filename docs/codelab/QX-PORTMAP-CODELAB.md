@@ -17,8 +17,8 @@ Repository: <https://github.com/tgg49099-dotcom/qnx-qx-portmap>
   tool.** QX PORTMAP is a *host* tool: it reads the official QNX 8.0
   documentation from your own machine, so it needs **no SDP, no QNX board, no
   QNX account and no API key**. (Running the tool on a real QNX 8.0 target is
-  still pending the SDP 8.0 licence: **to be confirmed on QNX 8.0 on 20
-  November 2026**.)
+  still pending the SDP 8.0 licence, which the project does not have yet:
+  **not done as of 22 November 2026**.)
 - **A Linux, macOS or Windows host with Python 3.8 or later** - standard
   library only, nothing to install.
 - **About 15 minutes** for steps 1 to 4 and 8 to 9. Step 3 downloads 76 pages
@@ -580,8 +580,8 @@ is kept in
 
 Run the tool on the calls of your own project (steps 8 and 9) and work through
 the work list, priority by priority - the demonstration of the tool on a real
-QNX 8.0 target is still pending the SDP 8.0 licence, **to be confirmed on
-QNX 8.0 on 20 November 2026**.
+QNX 8.0 target is still pending the SDP 8.0 licence, which the project does
+not have yet: **not done as of 22 November 2026**.
 
 ---
 
