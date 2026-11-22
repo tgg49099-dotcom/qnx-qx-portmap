@@ -161,7 +161,7 @@ project makes are still documented in QNX 8.0. The proposal of a post on
 ### Demo video
 
 **https://youtu.be/UMmxNlxkEi0** - published and public on YouTube on
-17 November 2026 (channel "Tgg Labs"), **1 min 52 s** (111.04 s), under the
+17 November 2026 (channel "Tgg Labs"), **1 min 51 s** (111.04 s), under the
 three minutes the contest rules ask for.
 
 What it shows: the tool running in a real terminal, filmed from a fresh clone

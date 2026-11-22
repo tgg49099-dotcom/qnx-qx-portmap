@@ -266,7 +266,7 @@ Points d'honnetete traites cette fois :
 - **La video de demonstration est publiee et publique** sur YouTube depuis le
   17/11/2026 : `https://youtu.be/UMmxNlxkEi0` - identifiant `UMmxNlxkEi0`,
   titre "QX PORTMAP - is every QNX symbol your code calls still documented in
-  QNX 8.0 ?", chaine "Tgg Labs", **1 min 52 s** (111,04 s, mesure sur le
+  QNX 8.0 ?", chaine "Tgg Labs", **1 min 51 s** (111,04 s, mesure sur le
   fichier par le Studio le 17/11/2026), donc sous les trois minutes demandees
   par le reglement. Verifie depuis l'exterieur de l'environnement de build le
   17/11/2026 : HTTP 200 sur l'oEmbed YouTube de cette URL, avec ce titre et
@@ -459,7 +459,7 @@ Points d'honnetete traites cette fois :
 - **Le rejeu du corpus tourne encore** : **2 609 pages et 0 erreur** a 02:11:09, **1 771 ms par page** depuis 00:54:09, soit une projection d'environ **1 h 41** pour les 3 426 pages -- le rythme du README, et plus rapide que le « about 1 h 56 » du kit, qui est une projection mesuree sur les 160 premieres pages. **Le nombre exact de pages n'est pas encore connu : rien n'a ete ecrit dans le kit ni dans le README.**
 
 ## Progression de ce cycle (18/11/2026, 02:16, chaque chiffre des trois documents compare un par un)
-- **La tache donnee a Jules a ete faite par le slot, Jules n'ayant pas encore repondu.** Chaque chiffre cite dans README.md, dans KIT-SOUMISSION-QNX.md et dans VIDEO-YOUTUBE-QNX-PORTMAP.md a ete compare un par un. Les trois documents concordent sur les chiffres qui comptent : 202 tests et 33 ignores, 3 426 pages de corpus, 76 pages pour le mode rapide, l'URL de la video et sa duree (111,04 s, 1 min 52 s), le manifeste de 126 fichiers, la contre-epreuve ROUGE 10/10, le taux de 96 % sur un echantillon de 100 symboles.
+- **La tache donnee a Jules a ete faite par le slot, Jules n'ayant pas encore repondu.** Chaque chiffre cite dans README.md, dans KIT-SOUMISSION-QNX.md et dans VIDEO-YOUTUBE-QNX-PORTMAP.md a ete compare un par un. Les trois documents concordent sur les chiffres qui comptent : 202 tests et 33 ignores, 3 426 pages de corpus, 76 pages pour le mode rapide, l'URL de la video et sa duree (111,04 s, 1 min 51 s), le manifeste de 126 fichiers, la contre-epreuve ROUGE 10/10, le taux de 96 % sur un echantillon de 100 symboles.
 - **Deux chiffres du fichier video n'etaient pas dates, ils le sont maintenant.** Ce fichier est le plan du 15 novembre (160 s, 170 tests), puis le tournage du 16 novembre (111,04 s, 194 tests), puis la publication du 17 novembre ; la suite publiee repond aujourd'hui 202 tests. Le plan est garde tel qu'il a ete ecrit, mais un paragraphe d'etat, en tete du fichier, dit desormais a quel jour chaque chiffre appartient, et les deux lignes du tableau du tournage qui citent un chiffre (la suite de tests, et la duree du mode rapide, 151,2 s sur la machine de tournage) nomment maintenant le jour et la machine dont ils viennent. **Aucun chiffre n'a ete change** : les documents ne se contredisaient pas, ils mesuraient trois jours differents sans le dire.
 
 ## Progression de ce cycle (18/11/2026, 03:05, le rejeu complet du corpus est fini : le nombre exact de pages est connu)

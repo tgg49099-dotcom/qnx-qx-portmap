@@ -395,7 +395,7 @@ this cycle: the procedure, the one-command check, and the sources.
 - **The demonstration video is published and public** on YouTube since 17/11/2026:
   `https://youtu.be/UMmxNlxkEi0` - identifier `UMmxNlxkEi0`, title "QX PORTMAP -
   is every QNX symbol your code calls still documented in QNX 8.0?", channel
-  "Tgg Labs", **1 min 52 s** (111.04 s, measured on the file by the Studio on
+  "Tgg Labs", **1 min 51 s** (111.04 s, measured on the file by the Studio on
   17/11/2026), so it is under the three minutes the rules ask for. Checked from
   outside the build environment on 17/11/2026: HTTP 200 on the YouTube oEmbed
   of that URL, with that title and that channel.
@@ -575,7 +575,7 @@ this cycle: the procedure, the one-command check, and the sources.
 - **The corpus replay is still running**: **2,609 pages and 0 error** at 02:11:09, **1,771 ms per page** since 00:54:09, which projects to about **1 h 41** for the 3,426 pages -- the rate of the README, and faster than the "about 1 h 56" of the kit, which is a projection measured on the first 160 pages. **The exact number of pages is not known yet, so nothing was written in the kit or in the README.**
 
 ## Progress of this cycle (18/11/2026, 02:16, every figure of the three documents compared one by one)
-- **The task given to Jules was done by the slot, because Jules has not answered yet.** Every figure quoted in README.md, in KIT-SOUMISSION-QNX.md and in VIDEO-YOUTUBE-QNX-PORTMAP.md was compared one by one. The three documents agree on the figures that matter: 202 tests and 33 skipped, 3,426 pages of corpus, 76 pages for the quick mode, the URL of the video and its duration (111.04 s, 1 min 52 s), the manifest of 126 files, the RED counter-proof 10/10, the rate of 96 % on a sample of 100 symbols.
+- **The task given to Jules was done by the slot, because Jules has not answered yet.** Every figure quoted in README.md, in KIT-SOUMISSION-QNX.md and in VIDEO-YOUTUBE-QNX-PORTMAP.md was compared one by one. The three documents agree on the figures that matter: 202 tests and 33 skipped, 3,426 pages of corpus, 76 pages for the quick mode, the URL of the video and its duration (111.04 s, 1 min 51 s), the manifest of 126 files, the RED counter-proof 10/10, the rate of 96 % on a sample of 100 symbols.
 - **Two figures of the video file were not dated, and are now.** That file is the plan of 15 November (160 s, 170 tests), then the filming of 16 November (111.04 s, 194 tests), then the publication of 17 November; the published suite answers 202 tests today. The plan is kept as it was written, but a status paragraph at the top of the file now says which figure belongs to which day, and the two rows of the filming table that quote a figure (the test suite, and the duration of the quick-mode run, 151.2 s on the filming machine) now name the day and the machine they come from. **No figure was changed**: the documents did not contradict each other, they were measuring three different days without saying so.
 
 ## Progress of this cycle (18/11/2026, 03:05, the complete judge replay is over: the exact number of pages is known)

@@ -409,7 +409,7 @@ Thumbnail: https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main
 
 The video is published and public on YouTube since 17/11/2026: the URL to paste
 in `KIT-SOUMISSION-QNX.md` (section 4.5) is `https://youtu.be/UMmxNlxkEi0`
-(identifier `UMmxNlxkEi0`, channel "Tgg Labs", 1 min 52 s).
+(identifier `UMmxNlxkEi0`, channel "Tgg Labs", 1 min 51 s).
 
 ## Update 2026-11-17 - the video is published
 
@@ -419,7 +419,7 @@ in `KIT-SOUMISSION-QNX.md` (section 4.5) is `https://youtu.be/UMmxNlxkEi0`
   outside the build environment on 17/11/2026: HTTP 200 on the YouTube oEmbed
   (`https://www.youtube.com/oembed?url=https://youtu.be/UMmxNlxkEi0&format=json`),
   with that title and that channel.
-- **Duration**: 111.04 s (1 min 52 s), measured on the file by the Studio on
+- **Duration**: 111.04 s (1 min 51 s), measured on the file by the Studio on
   17/11/2026 - under the three minutes the rules ask for. The file uploaded
   is the one committed in the repository
   (`media/qx-portmap-demo-final.mp4`, 1 832 957 bytes).

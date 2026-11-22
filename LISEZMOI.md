@@ -32,7 +32,7 @@ qnx-portmap abort accept bzero                    # real example (see README.md)
 
 The demonstration video is **published and public** on YouTube since
 17/11/2026: **https://youtu.be/UMmxNlxkEi0** (identifier `UMmxNlxkEi0`, channel
-"Tgg Labs", **1 min 52 s**, under the three minutes the rules ask for). Checked
+"Tgg Labs", **1 min 51 s**, under the three minutes the rules ask for). Checked
 from outside the build environment on 17/11/2026: HTTP 200 on the YouTube
 oEmbed, with that title and that channel.
 
