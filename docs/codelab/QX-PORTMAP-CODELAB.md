@@ -463,10 +463,18 @@ VERDICT: NO CHECK FAILED - 6/8 OK, 2 NOT CHECKED (RC 0)
 
 **Run it on a fresh clone.** The checks compare the published tree with the
 published proofs, so they are meant to be run on a clone that has not been
-modified. If you run the command after the steps above, the steps have
+modified. The simplest way is a **second clone**, which leaves the corpus you
+downloaded and the files the steps wrote untouched:
+
+```bash
+git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git /tmp/portmap-verif
+cd /tmp/portmap-verif && bash scripts/verify-all.sh
+```
+
+If you run the command in the clone where you did the steps, the steps have
 written `corpus-quick/`, `corpus-downloaded/`, `calls.txt`, `my_code.c` and
-`state.json` into the clone, the manifest no longer matches the tree, and the
-command prints (measured on 20 November 2026):
+`state.json` into it, the manifest no longer matches the tree, and the command
+prints (measured on 20 November 2026, replayed on 22 November 2026):
 
 ```text
 VERDICT: FAILED AND NOT CHECKED - 1 check(s) FAILED and
@@ -477,9 +485,16 @@ VERDICT: FAILED AND NOT CHECKED - 1 check(s) FAILED and
 The failing row is `published manifest` ("the published manifest is
 obsolete") and the RED counter-proof is then `NOT CHECKED` ("the working copy
 is not clean"). Nothing is disproved: the same command on a fresh clone
-gives the verdict above. To check the tree after the steps, run
-`python3 scripts/manifeste_publie.py` to regenerate the manifest, and
-`git status` to see what the steps wrote.
+gives the verdict above. `git status` shows what the steps wrote, and
+`git checkout -- MANIFESTE-PUBLIE.txt` puts the published manifest back.
+
+**Do not publish a regenerated manifest.** `python3 scripts/manifeste_publie.py`
+lists *every* file of the tree, the ones the steps wrote included: in a clone
+where the steps were done, it lists **132 files instead of the 127 published
+ones** (measured on 22 November 2026), with `calls.txt`, `corpus-quick/`,
+`corpus-downloaded/`, `my_code.c` and `state.json` in it. Use it to see what
+changed, then restore the published manifest with
+`git checkout -- MANIFESTE-PUBLIE.txt`.
 
 The eight checks are the unit test suite, the anti-leak control of the corpus,
 the published manifest, the published numbers, the parity of the README, the
@@ -499,8 +514,9 @@ VERDICT: EVERY CHECK PASSED - 8/8 OK (RC 0)
 
 (measured on 19 November 2026: 202 tests and 1 skipped, 0 match with the QNX
 documentation, `MANIFESTE-PUBLIE.txt lists 127 files`, every published count
-is the real one, 10 / 10 rules counter-proved, nothing left in the 71
-published documents.)
+is the real one, 10 / 10 rules counter-proved - the eleventh rule needs
+the corpus *inside the tree*, see below -, nothing left in the 71 published
+documents.)
 
 The unit test suite alone:
 
@@ -521,12 +537,16 @@ duration changes from one machine to another. The 33 skipped tests are the
 ones that need the corpus: they are skipped, never failed.)
 
 **One warning about the suite:** if you exported `QX_PORTMAP_CORPUS` in your
-shell, unset it first. The README example is the output of the project
-against *its* corpus, so the comparison test fails by design with another one
-(`FAIL: test_readme_shows_the_real_output`, measured on 19 November 2026 with
-a 76-page corpus). The commands of steps 6 and 7 set the variable for that
-command only, so a plain `unset QX_PORTMAP_CORPUS` is enough. The suite also
-needs room in the temporary directory (145 MB, see trap 4).
+shell, it has to point to the frozen corpus of the project, and to nothing
+else. The README example is the output of the project against *its* corpus,
+so the comparison is made with that corpus only, recognised by the
+fingerprint of its `SHA256SUMS` file published in
+[`CORPUS-NON-PUBLIE.txt`](../../CORPUS-NON-PUBLIE.txt). With another corpus -
+the one you downloaded, or a quick corpus - the tests that need the frozen
+corpus are **skipped, never failed**: the suite stays green (measured on
+22 November 2026 with a 76-page corpus: `Ran 202 tests`, `OK (skipped=33)`).
+The commands of steps 6 and 7 set the variable for that command only. The
+suite also needs room in the temporary directory (145 MB, see trap 4).
 
 And the RED counter-proof, which breaks one rule of the code at a time and
 checks that the matching test turns red:
@@ -542,9 +562,11 @@ SHA-256 of every page of the corpus shipped with the tool, and the corpus is
 not redistributed, so it cannot be tested in your clone. The output of the day
 is kept in
 [`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`](../preuves/i-contre-epreuve-rouge-avec-corpus.txt)
-(11 / 11 with the corpus present) and in
+(11 / 11 when the corpus is **inside the tree**, in `corpus/`) and in
 [`docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt`](../preuves/c-contre-epreuve-rouge-sans-corpus.txt)
-(10 / 10 without it).
+(10 / 10 without it). The eleventh rule reads `corpus/pages/...` **relative
+to the tree**: a corpus pointed to by `QX_PORTMAP_CORPUS` is outside the tree,
+so the rule stays untestable and the result is 10 / 10 there too.
 
 ## The traps
 

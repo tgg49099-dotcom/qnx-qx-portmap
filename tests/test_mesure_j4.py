@@ -39,7 +39,13 @@ import unittest
 from qnx_portmap.classify import Classifier
 from qnx_portmap.corpus import Corpus, default_corpus_dir
 
-from .helpers import CORPUS_ABSENT_MSG
+from .helpers import (CORPUS_ABSENT_MSG, frozen_corpus_dir,
+                     frozen_corpus_skip_reason)
+
+# The frozen corpus of the project, in the tree or through QX_PORTMAP_CORPUS:
+# another corpus cannot reproduce the published measurement (the test is then
+# skipped, never failed).
+CORPUS = frozen_corpus_dir()
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MESURE_DIR = os.path.join(ROOT, "docs", "mesure-J4")
@@ -456,15 +462,14 @@ class TestRapportAnglais(unittest.TestCase):
                          "l'outil produit a partir des donnees publiees")
 
 
-@unittest.skipUnless(os.path.isfile(os.path.join(default_corpus_dir(), "MANIFEST.json")),
-                     CORPUS_ABSENT_MSG)
+@unittest.skipUnless(CORPUS, frozen_corpus_skip_reason())
 class TestMesureReproductible(unittest.TestCase):
     """Rejouer l'outil sur les 100 symboles doit redonner la mesure publiee."""
 
     @classmethod
     def setUpClass(cls):
         cls.data = load_data()
-        cls.corpus = Corpus(default_corpus_dir())
+        cls.corpus = Corpus(CORPUS)
         cls.classifier = Classifier(cls.corpus)
 
     def test_les_statuts_publies_sont_reproduits(self):

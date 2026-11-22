@@ -24,8 +24,13 @@ from contextlib import redirect_stdout
 from qnx_portmap.cli import main
 from qnx_portmap.corpus import default_corpus_dir
 
-from .helpers import CORPUS_ABSENT_MSG
+from .helpers import CORPUS_ABSENT_MSG, frozen_corpus_dir, frozen_corpus_skip_reason
 from .test_readme import README, README_FR, SYMBOLS, readme_example_output
+
+# The frozen corpus of the project, in the tree or through
+# QX_PORTMAP_CORPUS: another corpus cannot be used to check the published
+# output, the test is then skipped, never failed.
+CORPUS = frozen_corpus_dir()
 
 MARKER_FULL = "Real output of the command"
 MARKER_QUICK = "Excerpt of the **real output**"
@@ -34,17 +39,16 @@ MARKER_FR = "Sortie reelle :"
 
 def real_output(lang=None):
     """Runs the README command against the frozen corpus and returns its output."""
-    argv = ["--corpus", default_corpus_dir()]
+    argv = ["--corpus", CORPUS]
     if lang:
         argv += ["--lang", lang]
     buf = io.StringIO()
     with redirect_stdout(buf):
         code = main(argv + SYMBOLS)
-    return buf.getvalue().replace(default_corpus_dir(), "<CORPUS>"), code
+    return buf.getvalue().replace(CORPUS, "<CORPUS>"), code
 
 
-@unittest.skipUnless(os.path.isfile(os.path.join(default_corpus_dir(), "MANIFEST.json")),
-                     CORPUS_ABSENT_MSG)
+@unittest.skipUnless(CORPUS, frozen_corpus_skip_reason())
 class TestReadmeEnglishOutput(unittest.TestCase):
     def test_readme_english_output_is_real(self):
         got, code = real_output()

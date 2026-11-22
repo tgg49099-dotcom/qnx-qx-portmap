@@ -47,7 +47,13 @@ from qnx_portmap.classify import Classifier
 from qnx_portmap.corpus import Corpus, default_corpus_dir
 from qnx_portmap.extract import article_of, sentences_with, strip_tags
 
-from .helpers import CORPUS_ABSENT_MSG
+from .helpers import (CORPUS_ABSENT_MSG, frozen_corpus_dir,
+                     frozen_corpus_skip_reason)
+
+# The frozen corpus of the project, in the tree or through QX_PORTMAP_CORPUS:
+# another corpus cannot reproduce the published measurement (the test is then
+# skipped, never failed).
+CORPUS = frozen_corpus_dir()
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MESURE_DIR = os.path.join(ROOT, "docs", "mesure-J5")
@@ -562,8 +568,7 @@ class TestTauxCompteALaMain(unittest.TestCase):
                              "etat publie incorrect pour %s" % symbole)
 
 
-@unittest.skipUnless(os.path.isfile(os.path.join(default_corpus_dir(), "MANIFEST.json")),
-                     CORPUS_ABSENT_MSG)
+@unittest.skipUnless(CORPUS, frozen_corpus_skip_reason())
 class TestMesureReproductible(unittest.TestCase):
     """Rejouer la mesure J5 sur le corpus fige doit redonner le chiffre publie."""
 
@@ -571,7 +576,7 @@ class TestMesureReproductible(unittest.TestCase):
     def setUpClass(cls):
         cls.data = load_data()
         cls.j4 = load_j4()
-        cls.corpus = Corpus(default_corpus_dir())
+        cls.corpus = Corpus(CORPUS)
         cls.classifier = Classifier(cls.corpus)
 
     def _choix(self):

@@ -12,16 +12,18 @@ import unittest
 from qnx_portmap.classify import (ABSENT, Classifier, DOCUMENTED, ELSEWHERE, UNKNOWN)
 from qnx_portmap.corpus import Corpus, default_corpus_dir
 
-from .helpers import CORPUS_ABSENT_MSG
+from .helpers import CORPUS_ABSENT_MSG, frozen_corpus_dir, frozen_corpus_skip_reason
 
-CORPUS_DIR = os.environ.get("QX_PORTMAP_CORPUS") or default_corpus_dir()
+# The frozen corpus of the project: the one in the tree, or the one that
+# QX_PORTMAP_CORPUS points to when it is that very corpus (fingerprint).
+CORPUS_DIR = frozen_corpus_dir()
 
 
 def corpus_available():
-    return os.path.isfile(os.path.join(CORPUS_DIR, "MANIFEST.json"))
+    return CORPUS_DIR is not None
 
 
-@unittest.skipUnless(corpus_available(), CORPUS_ABSENT_MSG)
+@unittest.skipUnless(corpus_available(), frozen_corpus_skip_reason())
 class TestFrozenCorpus(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

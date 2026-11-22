@@ -27,12 +27,19 @@ from contextlib import redirect_stdout
 from qnx_portmap.cli import main
 from qnx_portmap.corpus import default_corpus_dir
 
-from .helpers import CORPUS_ABSENT_MSG
+from .helpers import CORPUS_ABSENT_MSG, frozen_corpus_dir, frozen_corpus_skip_reason
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 README = os.path.join(ROOT, "README.md")
 README_FR = os.path.join(ROOT, "docs", "README-FR.md")
 SYMBOLS = ["abort", "accept", "bzero", "zzz_fonction_inexistante"]
+
+# The block of the README is the output of the tool against the FROZEN
+# corpus of the project. Another corpus - the one a reader downloads, a
+# quick corpus - produces another output: the comparison is then simply
+# not made (the test is skipped, never failed). The frozen corpus is
+# looked for in the tree first, then in QX_PORTMAP_CORPUS.
+CORPUS = frozen_corpus_dir()
 
 # The marker that introduces the verbatim output block in each file.
 MARKER_EN = "Real output of the command"
@@ -72,7 +79,7 @@ def real_output(lang=None):
     Without ``lang``, the command is run with the default language of the tool
     (English); ``lang="fr"`` runs the French mode.
     """
-    argv = ["--corpus", default_corpus_dir()]
+    argv = ["--corpus", CORPUS]
     if lang:
         argv += ["--lang", lang]
     buf = io.StringIO()
@@ -80,13 +87,12 @@ def real_output(lang=None):
         code = main(argv + SYMBOLS)
     got = buf.getvalue()
     # the corpus path depends on the machine: it is normalized
-    root = default_corpus_dir()
+    root = CORPUS
     got = got.replace(root, "<CORPUS>")
     return got, code
 
 
-@unittest.skipUnless(os.path.isfile(os.path.join(default_corpus_dir(), "MANIFEST.json")),
-                     CORPUS_ABSENT_MSG)
+@unittest.skipUnless(CORPUS, frozen_corpus_skip_reason())
 class TestReadmeExample(unittest.TestCase):
     def test_readme_shows_the_real_output(self):
         expected = readme_example_output(README, MARKER_EN)

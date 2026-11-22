@@ -379,3 +379,60 @@ def build_fixture_corpus(root):
     with open(os.path.join(root, "SHA256SUMS"), "w", encoding="utf-8") as fh:
         fh.write("\n".join(sums) + "\n")
     return root
+
+
+# --------------------------------------------------------------------------
+# Le corpus fige du projet
+# --------------------------------------------------------------------------
+# Les tests qui comparent une sortie publiee (le README, les mesures J4 et J5,
+# l'integrite du corpus) doivent tous utiliser LE corpus fige du projet. Un
+# autre corpus - celui que le lecteur reconstruit, un corpus de mode rapide -
+# produit une autre sortie : le test serait alors en echec alors que rien
+# n'est faux. Le corpus fige est reconnu par l'empreinte de son fichier de
+# sommes de controle, publiee dans CORPUS-NON-PUBLIE.txt.
+FROZEN_CORPUS_SHA256 = "e312cea466329a76053be0160911cf378ffb1c6ea80050a66c66186ca0023efd"
+
+CORPUS_NOT_FROZEN_MSG = ("autre corpus que le corpus fige du projet : "
+                          "les tests qui exigent le corpus fige sont ignores, "
+                          "jamais en echec")
+
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def frozen_corpus_dir():
+    """Le repertoire du corpus fige du projet, ou None s'il est inaccessible.
+
+    Il est cherche dans l'arbre du depot (``corpus/``) puis dans la variable
+    d'environnement ``QX_PORTMAP_CORPUS`` : la variable n'est utilisee que si
+    elle designe le corpus fige du projet, verifie par son empreinte.
+    """
+    candidats = [os.path.join(ROOT_DIR, "corpus")]
+    env = os.environ.get("QX_PORTMAP_CORPUS")
+    if env:
+        candidats.append(os.path.abspath(env))
+    for candidat in candidats:
+        sommes = os.path.join(candidat, "SHA256SUMS")
+        if not os.path.isfile(sommes):
+            continue
+        empreinte = hashlib.sha256()
+        with open(sommes, "rb") as fh:
+            for bloc in iter(lambda: fh.read(1 << 20), b""):
+                empreinte.update(bloc)
+        if empreinte.hexdigest() == FROZEN_CORPUS_SHA256:
+            return candidat
+    return None
+
+
+def frozen_corpus_skip_reason():
+    """La raison du saut des tests qui exigent le corpus fige, ou None.
+
+    Le message du saut est celui d'un corpus absent quand aucun corpus n'est
+    la, et un message propre quand un corpus - mais pas celui du projet -
+    est present.
+    """
+    if frozen_corpus_dir() is not None:
+        return None
+    env = os.environ.get("QX_PORTMAP_CORPUS")
+    if env and os.path.isfile(os.path.join(os.path.abspath(env), "MANIFEST.json")):
+        return CORPUS_NOT_FROZEN_MSG
+    return CORPUS_ABSENT_MSG
