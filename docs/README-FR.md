@@ -422,7 +422,7 @@ qui exige le corpus **dans le paquet installe** (absent du depot, la
 documentation QNX n'etant pas redistribuee) ; il est saute, jamais en echec.
 Si le corpus est place dans `corpus/` a cote du paquet, ce test s'execute et
 la suite passe sans aucun saut. Les trois lignes du tableau ci-dessus ont ete
-remesurees le 16/11/2026.
+remesurees le 22/11/2026, sur des clones frais du depot public.
 
 Les 33 tests sautes sont ceux qui exigent le corpus complet (integrite
 SHA-256 de chacune des 3 426 pages, chiffres de l'index 8.0 et 7.1, reponses

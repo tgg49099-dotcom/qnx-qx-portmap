@@ -646,7 +646,8 @@ one that requires the corpus **inside the installed package** (absent from the
 repository, the QNX documentation being not redistributable); it is skipped,
 never failed. If the corpus is placed in `corpus/` next to the package, this
 test runs and the suite passes without any skip. The three lines of the table
-above were re-measured on 15/11/2026.
+above were re-measured on 22 November 2026, on fresh clones of the published
+repository.
 
 The 33 skipped tests are the ones that require the complete corpus (SHA-256
 integrity of each of the 3 426 pages, index figures for 8.0 and 7.1, answers

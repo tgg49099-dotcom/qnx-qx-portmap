@@ -24,7 +24,7 @@ Repository: <https://github.com/tgg49099-dotcom/qnx-qx-portmap>
 - **About 15 minutes** for steps 1 to 4 and 8 to 9. Step 3 downloads 76 pages
   of the official documentation at one request per second (**150.7 s**
   measured on 19 November 2026), step 4 downloads 27 pages (**51 s**, measured
-  on 19 November 2026).
+  on 15 November 2026).
 - **About 2 hours** for steps 5 to 7: they need the complete snapshot of the
   official documentation (3 973 pages in 2 h 03, measured on 18 November
   2026).
@@ -175,7 +175,7 @@ pages figees : 27
 fichiers dans corpus : 56
 ```
 
-27 pages in **51 seconds** (measured on 19 November 2026). The pages come from
+27 pages in **51 seconds** (measured on 15 November 2026). The pages come from
 the official QNX site; the script keeps a download log with the SHA-256 of
 each page.
 
@@ -489,11 +489,16 @@ gives the verdict above. `git status` shows what the steps wrote, and
 `git checkout -- MANIFESTE-PUBLIE.txt` puts the published manifest back.
 
 **Do not publish a regenerated manifest.** `python3 scripts/manifeste_publie.py`
-lists *every* file of the tree, the ones the steps wrote included: in a clone
-where the steps were done, it lists **132 files instead of the 127 published
-ones** (measured on 22 November 2026), with `calls.txt`, `corpus-quick/`,
-`corpus-downloaded/`, `my_code.c` and `state.json` in it. Use it to see what
-changed, then restore the published manifest with
+lists *every* file of the tree, the ones the steps wrote included; it counts
+files, never a directory. In a clone where the steps were done, it lists
+**130 files instead of the 127 published ones** (measured on 22 November 2026):
+the three files the steps leave in the tree - `calls.txt`, `my_code.c` and
+`state.json` - are in it, and the directories `corpus-quick/` and
+`corpus-downloaded/` are not counted at all, only the files they contain. The
+count then grows with the snapshots the steps download: **285 files** with the
+quick snapshot of step 3 (`corpus-quick/`, 155 files) and **8 235 files** with
+the complete snapshot of step 5 (`corpus-downloaded/`, 7 950 files). Use it to
+see what changed, then restore the published manifest with
 `git checkout -- MANIFESTE-PUBLIE.txt`.
 
 The eight checks are the unit test suite, the anti-leak control of the corpus,
