@@ -385,15 +385,22 @@ class TestRefreshFixes(unittest.TestCase):
         self.assertEqual(manifest["pages_total"], 1)
         self.assertEqual(manifest["versions"], ["8.0"])
 
-    def test_crawl_book_follows_links_with_fragments(self):
+    def test_crawl_book_follows_the_frozen_corpus_link_rule(self):
+        """Studio 23/11/2026: the crawler follows "page.html" links, as when
+        the frozen corpus was built. Following "page.html#anchor" too made
+        quick mode fetch bsps.html, absent from the frozen corpus, so quick
+        mode no longer matched full mode (test_quick, test_no_failed_page).
+        Change this rule only together with a rebuild of the frozen corpus."""
         base = "https://www.qnx.com/developers/docs/8.0/%s/topic/" % USER_GUIDE
         site = {
-            base + "about.html": '<a href="sub.html#section1">Sub</a>',
-            base + "sub.html": "<article><p>Target page</p></article>",
+            base + "about.html": ('<a href="plain.html">Plain</a>'
+                                  '<a href="anchored.html#section1">Anchored</a>'),
+            base + "plain.html": "<article><p>Target page</p></article>",
+            base + "anchored.html": "<article><p>Only linked with an anchor</p></article>",
         }
         dl = FakeDownloader(os.path.join(self.tmp, "frag-cache"), site)
         pages = dl.crawl_book("8.0", USER_GUIDE, "about.html")
-        self.assertEqual(pages, [base + "about.html", base + "sub.html"])
+        self.assertEqual(pages, [base + "about.html", base + "plain.html"])
 
     def test_fetch_atomic_write_leaves_no_tmp_files(self):
         cache_dir = os.path.join(self.tmp, "atomic-cache")

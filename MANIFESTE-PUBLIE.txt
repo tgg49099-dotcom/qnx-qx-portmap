@@ -1,9 +1,9 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
 Tree            : /home/claude/w/pm
-Generated on    : 2026-11-23 21:10:03
+Generated on    : 2026-11-23 21:10:39
 Files           : 131
-Total size      : 4073146 bytes
+Total size      : 4074065 bytes
 
 The 3 biggest files:
     1832957 bytes  media/qx-portmap-demo-final.mp4
@@ -85,7 +85,7 @@ qnx_portmap/cli.py	18063	27381c32be5a53050ebc792c3df0dc6fdfbd48482789d1925be2046
 qnx_portmap/corpus.py	10049	e2bc44642d67ac84cd0822f6eed4a6eccab6b5e3bb1e6e2d35a9fc1fc2a392e1
 qnx_portmap/extract.py	34784	7932d83ff3978a6c304f0141ba82f96ab06bea48a6ade12c7b9e077695115145
 qnx_portmap/quick.py	6686	10275a2417f8d0e581442ad0c5e23102f6ccdc7251d91a786d6d2f95d0157481
-qnx_portmap/refresh.py	10475	30cc9e0f5f02ab8e6eb05ecdd77b085a4cfdbf6aa626aeec0948f391640984e8
+qnx_portmap/refresh.py	10829	43a1ee1211ec67015bb4153663c2ff5c3fb51e617e5fa4242f373b64ccea3a70
 qnx_portmap/report.py	19577	8324955427b69fb44d10b2e93b99cc03a893e4962bf59ad34d754bb0fb92669b
 qnx_portmap/scan.py	18191	eb28918e07997fa7cda4a398458992eb1909b87a1ea4196539e8d652236390fa
 scripts/bootstrap_corpus.sh	5288	dd52938560f7f5c59d728bdd082e876854a58a6e43f45457339a73e22d69d1f2
@@ -111,7 +111,7 @@ tests/fixtures/f10-getprotobyname_r.txt	461	7a4c894e32a31fbc3a76ea1800650c412821
 tests/fixtures/f11-errno.txt	794	67d8869420ed3b2bffeadd07ab2db52e4002e19f6da98b6f5038ff627b5a6aec
 tests/fixtures/f12-bzero.txt	816	ca124e230c640bdcab3a290706825d82c8ee4329fe2dbd8b8e6ed14c11581bb7
 tests/helpers.py	18966	a5f830fddf705522603027f0abbf8e11c3594ef39d4eb94ddd8c92a71702c942
-tests/test_antigravity.py	33651	b4347b779a17d0c4550ddafed29e417a5dba035aed1c15ee7a367263d803fac4
+tests/test_antigravity.py	34216	34e873607ee4b1c713f509c611fa4db24f470ddb46e67400fa00a8b7b4d97beb
 tests/test_classify.py	6002	fa817d50205a0bd884b9dbb489247398b3560118fe21470732d0f77ed9334303
 tests/test_cli.py	4835	7622a4b14ad4312877dfa67aa5ffa7b1bd26ae4c50256e84de6723ecb967e0c6
 tests/test_corpus.py	5195	8aefd0485c2f935b86daf8fb24378c75acbcd18589ede86a217064dce00f7bb4

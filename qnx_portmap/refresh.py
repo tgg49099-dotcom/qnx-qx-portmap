@@ -38,7 +38,12 @@ BOOKS_71 = [("com.qnx.doc.neutrino.lib_ref", "about.html")]
 
 OUT_RELPATH = re.compile(r'name="wh-out-relpath"\s+content="([^"]+)"')
 _CACHE_HASH_SUFFIX = re.compile(r"__[0-9a-f]{16}(\.html)$")
-_HTML_HREF = re.compile(r'href="([^"]+\.html(?:#[^"]*)?)"')
+# Links "page.html" only, as when the frozen corpus (3 426 pages) was built.
+# Studio 23/11/2026: also following "page.html#anchor" fetched one page the
+# frozen corpus does not hold (migration guide, bsps.html: a list of BSP
+# source files), so quick mode no longer matched full mode
+# (tests/test_quick.py, test_no_failed_page). Change both together, or neither.
+_HTML_HREF = re.compile(r'href="([^"]+\.html)"')
 
 
 class Downloader(object):
