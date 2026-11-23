@@ -24,7 +24,8 @@ import re
 
 from .corpus import LIB_REF_BOOK
 from .extract import (article_of, bold_identifiers, parse_index_page,
-                      parse_topic_page, sentences_with, strip_tags)
+                      parse_topic_page, sentences_with, strip_tags,
+                      symbol_regex)
 
 DOCUMENTED = "documented"
 ELSEWHERE = "described_elsewhere"
@@ -213,11 +214,7 @@ class Classifier(object):
         key = (sym, bool(call_form))
         rx = self._pattern_cache.get(key)
         if rx is None:
-            if call_form:
-                body = r"%s\s*\(" % re.escape(sym)
-            else:
-                body = r"%s" % re.escape(sym)
-            rx = re.compile(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % body)
+            rx = symbol_regex(sym, call_form=call_form)
             self._pattern_cache[key] = rx
         return rx
 

@@ -840,6 +840,23 @@ def bold_identifiers(page_html):
     return out
 
 
+def symbol_regex(sym, call_form=False):
+    """Word-boundary regex for an API name, blind to file paths.
+
+    ``recv`` must not match ``i2c/imx8/recv.c`` (a source file listed by
+    the 8.0 migration guide, page bsps.html): a name preceded by ``/`` or
+    ``\\``, or followed by ``.`` and a letter or digit (a file extension),
+    is a file name, not the API symbol.
+    """
+    if call_form:
+        body = r"%s\s*\(" % re.escape(sym)
+        tail = r"(?![A-Za-z0-9_])"
+    else:
+        body = re.escape(sym)
+        tail = r"(?![A-Za-z0-9_])(?!\.[A-Za-z0-9])"
+    return re.compile(r"(?<![A-Za-z0-9_/\\])%s%s" % (body, tail))
+
+
 def sentences_with(text, needle, limit=3, max_len=320, call_form=False,
                    pattern=None):
     """Sentences of ``text`` that contain ``needle`` (exact identifier).
@@ -851,11 +868,7 @@ def sentences_with(text, needle, limit=3, max_len=320, call_form=False,
     """
     out = []
     if pattern is None:
-        if call_form:
-            body = r"%s\s*\(" % re.escape(needle)
-        else:
-            body = r"%s" % re.escape(needle)
-        pattern = re.compile(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % body)
+        pattern = symbol_regex(needle, call_form=call_form)
     for m in pattern.finditer(text):
         start = text.rfind(".", 0, m.start())
         start = 0 if start < 0 else start + 1

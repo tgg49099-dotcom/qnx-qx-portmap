@@ -29,9 +29,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BREAKS = [
     ("frontiere de mot dans la recherche de citation",
      "qnx_portmap/extract.py",
-     'pattern = re.compile(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % body)',
-     'pattern = re.compile(r"%s" % body)',
+     r'    return re.compile(r"(?<![A-Za-z0-9_/\\])%s%s" % (body, tail))',
+     r'    return re.compile(r"%s" % body)',
      "tests.test_extract.TestSentencesWith.test_respects_word_boundaries"),
+
+    ("un nom de fichier n'est pas un symbole (recv.c, /dev/socket)",
+     "qnx_portmap/extract.py",
+     r'    return re.compile(r"(?<![A-Za-z0-9_/\\])%s%s" % (body, tail))',
+     r'    return re.compile(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % body)',
+     "tests.test_symbol_paths.FileNameIsNotSymbol.test_path_is_ignored"),
 
     ("verification du SHA-256 des pages du corpus",
      "qnx_portmap/corpus.py",
