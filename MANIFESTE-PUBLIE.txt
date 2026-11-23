@@ -1,9 +1,9 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
 Tree            : /tmp/claude-0/w/pm-patch
-Generated on    : 2026-11-23 14:22:16
+Generated on    : 2026-11-23 14:46:49
 Files           : 131
-Total size      : 4064882 bytes
+Total size      : 4065264 bytes
 
 The 3 biggest files:
     1832957 bytes  media/qx-portmap-demo-final.mp4
@@ -81,7 +81,7 @@ qnx_portmap/LISEZMOI-FR.md	782	c2ab59c8b7f12cb2d557e917db3cd7e2857612d5522d4480e
 qnx_portmap/LISEZMOI.md	849	4ec43a5065bc2928da8fcc9b549378cda1f6498a54eaf49477174a718dbe6402
 qnx_portmap/__init__.py	385	fb0a7d26903562acc28075650cc00ad00e66ec80aab944a86390fd09a810669e
 qnx_portmap/__main__.py	131	646687eab6b4ac778f4dd765b29b1b8bf5804c7731c32281a719c69084bd79b6
-qnx_portmap/classify.py	20054	48da80aa2e7ab07b930e3175260f2aca14a2f3dca465241b396424dacd6dc331
+qnx_portmap/classify.py	20436	c1dcedea63e414fc68adf0ed78efb1b4ece2c418c73be479396ec32b6b2370ad
 qnx_portmap/cli.py	18063	27381c32be5a53050ebc792c3df0dc6fdfbd48482789d1925be20464a4ef7f27
 qnx_portmap/corpus.py	10049	e2bc44642d67ac84cd0822f6eed4a6eccab6b5e3bb1e6e2d35a9fc1fc2a392e1
 qnx_portmap/extract.py	30985	ce4acad89d17052bf6e96d79d70d4fb80eeab1d754d353c8ccd66ed4228456c2

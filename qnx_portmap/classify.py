@@ -262,6 +262,13 @@ class Classifier(object):
                 continue
             if page.is_index_page:
                 continue
+            key = (page.version, page.book, page.topic)
+            if key not in self._scan_cache:
+                # fast path: a page whose raw HTML contains none of the
+                # remaining names cannot quote them; skip its (slow) parse
+                raw = self.corpus.html(page)
+                if not any(sym in raw for sym in remaining):
+                    continue
             text = self._article_text(page)
             if not text:
                 continue
