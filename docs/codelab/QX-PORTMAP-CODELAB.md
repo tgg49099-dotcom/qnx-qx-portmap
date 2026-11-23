@@ -305,11 +305,24 @@ too. The command exits with code 0.
 
 ## Step 8 - Extract the calls of your own code
 
+Take any C file of your own - or the three-line example below. Write the
+example file first, the next command reads it:
+
 ```bash
-grep -ohE '[A-Za-z_][A-Za-z0-9_]*[[:space:]]*\(' my_code.c | tr -d '( \t' | sort -u | grep -vxE 'if|for|while|switch|return|sizeof|main' > calls.txt
+cd qnx-qx-portmap && printf '#include <stdlib.h>\nvoid f(void) { abort(); bzero(p, 10); }\n' > my_code.c
 ```
 
-**You should see:** a `calls.txt` file with one call per line. With this file:
+**You should see:** nothing on the screen: the command writes the file
+silently. `cat my_code.c` shows the three lines of the example.
+
+Then extract the calls:
+
+```bash
+cd qnx-qx-portmap && grep -ohE '[A-Za-z_][A-Za-z0-9_]*[[:space:]]*\(' my_code.c | tr -d '( \t' | sort -u | grep -vxE 'if|for|while|switch|return|sizeof|main' > calls.txt
+```
+
+**You should see:** a `calls.txt` file with one call per line. With the file
+written above:
 
 ```c
 #include <stdlib.h>
