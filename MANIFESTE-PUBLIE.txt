@@ -1,9 +1,9 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
-Tree            : /work/qnx-portmap
-Generated on    : 2026-11-23 06:26:36
+Tree            : /work/proofs/cycle228/clone-portmap-neuf
+Generated on    : 2026-11-23 14:14:21
 Files           : 127
-Total size      : 3976196 bytes
+Total size      : 3976277 bytes
 
 The 3 biggest files:
     1832957 bytes  media/qx-portmap-demo-final.mp4
@@ -27,7 +27,7 @@ docs/CODELAB-FORUM-PROPOSITION.md	6058	2191292cdc025f39a8e56c8c95ff86cbbc1897579
 docs/QNX-8.0-CIBLE.md	12057	ef018230d6c01e80f8bd48f0c91150df7371e609a461cb284979f6ca35c556e7
 docs/README-FR.md	39888	1538550d0adf464a69d82a73063889291af23ec5db44de8cf80f2b65d6342197
 docs/UTILISATION.md	7020	c6a5eb4c82fa980855202f26087ccf1b173bc4a5d803802aece3c7b606fb3c73
-docs/codelab/QX-PORTMAP-CODELAB.md	29061	ae25d1fcc80f99dd6607ab11914dab5ff838830a5ee8bc54d6b0ce887b6acbf8
+docs/codelab/QX-PORTMAP-CODELAB.md	29142	dfc47a077d9e791885b5f43a561bc5398b757b3c0faef4344732095bd14427e3
 docs/contre-epreuve-rouge.txt	6719	158fe3b55580d86a4e212ef93716e90b49226f6526fcda19d31a48c6c42796db
 docs/demo-projets-reels.md	8572	9c2d6cae11b65815c68785a86f01512f81e26c9147e92c736c229dcd537eaef9
 docs/mesure-J4-FR.md	30669	7946d2218fd1ade0cb80c00a9e49c09ef2e180c10afb5d22021d1fe6cc5446b5
