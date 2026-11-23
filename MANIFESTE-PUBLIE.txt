@@ -1,9 +1,9 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
-Tree            : /tmp/claude-0/w/pm-patch
-Generated on    : 2026-11-23 14:46:49
+Tree            : /home/claude/w/pm
+Generated on    : 2026-11-23 20:18:32
 Files           : 131
-Total size      : 4065264 bytes
+Total size      : 4070861 bytes
 
 The 3 biggest files:
     1832957 bytes  media/qx-portmap-demo-final.mp4
@@ -12,7 +12,6 @@ The 3 biggest files:
 
 Detail (path, size in bytes, SHA-256):
 
-.git	63	4b1b91340e27537046df9b14caa9bc9ba4a75acb78a6b51ab5192ca0bd9ad45e
 .gitignore	108	2f22a3834102ea229a1904665d78ed928bc4a0e90a2632241a3de7697421c620
 CORPUS-NON-PUBLIE.txt	3771	1e4231b77e9db0717d6b46cac67561a02d82c189af76c35c5c6576d4e8fbc8d3
 KIT-SOUMISSION-QNX.md	57151	772435002fe763926112566585277f2fdc00bba793ff992a4c183f26644ac9fc
@@ -84,7 +83,7 @@ qnx_portmap/__main__.py	131	646687eab6b4ac778f4dd765b29b1b8bf5804c7731c32281a719
 qnx_portmap/classify.py	20436	c1dcedea63e414fc68adf0ed78efb1b4ece2c418c73be479396ec32b6b2370ad
 qnx_portmap/cli.py	18063	27381c32be5a53050ebc792c3df0dc6fdfbd48482789d1925be20464a4ef7f27
 qnx_portmap/corpus.py	10049	e2bc44642d67ac84cd0822f6eed4a6eccab6b5e3bb1e6e2d35a9fc1fc2a392e1
-qnx_portmap/extract.py	30985	ce4acad89d17052bf6e96d79d70d4fb80eeab1d754d353c8ccd66ed4228456c2
+qnx_portmap/extract.py	34092	46a2b1e20b69123eb703706d573f695721621cf308941d5ce88e6322483ff0bd
 qnx_portmap/quick.py	6686	10275a2417f8d0e581442ad0c5e23102f6ccdc7251d91a786d6d2f95d0157481
 qnx_portmap/refresh.py	10475	30cc9e0f5f02ab8e6eb05ecdd77b085a4cfdbf6aa626aeec0948f391640984e8
 qnx_portmap/report.py	19577	8324955427b69fb44d10b2e93b99cc03a893e4962bf59ad34d754bb0fb92669b
@@ -118,6 +117,7 @@ tests/test_cli.py	4835	7622a4b14ad4312877dfa67aa5ffa7b1bd26ae4c50256e84de6723ecb
 tests/test_corpus.py	5195	8aefd0485c2f935b86daf8fb24378c75acbcd18589ede86a217064dce00f7bb4
 tests/test_download_retry.py	1837	5cb712ba2089eb9f6196938b8962ff1daaa96f1f639f8c08bd754aa2fdf0ae27
 tests/test_extract.py	5614	efb9dc285c2dc379848c8e7eca02fc6d88f0d90483e6e94198b785de13e5ed3d
+tests/test_fast_extract.py	2553	f2f6ee27e3e0b84cf0c2bad614dd915c855f681464beadb06275faadc30be0cd
 tests/test_fixtures.py	10982	5cb3d47776160060a4560e316b7b11f7df06c8f0b0b7e6423ea738f87d29a038
 tests/test_frozen_corpus.py	6327	f8d9aa1cdf9aa271987ca6bec5589d585f195ef31e1d75f4c47d2dc1f0b66efc
 tests/test_lang_en.py	10863	08cb2899fbb968dad4b8f2efc18b8c0f755a0f1bee68e107b489ccafea4af8d5

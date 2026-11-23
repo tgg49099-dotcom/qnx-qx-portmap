@@ -680,7 +680,89 @@ class _BoldParser(HTMLParser):
 
 # --- public extraction functions -----------------------------------------
 
+# Fast paths (Studio, 23/11/2026). The html.parser versions below stay the
+# reference (tests/test_fast_extract.py compares both); on the real corpus
+# (3 426 pages) both give the same text, but the parser is about 50 times
+# slower: the full test suite went from 36 s to more than 170 s.
+_TOKEN = re.compile(
+    r"<!--.*?(?:-->|\Z)"                                  # comment
+    r"|<(script|style)(?=[\t\n\r\f />])"                   # raw text block
+    r"(?:[^>\"']|\"[^\"]*\"|'[^']*')*(?<!/)>.*?(?:</\1\s*>|\Z)"
+    r"|<[A-Za-z][^\t\n\r\f />\x00]*(?:[^>\"']|\"[^\"]*\"|'[^']*')*>"  # start tag
+    r"|</[A-Za-z][^>]*>"                                   # end tag
+    r"|<![^>]*>|<\?[^>]*>",                                # declaration, PI
+    re.S | re.I)
+_ARTICLE_TOKEN = re.compile(
+    r"<!--.*?(?:-->|\Z)"
+    r"|<(script|style)(?=[\t\n\r\f />])"
+    r"(?:[^>\"']|\"[^\"]*\"|'[^']*')*(?<!/)>.*?(?:</\1\s*>|\Z)"
+    r"|<(/?)article(?=[\t\n\r\f />])(?:[^>\"']|\"[^\"]*\"|'[^']*')*>",
+    re.S | re.I)
+
+
+def _tag_space(m):
+    tok = m.group(0)
+    if tok.startswith("<!--") or tok[1:2] not in ("!", "?"):
+        return " "
+    return ""
+
+
 def strip_tags(fragment):
+    """Removes the tags and normalizes the spaces. The text stays readable.
+
+    Script and style contents are dropped; tags and comments become a
+    space, declarations nothing (same output as ``_strip_tags_parser``).
+    """
+    if not fragment:
+        return ""
+    if "<" not in fragment and "&" not in fragment:
+        return _WS.sub(" ", fragment).strip()
+    text = _TOKEN.sub(_tag_space, fragment)
+    if "&" in text:
+        text = _html.unescape(text)
+    return _WS.sub(" ", text).strip()
+
+
+def article_of(page_html):
+    """Returns the ``<article>`` body of the page (empty string if absent).
+
+    Each top-level ``<article>...</article>`` block, without greedy capture,
+    ignoring the ones inside comments, scripts and styles (same output as
+    ``_article_of_parser``).
+    """
+    if not page_html or "<article" not in page_html.lower():
+        return ""
+    out = []
+    depth = 0
+    start = None
+    for m in _ARTICLE_TOKEN.finditer(page_html):
+        tok = m.group(0)
+        if tok.startswith("<!--") or m.group(1):
+            continue
+        if m.group(2):                       # </article>
+            if depth > 0:
+                depth -= 1
+                if depth == 0 and start is not None:
+                    end = page_html.find(">", m.start())
+                    out.append(page_html[start:end + 1 if end >= 0 else len(page_html)])
+                    start = None
+        elif tok.endswith("/>"):             # <article/>
+            if depth == 0:
+                end = page_html.find(">", m.start())
+                if end >= 0:
+                    out.append(page_html[m.start():end + 1])
+        else:
+            if depth == 0:
+                start = m.start()
+            depth += 1
+    if depth > 0 and start is not None:
+        out.append(page_html[start:])
+    return "\n".join(out)
+
+
+# --- reference implementations (html.parser), kept for the tests ----------
+
+def _strip_tags_parser(fragment):
     """Removes the tags and normalizes the spaces. The text stays readable."""
     if not fragment:
         return ""
@@ -692,7 +774,7 @@ def strip_tags(fragment):
     return _collapse_ws(parser.parts)
 
 
-def article_of(page_html):
+def _article_of_parser(page_html):
     """Returns the ``<article>`` body of the page (empty string if absent)."""
     if not page_html or "<article" not in page_html.lower():
         return ""
