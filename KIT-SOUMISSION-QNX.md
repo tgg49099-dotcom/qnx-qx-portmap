@@ -247,7 +247,7 @@ For each symbol it resolves, QX PORTMAP prints the official page, the exact quot
 
 ## Measured
 
-On 100 QNX symbols really called by five public QNX repositories: 95 resolved and quoted. 202 tests, no failure. Pure Python 3, no SDK, no board.
+On 100 QNX symbols really called by five public QNX repositories: 95 resolved and quoted. 246 tests, no failure. Pure Python 3, no SDK, no board.
 ```
 
 - Length (measured): 1170 characters
@@ -449,11 +449,11 @@ symbols, the citation of each one and the SHA-256 of the cited page are in
 python3 -m unittest discover -s tests -t .
 ```
 
-202 tests, no third-party dependency, no network access. Measured on
-17 November 2026 in the three possible configurations: with the corpus in
-`corpus/` next to the package, 202 tests and 0 skipped; with the corpus
-pointed to by the environment variable `QX_PORTMAP_CORPUS`, 202 tests and 1
-skipped; without any corpus, 202 tests and 33 skipped (the skipped ones are
+246 tests, no third-party dependency, no network access. Measured on
+23 November 2026 in the three possible configurations: with the corpus in
+`corpus/` next to the package, 246 tests and 0 skipped; with the corpus
+pointed to by the environment variable `QX_PORTMAP_CORPUS`, 246 tests and 1
+skipped; without any corpus, 246 tests and 33 skipped (the skipped ones are
 the ones that need the corpus). The suite also contains
 a RED -> GREEN proof: `tools/contre_epreuve.py` breaks one rule of the code
 at a time and checks that the matching test turns red, then restores the
@@ -537,7 +537,7 @@ Pure Python 3, standard library only: no SDK, no board.
 
 ## Measured
 
-On 100 QNX symbols really called by five public QNX repositories: 95 resolved and quoted. 202 tests, no failure.
+On 100 QNX symbols really called by five public QNX repositories: 95 resolved and quoted. 246 tests, no failure.
 ```
 
 - Length (measured): 1187 characters

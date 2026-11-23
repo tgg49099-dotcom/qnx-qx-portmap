@@ -109,7 +109,7 @@ BREAKS = [
 
     ("detection des symboles cites en gras",
      "qnx_portmap/extract.py",
-     '    for text in _bold_texts_in_article(page_html):',
+     '    for text in _bold_texts_in_article(page_html, whole_page=whole_page):',
      '    for text in []:',
      "tests.test_classify.TestClassification.test_symbol_cited_in_bold"),
 
