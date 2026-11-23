@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 import re
+import zlib
 
 from .extract import strip_tags
 
@@ -97,21 +98,32 @@ class Corpus(object):
         if not os.path.isfile(manifest_path):
             raise CorpusError(self._t("corpus introuvable : %s" % self.root,
                                       "corpus not found: %s" % self.root))
-        with open(manifest_path, encoding="utf-8") as fh:
-            self.manifest = json.load(fh)
+        try:
+            with open(manifest_path, encoding="utf-8") as fh:
+                self.manifest = json.load(fh)
+        except (OSError, ValueError) as exc:
+            raise CorpusError(self._t("manifeste illisible (%s) : %s" % (manifest_path, exc),
+                                      "unreadable manifest (%s): %s" % (manifest_path, exc)))
+        if not isinstance(self.manifest, dict):
+            raise CorpusError(self._t("manifeste invalide : %s" % manifest_path,
+                                      "invalid manifest: %s" % manifest_path))
         index_path = os.path.join(self.root, self.manifest.get("pages_index", "index/pages.jsonl"))
         if not os.path.isfile(index_path):
             raise CorpusError(self._t("index des pages introuvable : %s" % index_path,
                                       "page index not found: %s" % index_path))
-        with open(index_path, encoding="utf-8") as fh:
-            for line in fh:
-                line = line.strip()
-                if not line:
-                    continue
-                page = Page(json.loads(line))
-                self.pages.append(page)
-                self._by_key[(page.version, page.book, page.topic)] = page
-                self._by_url[page.url] = page
+        try:
+            with open(index_path, encoding="utf-8") as fh:
+                for line in fh:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    page = Page(json.loads(line))
+                    self.pages.append(page)
+                    self._by_key[(page.version, page.book, page.topic)] = page
+                    self._by_url[page.url] = page
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            raise CorpusError(self._t("index des pages illisible (%s) : %s" % (index_path, exc),
+                                      "unreadable page index (%s): %s" % (index_path, exc)))
         if not self.pages:
             raise CorpusError(self._t("corpus vide : %s" % self.root,
                                       "empty corpus: %s" % self.root))
@@ -132,7 +144,7 @@ class Corpus(object):
         try:
             with gzip.open(path, "rb") as fh:
                 return fh.read()
-        except (OSError, EOFError) as exc:
+        except (OSError, EOFError, zlib.error) as exc:
             raise CorpusError(self._t("page illisible (%s) : %s" % (page.file, exc),
                                       "unreadable page (%s): %s" % (page.file, exc)))
 
@@ -210,9 +222,13 @@ class Corpus(object):
                 line = line.strip()
                 if not line:
                     continue
-                digest, _, rel = line.partition("  ")
-                full = os.path.join(self.root, rel)
+                digest, sep, rel = line.partition("  ")
                 checked += 1
+                if not sep or not digest or not rel:
+                    failed.append((line, digest, self._t("ligne mal formee",
+                                                         "malformed entry")))
+                    continue
+                full = os.path.join(self.root, rel)
                 if not os.path.isfile(full):
                     failed.append((rel, digest, self._t("fichier absent",
                                                         "file missing")))
@@ -232,11 +248,13 @@ def read_symbols(text):
     The comments (``#``) and the empty lines are ignored.
     """
     out = []
+    seen = set()
     for line in text.splitlines():
         line = line.split("#", 1)[0]
-        for chunk in line.replace(";", ",").replace(" ", ",").split(","):
+        for chunk in re.split(r"[,;\s]+", line):
             chunk = chunk.strip()
-            if chunk and chunk not in out:
+            if chunk and chunk not in seen:
+                seen.add(chunk)
                 out.append(chunk)
     return out
 

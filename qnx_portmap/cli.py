@@ -11,10 +11,11 @@ import argparse
 import os
 import sys
 
-from .classify import Classifier
+from .classify import ABSENT, UNKNOWN, Classifier
 from .corpus import Corpus, CorpusError, default_corpus_dir, read_symbols
 from .quick import apply_quick_limits, is_quick
-from .report import render_json, render_markdown, render_text
+from .report import render_json, render_markdown, render_sarif, render_text
+from .scan import ScanError, scan_directory
 
 # Help of the argument parser in the two output languages. English is the
 # default language of the console; the French help is printed on demand
@@ -26,11 +27,14 @@ HELP_STRINGS = {
         "epilog": "Exemples :\n"
                   "  qnx-portmap abort pthread_create bzero\n"
                   "  qnx-portmap --file symboles.txt --format markdown\n"
+                  "  qnx-portmap --scan-dir ./src --worklist\n"
                   "  cat symbols.txt | qnx-portmap --stdin --format json\n"
                   "  qnx-portmap --verify-corpus\n",
         "symbols": "symboles a analyser",
         "file": "fichier contenant la liste des symboles",
         "stdin": "lire la liste sur l'entree standard",
+        "scan_dir": "parcourir les fichiers .c et .h d'un repertoire "
+                    "(ignore les fonctions definies dans le projet)",
         "format": "format de sortie (defaut : text)",
         "corpus": "repertoire du corpus fige (defaut : corpus du paquet)",
         "version_doc": "version de documentation visee",
@@ -56,11 +60,14 @@ HELP_STRINGS = {
         "epilog": "Examples:\n"
                   "  qnx-portmap abort pthread_create bzero\n"
                   "  qnx-portmap --file symbols.txt --format markdown\n"
+                  "  qnx-portmap --scan-dir ./src --worklist\n"
                   "  cat symbols.txt | qnx-portmap --stdin --format json\n"
                   "  qnx-portmap --verify-corpus\n",
         "symbols": "symbols to analyze",
         "file": "file containing the symbol list",
         "stdin": "read the list from standard input",
+        "scan_dir": "scan .c and .h files in a directory "
+                    "(ignores functions defined in the project)",
         "format": "output format (default: text)",
         "corpus": "frozen corpus directory (default: package corpus)",
         "version_doc": "target documentation version",
@@ -85,8 +92,9 @@ HELP_STRINGS = {
 # Console messages (outside the renderings) in the two output languages.
 CLI_STRINGS = {
     "fr": {
-        "no_symbols": "qnx-portmap: aucun symbole donne (argument, --file ou --stdin)\n",
+        "no_symbols": "qnx-portmap: aucun symbole donne (argument, --file, --stdin ou --scan-dir)\n",
         "unreadable_file": "qnx-portmap: fichier illisible : %s",
+        "unreadable_dir": "qnx-portmap: repertoire illisible ou introuvable : %s\n",
         "error": "qnx-portmap: %s\n",
         "dir_searched": "  repertoire recherche : %s\n",
         "hints": "  solutions : QX_PORTMAP_CORPUS=/chemin/vers/corpus "
@@ -111,8 +119,9 @@ CLI_STRINGS = {
         "quick_built": "qnx-portmap: petit corpus pret : %d pages en %s s\n",
     },
     "en": {
-        "no_symbols": "qnx-portmap: no symbol given (argument, --file or --stdin)\n",
+        "no_symbols": "qnx-portmap: no symbol given (argument, --file, --stdin or --scan-dir)\n",
         "unreadable_file": "qnx-portmap: unreadable file: %s",
+        "unreadable_dir": "qnx-portmap: unreadable or missing directory: %s\n",
         "error": "qnx-portmap: %s\n",
         "dir_searched": "  directory searched: %s\n",
         "hints": "  hints: QX_PORTMAP_CORPUS=/path/to/corpus "
@@ -139,6 +148,10 @@ CLI_STRINGS = {
 }
 
 
+class _InputError(Exception):
+    """Error while reading symbols from CLI inputs."""
+
+
 def _early_lang(argv):
     """Language asked for before the parsing, to translate ``--help`` too."""
     for i, arg in enumerate(argv):
@@ -158,8 +171,9 @@ def build_parser(lang="en"):
     p.add_argument("symbols", nargs="*", help=h["symbols"])
     p.add_argument("--file", "-f", help=h["file"])
     p.add_argument("--stdin", action="store_true", help=h["stdin"])
-    p.add_argument("--format", choices=("text", "json", "markdown"), default="text",
-                   help=h["format"])
+    p.add_argument("--scan-dir", default=None, help=h["scan_dir"])
+    p.add_argument("--format", choices=("text", "json", "markdown", "sarif"),
+                   default="text", help=h["format"])
     p.add_argument("--corpus", default=None,
                    help=h["corpus"])
     p.add_argument("--lang", choices=("fr", "en"), default="en",
@@ -188,22 +202,38 @@ def build_parser(lang="en"):
     return p
 
 
-def _collect_symbols(args, s):
+def _collect_inputs(args, s):
+    """Collects deduplicated symbols and optional scan result."""
     symbols = list(args.symbols)
+    scan_res = None
     if args.file:
         try:
             with open(args.file, encoding="utf-8") as fh:
                 symbols.extend(read_symbols(fh.read()))
         except OSError as exc:
-            raise SystemExit(s["unreadable_file"] % exc)
+            raise _InputError((s["unreadable_file"] % exc) + "\n")
     if args.stdin:
         symbols.extend(read_symbols(sys.stdin.read()))
+    if args.scan_dir:
+        try:
+            scan_res = scan_directory(args.scan_dir)
+        except (ScanError, OSError) as exc:
+            raise _InputError(s["unreadable_dir"] % exc)
+        symbols.extend(scan_res.symbols)
     out = []
+    seen = set()
     for sym in symbols:
         sym = sym.strip()
-        if sym and sym not in out:
+        if sym and sym not in seen:
+            seen.add(sym)
             out.append(sym)
-    return out
+    return out, scan_res
+
+
+def _collect_symbols(args, s):
+    """Collects deduplicated symbols from arguments, ``--file``, ``--stdin`` and ``--scan-dir``."""
+    symbols, _ = _collect_inputs(args, s)
+    return symbols
 
 
 def _do_fresh(args, corpus_dir, s):
@@ -252,8 +282,13 @@ def main(argv=None):
     s = CLI_STRINGS[args.lang]
     corpus_dir = args.corpus or default_corpus_dir()
     quick_symbols = None
+    scan_res = None
     if args.quick:
-        quick_symbols = _collect_symbols(args, s)
+        try:
+            quick_symbols, scan_res = _collect_inputs(args, s)
+        except _InputError as exc:
+            sys.stderr.write(str(exc))
+            return 2
         if not quick_symbols:
             sys.stderr.write(s["no_symbols"])
             return 2
@@ -300,7 +335,14 @@ def main(argv=None):
             print("  %-42s %d" % (book, n))
         return 0
 
-    symbols = quick_symbols or _collect_symbols(args, s)
+    if quick_symbols is not None:
+        symbols = quick_symbols
+    else:
+        try:
+            symbols, scan_res = _collect_inputs(args, s)
+        except _InputError as exc:
+            sys.stderr.write(str(exc))
+            return 2
     if not symbols:
         sys.stderr.write(s["no_symbols"])
         return 2
@@ -308,6 +350,10 @@ def main(argv=None):
     classifier = Classifier(corpus, version=args.version_doc,
                             previous=args.previous_version, lang=args.lang)
     results = classifier.classify(symbols)
+    if scan_res is not None:
+        for res in results:
+            if res.symbol in scan_res.calls:
+                res.locations = list(scan_res.calls[res.symbol])
     if is_quick(corpus):
         apply_quick_limits(results, version=args.version_doc,
                            previous=args.previous_version, lang=args.lang)
@@ -316,26 +362,28 @@ def main(argv=None):
     if args.format == "json":
         sys.stdout.write(render_json(results, worklist, corpus,
                                      version=args.version_doc,
-                                     previous=args.previous_version))
+                                     previous=args.previous_version,
+                                     worklist_only=args.worklist,
+                                     scan=scan_res))
     elif args.format == "markdown":
         sys.stdout.write(render_markdown(results, worklist, corpus,
                                          version=args.version_doc,
                                          previous=args.previous_version,
-                                         lang=args.lang))
+                                         lang=args.lang,
+                                         worklist_only=args.worklist))
+    elif args.format == "sarif":
+        sys.stdout.write(render_sarif(results, worklist, corpus,
+                                      version=args.version_doc,
+                                      previous=args.previous_version,
+                                      worklist_only=args.worklist))
     else:
-        if args.worklist:
-            sys.stdout.write(render_text(results, worklist, corpus,
-                                         version=args.version_doc,
-                                         previous=args.previous_version,
-                                         lang=args.lang))
-        else:
-            sys.stdout.write(render_text(results, worklist, corpus,
-                                         version=args.version_doc,
-                                         previous=args.previous_version,
-                                         lang=args.lang))
+        sys.stdout.write(render_text(results, worklist, corpus,
+                                     version=args.version_doc,
+                                     previous=args.previous_version,
+                                     lang=args.lang,
+                                     worklist_only=args.worklist))
 
     # exit code: 0 if everything is fine, 1 if a symbol is absent or unknown
-    from .classify import ABSENT, UNKNOWN
     return 1 if any(r.status in (ABSENT, UNKNOWN) for r in results) else 0
 
 

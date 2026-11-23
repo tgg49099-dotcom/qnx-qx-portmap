@@ -13,56 +13,693 @@ on every version (7.1 and 8.0) are:
 - ``<strong>``                         : a text in bold.
 
 Nothing here is specific to one version: the same code reads 7.1 and 8.0.
+HTML structure is parsed with the standard library ``html.parser`` rather
+than fragile regular expressions.
 """
 
 import html as _html
+from html.parser import HTMLParser
 import re
 
 # --- global patterns ------------------------------------------------------
 
-_SCRIPT_STYLE = re.compile(r"(?is)<(script|style)\b.*?</\1>")
-_ANY_TAG = re.compile(r"(?s)<[^>]+>")
 _WS = re.compile(r"\s+")
-
-# A page can contain several <article> elements (nested topics, like the
-# migration guide): the first one to the last one is taken.
-_ARTICLE = re.compile(r"(?is)<article\b.*</article>")
-_ARTICLE_OPEN = re.compile(r"(?is)<article\b")
-_ARTICLE_CLOSE = re.compile(r"(?is)</article>")
-_TOPIC_ITEM = re.compile(r"(?is)<li\b[^>]*role=\"treeitem\"[^>]*>(.*?)</li>")
-_ANCHOR = re.compile(r'(?is)<a\b[^>]*href="([^"]+)"[^>]*>(.*?)</a>')
-_SHORTDESC = re.compile(r'(?is)<p\b[^>]*class="[^"]*shortdesc[^"]*"[^>]*>(.*?)</p>')
-_APINAME = re.compile(r'(?is)<span\b[^>]*class="[^"]*\bapiname\b[^"]*"[^>]*>(.*?)</span>')
-_VARNAME = re.compile(r'(?is)<var\b[^>]*class="[^"]*\bvarname\b[^"]*"[^>]*>(.*?)</var>')
-_CONSTNAME = re.compile(r'(?is)<span\b[^>]*class="[^"]*\bconst\b[^"]*"[^>]*>(.*?)</span>')
-_BOLD = re.compile(r"(?is)<(?:strong|b)\b[^>]*>(.*?)</(?:strong|b)>")
-_H1 = re.compile(r"(?is)<h1\b[^>]*>(.*?)</h1>")
-_H2 = re.compile(r"(?is)<h2\b[^>]*>(.*?)</h2>")
-_H2_OPEN = re.compile(r"(?is)<h2\b[^>]*>([^<]*)")
-_P = re.compile(r"(?is)<p\b[^>]*>(.*?)</p>")
-_ELSEWHERE_HEAD = re.compile(r"(?is)<p\b[^>]*>(.*?)</p>")
-_ROW = re.compile(r"(?is)<tr\b[^>]*>(.*?)</tr>")
-_CELL = re.compile(r"(?is)<td\b[^>]*>(.*?)</td>")
 _IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_*]*")
-_SENTENCE = re.compile(r"(?s)([^.!?]*?[A-Za-z_][A-Za-z0-9_]*[^.!?]*?[.!?])")
+_SKIP_TAGS = frozenset(("script", "style"))
+_BOLD_TAGS = frozenset(("strong", "b"))
 
+
+def _attr(attrs, name):
+    """Returns the value of an HTML attribute (or empty string if absent)."""
+    for key, val in attrs:
+        if key == name:
+            return val or ""
+    return ""
+
+
+def _classes(attrs):
+    """Returns the set of CSS class tokens carried by an element."""
+    raw = _attr(attrs, "class")
+    return set(raw.split()) if raw else set()
+
+
+def _symbol_kind(tag, attrs):
+    """Returns the symbol kind for a tagged QNX symbol element, or None."""
+    cls = _classes(attrs)
+    if tag == "span" and "apiname" in cls:
+        return "function"
+    if tag == "var" and "varname" in cls:
+        return "variable"
+    if tag == "span" and "const" in cls:
+        return "constant"
+    return None
+
+
+def _collapse_ws(parts):
+    return _WS.sub(" ", "".join(parts)).strip()
+
+
+def _line_offsets(text):
+    """Start offset of each 1-based line in *text*."""
+    offsets = [0]
+    idx = text.find("\n")
+    while idx >= 0:
+        offsets.append(idx + 1)
+        idx = text.find("\n", idx + 1)
+    return offsets
+
+
+# --- HTML parsers ---------------------------------------------------------
+
+class _StripTagsParser(HTMLParser):
+    """Strips HTML markup while preserving token separation and ignoring scripts/styles."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.parts = []
+        self._skip = 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in _SKIP_TAGS:
+            self._skip += 1
+        self.parts.append(" ")
+
+    def handle_endtag(self, tag):
+        if tag in _SKIP_TAGS and self._skip > 0:
+            self._skip -= 1
+        self.parts.append(" ")
+
+    def handle_startendtag(self, tag, attrs):
+        self.parts.append(" ")
+
+    def handle_comment(self, data):
+        self.parts.append(" ")
+
+    def handle_data(self, data):
+        if self._skip == 0:
+            self.parts.append(data)
+
+
+class _ArticleExtractor(HTMLParser):
+    """Extracts each top-level ``<article>...</article>`` block without greedy capture."""
+
+    def __init__(self, source):
+        super().__init__(convert_charrefs=False)
+        self._source = source
+        self._offsets = _line_offsets(source)
+        self._skip = 0
+        self._depth = 0
+        self._start = None
+        self.articles = []
+
+    def _index(self):
+        line, col = self.getpos()
+        return self._offsets[line - 1] + col
+
+    def handle_starttag(self, tag, attrs):
+        if tag in _SKIP_TAGS:
+            self._skip += 1
+            return
+        if self._skip == 0 and tag == "article":
+            if self._depth == 0:
+                self._start = self._index()
+            self._depth += 1
+
+    def handle_startendtag(self, tag, attrs):
+        if self._skip == 0 and tag == "article" and self._depth == 0:
+            start = self._index()
+            end = self._source.find(">", start)
+            if end >= 0:
+                self.articles.append(self._source[start:end + 1])
+
+    def handle_endtag(self, tag):
+        if tag in _SKIP_TAGS and self._skip > 0:
+            self._skip -= 1
+            return
+        if self._skip == 0 and tag == "article" and self._depth > 0:
+            self._depth -= 1
+            if self._depth == 0 and self._start is not None:
+                pos = self._index()
+                end = self._source.find(">", pos)
+                slice_end = end + 1 if end >= 0 else len(self._source)
+                self.articles.append(self._source[self._start:slice_end])
+                self._start = None
+
+    def finish(self):
+        if self._depth > 0 and self._start is not None:
+            self.articles.append(self._source[self._start:])
+            self._depth = 0
+            self._start = None
+        return "\n".join(self.articles)
+
+
+class _AnchorNamesParser(HTMLParser):
+    """Extracts tagged symbol names and kinds from an anchor inner HTML fragment."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.found = []
+        self._seen = set()
+        self._captures = []
+        self._skip = 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in _SKIP_TAGS:
+            self._skip += 1
+            return
+        for cap in self._captures:
+            cap["parts"].append(" ")
+            if tag == cap["tag"]:
+                cap["depth"] += 1
+        kind = _symbol_kind(tag, attrs)
+        if kind is not None:
+            self._captures.append({"tag": tag, "kind": kind, "depth": 1, "parts": []})
+
+    def handle_endtag(self, tag):
+        if tag in _SKIP_TAGS and self._skip > 0:
+            self._skip -= 1
+            return
+        for cap in list(self._captures):
+            cap["parts"].append(" ")
+            if tag == cap["tag"]:
+                cap["depth"] -= 1
+                if cap["depth"] == 0:
+                    self._captures.remove(cap)
+                    raw = _collapse_ws(cap["parts"])
+                    for name in _IDENTIFIER.findall(raw):
+                        if name not in self._seen:
+                            self._seen.add(name)
+                            self.found.append((name, cap["kind"]))
+
+    def handle_data(self, data):
+        if self._skip == 0:
+            for cap in self._captures:
+                cap["parts"].append(data)
+
+
+class _IndexParser(HTMLParser):
+    """Single-pass structural parser for an A-Z C Library Reference index page."""
+
+    def __init__(self, docs_root):
+        super().__init__(convert_charrefs=True)
+        self._docs_root = docs_root
+        self._skip = 0
+        self._article_depth = 0
+
+        # Navigation entries scoped by enclosing <li> (no fixed character window).
+        self.entries = {}
+        self._root_scope = {"pending": None}
+        self._li_stack = []
+        self._anchor = None
+        self._shortdesc = None
+
+        # "Described elsewhere" table rows inside <article>.
+        self.elsewhere_rows = []
+        self._row_stack = []
+        self._cell_stack = []
+
+    def _scope(self):
+        return self._li_stack[-1] if self._li_stack else self._root_scope
+
+    def _flush_scope(self, scope):
+        pending = scope["pending"]
+        if pending is not None:
+            url, names, desc = pending
+            for name, kind in names:
+                self.entries.setdefault(name, {"url": url, "desc": desc, "kind": kind})
+            scope["pending"] = None
+
+    def _flush_all(self):
+        while self._li_stack:
+            self._flush_scope(self._li_stack.pop())
+        self._flush_scope(self._root_scope)
+
+    def handle_starttag(self, tag, attrs):
+        if tag in _SKIP_TAGS:
+            self._skip += 1
+            return
+        if self._skip > 0:
+            return
+
+        if tag == "article":
+            self._article_depth += 1
+
+        # --- navigation tree entries ---
+        if tag == "li":
+            self._li_stack.append({"pending": None})
+        elif tag in ("ul", "ol") and self._li_stack:
+            # Entering a nested child list ends the parent item's own metadata.
+            self._flush_scope(self._li_stack[-1])
+
+        if self._shortdesc is not None:
+            self._shortdesc["parts"].append(" ")
+            if tag == "p":
+                self._shortdesc["depth"] += 1
+        elif tag == "p" and "shortdesc" in _attr(attrs, "class"):
+            scope = self._scope()
+            if scope["pending"] is not None and not scope["pending"][2]:
+                self._shortdesc = {"depth": 1, "parts": [], "scope": scope}
+
+        if self._anchor is not None:
+            for cap in self._anchor["captures"]:
+                cap["parts"].append(" ")
+                if tag == cap["tag"]:
+                    cap["depth"] += 1
+            kind = _symbol_kind(tag, attrs)
+            if kind is not None:
+                self._anchor["captures"].append(
+                    {"tag": tag, "kind": kind, "depth": 1, "parts": []}
+                )
+        elif tag == "a":
+            href = _attr(attrs, "href")
+            if "/topic/" in href:
+                self._anchor = {
+                    "href": href,
+                    "names": [],
+                    "seen": set(),
+                    "captures": [],
+                }
+
+        # --- "described elsewhere" tables inside <article> ---
+        if self._article_depth > 0:
+            if tag == "tr":
+                self._row_stack.append([])
+            elif tag == "td" and self._row_stack:
+                self._cell_stack.append(
+                    {"depth": 1, "text": [], "tagged": [], "urls": [], "captures": []}
+                )
+            elif self._cell_stack:
+                cell = self._cell_stack[-1]
+                cell["text"].append(" ")
+                if tag == "td":
+                    cell["depth"] += 1
+                for cap in cell["captures"]:
+                    cap["parts"].append(" ")
+                    if tag == cap["tag"]:
+                        cap["depth"] += 1
+                if _symbol_kind(tag, attrs) is not None:
+                    cell["captures"].append({"tag": tag, "depth": 1, "parts": []})
+                if tag == "a":
+                    href = _attr(attrs, "href")
+                    if href:
+                        if href.startswith("http"):
+                            cell["urls"].append(href)
+                        else:
+                            cell["urls"].append(_join(self._docs_root, href))
+
+    def handle_startendtag(self, tag, attrs):
+        if self._skip > 0:
+            return
+        if self._shortdesc is not None:
+            self._shortdesc["parts"].append(" ")
+        if self._anchor is not None:
+            for cap in self._anchor["captures"]:
+                cap["parts"].append(" ")
+        if self._cell_stack:
+            cell = self._cell_stack[-1]
+            cell["text"].append(" ")
+            for cap in cell["captures"]:
+                cap["parts"].append(" ")
+
+    def handle_endtag(self, tag):
+        if tag in _SKIP_TAGS and self._skip > 0:
+            self._skip -= 1
+            return
+        if self._skip > 0:
+            return
+
+        # --- "described elsewhere" tables inside <article> ---
+        if self._article_depth > 0:
+            if self._cell_stack:
+                cell = self._cell_stack[-1]
+                if tag == "td":
+                    cell["depth"] -= 1
+                    if cell["depth"] == 0:
+                        self._cell_stack.pop()
+                        if self._row_stack:
+                            self._row_stack[-1].append(
+                                {
+                                    "text": _collapse_ws(cell["text"]),
+                                    "tagged": cell["tagged"],
+                                    "urls": cell["urls"],
+                                }
+                            )
+                    else:
+                        cell["text"].append(" ")
+                else:
+                    cell["text"].append(" ")
+                    for cap in list(cell["captures"]):
+                        cap["parts"].append(" ")
+                        if tag == cap["tag"]:
+                            cap["depth"] -= 1
+                            if cap["depth"] == 0:
+                                cell["captures"].remove(cap)
+                                text = _collapse_ws(cap["parts"])
+                                if text:
+                                    cell["tagged"].append(text)
+            if tag == "tr" and self._row_stack:
+                cells = self._row_stack.pop()
+                if len(cells) >= 2:
+                    self.elsewhere_rows.append((cells[0], cells[1]))
+
+        # --- navigation tree entries ---
+        if self._anchor is not None:
+            if tag == "a":
+                anchor = self._anchor
+                self._anchor = None
+                if anchor["names"]:
+                    scope = self._scope()
+                    self._flush_scope(scope)
+                    scope["pending"] = [
+                        _join(self._docs_root, anchor["href"]),
+                        anchor["names"],
+                        "",
+                    ]
+            else:
+                for cap in list(self._anchor["captures"]):
+                    cap["parts"].append(" ")
+                    if tag == cap["tag"]:
+                        cap["depth"] -= 1
+                        if cap["depth"] == 0:
+                            self._anchor["captures"].remove(cap)
+                            raw = _collapse_ws(cap["parts"])
+                            for name in _IDENTIFIER.findall(raw):
+                                if name not in self._anchor["seen"]:
+                                    self._anchor["seen"].add(name)
+                                    self._anchor["names"].append((name, cap["kind"]))
+
+        if self._shortdesc is not None:
+            if tag == "p":
+                self._shortdesc["depth"] -= 1
+                if self._shortdesc["depth"] == 0:
+                    desc = _collapse_ws(self._shortdesc["parts"])
+                    scope = self._shortdesc["scope"]
+                    self._shortdesc = None
+                    if scope["pending"] is not None:
+                        scope["pending"][2] = desc
+                        self._flush_scope(scope)
+                else:
+                    self._shortdesc["parts"].append(" ")
+            else:
+                self._shortdesc["parts"].append(" ")
+
+        if tag == "li" and self._li_stack:
+            self._flush_scope(self._li_stack.pop())
+
+        if tag == "article" and self._article_depth > 0:
+            self._article_depth -= 1
+
+    def handle_data(self, data):
+        if self._skip > 0:
+            return
+        if self._shortdesc is not None:
+            self._shortdesc["parts"].append(data)
+        if self._anchor is not None:
+            for cap in self._anchor["captures"]:
+                cap["parts"].append(data)
+        if self._cell_stack:
+            cell = self._cell_stack[-1]
+            cell["text"].append(data)
+            for cap in cell["captures"]:
+                cap["parts"].append(data)
+
+
+class _TopicParser(HTMLParser):
+    """Structural parser for a QNX manual (topic) page."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self._skip = 0
+        self._article_depth = 0
+
+        self.title = ""
+        self._seen_h1 = False
+        self._h1 = None
+        self.h1_names = []
+        self._h1_seen = set()
+        self.all_names = []
+        self._all_seen = set()
+        self._name_captures = []
+
+        self.shortdesc = ""
+        self._shortdesc = None
+
+        self.sections = []
+        self._h2 = None
+        self._section_p = None
+
+        self.bold = []
+        self._bold_seen = set()
+        self._bold_captures = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag in _SKIP_TAGS:
+            self._skip += 1
+            return
+        if self._skip > 0:
+            return
+        if tag == "article":
+            self._article_depth += 1
+            return
+        if self._article_depth == 0:
+            return
+
+        if self._h1 is not None:
+            self._h1["parts"].append(" ")
+            if tag == "h1":
+                self._h1["depth"] += 1
+        elif tag == "h1" and not self._seen_h1:
+            self._seen_h1 = True
+            self._h1 = {"depth": 1, "parts": []}
+
+        if self._shortdesc is not None:
+            self._shortdesc["parts"].append(" ")
+            if tag == "p":
+                self._shortdesc["depth"] += 1
+        elif tag == "p" and not self.shortdesc and "shortdesc" in _attr(attrs, "class"):
+            self._shortdesc = {"depth": 1, "parts": []}
+
+        if self._h2 is not None:
+            self._h2["parts"].append(" ")
+            if tag == "h2":
+                self._h2["depth"] += 1
+        elif tag == "h2":
+            self._h2 = {"depth": 1, "parts": []}
+            self._section_p = None
+
+        if self._section_p is not None:
+            self._section_p["parts"].append(" ")
+            if tag == "p":
+                self._section_p["depth"] += 1
+        elif tag == "p" and self.sections:
+            self._section_p = {"depth": 1, "parts": []}
+
+        for cap in self._name_captures:
+            cap["parts"].append(" ")
+            if tag == cap["tag"]:
+                cap["depth"] += 1
+        if _symbol_kind(tag, attrs) is not None:
+            self._name_captures.append(
+                {"tag": tag, "depth": 1, "parts": [], "in_h1": self._h1 is not None}
+            )
+
+        for cap in self._bold_captures:
+            cap["parts"].append(" ")
+            if tag == cap["tag"]:
+                cap["depth"] += 1
+        if tag in _BOLD_TAGS:
+            self._bold_captures.append({"tag": tag, "depth": 1, "parts": []})
+
+    def handle_startendtag(self, tag, attrs):
+        if self._skip > 0 or self._article_depth == 0:
+            return
+        for active in (self._h1, self._shortdesc, self._h2, self._section_p):
+            if active is not None:
+                active["parts"].append(" ")
+        for cap in self._name_captures:
+            cap["parts"].append(" ")
+        for cap in self._bold_captures:
+            cap["parts"].append(" ")
+
+    def handle_endtag(self, tag):
+        if tag in _SKIP_TAGS and self._skip > 0:
+            self._skip -= 1
+            return
+        if self._skip > 0:
+            return
+        if tag == "article" and self._article_depth > 0:
+            self._article_depth -= 1
+            return
+        if self._article_depth == 0:
+            return
+
+        for cap in list(self._name_captures):
+            cap["parts"].append(" ")
+            if tag == cap["tag"]:
+                cap["depth"] -= 1
+                if cap["depth"] == 0:
+                    self._name_captures.remove(cap)
+                    raw = _collapse_ws(cap["parts"])
+                    for name in _IDENTIFIER.findall(raw):
+                        if name not in self._all_seen:
+                            self._all_seen.add(name)
+                            self.all_names.append(name)
+                        if cap["in_h1"] and name not in self._h1_seen:
+                            self._h1_seen.add(name)
+                            self.h1_names.append(name)
+
+        for cap in list(self._bold_captures):
+            cap["parts"].append(" ")
+            if tag == cap["tag"]:
+                cap["depth"] -= 1
+                if cap["depth"] == 0:
+                    self._bold_captures.remove(cap)
+                    text = _collapse_ws(cap["parts"])
+                    if text and text not in self._bold_seen:
+                        self._bold_seen.add(text)
+                        self.bold.append(text)
+
+        if self._h1 is not None:
+            if tag == "h1":
+                self._h1["depth"] -= 1
+                if self._h1["depth"] == 0:
+                    self.title = _collapse_ws(self._h1["parts"])
+                    self._h1 = None
+                else:
+                    self._h1["parts"].append(" ")
+            else:
+                self._h1["parts"].append(" ")
+
+        if self._shortdesc is not None:
+            if tag == "p":
+                self._shortdesc["depth"] -= 1
+                if self._shortdesc["depth"] == 0:
+                    self.shortdesc = _collapse_ws(self._shortdesc["parts"])
+                    self._shortdesc = None
+                else:
+                    self._shortdesc["parts"].append(" ")
+            else:
+                self._shortdesc["parts"].append(" ")
+
+        if self._h2 is not None:
+            if tag == "h2":
+                self._h2["depth"] -= 1
+                if self._h2["depth"] == 0:
+                    heading = _collapse_ws(self._h2["parts"])
+                    self.sections.append((heading, []))
+                    self._h2 = None
+                else:
+                    self._h2["parts"].append(" ")
+            else:
+                self._h2["parts"].append(" ")
+
+        if self._section_p is not None:
+            if tag == "p":
+                self._section_p["depth"] -= 1
+                if self._section_p["depth"] == 0:
+                    text = _collapse_ws(self._section_p["parts"])
+                    if self.sections:
+                        self.sections[-1][1].append(text)
+                    self._section_p = None
+                else:
+                    self._section_p["parts"].append(" ")
+            else:
+                self._section_p["parts"].append(" ")
+
+    def handle_data(self, data):
+        if self._skip > 0 or self._article_depth == 0:
+            return
+        for active in (self._h1, self._shortdesc, self._h2, self._section_p):
+            if active is not None:
+                active["parts"].append(data)
+        for cap in self._name_captures:
+            cap["parts"].append(data)
+        for cap in self._bold_captures:
+            cap["parts"].append(data)
+
+
+class _BoldParser(HTMLParser):
+    """Extracts text inside ``<strong>`` and ``<b>`` tags within ``<article>`` blocks."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self._skip = 0
+        self._article_depth = 0
+        self._captures = []
+        self.texts = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag in _SKIP_TAGS:
+            self._skip += 1
+            return
+        if self._skip > 0:
+            return
+        if tag == "article":
+            self._article_depth += 1
+            return
+        if self._article_depth == 0:
+            return
+        for cap in self._captures:
+            cap["parts"].append(" ")
+            if tag == cap["tag"]:
+                cap["depth"] += 1
+        if tag in _BOLD_TAGS:
+            self._captures.append({"tag": tag, "depth": 1, "parts": []})
+
+    def handle_startendtag(self, tag, attrs):
+        if self._skip == 0 and self._article_depth > 0:
+            for cap in self._captures:
+                cap["parts"].append(" ")
+
+    def handle_endtag(self, tag):
+        if tag in _SKIP_TAGS and self._skip > 0:
+            self._skip -= 1
+            return
+        if self._skip > 0:
+            return
+        if tag == "article" and self._article_depth > 0:
+            self._article_depth -= 1
+            return
+        if self._article_depth == 0:
+            return
+        for cap in list(self._captures):
+            cap["parts"].append(" ")
+            if tag == cap["tag"]:
+                cap["depth"] -= 1
+                if cap["depth"] == 0:
+                    self._captures.remove(cap)
+                    text = _collapse_ws(cap["parts"])
+                    if text:
+                        self.texts.append(text)
+
+    def handle_data(self, data):
+        if self._skip == 0 and self._article_depth > 0:
+            for cap in self._captures:
+                cap["parts"].append(data)
+
+
+# --- public extraction functions -----------------------------------------
 
 def strip_tags(fragment):
     """Removes the tags and normalizes the spaces. The text stays readable."""
-    text = _ANY_TAG.sub(" ", fragment)
-    return _WS.sub(" ", _html.unescape(text)).strip()
+    if not fragment:
+        return ""
+    if "<" not in fragment and "&" not in fragment:
+        return _WS.sub(" ", fragment).strip()
+    parser = _StripTagsParser()
+    parser.feed(fragment)
+    parser.close()
+    return _collapse_ws(parser.parts)
 
 
 def article_of(page_html):
-    """Returns the <article> body of the page (empty string if absent)."""
-    m = _ARTICLE.search(page_html)
-    if m:
-        return m.group(0)
-    start = _ARTICLE_OPEN.search(page_html)
-    if not start:
+    """Returns the ``<article>`` body of the page (empty string if absent)."""
+    if not page_html or "<article" not in page_html.lower():
         return ""
-    end = _ARTICLE_CLOSE.search(page_html, start.end())
-    return page_html[start.start(): end.end()] if end else page_html[start.start():]
+    extractor = _ArticleExtractor(page_html)
+    extractor.feed(page_html)
+    extractor.close()
+    return extractor.finish()
 
 
 def _inner_names(anchor_inner):
@@ -72,14 +709,10 @@ def _inner_names(anchor_inner):
     'function' for ``name()``, 'variable' for ``<var>``, 'constant' for
     ``<span class="... const">``.
     """
-    found = []
-    for rx, kind in ((_APINAME, "function"), (_VARNAME, "variable"), (_CONSTNAME, "constant")):
-        for m in rx.finditer(anchor_inner):
-            raw = strip_tags(m.group(1))
-            for name in _IDENTIFIER.findall(raw):
-                if name not in [n for n, _ in found]:
-                    found.append((name, kind))
-    return found
+    parser = _AnchorNamesParser()
+    parser.feed(anchor_inner)
+    parser.close()
+    return parser.found
 
 
 def _names_in_text(text):
@@ -111,51 +744,27 @@ def parse_index_page(page_html, docs_root):
     is in the navigation tree of the page (and not in the ``<article>``
     body), hence the walk of the whole page.
     """
-    entries = {}
+    parser = _IndexParser(docs_root)
+    parser.feed(page_html)
+    parser.close()
+    parser._flush_all()
+
     elsewhere = {}
-    article = article_of(page_html)
-
-    for anchor in _ANCHOR.finditer(page_html):
-        href, inner = anchor.group(1), anchor.group(2)
-        names = _inner_names(inner)
-        if not names:
-            continue
-        if "/topic/" not in href:
-            continue
-        url = _join(docs_root, href)
-        desc = ""
-        sd = _SHORTDESC.search(page_html, anchor.end(), anchor.end() + 900)
-        if sd:
-            desc = strip_tags(sd.group(1))
-        for name, kind in names:
-            entries.setdefault(name, {"url": url, "desc": desc, "kind": kind})
-
     # section "The following are described elsewhere:" -> two-column table
-    for m in _ROW.finditer(article):
-        cells = _CELL.findall(m.group(1))
-        if len(cells) < 2:
-            continue
-        left, right = cells[0], cells[1]
+    for left, right in parser.elsewhere_rows:
         names = []
-        for rx in (_APINAME, _VARNAME, _CONSTNAME):
-            for mm in rx.finditer(left):
-                names.extend(_names_in_text(strip_tags(mm.group(1))))
+        for tagged in left["tagged"]:
+            names.extend(_names_in_text(tagged))
         if not names:
-            names = _names_in_text(strip_tags(left))
+            names = _names_in_text(left["text"])
         if not names:
             continue
-        text = strip_tags(right)
-        urls = []
-        for a in _ANCHOR.finditer(right):
-            u = a.group(1)
-            if u.startswith("http"):
-                urls.append(_html.unescape(u))
-            else:
-                urls.append(_join(docs_root, u))
+        text = right["text"]
+        urls = list(right["urls"])
         for name in names:
             elsewhere.setdefault(name, {"text": text, "urls": urls})
 
-    return {"entries": entries, "elsewhere": elsewhere}
+    return {"entries": parser.entries, "elsewhere": elsewhere}
 
 
 def _join(docs_root, href):
@@ -185,45 +794,36 @@ def parse_topic_page(page_html):
     Returns a dict: ``title``, ``shortdesc``, ``description``,
     ``names``, ``bold`` (the bold texts of the body).
     """
-    article = article_of(page_html)
-    title = ""
-    h1 = _H1.search(article)
-    if h1:
-        title = strip_tags(h1.group(1))
-    shortdesc = ""
-    sd = _SHORTDESC.search(article)
-    if sd:
-        shortdesc = strip_tags(sd.group(1))
-    names = []
-    for rx, scope in ((_APINAME, h1.group(1) if h1 else article),
-                      (_VARNAME, h1.group(1) if h1 else article),
-                      (_CONSTNAME, h1.group(1) if h1 else article)):
-        for mm in rx.finditer(scope):
-            raw = strip_tags(mm.group(1))
-            for name in _IDENTIFIER.findall(raw):
-                if name not in names:
-                    names.append(name)
-    # first sentence of the Description section
+    parser = _TopicParser()
+    parser.feed(page_html)
+    parser.close()
+
+    names = parser.h1_names if parser._seen_h1 else parser.all_names
     description = ""
-    heads = list(_H2_OPEN.finditer(article))
-    for i, hm in enumerate(heads):
-        if "description" not in strip_tags(hm.group(1)).lower():
+    for heading, paragraphs in parser.sections:
+        if "description" not in heading.lower():
             continue
-        start = hm.end()
-        end = heads[i + 1].start() if i + 1 < len(heads) else len(article)
-        for pm in _P.finditer(article, start, end):
-            text = strip_tags(pm.group(1))
+        for text in paragraphs:
             if len(text) > 40:
                 description = text
                 break
         break
-    bold = []
-    for bm in _BOLD.finditer(article):
-        text = strip_tags(bm.group(1))
-        if text and text not in bold:
-            bold.append(text)
-    return {"title": title, "shortdesc": shortdesc, "description": description,
-            "names": names, "bold": bold}
+
+    return {
+        "title": parser.title,
+        "shortdesc": parser.shortdesc,
+        "description": description,
+        "names": names,
+        "bold": parser.bold,
+    }
+
+
+def _bold_texts_in_article(page_html):
+    """Bold texts inside ``<article>`` blocks of *page_html*."""
+    parser = _BoldParser()
+    parser.feed(page_html)
+    parser.close()
+    return parser.texts
 
 
 def bold_identifiers(page_html):
@@ -234,13 +834,14 @@ def bold_identifiers(page_html):
     ``argument`` (an English word met in a sentence).
     """
     out = set()
-    for m in _BOLD.finditer(article_of(page_html)):
-        for name in _IDENTIFIER.findall(strip_tags(m.group(1))):
+    for text in _bold_texts_in_article(page_html):
+        for name in _IDENTIFIER.findall(text):
             out.add(name)
     return out
 
 
-def sentences_with(text, needle, limit=3, max_len=320, call_form=False):
+def sentences_with(text, needle, limit=3, max_len=320, call_form=False,
+                   pattern=None):
     """Sentences of ``text`` that contain ``needle`` (exact identifier).
 
     A word boundary is used: ``needle`` must not match a longer
@@ -249,11 +850,12 @@ def sentences_with(text, needle, limit=3, max_len=320, call_form=False):
     the symbol is rendered, marked with ellipses.
     """
     out = []
-    if call_form:
-        body = r"%s\s*\(" % re.escape(needle)
-    else:
-        body = r"%s" % re.escape(needle)
-    pattern = re.compile(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % body)
+    if pattern is None:
+        if call_form:
+            body = r"%s\s*\(" % re.escape(needle)
+        else:
+            body = r"%s" % re.escape(needle)
+        pattern = re.compile(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % body)
     for m in pattern.finditer(text):
         start = text.rfind(".", 0, m.start())
         start = 0 if start < 0 else start + 1
