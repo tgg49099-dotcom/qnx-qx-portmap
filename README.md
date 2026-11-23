@@ -33,10 +33,11 @@ download log (see [QNX corpus](#qnx-corpus-not-redistributed)).
 QNX repositories, the tool resolves and quotes **95 %** of them
 ([`docs/mesure-J5.md`](docs/mesure-J5.md)). The first measurement, on the same
 sample, resolved 93 % ([`docs/mesure-J4.md`](docs/mesure-J4.md)): the
-difference is explained further down. One of the symbols that J5 first
-resolved, `InterruptAttach`, is now reported as **removed in 8.0 according to
+difference is explained further down. One of the symbols the tool used to
+resolve, `InterruptAttach`, is now reported as **removed in 8.0 according to
 the official migration guide**, with the sentence of the guide quoted: that is
-the honest answer, and the rate follows it down.
+the honest answer, and the rate follows it down, from 96 % to the 95 %
+published here.
 
 ### The three things the contest rules ask a submission to state
 
@@ -308,6 +309,12 @@ The plan of the video and the YouTube fields are in
 - **No SDP access is required.** No QNX SDP, no compiler, no target board, no
   QNX account, no API token, no root access. The tool compiles nothing and
   does not run on a target: it reads documentation.
+- **One internet access is needed for the first answer.** The quick start of
+  this README downloads the 76 pages it needs from
+  `https://www.qnx.com/developers/docs/` (measured on 23 November 2026 in a
+  fresh clone of this repository: 76 pages in 138 s; 127 s and 144 s on
+  16 November 2026). After that download the tool reads its corpus locally and
+  makes **no network request** any more.
 - **The corpus is not shipped with the repository.** The QNX documentation is
   (c) QNX Software Systems Ltd / BlackBerry Limited and is not redistributable:
   see `NOTICES-DOCS-QNX.md` and `CORPUS-NON-PUBLIE.txt`. It is rebuilt with a
@@ -877,8 +884,8 @@ is in `docs/preuves/`:
 All consulted on **14/11/2026**:
 
 - QNX OS 8.0 documentation - <https://www.qnx.com/developers/docs/8.0/>
-  - C Library Reference: <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic>
-  - Migration guide: <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic>
+  - C Library Reference (A-Z index, page A): <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.lib_ref/topic/lib-a.html>
+  - Migration guide (about page): <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/about.html>
   - Networking APIs (io-sock): <https://www.qnx.com/developers/docs/8.0/com.qnx.doc.neutrino.io_sock/topic/socket_api.html>
 - QNX OS 7.1 documentation - <https://www.qnx.com/developers/docs/7.1/>
 - FreeBSD documentation (cited by the 8.0 C Library Reference for the retired
