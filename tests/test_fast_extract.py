@@ -66,3 +66,29 @@ class TestFastExtractIsExact(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestArticleOnlyParsingIsExact(unittest.TestCase):
+    """parse_topic_page and bold_identifiers read the article blocks only;
+    the result must be the one of the whole-page parse (Studio 23/11/2026)."""
+
+    def _same(self, html):
+        self.assertEqual(extract.parse_topic_page(html),
+                         extract.parse_topic_page(html, whole_page=True), html)
+        self.assertEqual(extract.bold_identifiers(html),
+                         extract.bold_identifiers(html, whole_page=True), html)
+
+    def test_fixtures_of_real_qnx_pages(self):
+        for name in sorted(os.listdir(FIXTURES_DIR)):
+            with open(os.path.join(FIXTURES_DIR, name), encoding="utf-8") as fh:
+                self._same(fh.read())
+
+    def test_random_markup(self):
+        extra = ['<h1>', '</h1>', '<h2>Description</h2>', '<h2>', '</h2>',
+                 '<p class="shortdesc">', '<strong>', '</strong>',
+                 '<var class="keyword varname">errno</var>',
+                 'A long sentence that is more than forty characters long. ']
+        for seed in range(3000):
+            rnd = random.Random(seed)
+            self._same("".join(rnd.choice(_TOKENS + extra)
+                               for _ in range(rnd.randint(1, 50))))

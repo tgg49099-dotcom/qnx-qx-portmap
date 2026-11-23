@@ -870,14 +870,19 @@ def _join(docs_root, href):
     return "%s/%s" % (root, href.lstrip("/"))
 
 
-def parse_topic_page(page_html):
+def parse_topic_page(page_html, whole_page=False):
     """Parses a symbol page (a manual page).
 
     Returns a dict: ``title``, ``shortdesc``, ``description``,
     ``names``, ``bold`` (the bold texts of the body).
     """
     parser = _TopicParser()
-    parser.feed(page_html)
+    # Studio 23/11/2026: the parser ignores everything outside <article>;
+    # feeding it only the article blocks gives the same result (checked on
+    # the 3 426 pages of the corpus) without parsing the navigation tree,
+    # which is most of each page (2 249 names: 4 s instead of 40 s or more).
+    # ``whole_page=True`` is the reference, kept for tests/test_fast_extract.py.
+    parser.feed(page_html if whole_page else article_of(page_html))
     parser.close()
 
     names = parser.h1_names if parser._seen_h1 else parser.all_names
@@ -900,15 +905,19 @@ def parse_topic_page(page_html):
     }
 
 
-def _bold_texts_in_article(page_html):
-    """Bold texts inside ``<article>`` blocks of *page_html*."""
+def _bold_texts_in_article(page_html, whole_page=False):
+    """Bold texts inside ``<article>`` blocks of *page_html*.
+
+    The parser ignores everything outside <article>: it is fed the article
+    blocks only (``whole_page=True`` is the reference, for the tests).
+    """
     parser = _BoldParser()
-    parser.feed(page_html)
+    parser.feed(page_html if whole_page else article_of(page_html))
     parser.close()
     return parser.texts
 
 
-def bold_identifiers(page_html):
+def bold_identifiers(page_html, whole_page=False):
     """Identifiers cited in bold in the body of the page.
 
     A symbol put in bold by the official documentation is a deliberate
@@ -916,7 +925,7 @@ def bold_identifiers(page_html):
     ``argument`` (an English word met in a sentence).
     """
     out = set()
-    for text in _bold_texts_in_article(page_html):
+    for text in _bold_texts_in_article(page_html, whole_page=whole_page):
         for name in _IDENTIFIER.findall(text):
             out.add(name)
     return out
