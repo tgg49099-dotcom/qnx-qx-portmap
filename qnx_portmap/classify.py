@@ -27,6 +27,10 @@ from .extract import (article_of, bold_identifiers, parse_index_page,
                       parse_topic_page, sentences_with, strip_tags,
                       symbol_regex)
 
+# Above this many names, the raw-HTML pre-filter of _scan_corpus costs more
+# than it saves (measured on the real corpus, Studio 23/11/2026).
+_PREFILTER_MAX = 64
+
 DOCUMENTED = "documented"
 ELSEWHERE = "described_elsewhere"
 ABSENT = "absent"
@@ -263,9 +267,11 @@ class Classifier(object):
             if page.is_index_page:
                 continue
             key = (page.version, page.book, page.topic)
-            if key not in self._scan_cache:
+            if key not in self._scan_cache and len(remaining) <= _PREFILTER_MAX:
                 # fast path: a page whose raw HTML contains none of the
-                # remaining names cannot quote them; skip its (slow) parse
+                # remaining names cannot quote them; skip its parse. Only
+                # for short lists: with 2 249 names (quick-mode test) testing
+                # every name against every raw page costs minutes.
                 raw = self.corpus.html(page)
                 if not any(sym in raw for sym in remaining):
                     continue
