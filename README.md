@@ -716,9 +716,10 @@ python3 tools/contre_epreuve.py
 | the J5 sample is strictly the one of J4 | `test_echantillon_identique_a_j4` |
 | a verified QNX 8.0 page of the frozen corpus is required for every conversion | `test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256` |
 
-The 11 counter-proofs are conclusive (`11 / 11`, exit code 0); the complete
-output is kept in `docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`
-(and in `docs/contre-epreuve-rouge.txt`).
+The table lists **14** broken rules: **11** of them are counter-proved by
+`tools/contre_epreuve.py` (**11 / 11**, exit code 0, complete output in
+`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`), and the **three J5 rules**
+have their own red proof in `docs/preuves/h-mesure-j5-rouge.txt`.
 
 On the tree **without** the corpus, 10 of the 11 rules remain counter-proved
 (`10 / 10`, exit code 0): the rule "integrity of the frozen corpus shipped"
