@@ -190,14 +190,14 @@ pip install .                     # or, without installing: python3 -m qnx_portm
 python3 -m unittest discover -s tests -t .
 ```
 
-Result measured on 17 November 2026: **202 tests, exit code 0**, without any
+Result measured on 23 November 2026: **246 tests, exit code 0**, without any
 network access and without any third-party dependency.
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/`, next to the package | 202 tests, **0 skipped**, exit code 0 |
-| Corpus through `QX_PORTMAP_CORPUS` | 202 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 202 tests, **33 skipped**, exit code 0 |
+| Corpus in `corpus/`, next to the package | 246 tests, **0 skipped**, exit code 0 |
+| Corpus through `QX_PORTMAP_CORPUS` | 246 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 246 tests, **33 skipped**, exit code 0 |
 
 The skipped tests are the ones that need the corpus: they are skipped, never
 failed. A test that always passes tests nothing, so the repository also
@@ -606,9 +606,9 @@ SUMMARY - one line per verification
 ======================================================================================================
 VERIFICATION                               RESULT       DETAIL                                         EXIT
 ------------------------------------------ ------------ ------------------------------------------------ ----
-unit test suite                            OK           202 tests, 33 skipped                          0
+unit test suite                            OK           246 tests, 33 skipped                          0
 anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
-published manifest                         OK           MANIFESTE-PUBLIE.txt lists 127 files           0
+published manifest                         OK           MANIFESTE-PUBLIE.txt lists 131 files           0
 published numbers of the README            OK           every published count is the real one          0
 parity of the README output block          NOT CHECKED  the frozen corpus is absent here               0
 RED counter-proof                          OK           10 / 10 rules counter-proved                   0
@@ -640,13 +640,13 @@ python3 -m unittest tests.verify_all_contract
 python3 -m unittest discover -s tests -t .
 ```
 
-202 tests, no dependency, **no network access**. Three cases:
+246 tests, no dependency, **no network access**. Three cases:
 
 | Situation | Result |
 |---|---|
-| Corpus in `corpus/` (next to the package) | 202 tests, **0 skipped**, exit code 0 |
-| Corpus via `QX_PORTMAP_CORPUS` | 202 tests, **1 skipped**, exit code 0 |
-| Corpus absent | 202 tests, **33 skipped**, exit code 0 |
+| Corpus in `corpus/` (next to the package) | 246 tests, **0 skipped**, exit code 0 |
+| Corpus via `QX_PORTMAP_CORPUS` | 246 tests, **1 skipped**, exit code 0 |
+| Corpus absent | 246 tests, **33 skipped**, exit code 0 |
 
 With the corpus given by `QX_PORTMAP_CORPUS`, the only skipped test is the
 one that requires the corpus **inside the installed package** (absent from the
@@ -667,7 +667,7 @@ corpus absent : lancer scripts/bootstrap_corpus.sh
 (the message of the tool, in French: "corpus absent: run
 scripts/bootstrap_corpus.sh")
 
-The 169 other tests pass **without the corpus**. Among them, the 21 tests of
+The 213 other tests pass **without the corpus**. Among them, the 21 tests of
 `tests/test_fixtures.py` work on the **miniature fixtures**: 12 short extracts
 (1 to 3 lines) of real QNX pages, stored in `tests/fixtures/`, with the source
 URL, the consultation date and the SHA-256 of the complete page the extract

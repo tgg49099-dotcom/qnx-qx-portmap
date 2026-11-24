@@ -360,8 +360,9 @@ class TestJudgePathInReadme(unittest.TestCase):
         self.assertIsNotNone(readme, "quick-mode block not found in the README")
         self.assertIsNotNone(kit, "quick-mode block not found in the kit")
         self.assertEqual(readme, kit)
-        self.assertIn(JUDGE_COMMAND, open(os.path.join(ROOT, "KIT-SOUMISSION-QNX.md"),
-                                          encoding="utf-8").read())
+        with open(os.path.join(ROOT, "KIT-SOUMISSION-QNX.md"),
+                  encoding="utf-8") as fh:
+            self.assertIn(JUDGE_COMMAND, fh.read())
         # The legend that introduces the block must be the same, word for word,
         # in the README and in the kit: it says which lines of the real output
         # are elided (the real output prints one status line and one note line

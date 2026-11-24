@@ -29,9 +29,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BREAKS = [
     ("frontiere de mot dans la recherche de citation",
      "qnx_portmap/extract.py",
-     'pattern = re.compile(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % body)',
-     'pattern = re.compile(r"%s" % body)',
+     r'    return re.compile(r"(?<![A-Za-z0-9_/\\])%s%s" % (body, tail))',
+     r'    return re.compile(r"%s" % body)',
      "tests.test_extract.TestSentencesWith.test_respects_word_boundaries"),
+
+    ("un nom de fichier n'est pas un symbole (recv.c, /dev/socket)",
+     "qnx_portmap/extract.py",
+     r'    return re.compile(r"(?<![A-Za-z0-9_/\\])%s%s" % (body, tail))',
+     r'    return re.compile(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % body)',
+     "tests.test_symbol_paths.FileNameIsNotSymbol.test_path_is_ignored"),
 
     ("verification du SHA-256 des pages du corpus",
      "qnx_portmap/corpus.py",
@@ -55,15 +61,15 @@ BREAKS = [
 
     ("lecture du tableau \"described elsewhere\" de l'index",
      "qnx_portmap/extract.py",
-     "    for m in _ROW.finditer(article):",
-     '    for m in _ROW.finditer(""):',
+     "    for left, right in parser.elsewhere_rows:",
+     "    for left, right in []:",
      "tests.test_classify.TestClassification.test_described_elsewhere_symbol"),
 
     ("extraction de la section Description",
      "qnx_portmap/extract.py",
-     '        if "description" not in strip_tags(hm.group(1)).lower():\n'
+     '        if "description" not in heading.lower():\n'
      '            continue',
-     '        if "description" not in strip_tags(hm.group(1)).lower():\n'
+     '        if "description" not in heading.lower():\n'
      '            pass',
      "tests.test_extract.TestParseTopicPage."
      "test_description_is_the_description_section_not_the_library_one"),
@@ -76,7 +82,7 @@ BREAKS = [
 
     ("deduplication de la liste de symboles",
      "qnx_portmap/classify.py",
-     "            if sym and sym not in unique:",
+     "            if sym and sym not in seen:",
      "            if sym:",
      "tests.test_classify.TestClassification.test_duplicate_symbol_is_reported_once"),
 
@@ -103,8 +109,8 @@ BREAKS = [
 
     ("detection des symboles cites en gras",
      "qnx_portmap/extract.py",
-     '    for m in _BOLD.finditer(article_of(page_html)):',
-     '    for m in []:',
+     '    for text in _bold_texts_in_article(page_html, whole_page=whole_page):',
+     '    for text in []:',
      "tests.test_classify.TestClassification.test_symbol_cited_in_bold"),
 
     ("le taux J4 ne compte que les symboles resolus et cites",

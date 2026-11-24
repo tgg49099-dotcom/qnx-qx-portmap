@@ -76,6 +76,7 @@ def relpath_of(raw_text, filename):
     rest = filename.split("_docs_", 1)[1]
     version, tail = rest.split("_", 1)
     book, _, topic = tail.partition("_topic_")
+    topic = re.sub(r"__[0-9a-f]{16}(\.html)$", r"\1", topic)
     return "%s/topic/%s" % (book, topic)
 
 
@@ -130,9 +131,15 @@ def main():
 
     # --- SHA256SUMS (fingerprints of the stored files) ---------------------
     sums_path = os.path.join(out_root, "SHA256SUMS")
+    cache_abs = os.path.abspath(args.cache)
     entries = []
     for dirpath, dirnames, filenames in os.walk(out_root):
-        dirnames.sort()
+        dirpath_abs = os.path.abspath(dirpath)
+        dirnames[:] = sorted(
+            d for d in dirnames
+            if os.path.abspath(os.path.join(dirpath_abs, d)) != cache_abs
+            and not (dirpath_abs == out_root and d == "cache")
+        )
         for fn in sorted(filenames):
             if fn == "SHA256SUMS" or fn == "MANIFEST.json":
                 continue

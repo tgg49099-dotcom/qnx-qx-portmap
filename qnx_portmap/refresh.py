@@ -37,6 +37,13 @@ BOOKS = [
 BOOKS_71 = [("com.qnx.doc.neutrino.lib_ref", "about.html")]
 
 OUT_RELPATH = re.compile(r'name="wh-out-relpath"\s+content="([^"]+)"')
+_CACHE_HASH_SUFFIX = re.compile(r"__[0-9a-f]{16}(\.html)$")
+# Links "page.html" only, as when the frozen corpus (3 426 pages) was built.
+# Studio 23/11/2026: also following "page.html#anchor" fetched one page the
+# frozen corpus does not hold (migration guide, bsps.html: a list of BSP
+# source files), so quick mode no longer matched full mode
+# (tests/test_quick.py, test_no_failed_page). Change both together, or neither.
+_HTML_HREF = re.compile(r'href="([^"]+\.html)"')
 
 
 class Downloader(object):
@@ -52,7 +59,21 @@ class Downloader(object):
         os.makedirs(cache_dir, exist_ok=True)
 
     def cache_path(self, url):
-        key = re.sub(r"[^A-Za-z0-9._-]", "_", url.replace("https://", ""))[-150:]
+        """Collision-free cache file path for *url*.
+
+        Preserves the sanitized URL prefix (including ``_docs_<version>_``)
+        and ``.html`` extension while appending a 16-hex SHA-256 digest of
+        the full URL so arbitrarily long URLs never collide or exceed
+        filesystem filename limits.
+        """
+        digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
+        stripped = re.sub(r"^https?://", "", url)
+        clean = re.sub(r"[^A-Za-z0-9._-]", "_", stripped)
+        ext = ".html" if clean.endswith(".html") else ""
+        stem = clean[:-len(ext)] if ext else clean
+        if len(stem) > 160:
+            stem = stem[:95] + "_" + stem[-64:]
+        key = "%s__%s%s" % (stem, digest, ext)
         return os.path.join(self.cache_dir, key)
 
     def fetch(self, url):
@@ -65,8 +86,18 @@ class Downloader(object):
                 req = urllib.request.Request(url, headers={"User-Agent": UA})
                 with urllib.request.urlopen(req, timeout=self.timeout) as resp:
                     body = resp.read().decode("utf-8", "replace")
-                with open(path, "w", encoding="utf-8") as fh:
-                    fh.write(body)
+                tmp_path = path + ".tmp.%d" % os.getpid()
+                try:
+                    with open(tmp_path, "w", encoding="utf-8") as fh:
+                        fh.write(body)
+                    os.replace(tmp_path, path)
+                except OSError:
+                    if os.path.exists(tmp_path):
+                        try:
+                            os.remove(tmp_path)
+                        except OSError:
+                            pass
+                    raise
                 self.fetched += 1
                 time.sleep(self.delay)
                 return body
@@ -95,9 +126,9 @@ class Downloader(object):
             if not body:
                 continue
             pages.append(url)
-            if max_pages and len(pages) >= max_pages:
+            if max_pages is not None and max_pages > 0 and len(pages) >= max_pages:
                 break
-            for href in dict.fromkeys(re.findall(r'href="([^"]+\.html)"', body)):
+            for href in dict.fromkeys(_HTML_HREF.findall(body)):
                 if href.startswith("#"):
                     continue
                 nxt = urllib.parse.urljoin(url, href).split("#")[0]
@@ -127,7 +158,9 @@ def build_corpus_from_cache(cache_dir, out_dir, versions=("8.0", "7.1")):
     os.makedirs(out_dir, exist_ok=True)
     index_dir = os.path.join(out_dir, "index")
     os.makedirs(index_dir, exist_ok=True)
+    allowed_versions = set(versions) if versions else None
     records = []
+    seen_pages = set()
     for name in sorted(os.listdir(cache_dir)):
         if not name.endswith(".html"):
             continue
@@ -135,7 +168,11 @@ def build_corpus_from_cache(cache_dir, out_dir, versions=("8.0", "7.1")):
         if not m:
             continue
         version = m.group(1)
+        if allowed_versions is not None and version not in allowed_versions:
+            continue
         path = os.path.join(cache_dir, name)
+        if not os.path.isfile(path):
+            continue
         with open(path, "rb") as fh:
             raw = fh.read()
         text = raw.decode("utf-8", "replace")
@@ -143,8 +180,12 @@ def build_corpus_from_cache(cache_dir, out_dir, versions=("8.0", "7.1")):
         rel = rel.group(1) if rel else None
         if not rel:
             book = name.split("_docs_", 1)[1].split("_", 1)[1].partition("_topic_")[0]
-            topic = name.rsplit("_topic_", 1)[-1]
+            topic = _CACHE_HASH_SUFFIX.sub(r"\1", name.rsplit("_topic_", 1)[-1])
             rel = "%s/topic/%s" % (book, topic)
+        page_key = (version, rel)
+        if page_key in seen_pages:
+            continue
+        seen_pages.add(page_key)
         dest = os.path.join(out_dir, "pages", version, rel + ".gz")
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         with open(dest, "wb") as fh:
@@ -163,9 +204,16 @@ def build_corpus_from_cache(cache_dir, out_dir, versions=("8.0", "7.1")):
         for rec in records:
             fh.write(json.dumps(rec, ensure_ascii=False, sort_keys=True) + "\n")
 
+    out_abs = os.path.realpath(out_dir)
+    cache_abs = os.path.realpath(cache_dir)
     sums = []
     for dirpath, dirnames, filenames in os.walk(out_dir):
-        dirnames.sort()
+        dirpath_abs = os.path.realpath(dirpath)
+        dirnames[:] = sorted(
+            d for d in dirnames
+            if os.path.realpath(os.path.join(dirpath_abs, d)) != cache_abs
+            and not (dirpath_abs == out_abs and d == "cache")
+        )
         for fn in sorted(filenames):
             if fn in ("SHA256SUMS", "MANIFEST.json"):
                 continue

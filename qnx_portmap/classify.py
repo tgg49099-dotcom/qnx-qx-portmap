@@ -19,11 +19,17 @@ Four statuses, from the most favourable to the least favourable:
 Every answer carries the official page and the exact quotation.
 """
 
+import difflib
 import re
 
 from .corpus import LIB_REF_BOOK
-from .extract import (bold_identifiers, parse_index_page, parse_topic_page,
-                      sentences_with, strip_tags)
+from .extract import (article_of, bold_identifiers, parse_index_page,
+                      parse_topic_page, sentences_with, strip_tags,
+                      symbol_regex)
+
+# Above this many names, the raw-HTML pre-filter of _scan_corpus costs more
+# than it saves (measured on the real corpus, Studio 23/11/2026).
+_PREFILTER_MAX = 64
 
 DOCUMENTED = "documented"
 ELSEWHERE = "described_elsewhere"
@@ -127,6 +133,8 @@ class SymbolResult(object):
         self.removed_by_migration_guide = False
         self.detail = ""
         self.note = ""
+        self.locations = []
+        self.suggestions = []
 
     @property
     def priority(self):
@@ -137,7 +145,7 @@ class SymbolResult(object):
         return 0
 
     def to_dict(self):
-        return {
+        data = {
             "symbol": self.symbol,
             "status": self.status,
             "kind": self.kind,
@@ -149,11 +157,17 @@ class SymbolResult(object):
             "citation_kind": self.citation_kind,
             "see_urls": list(self.see_urls),
             "mentioned_in_migration_guide": self.mentioned_in_migration_guide,
+            "removed_by_migration_guide": self.removed_by_migration_guide,
             "migration_urls": list(self.migration_urls),
             "detail": self.detail,
             "note": self.note,
             "priority": self.priority,
         }
+        if self.locations:
+            data["locations"] = [dict(loc) for loc in self.locations]
+        if self.suggestions:
+            data["suggestions"] = list(self.suggestions)
+        return data
 
 
 class Classifier(object):
@@ -174,6 +188,8 @@ class Classifier(object):
         self._load_indexes()
         self._scan_cache = {}
         self._bold_cache = {}
+        self._pattern_cache = {}
+        self._known_names = None
         self._migration_text = None
         self._removals = None
 
@@ -197,11 +213,30 @@ class Classifier(object):
         }
 
     # -- search in the corpus ---------------------------------------------
+    def _symbol_pattern(self, sym, call_form=False):
+        """Compiled word-boundary regex for *sym* (cached per Classifier)."""
+        key = (sym, bool(call_form))
+        rx = self._pattern_cache.get(key)
+        if rx is None:
+            rx = symbol_regex(sym, call_form=call_form)
+            self._pattern_cache[key] = rx
+        return rx
+
+    def _suggest(self, sym, limit=3, cutoff=0.78):
+        """Close official symbol names from the corpus indexes (never guesses status)."""
+        if not sym or len(sym) < 3:
+            return []
+        if self._known_names is None:
+            names = set(self.entries) | set(self.elsewhere) | set(self.prev_entries)
+            self._known_names = sorted(names)
+        if not self._known_names:
+            return []
+        return difflib.get_close_matches(sym, self._known_names, n=limit, cutoff=cutoff)
+
     def _article_text(self, page):
         key = (page.version, page.book, page.topic)
         if key not in self._scan_cache:
             html = self.corpus.html(page)
-            from .extract import article_of
             self._scan_cache[key] = strip_tags(article_of(html))
         return self._scan_cache[key]
 
@@ -220,28 +255,34 @@ class Classifier(object):
         found = {}
         if not symbols:
             return found
-        patterns = {}
-        for sym in symbols:
-            if call_form:
-                body = r"%s\s*\(" % re.escape(sym)
-            else:
-                body = r"%s" % re.escape(sym)
-            patterns[sym] = re.compile(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % body)
+        remaining = {
+            sym: self._symbol_pattern(sym, call_form=call_form)
+            for sym in symbols
+        }
         for page in self.corpus.pages:
+            if not remaining:
+                break
             if page.version != self.version:
                 continue
             if page.is_index_page:
                 continue
+            key = (page.version, page.book, page.topic)
+            if key not in self._scan_cache and len(remaining) <= _PREFILTER_MAX:
+                # fast path: a page whose raw HTML contains none of the
+                # remaining names cannot quote them; skip its parse. Only
+                # for short lists: with 2 249 names (quick-mode test) testing
+                # every name against every raw page costs minutes.
+                raw = self.corpus.html(page)
+                if not any(sym in raw for sym in remaining):
+                    continue
             text = self._article_text(page)
             if not text:
                 continue
-            bold = None
-            for sym, rx in patterns.items():
-                if sym in found:
-                    continue
+            for sym, rx in list(remaining.items()):
                 if sym not in text:      # quick test, without a regular expression
                     continue
-                sentences = sentences_with(text, sym, limit=1, call_form=call_form)
+                sentences = sentences_with(text, sym, limit=1, call_form=call_form,
+                                           pattern=rx)
                 if not sentences:
                     continue
                 if not self._is_api_name(sym):
@@ -251,6 +292,7 @@ class Classifier(object):
                     # "described elsewhere" would be wrong.
                     continue
                 found[sym] = (page, sentences[0])
+                del remaining[sym]
         return found
 
     def _bold_ids(self, page):
@@ -278,8 +320,9 @@ class Classifier(object):
             pages = self.corpus.migration_pages(self.version)
             self._migration_text = [(p, self._article_text(p)) for p in pages]
         for sym in symbols:
-            rx = re.compile(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % re.escape(sym))
-            hits = [p.url for p, text in self._migration_text if rx.search(text)]
+            rx = self._symbol_pattern(sym, call_form=False)
+            hits = [p.url for p, text in self._migration_text
+                    if sym in text and rx.search(text)]
             if hits:
                 out[sym] = hits
         return out
@@ -310,9 +353,11 @@ class Classifier(object):
     def classify(self, symbols):
         """Classifies a list of symbols and returns a list of SymbolResult."""
         unique = []
+        seen = set()
         for sym in symbols:
             sym = sym.strip() if isinstance(sym, str) else sym
-            if sym and sym not in unique:
+            if sym and sym not in seen:
+                seen.add(sym)
                 unique.append(sym)
 
         n = NOTES[self.lang]
@@ -349,8 +394,9 @@ class Classifier(object):
             # 0th pass: a removal announced by the official migration guide
             # wins over any other mention of the symbol in 8.0
             removals = self._migration_removals()
+            pending_set = set(pending)
             for res in results:
-                if res.symbol in pending and res.symbol in removals:
+                if res.symbol in pending_set and res.symbol in removals:
                     page, sentence = removals[res.symbol]
                     res.status = ABSENT
                     res.removed_by_migration_guide = True
@@ -366,9 +412,10 @@ class Classifier(object):
             # 2nd pass: the symbol is only mentioned in the text
             rest = [s for s in pending if s not in found]
             mentioned = self._scan_corpus(rest, call_form=False)
+            pending_set = set(pending)
             for res in results:
                 sym = res.symbol
-                if sym not in pending:
+                if sym not in pending_set:
                     continue
                 if sym in found:
                     page, sentence = found[sym]
@@ -397,6 +444,7 @@ class Classifier(object):
                     res.note = n["absent_note"] % (self.previous, self.version)
                 else:
                     res.status = UNKNOWN
+                    res.suggestions = self._suggest(sym)
                     res.note = n["unknown_note"] % (self.version,
                                                     self.corpus.manifest.get("consulted",
                                                                              "14/11/2026"))

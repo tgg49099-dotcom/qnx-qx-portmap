@@ -98,20 +98,24 @@ def build_quick_corpus(out_dir, symbols, version="8.0", previous="7.1",
         raise QuickError("migration guide not downloaded: %s"
                          % (DOCS % (version, MIGRATION_BOOK) + "about.html"))
     say("migration guide %s: %d pages" % (version, len(migration)))
-    build_corpus_from_cache(cache, out_dir)
+    build_corpus_from_cache(cache, out_dir, versions=(version, previous))
 
     # own page of each documented symbol (detail sentence)
     classifier = Classifier(Corpus(out_dir), version=version, previous=previous)
     own = []
+    seen_own = set()
     for sym in symbols:
         entry = classifier.entries.get(sym)
-        if entry and entry["url"].split("#")[0] not in own:
-            own.append(entry["url"].split("#")[0])
+        if entry:
+            base_url = entry["url"].split("#")[0]
+            if base_url not in seen_own:
+                seen_own.add(base_url)
+                own.append(base_url)
     for url in own:
         dl.fetch(url)          # a missing own page only loses the detail line
     say("own pages of the documented symbols: %d" % len(own))
 
-    manifest = build_corpus_from_cache(cache, out_dir)
+    manifest = build_corpus_from_cache(cache, out_dir, versions=(version, previous))
     manifest["mode"] = QUICK_MODE
     manifest["quick"] = {
         "symbols": list(symbols),
