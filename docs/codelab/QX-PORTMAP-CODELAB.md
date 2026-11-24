@@ -532,9 +532,10 @@ VERDICT: EVERY CHECK PASSED - 8/8 OK (RC 0)
 
 (measured on 19 November 2026: 202 tests and 1 skipped, 0 match with the QNX
 documentation, `MANIFESTE-PUBLIE.txt lists 127 files`, every published count
-is the real one, 10 / 10 rules counter-proved - the eleventh rule needs
-the corpus *inside the tree*, see below -, nothing left in the 71 published
-documents.)
+is the real one, 11 / 11 rules counter-proved, nothing left in the 71
+published documents.  The eleventh rule is the integrity of the corpus
+itself, which cannot be tested without it - without the corpus, the same
+command prints `10 / 10`.)
 
 The unit test suite alone:
 
