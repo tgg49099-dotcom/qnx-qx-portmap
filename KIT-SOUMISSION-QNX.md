@@ -696,29 +696,32 @@ capture it belongs to already prints.
 | `media/galerie-miniature-3x2.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-miniature-3x2.png` | 161 276 | 1500 x 1000 (3:2) | `a95afc6864ab55327f3e62fe6f1645f3` | Thumbnail image for the Project Gallery |
 | `media/galerie-1-statuts.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-1-statuts.png` | 154 689 | 1300 x 949 | `eb705e77ed1acb942f305a66f8746431` | Image Gallery |
 | `media/galerie-2-json.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-2-json.png` | 87 887 | 1300 x 1033 | `0ec556c674ddd603a5b341f8da07295e` | Image Gallery |
-| `media/galerie-3-tests.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-3-tests.png` | 41 437 | 1500 x 1000 (3:2) | `c2bf2015c1e8ca80f4cd599d232f227a` | Image Gallery |
+| `media/galerie-3-tests.png` | `https://raw.githubusercontent.com/tgg49099-dotcom/qnx-qx-portmap/main/media/galerie-3-tests.png` | 44 175 | 1500 x 1000 (3:2) | `7a1adf2c24c855f035050f5b619d93f7` | Image Gallery |
 
 - The three gallery screenshots are the three screenshots of the table
   below, taken on 17/11/2026 (screenshot 3 was put back on a 3:2 canvas on
-  18/11/2026, from the same recorded session), in this order:
+  18/11/2026, from the same recorded session, and re-made on 24/11/2026
+  from a new recording of the same command on the 246-test tree), in this
+  order:
 
 | screenshot | file | command | what it shows |
 |---|---|---|---|
 | 1 | `media/galerie-1-statuts.png` | `python3 -m qnx_portmap abort accept bzero` | the three statuses (documented / described elsewhere / absent), the official page, the exact quotation and the upgrade work list |
 | 2 | `media/galerie-2-json.png` | `python3 -m qnx_portmap --format json abort` | the same answer in JSON, with English field names |
-| 3 | `media/galerie-3-tests.png` | `python3 -m unittest discover -s tests -t .` | the test suite result: `Ran 202 tests`, `OK (skipped=33)` |
+| 3 | `media/galerie-3-tests.png` | `python3 -m unittest discover -s tests -t .` | the test suite result: `Ran 246 tests`, `OK (skipped=33)` |
 
 - The 3:2 thumbnail is the same screen as screenshot 1, with a title bar
   and a footer; it is the file to upload in the field of section 3.3.
 - Screenshot 3 is in the exact 3:2 ratio too (1500 x 1000), like the
   thumbnail: Devpost shows the gallery images in a fixed frame, and a 3:2
-  image is not cropped. It was re-rendered on a 3:2 canvas from the same
-  recording: the lines drawn are still the verbatim lines of the recording,
-  and its title bar and its footer only repeat what the capture already
-  prints (`Ran 202 tests`, `OK (skipped=33)`).
+  image is not cropped. It was re-rendered on a 3:2 canvas from the
+  recording of 24/11/2026: the lines drawn are the verbatim lines of that
+  recording, and its title bar and its footer only repeat what the capture
+  already prints (`Ran 246 tests`, `OK (skipped=33)`).
 - All four files are PNG, under the 5 MB limit of Devpost (the biggest one
   is 161 276 bytes). The URLs were checked from outside the build
-  environment on 17/11/2026 and again on 18/11/2026: HTTP 200,
+  environment on 17/11/2026 and again on 18/11/2026, and the URL of
+  screenshot 3 was checked again on 24/11/2026 after its update: HTTP 200,
   `image/png`, the size and the md5 announced above.
 - What the images do **not** show: the tool running on a QNX 8.0 target.
   It is a host tool, and the SDP 8.0 licence is not available in the build
