@@ -438,7 +438,7 @@ python3 -m unittest discover -s tests -t .
 **You should see:**
 
 ```text
-Ran 202 tests in 1.0s
+Ran 246 tests in 2.6s
 
 OK (skipped=33)
 ```

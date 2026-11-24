@@ -125,8 +125,15 @@ def corpus_line_list(corpus_dir, index_path):
 
 
 def corpus_blob(corpus_dir, index_path):
-    """Text of every page of the corpus, concatenated (one single string)."""
-    parts = []
+    """Text of every page of the corpus, concatenated (one single string).
+
+    The pages are joined by chunks of about 4 MB, so the temporary strings
+    are released before the final concatenation.  The result is the same
+    string as before, but the peak of memory is lower.
+    """
+    chunks = []
+    chunk = []
+    chunk_len = 0
     with open(index_path, encoding="utf-8") as fh:
         for raw in fh:
             raw = raw.strip()
@@ -138,11 +145,19 @@ def corpus_blob(corpus_dir, index_path):
                 continue
             try:
                 with gzip.open(path, "rb") as gz:
-                    parts.append(gz.read().decode("utf-8", "replace"))
+                    text = gz.read().decode("utf-8", "replace")
             except (OSError, EOFError):
                 continue
-    blob = "\n".join(parts)
-    del parts
+            chunk.append(text)
+            chunk_len += len(text)
+            if chunk_len >= 4 * 1024 * 1024:
+                chunks.append("\n".join(chunk))
+                chunk = []
+                chunk_len = 0
+    if chunk:
+        chunks.append("\n".join(chunk))
+    blob = "\n".join(chunks)
+    del chunks
     return blob
 
 
@@ -205,21 +220,51 @@ class CorpusText(object):
     GRAM = 30
     STEP = LINE_MIN - GRAM + 1
 
+    # The prefilter is a Bloom filter of 64 MiB, not a set of the 27 684 783
+    # distinct pieces of the corpus (1.70 GB measured on 19 November 2026).
+    # A Bloom filter has no false negative: every piece of the corpus is
+    # inserted in it, so a window that is in the corpus is always searched.
+    # A false positive only costs one useless search in the same text, so the
+    # control can be stricter than before, never more lenient.  The searched
+    # text is built in ONE allocation ("\n".join): the concatenation
+    # "\n" + join + "\n" copied the 350 MB three times.
+    BLOOM_BITS = 1 << 29          # 64 Mio de bits
+    BLOOM_K = 4                  # empreintes par piece
+    BLOOM_MASK64 = (1 << 64) - 1
+
     def __init__(self, corpus_line_list):
-        self.text = "\n" + "\n".join(corpus_line_list) + "\n"
+        self.text = "\n".join([""] + list(corpus_line_list) + [""])
         g, step = self.GRAM, self.STEP
-        grams = set()
+        mask64 = self.BLOOM_MASK64
+        bits = bytearray(self.BLOOM_BITS // 8)
+        mask = self.BLOOM_BITS - 1
+        k = self.BLOOM_K
         for line in corpus_line_list:
             for q in range(0, len(line) - g + 1, step):
-                grams.add(hash(line[q:q + g]))
-        self.grams = grams
+                h = hash(line[q:q + g]) & mask64
+                h2 = (h * 0x9E3779B97F4A7C15) & mask64
+                for j in range(k):
+                    pos = ((h + j * h2) & mask64) & mask
+                    bits[pos >> 3] |= 1 << (pos & 7)
+        self.bits = bits
+        self.mask = mask
+        self.k = k
         self.memo = {}
 
     def may_contain(self, window):
         g = self.GRAM
-        grams = self.grams
+        bits = self.bits
+        mask = self.mask
+        k = self.k
+        mask64 = self.BLOOM_MASK64
         for i in range(self.STEP):
-            if hash(window[i:i + g]) in grams:
+            h = hash(window[i:i + g]) & mask64
+            h2 = (h * 0x9E3779B97F4A7C15) & mask64
+            for j in range(k):
+                pos = ((h + j * h2) & mask64) & mask
+                if not (bits[pos >> 3] >> (pos & 7)) & 1:
+                    break
+            else:
                 return True
         return False
 
@@ -403,6 +448,22 @@ def main():
         print("     FUITE %s : %s" % (oid, why))
     print()
 
+    # The complete text of the corpus is built only for the test "the whole
+    # content of the file is in the corpus", then it is released before the
+    # search index is built: the two memory peaks do not add up.  The result
+    # is printed in the same place as before.
+    blob = corpus_blob(corpus_dir, index_path)
+    corpus_text_length = len(blob)
+    whole_file_hits = []
+    for rel, full in files:
+        text = texts.get(rel)
+        if not text:
+            continue
+        stripped = text.strip()
+        if stripped and len(stripped) >= LINE_MIN and blob.find(stripped) != -1:
+            whole_file_hits.append((rel, len(stripped)))
+    del blob
+
     print("4. Recouvrement ligne a ligne (lignes de %d caracteres ou plus)" % LINE_MIN)
     corpus_line_set = corpus_lines(corpus_dir, index_path)
     print("   lignes distinctes du corpus : %d" % len(corpus_line_set))
@@ -430,20 +491,18 @@ def main():
     print()
 
     print("5. Recouvrement par fragments (plus longue sous-chaine commune)")
-    blob = corpus_blob(corpus_dir, index_path)
-    print("   texte du corpus             : %d caracteres" % len(blob))
+    print("   texte du corpus             : %d caracteres" % corpus_text_length)
     corpus_line_list = list(corpus_line_set.keys())
     corpus_text = CorpusText(corpus_line_list)
-    whole_file_hits = []
+    # les lignes distinctes du corpus sont copiees dans le texte de recherche
+    # et dans le filtre : elles ne servent plus.
+    del corpus_line_set, corpus_line_list
     fragment_bytes = {}
     fragment_detail = {}
     for rel, full in files:
         text = texts.get(rel)
         if not text:
             continue
-        stripped = text.strip()
-        if stripped and len(stripped) >= LINE_MIN and blob.find(stripped) != -1:
-            whole_file_hits.append((rel, len(stripped)))
         interesting = rel.startswith(FRAGMENT_DIRS) or has_qnx_marker(text)
         if not interesting:
             continue

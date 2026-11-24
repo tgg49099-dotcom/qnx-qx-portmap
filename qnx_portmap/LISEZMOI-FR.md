@@ -13,6 +13,6 @@ Ce que contient ce dossier :
 Commandes de verification (depuis la racine `qnx-portmap/`) :
 
 ```bash
-python3 -m unittest discover -s tests -t .   # 90 tests : verts, 18 sautes sans corpus
-python3 tools/contre_epreuve.py               # 10/10 contre-epreuves doivent etre concluantes
+python3 -m unittest discover -s tests -t .   # 246 tests : verts, 33 sautes sans corpus
+python3 tools/contre_epreuve.py               # 11/11 contre-epreuves doivent etre concluantes
 ```

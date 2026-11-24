@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """RED counter-proof: break a rule, show that the test fails.
 
-A test that always passes tests nothing. This script breaks ten rules of the
+A test that always passes tests nothing. This script breaks twelve rules of the
 code on purpose, one at a time, and checks that the loaded test detects it.
 It restores the repository at every step (restoration by git).
 
-Nine rules are testable without the complete corpus (they rely on the
-miniature corpus rebuilt from the fixtures). The tenth one verifies the
+Eleven rules are testable without the complete corpus (they rely on the
+miniature corpus rebuilt from the fixtures). The twelfth one verifies the
 integrity of the frozen corpus shipped with the tool: it is testable only if
 the corpus is present in the tree; otherwise it is reported as not testable
 and is not counted in the total.

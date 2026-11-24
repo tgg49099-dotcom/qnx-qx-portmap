@@ -4,7 +4,9 @@ The README tells a judge how many tests the suite has, how many are skipped
 without the frozen corpus, and how many files the published manifest lists.
 These numbers drift every time a test or a file is added.  This tool reads
 every such claim and compares it with the values measured by
-``scripts/verify-all.sh`` on the same tree.
+``scripts/verify-all.sh`` on the same tree.  Every LISEZMOI file that
+publishes a test count is checked too: a number written in a file of the
+package must be the real one, exactly like the numbers of the README.
 
 Usage (called by ``scripts/verify-all.sh``, check 4)::
 
@@ -79,6 +81,8 @@ CLAIMS = [
     ("LISEZMOI.md", "state of the project",
      r"\*\*(\d+) tests, all green\*\* \((\d+) of them are skipped", ["tests", "skipped"]),
     ("qnx_portmap/LISEZMOI.md", "verification commands",
+     r"# (\d+) tests: green, (\d+) skipped without corpus", ["tests", "skipped"]),
+    ("tests/LISEZMOI.md", "verification commands",
      r"# (\d+) tests: green, (\d+) skipped without corpus", ["tests", "skipped"]),
 ]
 

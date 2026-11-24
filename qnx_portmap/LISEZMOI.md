@@ -14,7 +14,7 @@ Verification commands (from the `qnx-portmap/` root):
 
 ```bash
 python3 -m unittest discover -s tests -t .   # 246 tests: green, 33 skipped without corpus
-python3 tools/contre_epreuve.py               # 10/10 counter-proofs must be conclusive
+python3 tools/contre_epreuve.py               # 11/11 counter-proofs must be conclusive
 ```
 
 The French version of this file is kept byte-identical in

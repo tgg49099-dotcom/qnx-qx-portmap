@@ -1,7 +1,7 @@
 """The checker of the published numbers must catch a false number.
 
 ``tools/published_counts.py`` compares every test and file count written in
-the README, the French README, the submission kit and the two LISEZMOI files with the values measured by
+the README, the French README, the submission kit and the LISEZMOI files with the values measured by
 ``scripts/verify-all.sh``.  These tests run it on a small synthetic tree:
 a sound tree is green, one false number is caught (and only that one), a
 reworded claim is caught, and the skip counts are never reported OK when the
@@ -63,6 +63,9 @@ def make_tree(root, n=10, s=3, f=7, p=None, fr_n=None):
         h.write(LISEZMOI.format(n=n, s=s))
     with open(os.path.join(root, "qnx_portmap", "LISEZMOI.md"), "w", encoding="utf-8") as h:
         h.write(PKG.format(n=n, s=s))
+    os.makedirs(os.path.join(root, "tests"))
+    with open(os.path.join(root, "tests", "LISEZMOI.md"), "w", encoding="utf-8") as h:
+        h.write(PKG.format(n=n, s=s))
     os.makedirs(os.path.join(root, "docs"))
     with open(os.path.join(root, "docs", "README-FR.md"), "w", encoding="utf-8") as h:
         h.write(README_FR.format(n=n if fr_n is None else fr_n, s=s, p=n - s))
@@ -92,6 +95,19 @@ class TestPublishedCounts(unittest.TestCase):
             make_tree(root, n=10)
             rows, failed = check(root, 11, 3, False, 7)  # one test was added
             self.assertGreaterEqual(failed, 8, rows)
+            # The same stale number in the LISEZMOI file of the tests folder
+            # is caught too.  On 24/11/2026 that file still said 184 tests
+            # while the suite had 246, and no claim covered it.
+            with tempfile.TemporaryDirectory() as root:
+                make_tree(root)
+                path = os.path.join(root, "tests", "LISEZMOI.md")
+                with open(path, "w", encoding="utf-8") as h:
+                    h.write(PKG.format(n=9, s=3))
+                rows, failed = check(root, 10, 3, False, 7)
+                self.assertEqual(failed, 1, rows)
+                bad = [r for r in rows if r[4] == "FAILED"]
+                self.assertEqual(bad[0][0], "tests/LISEZMOI.md")
+                self.assertEqual((bad[0][2], bad[0][3]), (9, 10))
 
     def test_stale_french_readme_is_caught(self):
         # 16/11/2026: docs/README-FR.md still said 124 tests while the suite

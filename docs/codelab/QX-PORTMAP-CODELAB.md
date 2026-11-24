@@ -504,13 +504,15 @@ gives the verdict above. `git status` shows what the steps wrote, and
 **Do not publish a regenerated manifest.** `python3 scripts/manifeste_publie.py`
 lists *every* file of the tree, the ones the steps wrote included; it counts
 files, never a directory. In a clone where the steps were done, it lists
-**130 files instead of the 127 published ones** (measured on 22 November 2026):
+**135 files instead of the 132 published ones** (measured on 24 November 2026):
 the three files the steps leave in the tree - `calls.txt`, `my_code.c` and
 `state.json` - are in it, and the directories `corpus-quick/` and
 `corpus-downloaded/` are not counted at all, only the files they contain. The
-count then grows with the snapshots the steps download: **285 files** with the
-quick snapshot of step 3 (`corpus-quick/`, 155 files) and **8 235 files** with
-the complete snapshot of step 5 (`corpus-downloaded/`, 7 950 files). Use it to
+count then grows with the snapshots the steps download: **290 files** with the
+quick snapshot of step 3 (`corpus-quick/`, 155 files - measured on 24 November
+2026) and **8 240 files** with the complete snapshot of step 5
+(`corpus-downloaded/`, 7 950 files - measured on 22 November 2026, the day the
+complete snapshot was downloaded). Use it to
 see what changed, then restore the published manifest with
 `git checkout -- MANIFESTE-PUBLIE.txt`.
 
@@ -530,12 +532,12 @@ proof and prints:
 VERDICT: EVERY CHECK PASSED - 8/8 OK (RC 0)
 ```
 
-(measured on 19 November 2026: 202 tests and 1 skipped, 0 match with the QNX
-documentation, `MANIFESTE-PUBLIE.txt lists 127 files`, every published count
-is the real one, 11 / 11 rules counter-proved, nothing left in the 71
-published documents.  The eleventh rule is the integrity of the corpus
+(measured on 24 November 2026: 246 tests and 1 skipped, 0 match with the QNX
+documentation, `MANIFESTE-PUBLIE.txt lists 132 files`, every published count
+is the real one, 11 / 11 rules counter-proved, nothing left in the 72
+published documents.  One rule of the twelve is the integrity of the corpus
 itself, which cannot be tested without it - without the corpus, the same
-command prints `10 / 10`.)
+command prints `11 / 11`.)
 
 The unit test suite alone:
 
@@ -546,12 +548,12 @@ cd qnx-qx-portmap && python3 -m unittest discover -s tests -t .
 **You should see:**
 
 ```text
-Ran 202 tests in 1.335s
+Ran 246 tests in 2.599s
 
 OK (skipped=33)
 ```
 
-(202 tests, 33 skipped, exit code 0 - measured on 19 November 2026; only the
+(246 tests, 33 skipped, exit code 0 - measured on 24 November 2026; only the
 duration changes from one machine to another. The 33 skipped tests are the
 ones that need the corpus: they are skipped, never failed.)
 
@@ -563,7 +565,7 @@ fingerprint of its `SHA256SUMS` file published in
 [`CORPUS-NON-PUBLIE.txt`](../../CORPUS-NON-PUBLIE.txt). With another corpus -
 the one you downloaded, or a quick corpus - the tests that need the frozen
 corpus are **skipped, never failed**: the suite stays green (measured on
-22 November 2026 with a 76-page corpus: `Ran 202 tests`, `OK (skipped=33)`).
+24 November 2026 with a 76-page corpus: `Ran 246 tests`, `OK (skipped=33)`).
 The commands of steps 6 and 7 set the variable for that command only. The
 suite also needs room in the temporary directory (145 MB, see trap 4).
 
@@ -574,18 +576,19 @@ checks that the matching test turns red:
 cd qnx-qx-portmap && python3 tools/contre_epreuve.py
 ```
 
-**You should see:** `10 / 10 contre-epreuves concluantes` (10 rules broken, 10
+**You should see:** `11 / 11 contre-epreuves concluantes` (11 rules broken, 11
 tests caught them, exit code 0) and the line `regle non testable ici (corpus
-absent) : integrite du corpus fige livre`: the eleventh rule checks the
+absent) : integrite du corpus fige livre`: one rule of the twelve checks the
 SHA-256 of every page of the corpus shipped with the tool, and the corpus is
 not redistributed, so it cannot be tested in your clone. The output of the day
 is kept in
 [`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`](../preuves/i-contre-epreuve-rouge-avec-corpus.txt)
-(11 / 11 when the corpus is **inside the tree**, in `corpus/`) and in
+(11 / 11 when the corpus is **inside the tree**, in `corpus/`, archived on
+15/11/2026) and in
 [`docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt`](../preuves/c-contre-epreuve-rouge-sans-corpus.txt)
-(10 / 10 without it). The eleventh rule reads `corpus/pages/...` **relative
-to the tree**: a corpus pointed to by `QX_PORTMAP_CORPUS` is outside the tree,
-so the rule stays untestable and the result is 10 / 10 there too.
+(10 / 10 without it, archived on 15/11/2026). That rule reads `corpus/pages/...`
+**relative to the tree**: a corpus pointed to by `QX_PORTMAP_CORPUS` is outside
+the tree, so the rule stays untestable and the result is 11 / 11 there too.
 
 ## The traps
 

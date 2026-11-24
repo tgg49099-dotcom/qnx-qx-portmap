@@ -190,7 +190,7 @@ pip install .                     # or, without installing: python3 -m qnx_portm
 python3 -m unittest discover -s tests -t .
 ```
 
-Result measured on 23 November 2026: **246 tests, exit code 0**, without any
+Result measured on 24 November 2026: **246 tests, exit code 0**, without any
 network access and without any third-party dependency.
 
 | Situation | Result |
@@ -208,13 +208,14 @@ and the matching test must turn red, then the code is restored.
 python3 tools/contre_epreuve.py
 ```
 
-11 rules, 11 conclusive (11/11, exit code 0) with the corpus, 10/11 without it
-(the eleventh rule is about the integrity of the frozen corpus itself); the
-output is kept in
+12 rules, 12 conclusive (12/12, exit code 0) when the frozen corpus is in the
+tree, 11 of the 12 conclusive without it - the tool prints `11 / 11`, because
+the rule about the integrity of the frozen corpus itself cannot be tested
+without the corpus; the archived outputs are kept in
 [`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`](docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt)
-(11/11) and
+(11/11, archived on 15/11/2026) and
 [`docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt`](docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt)
-(10/10).
+(10/10, archived on 15/11/2026).
 
 ### Submission kit and video plan
 
@@ -587,7 +588,7 @@ demonstration video URL must be the same in the README and in the kit). The comm
 which breaks a rule of the code on purpose, is replayed on a temporary copy
 of the tree, never on the checkout of the reader.
 
-Real output, on a fresh clone without the corpus:
+Real output, on a fresh clone without the corpus (replayed on 24 November 2026):
 
 ```bash
 git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git
@@ -608,12 +609,12 @@ VERIFICATION                               RESULT       DETAIL                  
 ------------------------------------------ ------------ ------------------------------------------------ ----
 unit test suite                            OK           246 tests, 33 skipped                          0
 anti-leak control of the QNX corpus        NOT CHECKED  the frozen QNX corpus is absent here           -
-published manifest                         OK           MANIFESTE-PUBLIE.txt lists 131 files           0
+published manifest                         OK           MANIFESTE-PUBLIE.txt lists 132 files           0
 published numbers of the README            OK           every published count is the real one          0
 parity of the README output block          NOT CHECKED  the frozen corpus is absent here               0
-RED counter-proof                          OK           10 / 10 rules counter-proved                   0
+RED counter-proof                          OK           11 / 11 rules counter-proved                   0
 lengths of the submission kit              OK           every measured length matches the text         0
-placeholders and draft banners             OK           nothing left in the 71 published documents     0
+placeholders and draft banners             OK           nothing left in the 72 published documents     0
 ======================================================================================================
 VERDICT: NO CHECK FAILED - 6/8 OK, 2 NOT CHECKED (RC 0)
          the check(s) that could not run on this machine are named in the
@@ -653,7 +654,7 @@ one that requires the corpus **inside the installed package** (absent from the
 repository, the QNX documentation being not redistributable); it is skipped,
 never failed. If the corpus is placed in `corpus/` next to the package, this
 test runs and the suite passes without any skip. The three lines of the table
-above were re-measured on 22 November 2026, on fresh clones of the published
+above were re-measured on 24 November 2026, on fresh clones of the published
 repository.
 
 The 33 skipped tests are the ones that require the complete corpus (SHA-256
@@ -702,6 +703,7 @@ python3 tools/contre_epreuve.py
 | Broken rule | Test that must turn red |
 |---|---|
 | word boundary in the citation search | `test_respects_word_boundaries` |
+| a file name is not a symbol (`recv.c`, `/dev/socket`) | `test_path_is_ignored` |
 | verification of the SHA-256 of the corpus pages | `test_detects_a_corrupted_page` |
 | verification of the `SHA256SUMS` file | `test_detects_a_corrupted_sha256sums_file` |
 | reading of the "described elsewhere" table of the index | `test_described_elsewhere_symbol` |
@@ -716,17 +718,18 @@ python3 tools/contre_epreuve.py
 | the J5 sample is strictly the one of J4 | `test_echantillon_identique_a_j4` |
 | a verified QNX 8.0 page of the frozen corpus is required for every conversion | `test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256` |
 
-The table lists **14** broken rules: **11** of them are counter-proved by
-`tools/contre_epreuve.py` (**11 / 11**, exit code 0, complete output in
-`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`), and the **three J5 rules**
-have their own red proof in `docs/preuves/h-mesure-j5-rouge.txt`.
+The table lists **15** broken rules: **12** of them are counter-proved by
+`tools/contre_epreuve.py` (**12 / 12** with the corpus in the tree, **11 / 11**
+without it, exit code 0), and the **three J5 rules** have their own red proof in
+`docs/preuves/h-mesure-j5-rouge.txt`.
 
-On the tree **without** the corpus, 10 of the 11 rules remain counter-proved
-(`10 / 10`, exit code 0): the rule "integrity of the frozen corpus shipped"
+On the tree **without** the corpus, 11 of the 12 rules remain counter-proved
+(`11 / 11`, exit code 0): the rule "integrity of the frozen corpus shipped"
 covers the 3 426 pages, therefore the corpus itself; without it there is
-nothing to corrupt and the matching test is skipped. The two runs are in
-`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt` (11/11) and
-`docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt` (10/10).
+nothing to corrupt and the matching test is skipped. The archived runs are in
+`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt` (11/11, archived on
+15/11/2026) and `docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt`
+(10/10, archived on 15/11/2026).
 
 ## QNX corpus: not redistributed
 
@@ -849,8 +852,40 @@ python3 scripts/controle_fuite_corpus.py --tree . \
     --corpus /path/to/corpus
 ```
 
-The control is complete (end to end, about 15 minutes: it decompresses and
-compares 350 MB of documentation).
+The control is complete (end to end, it decompresses and compares 350 MB of
+documentation). It takes about three minutes on the container of the build
+machine (180.0 s measured on 24 November 2026, on the tree of this
+repository).
+
+#### The memory of the control, and why its result cannot change
+
+The control used to keep a set of the 27 684 783 distinct 30-character
+pieces of the corpus (1.70 GB, measured on 19 November 2026) and to search a
+350 MB text built in three copies. On the container of the build machine
+(cgroup limit 2 621 440 000 bytes, no swap) the kernel killed it after 10
+seconds: `RC 137`, peak 2 621 251 584 bytes - measured on 24 November 2026,
+on a fresh clone of the published commit `ffee935`.
+
+It now keeps a **Bloom filter of 64 MiB** instead of that set, builds the
+searched text in one allocation, and releases the complete text of the corpus
+before the search index is built. A Bloom filter has **no false negative**:
+every piece of the corpus is inserted in it, so a window that is in the corpus
+is always searched. A false positive is still possible, and it only costs one
+useless search in the same text: the control can be **stricter** than before,
+never more lenient, so the verdict cannot become green where it was red.
+
+Measured on the same machine, with the same corpus and the same tree, on
+24 November 2026: the control ends with `RESULTAT : 0 correspondance` and
+`RC 0` in **180.0 s** (about three minutes), with a peak of
+**1 793 519 616 bytes** (about 1.7 Go). The duration and the peak depend on
+the machine and on its cache state: another run of the same day gave 177.0 s
+and 1 577 209 856 bytes, with the same verdict.
+
+The proof of the equivalence is in
+[`docs/preuves/m-anti-fuite-memoire.txt`](docs/preuves/m-anti-fuite-memoire.txt):
+the output of the corrected control and the output of the reference
+implementation (`a2b42cc`, which searches the corpus line by line) are
+identical line for line, and the sabotage test still turns the control red.
 
 `MANIFESTE-PUBLIE.txt` (at the root) lists, for every publishable file, the
 path, the size and the SHA-256; it is regenerated with:
@@ -862,23 +897,24 @@ python3 scripts/manifeste_publie.py --check    # checks that it is up to date
 
 ### Evidence
 
-The evidence of 14/11 and 15/11/2026 (command and real output for each one)
-is in `docs/preuves/`:
+The evidence of 14/11, 15/11 and 24/11/2026 (command and real output for each
+one) is in `docs/preuves/`:
 
 | File | Evidence |
 |---|---|
 | `a-tests-sans-corpus.txt` | archived run of 15/11/2026 (commit `5653bb2`, before the English mode was added): 147 tests on a copy **without** the corpus, 122 pass, 25 are skipped, exit code 0 |
 | `b-tests-avec-corpus.txt` | the same archived run **with** the corpus: 147 tests, 0 skipped, exit code 0 |
-| `c-contre-epreuve-rouge-sans-corpus.txt` | RED counter-proof without the corpus: 10/10 conclusive, 1 rule not testable |
+| `c-contre-epreuve-rouge-sans-corpus.txt` | archived run of 15/11/2026: RED counter-proof without the corpus, 10/10 conclusive (the 11 rules of that day), 1 rule not testable |
 | `d-controle-fuite-corpus.txt` | anti-leak control: 0 match |
 | `e-fresh-sans-corpus.txt` | `--fresh --fresh-max-pages 3` on the copy without the corpus: exit code 0, frozen corpus unchanged |
 | `f-manifeste-publie.txt` | `MANIFESTE-PUBLIE.txt`: number of files, total size, 3 biggest files |
 | `garde-fou-bootstrap.txt` | the rebuild script refuses to write into a frozen corpus |
 | `g-mesure-j4-rouge.txt` | the J4 measurement: the test fails when the rate or the published data is faked, then passes again |
 | `h-mesure-j5-rouge.txt` | the J5 measurement: the test fails on the previous state (93 %) and when the published data is broken, then passes again (95 %) |
-| `i-contre-epreuve-rouge-avec-corpus.txt` | RED counter-proof with the corpus in the tree: 11/11 conclusive |
+| `i-contre-epreuve-rouge-avec-corpus.txt` | archived run of 15/11/2026: RED counter-proof with the corpus in the tree, 11/11 conclusive (the 11 rules of that day) |
 | `j-mesure-champs-devpost.txt` | the 120 published Devpost project pages measured: observed field lengths |
 | `k-formulaire-devpost-302-401.txt` | the contest form is behind a session: HTTP 302 and HTTP 401 |
+| `m-anti-fuite-memoire.txt` | anti-leak control of 24/11/2026: the memory of the control, the proof that the corrected control gives the same verdict as the reference implementation (identical output, line for line) and the sabotage test that still turns it red |
 
 ## Sources
 

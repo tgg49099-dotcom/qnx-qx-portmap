@@ -1,0 +1,163 @@
+PREUVE (m) - CONTROLE ANTI-FUITE : MEMOIRE ET EQUIVALENCE DU RESULTAT
+Date : 24/11/2026
+
+Machine de mesure : conteneur Debian 12, cgroup v2,
+memory.max = 2 621 440 000 octets, memory.swap.max = 0, 6 coeurs.
+Corpus de reference : /work/qnx-portmap-corpus-local/corpus (3 426 pages,
+empreintes SHA-256 intactes).
+
+Le pic de memoire est le maximum de memory.current du cgroup, echantillonne
+toutes les 0,25 s pendant l'execution : c'est la memoire reellement utilisee
+par le conteneur, pas le RSS final du processus. La duree est celle annoncee
+par le controle lui-meme ("Duree du controle").
+
+Le controle anti-fuite est le script scripts/controle_fuite_corpus.py. Il a
+ete remplace, dans le commit qui ajoute ce fichier, par une version qui garde
+un filtre de Bloom de 64 Mio au lieu d'un ensemble des 27 684 783 morceaux
+distincts de 30 caracteres du corpus, qui construit le texte cherche en une
+seule allocation, et qui libere le texte complet du corpus avant de construire
+l'index de recherche.
+
+------------------------------------------------------------------------------
+1. AVANT LE CORRECTIF - le controle tue par le noyau
+
+Arbre : un clone neuf du commit publie ffee935 (script d'origine, identique a
+celui du commit publie).
+
+Commande :
+    python3 -u -I scripts/controle_fuite_corpus.py --tree <clone ffee935> \
+        --corpus /work/qnx-portmap-corpus-local/corpus
+
+Sortie reelle (dernieres lignes avant la mort du processus) :
+
+CONTROLE ANTI-FUITE DU CORPUS QNX
+  date              : 2026-11-24 12:49:42
+  arbre publiable   : /work/cycle280/avant-ffee935
+  corpus de ref.    : /work/qnx-portmap-corpus-local/corpus
+  pages de reference: 3426 (empreintes de contenu)
+  fichiers stockes  : 3427 (empreintes gzip)
+...
+5. Recouvrement par fragments (plus longue sous-chaine commune)
+   texte du corpus             : 350127068 caracteres
+
+RC = 137 (tue par le noyau, OOM killer du cgroup)
+Duree avant la mort : 10 s (de 11:49:42 a 11:49:52 UTC le 24/11/2026 ; l'heure
+affichee par le controle, 12:49:42, est l'heure locale du conteneur, UTC+1)
+PIC memory.current : 2 621 251 584 octets
+Limite du cgroup   : 2 621 440 000 octets
+
+------------------------------------------------------------------------------
+2. APRES LE CORRECTIF - le meme controle, le meme corpus
+
+Commande :
+    python3 -u -I scripts/controle_fuite_corpus.py --tree <arbre> \
+        --corpus /work/qnx-portmap-corpus-local/corpus
+
+Sortie reelle (les lignes du resultat ; la sortie complete compte 100 lignes) :
+
+6. Budget de copie (4000 octets de texte QNX verbatim par fichier)
+   fichiers avec du texte verbatim QNX : 38
+   octets verbatim QNX dans l'arbre   : 7635
+   fichiers au-dessus du budget        : 0
+
+RESULTAT : 0 correspondance. L'arbre publiable ne contient aucune
+           page de la documentation QNX.
+Duree du controle : 180.0 s
+
+RC = 0
+PIC memory.current : 1 793 519 616 octets (contre 2 621 251 584 avant, pour
+la meme limite de 2 621 440 000 octets)
+
+Une autre execution du meme jour, sur le meme arbre et avec le meme corpus, a
+donne 177.0 s et un pic de 1 577 209 856 octets, avec le meme verdict : le pic
+compte aussi le cache de la machine, il varie donc d'une execution a l'autre.
+C'est la mesure de 180.0 s / 1 793 519 616 octets qui est publiee dans le
+README, parce qu'elle porte sur l'arbre publie.
+
+La ligne "fichiers analyses : N (M octets)" n'est pas reprise ici : elle
+change avec la taille de ce fichier lui-meme.
+
+------------------------------------------------------------------------------
+3. EQUIVALENCE AVEC L'IMPLEMENTATION DE REFERENCE
+
+La reference est la version du script au commit a2b42cc : elle cherche le
+corpus ligne par ligne, sans filtre prealable, donc sans filtre de Bloom. Elle
+a ete lancee sur le meme arbre, avec le meme corpus, le meme jour.
+
+Les deux sorties sont identiques ligne pour ligne, a deux lignes pres :
+
+  - la ligne "  date              : ..." (l'heure de l'execution) ;
+  - la ligne "Duree du controle : ... s" (le temps mesure).
+
+La commande de comparaison (elle ecarte ces deux lignes) :
+
+    diff <(grep -v -e '^  date ' -e '^Duree du controle' sortie-corrigee.txt) \
+         <(grep -v -e '^  date ' -e '^Duree du controle' sortie-reference.txt)
+
+Sortie : vide (aucune difference).
+
+Meme code de sortie (0) et meme verdict ("RESULTAT : 0 correspondance") des
+deux cotes.
+
+Pourquoi le verdict ne peut pas changer : un filtre de Bloom n'a aucun faux
+negatif. Chaque morceau du corpus y est insere, donc une fenetre de 40
+caracteres qui se trouve dans le corpus est toujours cherchee dans le texte
+(la fenetre contient toujours un morceau entier du corpus, voir la constante
+STEP = LINE_MIN - GRAM + 1). Un faux positif reste possible : il ne coute
+qu'une recherche inutile dans le meme texte. Le controle peut donc seulement
+devenir plus severe, jamais plus lenient.
+
+------------------------------------------------------------------------------
+4. LE SABOTAGE FAIT TOUJOURS PASSER LE CONTROLE AU ROUGE
+
+Pour montrer que la correction n'a pas rendu le controle aveugle, une page du
+corpus a ete copiee dans l'arbre (decomprimee et compressee) :
+
+    cp <corpus>/pages/8.0/com.qnx.doc.neutrino.lib_ref/topic/a/abort.html.gz \
+       docs/sabotage-page.html.gz
+    gunzip -c docs/sabotage-page.html.gz > docs/sabotage-page.html
+
+Sortie reelle du controle sur cet arbre (les lignes qui changent) :
+
+1. SHA-256 des fichiers de l'arbre publiable
+   correspondances page QNX   : 1
+   correspondances fichier    : 1
+     FUITE docs/sabotage-page.html : page QNX identique
+     FUITE docs/sabotage-page.html.gz : fichier du corpus identique
+
+2. Contenu decompresse des fichiers gzip de l'arbre
+   correspondances page QNX   : 1
+     FUITE docs/sabotage-page.html.gz : page QNX compressee a l'identique
+
+5. Recouvrement par fragments (plus longue sous-chaine commune)
+   fichiers dont le contenu entier est dans le corpus : 1
+     FUITE docs/sabotage-page.html : 95111 octets verbatim
+
+6. Budget de copie (4000 octets de texte QNX verbatim par fichier)
+     TROP docs/sabotage-page.html : 91350 octets (lignes 91350, fragments 91350)
+
+RESULTAT : 5 correspondance(s) detectee(s).
+
+RC = 1
+
+------------------------------------------------------------------------------
+5. REJOUER LES TROIS MESURES
+
+    # 1. avant le correctif (arbre = commit ffee935)
+    git clone <depot> avant && cd avant && git checkout ffee935
+    python3 -u -I scripts/controle_fuite_corpus.py --tree . \
+        --corpus /chemin/vers/corpus          # RC 137 apres 10 s
+
+    # 2. apres le correctif (arbre publie)
+    python3 -u -I scripts/controle_fuite_corpus.py --tree . \
+        --corpus /chemin/vers/corpus          # RC 0, "0 correspondance"
+
+    # 3. equivalence : la meme commande avec le script du commit a2b42cc,
+    #    puis le diff des deux sorties (les deux lignes ecitees ci-dessus
+    #    sont ecartees).
+
+    # 4. sabotage : copier une page du corpus dans l'arbre, le controle doit
+    #    finir sur "RESULTAT : N correspondance(s) detectee(s)" et RC 1.
+
+Le corpus de reference n'est pas redistribue : il se reconstruit avec
+    bash scripts/bootstrap_corpus.sh --out corpus-downloaded

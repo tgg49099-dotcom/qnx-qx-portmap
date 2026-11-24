@@ -19,6 +19,6 @@ Verification commands (from the root `qnx-portmap/`):
 
 ```bash
 python3 -m unittest discover -s tests -t .   # all the tests must pass
-python3 tools/contre_epreuve.py               # 10/10 counter-proofs must be conclusive
+python3 tools/contre_epreuve.py               # 11/11 counter-proofs must be conclusive
 python3 tools/controle_placeholders.py        # no placeholder must be left
 ```

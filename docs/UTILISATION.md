@@ -148,9 +148,9 @@ counting it resolved (the rate was 96 % before that rule, on 19/11/2026).
 python3 -m unittest discover -s tests -t .
 ```
 
-Without the corpus: 202 tests, 33 of them skipped (the test says so, it does
-not lie). With the corpus: 202 tests, 1 skipped, exit code 0.
-(Figures re-measured on 19/11/2026.)
+Without the corpus: 246 tests, 33 of them skipped (the test says so, it does
+not lie). With the corpus: 246 tests, 1 skipped, exit code 0.
+(Figures re-measured on 24/11/2026.)
 
 The **RED -> GREEN** proof (a rule is broken, the test fails, the code is
 restored, the test passes again) is in [`preuves/`](preuves/); the detail of

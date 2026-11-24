@@ -13,8 +13,8 @@ compilation, no network by default.
 ## State
 
 Working V0 (14/11/2026). **246 tests, all green** (33 of them are skipped when
-the corpus is absent). RED counter-proof: 11/11 with
-the corpus, 10/10 without it (the rule on the integrity of the frozen corpus
+the corpus is absent). RED counter-proof: 12/12 with the corpus in the tree,
+11/11 without it (the rule on the integrity of the frozen corpus
 cannot be tested without it).
 
 **Measurement J4 (14/11/2026)**: on the 100 QNX symbols really called by 5
@@ -57,7 +57,7 @@ The repository is **publishable**: it no longer contains the QNX documentation.
 | Path | Content | Size |
 |---|---|---|
 | `qnx_portmap/` | the package (6 modules, standard library only) | ~66 KB |
-| `tests/` | 246 tests, among them 21 on the miniature fixtures and 16 on the J4 measurement | ~130 KB |
+| `tests/` | 246 tests, among them 21 on the miniature fixtures and 27 on the J4 measurement | ~130 KB |
 | `tests/fixtures/` | 12 short extracts (1 to 3 lines) of QNX pages, with URL and date | ~4 KB |
 | `tools/` | corpus construction, fixtures, RED counter-proof, J4 measurement, control of the placeholders | ~136 KB |
 | `scripts/` | corpus bootstrap, published manifest, anti-leak control | ~30 KB |

@@ -114,7 +114,7 @@ pip install .                     # or, without installing: python3 -m qnx_portm
 python3 -m unittest discover -s tests -t .
 ```
 
-Result measured on 23 November 2026: **246 tests, exit code 0**, without any
+Result measured on 24 November 2026: **246 tests, exit code 0**, without any
 network access and without any third-party dependency.
 
 | Situation | Result |
@@ -132,13 +132,14 @@ and the matching test must turn red, then the code is restored.
 python3 tools/contre_epreuve.py
 ```
 
-11 rules, 11 conclusive (11/11, exit code 0) with the corpus, 10/11 without it
-(the eleventh rule is about the integrity of the frozen corpus itself); the
-output is kept in
+12 rules, 12 conclusive (12/12, exit code 0) with the corpus in the tree, 11 of
+the 12 conclusive without it - the tool prints `11 / 11`, because the rule
+about the integrity of the frozen corpus itself cannot be tested without the
+corpus; the archived outputs are kept in
 [`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`](docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt)
-(11/11) and
+(11/11, archived on 15/11/2026) and
 [`docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt`](docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt)
-(10/10).
+(10/10, archived on 15/11/2026).
 
 ### Submission kit and video plan
 
@@ -468,6 +469,7 @@ python3 tools/contre_epreuve.py
 | Regle cassee | Test qui doit devenir rouge |
 |---|---|
 | frontiere de mot dans la recherche de citation | `test_respects_word_boundaries` |
+| un nom de fichier n'est pas un symbole (`recv.c`, `/dev/socket`) | `test_path_is_ignored` |
 | verification du SHA-256 des pages du corpus | `test_detects_a_corrupted_page` |
 | verification du fichier `SHA256SUMS` | `test_detects_a_corrupted_sha256sums_file` |
 | lecture du tableau "described elsewhere" de l'index | `test_described_elsewhere_symbol` |
@@ -482,16 +484,18 @@ python3 tools/contre_epreuve.py
 | l'echantillon J5 est strictement celui de J4 | `test_echantillon_identique_a_j4` |
 | une page QNX 8.0 verifiee dans le corpus fige est exigee pour chaque conversion | `test_les_pages_citees_sont_dans_le_corpus_fige_avec_le_bon_sha256` |
 
-Les 11 contre-epreuves sont concluantes (`11 / 11`, code de sortie 0) ; la sortie
-complete est conservee dans `docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`
+Les 12 contre-epreuves sont concluantes (`12 / 12` avec le corpus dans l'arbre,
+`11 / 11` sans lui, code de sortie 0) ; la sortie complete est conservee dans
+`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`
 (et dans `docs/contre-epreuve-rouge.txt`).
 
-Sur l'arbre **sans** corpus, 10 des 11 regles restent contre-prouvees (`10 / 10`,
+Sur l'arbre **sans** corpus, 11 des 12 regles restent contre-prouvees (`11 / 11`,
 code de sortie 0) : la regle "integrite du corpus fige livre" porte sur les
 3 426 pages, donc sur le corpus lui-meme ; sans lui, il n'y a rien a corrompre
-et le test correspondant est saute. Les deux executions sont dans
-`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt` (11/11) et
-`docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt` (10/10).
+et le test correspondant est saute. Les executions archivees sont dans
+`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt` (11/11, archivee le
+15/11/2026) et `docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt`
+(10/10, archivee le 15/11/2026).
 
 ## Corpus QNX : non distribue
 
@@ -615,8 +619,40 @@ python3 scripts/controle_fuite_corpus.py --tree . \
     --corpus /chemin/vers/corpus
 ```
 
-Le controle est complet (bout en bout, environ 15 minutes : il decompresse et
-compare 350 Mo de documentation).
+Le controle est complet (bout en bout : il decompresse et compare 350 Mo de
+documentation). Il prend environ trois minutes sur le conteneur de la machine de
+compilation (180,0 s mesures le 24 novembre 2026, sur l'arbre de ce depot).
+
+#### La memoire du controle, et pourquoi son resultat ne peut pas changer
+
+Le controle gardait un ensemble des 27 684 783 morceaux distincts de 30
+caracteres du corpus (1,70 Go, mesures du 19 novembre 2026) et cherchait dans
+un texte de 350 Mo construit en trois copies. Sur le conteneur de la machine de
+compilation (limite cgroup 2 621 440 000 octets, aucun swap) le noyau l'a tue
+au bout de 10 secondes : `RC 137`, pic 2 621 251 584 octets - mesures du 24
+novembre 2026, sur un clone neuf du commit publie `ffee935`.
+
+Il garde maintenant un **filtre de Bloom de 64 Mio** au lieu de cet ensemble,
+construit le texte cherche en une seule allocation et libere le texte complet
+du corpus avant l'index de recherche. Un filtre de Bloom n'a **aucun faux
+negatif** : chaque morceau du corpus y est insere, donc une fenetre qui est
+dans le corpus est toujours cherchee. Un faux positif reste possible et ne
+coute qu'une recherche inutile dans le meme texte : le controle ne peut donc
+etre que **plus severe** qu'avant, jamais plus lenient, et le verdict ne peut
+pas devenir vert la ou il etait rouge.
+
+Mesures sur la meme machine, avec le meme corpus et le meme arbre, le 24
+novembre 2026 : le controle se termine par `RESULTAT : 0 correspondance` et
+`RC 0` en **180,0 s** (environ trois minutes), avec un pic de
+**1 793 519 616 octets** (environ 1,7 Go). La duree et le pic dependent de la
+machine et de son cache : une autre execution du meme jour a donne 177,0 s et
+1 577 209 856 octets, avec le meme verdict.
+
+La preuve de l'equivalence est dans
+[`docs/preuves/m-anti-fuite-memoire.txt`](docs/preuves/m-anti-fuite-memoire.txt) :
+la sortie du controle corrige et la sortie de l'implementation de reference
+(`a2b42cc`, qui cherche le corpus ligne par ligne) sont identiques ligne pour
+ligne, et le test de sabotage fait toujours passer le controle au rouge.
 
 `MANIFESTE-PUBLIE.txt` (a la racine) liste, pour chaque fichier publiable, le
 chemin, la taille et le SHA-256 ; il se regenere avec :
@@ -628,23 +664,24 @@ python3 scripts/manifeste_publie.py --check    # verifie qu'il est a jour
 
 ### Preuves
 
-Les preuves du 14/11 et du 15/11/2026 (commande et sortie reelle pour chacune)
-sont dans `docs/preuves/` :
+Les preuves du 14/11, du 15/11 et du 24/11/2026 (commande et sortie reelle pour
+chacune) sont dans `docs/preuves/` :
 
 | Fichier | Preuve |
 |---|---|
 | `a-tests-sans-corpus.txt` | execution archivee du 15/11/2026 (commit `5653bb2`, avant l'ajout du mode anglais) : 147 tests sur une copie **sans** corpus, 122 passent, 25 sont sautes, code de sortie 0 |
 | `b-tests-avec-corpus.txt` | la meme execution archivee **avec** le corpus : 147 tests, 0 saut, code de sortie 0 |
-| `c-contre-epreuve-rouge-sans-corpus.txt` | contre-epreuve ROUGE sans le corpus : 10/10 concluantes, 1 regle non testable |
+| `c-contre-epreuve-rouge-sans-corpus.txt` | execution archivee du 15/11/2026 : contre-epreuve ROUGE sans le corpus, 10/10 concluantes (les 11 regles de ce jour-la), 1 regle non testable |
 | `d-controle-fuite-corpus.txt` | controle anti-fuite : 0 correspondance |
 | `e-fresh-sans-corpus.txt` | `--fresh --fresh-max-pages 3` sur la copie sans corpus : code de sortie 0, corpus fige inchange |
 | `f-manifeste-publie.txt` | `MANIFESTE-PUBLIE.txt` : nombre de fichiers, taille totale, 3 plus gros fichiers |
 | `garde-fou-bootstrap.txt` | le script de reconstruction refuse d'ecrire dans un corpus fige |
 | `g-mesure-j4-rouge.txt` | la mesure J4 : le test echoue quand on truque le taux ou les donnees publiees, puis repasse au vert |
 | `h-mesure-j5-rouge.txt` | la mesure J5 : le test echoue sur l'etat d'avant (93 %) et quand la donnee publiee est cassee, puis repasse au vert (95 %) |
-| `i-contre-epreuve-rouge-avec-corpus.txt` | contre-epreuve ROUGE avec le corpus dans l'arbre : 11/11 concluantes |
+| `i-contre-epreuve-rouge-avec-corpus.txt` | execution archivee du 15/11/2026 : contre-epreuve ROUGE avec le corpus dans l'arbre, 11/11 concluantes (les 11 regles de ce jour-la) |
 | `j-mesure-champs-devpost.txt` | les 120 pages de projets Devpost publies mesurees : longueurs observees des champs |
 | `k-formulaire-devpost-302-401.txt` | le formulaire du concours QNX est derriere une session : HTTP 302 et HTTP 401 |
+| `m-anti-fuite-memoire.txt` | controle anti-fuite du 24/11/2026 : la memoire du controle, la preuve que le controle corrige donne le meme verdict que l'implementation de reference (sortie identique ligne pour ligne) et le test de sabotage qui le fait toujours passer au rouge |
 
 ## Sources
 
