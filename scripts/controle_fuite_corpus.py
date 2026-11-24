@@ -146,7 +146,7 @@ def corpus_blob(corpus_dir, index_path):
     return blob
 
 
-def longest_verbatim_run(line, corpus_line_list):
+def longest_verbatim_run_reference(line, corpus_line_list):
     """Longest fragment of ``line`` present word for word in the corpus.
 
     The window of the middle is probed first, then the beginning of the
@@ -182,6 +182,105 @@ def longest_verbatim_run(line, corpus_line_list):
                 pos = corpus_line.find(window, pos + 1)
         if best >= n:
             break
+    return best
+
+
+class CorpusText(object):
+    """The distinct long lines of the corpus joined by newlines, searched at once.
+
+    No corpus line and no probed line holds a newline (both come from
+    ``splitlines``), so a 40-character window never spans two corpus lines and
+    the extension to the left and to the right stops at the newline exactly
+    where it stopped at the edges of one corpus line. The result is therefore
+    the one of ``longest_verbatim_run_reference``, without one ``find`` per
+    corpus line (measured on 23 November 2026: the control no longer fits in
+    230 s with the per-line loop).
+    """
+
+    # Pieces of GRAM characters, taken every STEP characters inside each corpus
+    # line: a window of LINE_MIN characters found in a corpus line always holds
+    # one of them whole (STEP + GRAM - 1 == LINE_MIN), so a window none of
+    # whose pieces is known cannot be in the corpus and is not searched (a
+    # collision only costs one useless search; the result never changes).
+    GRAM = 30
+    STEP = LINE_MIN - GRAM + 1
+
+    def __init__(self, corpus_line_list):
+        self.text = "\n" + "\n".join(corpus_line_list) + "\n"
+        g, step = self.GRAM, self.STEP
+        grams = set()
+        for line in corpus_line_list:
+            for q in range(0, len(line) - g + 1, step):
+                grams.add(hash(line[q:q + g]))
+        self.grams = grams
+        self.memo = {}
+
+    def may_contain(self, window):
+        g = self.GRAM
+        grams = self.grams
+        for i in range(self.STEP):
+            if hash(window[i:i + g]) in grams:
+                return True
+        return False
+
+
+def longest_verbatim_run(line, corpus):
+    """Longest fragment of ``line`` present word for word in the corpus.
+
+    ``corpus`` is a ``CorpusText`` (fast) or a list of lines (reference).
+    """
+    if not isinstance(corpus, CorpusText):
+        return longest_verbatim_run_reference(line, corpus)
+    known = corpus.memo.get(line)
+    if known is not None:
+        return known
+    run = _longest_run_fast(line, corpus)
+    corpus.memo[line] = run
+    return run
+
+
+def _longest_run_fast(line, corpus):
+    n = len(line)
+    if n < LINE_MIN:
+        return 0
+    text = corpus.text
+    mid = (n - LINE_MIN) // 2
+    probes = []
+    for start in (mid, 0):
+        if start not in probes:
+            probes.append(start)
+    best = 0
+    for start in probes:
+        window = line[start:start + LINE_MIN]
+        if not corpus.may_contain(window):
+            continue
+        tail = start + LINE_MIN
+        pos = text.find(window)
+        while pos != -1:
+            # Longest common extension, by halving on slice equality (the
+            # corpus text has a newline at both ends and between lines, and
+            # the probed line has none, so it never crosses a corpus line).
+            lo, hi = 0, min(start, pos)
+            while lo < hi:
+                mid_k = (lo + hi + 1) // 2
+                if line[start - mid_k:start] == text[pos - mid_k:pos]:
+                    lo = mid_k
+                else:
+                    hi = mid_k - 1
+            left = lo
+            end = pos + LINE_MIN
+            lo, hi = 0, n - tail
+            while lo < hi:
+                mid_k = (lo + hi + 1) // 2
+                if line[tail:tail + mid_k] == text[end:end + mid_k]:
+                    lo = mid_k
+                else:
+                    hi = mid_k - 1
+            right = lo
+            best = max(best, left + LINE_MIN + right)
+            if best >= n:
+                return best
+            pos = text.find(window, pos + 1)
     return best
 
 
@@ -334,6 +433,7 @@ def main():
     blob = corpus_blob(corpus_dir, index_path)
     print("   texte du corpus             : %d caracteres" % len(blob))
     corpus_line_list = list(corpus_line_set.keys())
+    corpus_text = CorpusText(corpus_line_list)
     whole_file_hits = []
     fragment_bytes = {}
     fragment_detail = {}
@@ -354,7 +454,7 @@ def main():
             line = line.strip()
             if len(line) < LINE_MIN:
                 continue
-            run = longest_verbatim_run(line, corpus_line_list)
+            run = longest_verbatim_run(line, corpus_text)
             if run:
                 total += run
                 best = max(best, run)
