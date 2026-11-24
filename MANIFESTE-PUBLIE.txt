@@ -1,9 +1,9 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
 Tree            : /home/claude/w/pm
-Generated on    : 2026-11-23 21:20:28
+Generated on    : 2026-11-24 02:14:25
 Files           : 131
-Total size      : 4074088 bytes
+Total size      : 4077716 bytes
 
 The 3 biggest files:
     1832957 bytes  media/qx-portmap-demo-final.mp4
@@ -89,7 +89,7 @@ qnx_portmap/refresh.py	10829	43a1ee1211ec67015bb4153663c2ff5c3fb51e617e5fa4242f3
 qnx_portmap/report.py	19577	8324955427b69fb44d10b2e93b99cc03a893e4962bf59ad34d754bb0fb92669b
 qnx_portmap/scan.py	18191	eb28918e07997fa7cda4a398458992eb1909b87a1ea4196539e8d652236390fa
 scripts/bootstrap_corpus.sh	5288	dd52938560f7f5c59d728bdd082e876854a58a6e43f45457339a73e22d69d1f2
-scripts/controle_fuite_corpus.py	16319	bfe579a8747fc734dfb1677bfb798799b2b6e64aceb15209f0e46f58e1efa7b8
+scripts/controle_fuite_corpus.py	19947	9e5625604f4c676cd371c83b1545ff34724cdb61db62fc03021e0dc9b106ddb6
 scripts/install-sdp8.sh	36900	d4ac5ed02faa7118eb426ec0a62adf471bd708642af8aa1a5ec07bf596518ee5
 scripts/manifeste_publie.py	4298	8267826d993946a54aca47ae50619af0962aaf440e06fb9d53aa8bfe7b2a43c4
 scripts/qnx8_target_check.sh	6939	40d498a2076fa80d3c6af5963b44ce463b826a64bf98494202d6a038cb703f8c
