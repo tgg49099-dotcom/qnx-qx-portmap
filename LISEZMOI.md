@@ -56,15 +56,27 @@ The repository is **publishable**: it no longer contains the QNX documentation.
 
 | Path | Content | Size |
 |---|---|---|
-| `qnx_portmap/` | the package (6 modules, standard library only) | ~66 KB |
-| `tests/` | 246 tests, among them 21 on the miniature fixtures and 27 on the J4 measurement | ~130 KB |
-| `tests/fixtures/` | 12 short extracts (1 to 3 lines) of QNX pages, with URL and date | ~4 KB |
-| `tools/` | corpus construction, fixtures, RED counter-proof, J4 measurement, control of the placeholders | ~136 KB |
-| `scripts/` | corpus bootstrap, published manifest, anti-leak control | ~30 KB |
-| `docs/` | RED counter-proof, demonstration, proofs, J4 and J5 measurements | ~170 KB |
-| `PROGRESSION.md` | one line per function of the tool (state + the test that proves it) | ~16 KB |
-| `MANIFESTE-PUBLIE.txt` | path, size and SHA-256 of every publishable file | ~9 KB |
+| `qnx_portmap/` | the package (10 modules, standard library only) | ~138 KB |
+| `tests/` | 246 tests, among them 21 on the miniature fixtures and 27 on the J4 measurement | ~223 KB |
+| `tests/fixtures/` | 12 short extracts (1 to 3 lines) of QNX pages, with URL and date | ~8 KB |
+| `tools/` | corpus construction, fixtures, RED counter-proof, J4 measurement, control of the placeholders | ~154 KB |
+| `scripts/` | corpus bootstrap, published manifest, anti-leak control | ~98 KB |
+| `docs/` | RED counter-proof, demonstration, proofs, J4 and J5 measurements | ~712 KB |
+| `PROGRESSION.md` | one line per function of the tool (state + the test that proves it) | ~72 KB |
+| `MANIFESTE-PUBLIE.txt` | path, size and SHA-256 of every publishable file | ~13 KB |
 | `corpus/` | **absent from the repository** - rebuilt on demand, see below | 0 |
+
+The sizes are the sum of the bytes of the files of the directory, the caches
+excluded, measured on 25 November 2026 with:
+
+```bash
+for d in qnx_portmap tests tests/fixtures tools scripts docs; do
+  printf '%-16s %9d o\n' "$d" \
+    "$(find "$d" -type f -not -name '*.pyc' -printf '%s\n' | awk '{s+=$1} END {print s+0}')"
+done
+wc -c PROGRESSION.md MANIFESTE-PUBLIE.txt
+```
+
 
 ## Frozen corpus: read this before touching it
 

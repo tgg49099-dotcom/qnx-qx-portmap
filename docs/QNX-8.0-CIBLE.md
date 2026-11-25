@@ -23,9 +23,11 @@ for or runs on QNX 8.0, not merely that QNX 8.0 is named in the README"
 The last point is what makes the tool a **host tool** that also fits a QNX
 target: it is the same code, the same command, and the same answers.
 
-**Measured on 16/11/2026, not assumed.** The package `qnx_portmap/` (9 files)
-needs **Python 3.4 or later** (`vermin --no-parse-comments --target=3.13-
---violations qnx_portmap/` -> "Minimum required versions: 3.4"), so the
+**Measured on 16/11/2026, re-measured on 25 November 2026, not assumed.** The
+package `qnx_portmap/` (10 Python modules) needs **Python 3.4 or later**
+(`vermin --no-parse-comments --target=3.13-
+--violations qnx_portmap/` -> "Minimum required versions: 3.4", the same
+result on both dates; the package had 9 modules on 16 November 2026), so the
 Python 3.13.7 of the SDP 8.0.3 target is new enough for it. The modules it
 imports are `argparse`, `collections`, `gzip`, `hashlib`, `html`, `json`, `os`,
 `re`, `string`, `sys`, `time`, `urllib`: **none of them is among the modules
