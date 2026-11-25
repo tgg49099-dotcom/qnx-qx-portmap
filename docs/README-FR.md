@@ -41,7 +41,7 @@ the honest answer, and the rate follows it down.
 | | |
 |---|---|
 | **QNX version** | **QNX SDP 8.0** - every answer is backed by a page of the BlackBerry QNX SDP 8.0 documentation (C Library Reference, io-sock User's Guide, SDP migration guide); each quotation carries the URL, the consultation date and the **SHA-256 of the page** it comes from |
-| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account**; it needs **no network connection to run** once the corpus has been downloaded (the corpus is a local snapshot; downloading it for the first time is the only step that needs the network - see [Quick start](#quick-start)); it is pure Python 3 with the standard library only, so it is POSIX-compatible and **designed to run on QNX 8.0 as well - this has not been demonstrated yet**, because the QNX SDP 8.0 licence is not available in this environment (see [Limites](#limites)) |
+| **Target** | the tool is a **host** tool (Linux, macOS, Windows) that needs **neither a QNX SDP, nor a QNX board, nor a QNX account**; it needs **no network connection to run** once the corpus has been downloaded (the corpus is a local snapshot; downloading it for the first time is the only step that needs the network - see [Quick start](#quick-start)); it is pure Python 3 with the standard library only, so it is POSIX-compatible and **designed to run on QNX 8.0 as well - this has not been demonstrated yet**, although the QNX SDP 8.0 licence arrived here on 24 November 2026, and the answers have since been checked against the real QNX 8.0 headers (see [Limites](#limites)) |
 | **Toolchain** | **Python 3.8+, standard library only** (`argparse`, `gzip`, `hashlib`, `json`, `re`, `urllib`) - no compilation step, no third-party dependency, no API key |
 
 ### AI-assisted development
@@ -185,7 +185,8 @@ The plan of the video and the YouTube fields are in
 ### Honest limits (English)
 
 - The project **has not been run on a QNX 8.0 machine yet**: that needs the QNX
-  SDP 8.0 licence, which is not available in this environment. The code is
+  SDP 8.0 licence, which arrived here on 24 November 2026: the tool itself has not
+  been run on a target yet. The code is
   Python 3 with the standard library only and is POSIX-compatible, so it is
   designed to run on QNX 8.0 as well, but that has not been demonstrated. The
   missing video segment is exactly that demonstration (see
@@ -773,8 +774,9 @@ l'etat de chaque fonction de l'outil est dans
 ## Limites
 
 - Le projet **n'a pas encore ete execute sur une machine QNX 8.0** : cela
-  demande la licence QNX SDP 8.0, qui n'est pas disponible dans cet
-  environnement. Le code est du Python 3 (bibliotheque standard uniquement) et
+  demande la licence QNX SDP 8.0, qui est arrivee dans cet
+  environnement le 24 novembre 2026 : l'outil lui-meme n'a pas encore ete execute
+  sur une cible. Le code est du Python 3 (bibliotheque standard uniquement) et
   il est compatible POSIX, donc il est concu pour tourner aussi sur QNX 8.0,
   mais cela n'a pas ete demontre. La regle du concours demande de montrer que
   le projet "genuinely builds for or runs on QNX 8.0" ; le segment de video
