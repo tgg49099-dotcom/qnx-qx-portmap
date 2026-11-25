@@ -457,7 +457,7 @@ skipped; without any corpus, 246 tests and 33 skipped (the skipped ones are
 the ones that need the corpus). The suite also contains
 a RED -> GREEN proof: `tools/contre_epreuve.py` breaks one rule of the code
 at a time and checks that the matching test turns red, then restores the
-repository. The 11 rules and their output are in `docs/contre-epreuve-rouge.txt`.
+repository. The 12 rules and their output are in `docs/contre-epreuve-rouge.txt`.
 
 ## Honest limits
 

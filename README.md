@@ -700,6 +700,13 @@ rule of the code at a time on purpose and checks that the matching test turns
 python3 tools/contre_epreuve.py
 ```
 
+**Run it on a clean checkout.** The tool refuses to touch a tree that is not
+clean: it breaks the code on purpose and then restores it, so it only runs
+where there is nothing to restore. In a tree where files were written (the
+codelab leaves `corpus-quick/`, `corpus-downloaded/`, `calls.txt`, `my_code.c`
+and `state.json` behind), it prints `contre_epreuve: the repository must be
+clean (git status not empty)` and exits with code 2.
+
 | Broken rule | Test that must turn red |
 |---|---|
 | word boundary in the citation search | `test_respects_word_boundaries` |

@@ -466,6 +466,13 @@ devient **rouge**, puis restaure le depot :
 python3 tools/contre_epreuve.py
 ```
 
+**A lancer sur un depot propre.** L'outil refuse de toucher un depot qui n'est
+pas propre : il casse le code volontairement puis le restaure, donc il ne
+tourne que la ou il n'y a rien a restaurer. Dans un depot ou des fichiers ont
+ete ecrits (le codelab laisse `corpus-quick/`, `corpus-downloaded/`,
+`calls.txt`, `my_code.c` et `state.json`), il affiche `contre_epreuve: the
+repository must be clean (git status not empty)` et sort avec le code 2.
+
 | Regle cassee | Test qui doit devenir rouge |
 |---|---|
 | frontiere de mot dans la recherche de citation | `test_respects_word_boundaries` |

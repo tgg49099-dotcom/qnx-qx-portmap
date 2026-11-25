@@ -570,18 +570,37 @@ The commands of steps 6 and 7 set the variable for that command only. The
 suite also needs room in the temporary directory (145 MB, see trap 4).
 
 And the RED counter-proof, which breaks one rule of the code at a time and
-checks that the matching test turns red:
+checks that the matching test turns red. **Run it in the second clone** of the
+section above (`/tmp/portmap-verif`), not in the clone where the steps were
+done: the tool refuses to touch a tree that is not clean, and the steps leave
+`corpus-quick/`, `corpus-downloaded/`, `calls.txt`, `my_code.c` and
+`state.json` in that one.
 
 ```bash
-cd qnx-qx-portmap && python3 tools/contre_epreuve.py
+cd /tmp/portmap-verif && python3 tools/contre_epreuve.py
 ```
 
 **You should see:** `11 / 11 contre-epreuves concluantes` (11 rules broken, 11
 tests caught them, exit code 0) and the line `regle non testable ici (corpus
 absent) : integrite du corpus fige livre`: one rule of the twelve checks the
 SHA-256 of every page of the corpus shipped with the tool, and the corpus is
-not redistributed, so it cannot be tested in your clone. The output of the day
-is kept in
+not redistributed, so it cannot be tested in your clone.
+
+**In the clone where you did the steps**, the same command refuses to start
+and prints (measured on 25 November 2026):
+
+```text
+contre_epreuve: the repository must be clean (git status not empty)
+```
+
+with exit code 2. Nothing is broken: the counter-proof restores the tree it
+breaks, so it only runs where there is nothing to restore - `git status` shows
+what the steps wrote.
+
+The output of the day is kept in
+[`docs/contre-epreuve-rouge.txt`](../contre-epreuve-rouge.txt) (the twelve
+rules and the two runs of 25 November 2026), and the archived runs of
+15/11/2026 in
 [`docs/preuves/i-contre-epreuve-rouge-avec-corpus.txt`](../preuves/i-contre-epreuve-rouge-avec-corpus.txt)
 (11 / 11 when the corpus is **inside the tree**, in `corpus/`, archived on
 15/11/2026) and in

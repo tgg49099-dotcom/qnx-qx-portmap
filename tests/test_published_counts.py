@@ -1,7 +1,9 @@
 """The checker of the published numbers must catch a false number.
 
 ``tools/published_counts.py`` compares every test and file count written in
-the README, the French README, the submission kit and the LISEZMOI files with the values measured by
+the README, the French README, the submission kit, the LISEZMOI files and the
+documents a judge reads (the two codelabs, the usage guide, the video plan)
+with the values measured by
 ``scripts/verify-all.sh``.  These tests run it on a small synthetic tree:
 a sound tree is green, one false number is caught (and only that one), a
 reworded claim is caught, and the skip counts are never reported OK when the
@@ -51,6 +53,20 @@ KIT = """{n} tests, no third-party dependency, no network access. Measured on
 pointed to by the environment variable `QX_PORTMAP_CORPUS`, {n} tests and 1
 skipped; without any corpus, {n} tests and {s} skipped (the skipped ones are
 """
+# The documents a judge reads publish the same counts.
+CODELAB = """Ran {n} tests in 2.599s
+
+OK (skipped={s})
+"""
+COMMUNITY = """Ran {n} tests in 2.6s
+
+OK (skipped={s})
+"""
+UTILISATION = "Without the corpus: {n} tests, {s} of them skipped (the test says so).\n"
+VIDEO = ("the published suite answers {n} tests today\n\n"
+         "| test suite on the fresh clone | the published suite has grown to {n} tests since |\n")
+PKG_FR = ("python3 -m unittest discover -s tests -t ."
+          "   # {n} tests : verts, {s} sautes sans corpus\n")
 
 
 def make_tree(root, n=10, s=3, f=7, p=None, fr_n=None):
@@ -63,12 +79,25 @@ def make_tree(root, n=10, s=3, f=7, p=None, fr_n=None):
         h.write(LISEZMOI.format(n=n, s=s))
     with open(os.path.join(root, "qnx_portmap", "LISEZMOI.md"), "w", encoding="utf-8") as h:
         h.write(PKG.format(n=n, s=s))
+    with open(os.path.join(root, "qnx_portmap", "LISEZMOI-FR.md"), "w", encoding="utf-8") as h:
+        h.write(PKG_FR.format(n=n, s=s))
     os.makedirs(os.path.join(root, "tests"))
     with open(os.path.join(root, "tests", "LISEZMOI.md"), "w", encoding="utf-8") as h:
         h.write(PKG.format(n=n, s=s))
     os.makedirs(os.path.join(root, "docs"))
     with open(os.path.join(root, "docs", "README-FR.md"), "w", encoding="utf-8") as h:
         h.write(README_FR.format(n=n if fr_n is None else fr_n, s=s, p=n - s))
+    os.makedirs(os.path.join(root, "docs", "codelab"))
+    with open(os.path.join(root, "docs", "codelab", "QX-PORTMAP-CODELAB.md"),
+              "w", encoding="utf-8") as h:
+        h.write(CODELAB.format(n=n, s=s))
+    with open(os.path.join(root, "docs", "CODELAB-COMMUNITY-QNX.md"),
+              "w", encoding="utf-8") as h:
+        h.write(COMMUNITY.format(n=n, s=s))
+    with open(os.path.join(root, "docs", "UTILISATION.md"), "w", encoding="utf-8") as h:
+        h.write(UTILISATION.format(n=n, s=s))
+    with open(os.path.join(root, "VIDEO-YOUTUBE-QNX-PORTMAP.md"), "w", encoding="utf-8") as h:
+        h.write(VIDEO.format(n=n))
     with open(os.path.join(root, "KIT-SOUMISSION-QNX.md"), "w", encoding="utf-8") as h:
         h.write(KIT.format(n=n, s=s))
 
@@ -107,6 +136,18 @@ class TestPublishedCounts(unittest.TestCase):
                 self.assertEqual(failed, 1, rows)
                 bad = [r for r in rows if r[4] == "FAILED"]
                 self.assertEqual(bad[0][0], "tests/LISEZMOI.md")
+                self.assertEqual((bad[0][2], bad[0][3]), (9, 10))
+            # The same stale number in the codelab - the document the judge
+            # follows step by step - is caught too.
+            with tempfile.TemporaryDirectory() as root:
+                make_tree(root)
+                path = os.path.join(root, "docs", "codelab", "QX-PORTMAP-CODELAB.md")
+                with open(path, "w", encoding="utf-8") as h:
+                    h.write(CODELAB.format(n=9, s=3))
+                rows, failed = check(root, 10, 3, False, 7)
+                self.assertEqual(failed, 1, rows)
+                bad = [r for r in rows if r[4] == "FAILED"]
+                self.assertEqual(bad[0][0], "docs/codelab/QX-PORTMAP-CODELAB.md")
                 self.assertEqual((bad[0][2], bad[0][3]), (9, 10))
 
     def test_stale_french_readme_is_caught(self):

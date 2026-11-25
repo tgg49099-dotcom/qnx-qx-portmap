@@ -8,6 +8,10 @@ every such claim and compares it with the values measured by
 publishes a test count is checked too: a number written in a file of the
 package must be the real one, exactly like the numbers of the README.
 
+The documents a judge reads are checked as well - the two codelabs, the usage
+guide, the video plan and the French LISEZMOI file publish the same counts:
+a count that drifts there is a count the judge reads.
+
 Usage (called by ``scripts/verify-all.sh``, check 4)::
 
     python3 tools/published_counts.py --tests 170 --skipped 27 \\
@@ -84,6 +88,18 @@ CLAIMS = [
      r"# (\d+) tests: green, (\d+) skipped without corpus", ["tests", "skipped"]),
     ("tests/LISEZMOI.md", "verification commands",
      r"# (\d+) tests: green, (\d+) skipped without corpus", ["tests", "skipped"]),
+    ("qnx_portmap/LISEZMOI-FR.md", "verification commands (fr)",
+     r"# (\d+) tests : verts, (\d+) sautes sans corpus", ["tests", "skipped"]),
+    ("docs/codelab/QX-PORTMAP-CODELAB.md", "the unit test suite alone",
+     r"Ran (\d+) tests in [\d.]+s\s*\n\s*\nOK \(skipped=(\d+)\)", ["tests", "skipped"]),
+    ("docs/CODELAB-COMMUNITY-QNX.md", "the unit test suite",
+     r"Ran (\d+) tests in [\d.]+s\s*\n\s*\nOK \(skipped=(\d+)\)", ["tests", "skipped"]),
+    ("docs/UTILISATION.md", "the suite without the corpus",
+     r"Without the corpus: (\d+) tests, (\d+) of them skipped", ["tests", "skipped"]),
+    ("VIDEO-YOUTUBE-QNX-PORTMAP.md", "the suite of today",
+     r"the published suite answers (\d+) tests", ["tests"]),
+    ("VIDEO-YOUTUBE-QNX-PORTMAP.md", "the suite of today, in the filming table",
+     r"the published suite has grown to (\d+) tests", ["tests"]),
 ]
 
 
