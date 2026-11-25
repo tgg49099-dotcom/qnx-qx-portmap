@@ -37,7 +37,9 @@ _QUALIFIERS_AFTER_PARAMS = frozenset((
 _INCLUDE_RE = re.compile(r"^\s*#\s*include\s*<([^>\r\n]+)>", re.MULTILINE)
 _DEFINE_FN_RE = re.compile(r"^(\s*#\s*define\s+([A-Za-z_][A-Za-z0-9_]*)\()")
 _DEFINE_OBJ_RE = re.compile(r"^(\s*#\s*define\s+[A-Za-z_][A-Za-z0-9_]*)")
-_TOKEN_RE = re.compile(r"->|[A-Za-z_][A-Za-z0-9_]*|[(){}\[\];,.=]")
+# Numbers are tokens (so "0x80" never yields the identifier "x80") and every other
+# punctuation character is a token (so "bits&(1<<i)" or "n && (" is never read as a call).
+_TOKEN_RE = re.compile(r"->|[0-9][A-Za-z0-9_]*|[A-Za-z_][A-Za-z0-9_]*|[(){}\[\];,.=]|[^\sA-Za-z0-9_]")
 
 
 class ScanError(Exception):

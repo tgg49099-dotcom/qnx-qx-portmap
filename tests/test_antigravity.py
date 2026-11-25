@@ -538,6 +538,30 @@ class TestScanDirAndScanner(unittest.TestCase):
         # Member accesses, attributes, keywords, typedefs must NOT be reported.
         for bad in ("read", "aligned", "if", "sizeof", "cb_t"):
             self.assertNotIn(bad, calls)
+        # An operand followed by an operator and "(" is not a call, and "0x80"
+        # does not yield "x80" (seen on a real QNX driver, 26/11/2026:
+        # varghes/Raspberry-QNX, Bsp_Rasp/src/hardware/devi, commit 043582a).
+        ops = "\n".join([
+            "int g(int bits, int n, char *p, char *name, int flags, int nTries) {",
+            "    int i = 0;",
+            "    if (bits&(1<<i)) i++;",
+            "    if (n && (i < 3)) i++;",
+            "    while (p && (*p++ != 0)) i++;",
+            "    if (!name && !(name = getenv(0))) i++;",
+            "    i = (flags & (4 | 8)) ? 1 : 2;",
+            "    i = ((0x80 & *(p + 1)) ? 0 : 1);",
+            "    if (NULL != (p = malloc(4))) i++;",
+            "    for (; nTries && (in8(0x60) & 1); nTries--) i++;",
+            "    return i | (InterruptAttach(1, 0, 0, 0, 0));",
+            "}",
+        ])
+        _d, ops_calls, _h = scan_file(ops)
+        for bad in ("bits", "n", "p", "name", "flags", "nTries", "x80", "NULL", "i"):
+            self.assertNotIn(bad, ops_calls)
+        self.assertEqual(ops_calls.get("getenv"), [6])
+        self.assertEqual(ops_calls.get("malloc"), [9])
+        self.assertEqual(ops_calls.get("in8"), [10])
+        self.assertEqual(ops_calls.get("InterruptAttach"), [11])
 
     def test_scan_directory_walks_c_and_h_and_filters_project_defined(self):
         proj = os.path.join(self.tmp, "proj")
