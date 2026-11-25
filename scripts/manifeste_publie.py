@@ -19,8 +19,18 @@ import sys
 import time
 
 IGNORED_DIRS = (".git", "__pycache__", "build", "dist", "qnx_portmap.egg-info",
-                ".pytest_cache")
+                ".pytest_cache",
+                # The corpus directories the tool itself writes.  They are not
+                # part of the published tree: the QNX documentation is not
+                # redistributable, and .gitignore ignores them as well.  A
+                # judge who runs the quick start writes `corpus-quick/` in the
+                # clone: the published manifest must still describe the
+                # published tree, and the replay command must still answer the
+                # published verdict in that same clone.
+                "corpus", "corpus-quick", "corpus-fresh", "corpus-downloaded")
 IGNORED_SUFFIX = (".pyc", ".pyo", ".orig", ".rej")
+# The consigne files of the owner are not published either (.gitignore).
+IGNORED_PREFIX = ("CONSIGNE-MERE-",)
 MANIFEST_NAME = "MANIFESTE-PUBLIE.txt"
 
 
@@ -38,6 +48,8 @@ def publishable_files(tree, manifest_path):
         dirnames[:] = sorted(d for d in dirnames if d not in IGNORED_DIRS)
         for fn in sorted(filenames):
             if fn.endswith(IGNORED_SUFFIX):
+                continue
+            if fn.startswith(IGNORED_PREFIX):
                 continue
             full = os.path.join(dirpath, fn)
             if os.path.abspath(full) == os.path.abspath(manifest_path):

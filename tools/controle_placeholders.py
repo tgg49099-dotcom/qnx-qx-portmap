@@ -35,8 +35,14 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # The same directories as the published manifest: they are not published.
 IGNORED_DIRS = (".git", "__pycache__", "build", "dist", "qnx_portmap.egg-info",
-                ".pytest_cache")
+                ".pytest_cache",
+                # The corpus directories the tool itself writes: the QNX
+                # documentation is not redistributable, and .gitignore ignores
+                # them, so they are not published documents either.
+                "corpus", "corpus-quick", "corpus-fresh", "corpus-downloaded")
 IGNORED_SUFFIX = (".pyc", ".pyo", ".orig", ".rej")
+# The consigne files of the owner are not published either (.gitignore).
+IGNORED_PREFIX = ("CONSIGNE-MERE-",)
 
 # Only the documents are scanned: the sources of the tools may name the
 # patterns they look for (this file does), and that would be a false positive.
@@ -73,6 +79,8 @@ def published_documents(tree):
         dirnames[:] = sorted(d for d in dirnames if d not in IGNORED_DIRS)
         for name in sorted(filenames):
             if name.endswith(IGNORED_SUFFIX):
+                continue
+            if name.startswith(IGNORED_PREFIX):
                 continue
             if not name.endswith(DOCUMENT_SUFFIX):
                 continue

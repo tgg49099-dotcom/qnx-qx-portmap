@@ -182,6 +182,53 @@ class TestVerifyAllContract(unittest.TestCase):
             failed = [r[0] for r in summary_rows(out) if r[1] == "FAILED"]
             self.assertEqual(failed, ["placeholders and draft banners"], out)
 
+    def test_the_corpus_of_the_quick_mode_does_not_break_the_proofs(self):
+        """The judge runs the quick start, then the replay command.
+
+        The quick start writes ``corpus-quick/`` in the clone.  That directory
+        holds the QNX documentation, which is not redistributable: it is not
+        part of the published tree, so it is ignored by git and by the
+        published manifest.  The published proofs must therefore still hold in
+        the clone where the judge ran the quick start.
+
+        Measured on 25 November 2026, before this rule existed: the command
+        answered ``RC 1`` with a FAILED ``published manifest`` row, on the
+        published repository, when it was run in the clone where the quick
+        start had just been done.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = os.path.join(tmp, "quick")
+            copy_tree(tree)
+            # the corpus of the quick mode, as the tool writes it
+            cache = os.path.join(tree, "corpus-quick", "cache")
+            os.makedirs(cache)
+            with open(os.path.join(cache, "page.html"), "w",
+                      encoding="utf-8") as handle:
+                handle.write("<html>the QNX documentation, not published</html>\n")
+            # git does not see it: the tree stays clean
+            status = subprocess.run(["git", "status", "--porcelain"], cwd=tree,
+                                    capture_output=True, text=True)
+            self.assertEqual(status.stdout.strip(), "",
+                             "the corpus of the quick mode must not dirty the tree")
+            # the published manifest does not list it either
+            check = subprocess.run(
+                ["python3", "-B", "scripts/manifeste_publie.py", "--check"],
+                cwd=tree, capture_output=True, text=True)
+            self.assertEqual(check.returncode, 0,
+                             "the published manifest must ignore the corpus "
+                             "directory:\n%s" % (check.stdout + check.stderr))
+            # and the whole command still answers the published verdict
+            code, out = run_verify_all(tree)
+            self.assertEqual(code, 0, out)
+            rows = {r[0]: r[1] for r in summary_rows(out)}
+            self.assertEqual(rows.get("published manifest"), "OK", out)
+            self.assertEqual(rows.get("RED counter-proof"), "OK", out)
+            match = GREEN_VERDICT.search(out)
+            self.assertIsNotNone(match, "the verdict is missing or malformed:\n%s" % out)
+            ok, total, not_checked = (int(match.group(1)), int(match.group(2)),
+                                      int(match.group(3)))
+            self.assertEqual((ok, total, not_checked), (6, 8, 2), out)
+
 
 if __name__ == "__main__":
     unittest.main()

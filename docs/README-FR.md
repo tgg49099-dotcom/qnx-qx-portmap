@@ -303,6 +303,12 @@ prudent (une affirmation sur toute la documentation 8.0, qu'il n'a pas lue) :
 note qui l'explique. `tests/test_quick.py` verifie sur le corpus fige que le
 mode rapide ne contredit jamais le mode complet.
 
+Le mode rapide ecrit son petit corpus dans `corpus-quick/`, dans le clone. Ce
+repertoire est ignore par git et par le manifeste publie (la documentation QNX
+n'est pas redistribuable, il ne fait donc pas partie de l'arbre publie) : le
+clone reste propre (`git status` n'affiche rien) et la commande qui rejoue
+toutes les preuves publiees repond encore dans ce meme clone.
+
 ## Utilisation
 
 Guide d'usage court : [`docs/UTILISATION.md`](docs/UTILISATION.md) (lancer
@@ -469,8 +475,9 @@ python3 tools/contre_epreuve.py
 **A lancer sur un depot propre.** L'outil refuse de toucher un depot qui n'est
 pas propre : il casse le code volontairement puis le restaure, donc il ne
 tourne que la ou il n'y a rien a restaurer. Dans un depot ou des fichiers ont
-ete ecrits (le codelab laisse `corpus-quick/`, `corpus-downloaded/`,
-`calls.txt`, `my_code.c` et `state.json`), il affiche `contre_epreuve: the
+ete ecrits (le codelab laisse `calls.txt`, `my_code.c` et `state.json` ; les
+repertoires de corpus qu'il telecharge sont ignores par git et ne salissent
+donc pas le depot), il affiche `contre_epreuve: the
 repository must be clean (git status not empty)` et sort avec le code 2.
 
 | Regle cassee | Test qui doit devenir rouge |

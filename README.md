@@ -101,6 +101,13 @@ the 7.1 index that it cannot resolve (a statement about the whole 8.0
 documentation, which it has not read), it stays prudent: `bzero` stays
 `unknown`.
 
+The quick mode writes its small corpus in `corpus-quick/`, in the clone. That
+directory is ignored by git and by the published manifest - the QNX
+documentation is not redistributable, so it is not part of the published tree
+- so the clone stays clean (`git status` prints nothing) and the [one command
+that replays every published proof](#one-command-to-replay-every-published-proof)
+still answers in that same clone.
+
 **The full answer** (quotations, SHA-256 of every page, and `absent`) needs
 the complete corpus: **about 4,000 pages** of the official QNX documentation,
 downloaded once from the official QNX site (the frozen snapshot used for the
@@ -626,6 +633,17 @@ VERDICT: NO CHECK FAILED - 6/8 OK, 2 NOT CHECKED (RC 0)
 The output above is the real one: the command prints no path and no timing,
 so it is the same on every machine.
 
+**You can run it in the clone where you already ran the quick start.** The
+quick start writes `corpus-quick/` in the clone; that directory is ignored by
+git and by the published manifest (the QNX documentation is not
+redistributable, so it is not part of the published tree), so the clone stays
+clean and the command answers the same verdict there. Measured on 25 November
+2026, in a fresh clone where the quick start had just run: `git status` prints
+nothing, the `published manifest` row is `OK` (`MANIFESTE-PUBLIE.txt lists
+132 files`), the `RED counter-proof` row is `OK` (`11 / 11 rules
+counter-proved`), and the verdict is the one printed above (`6/8 OK, 2 NOT
+CHECKED, RC 0`).
+
 The contract of the command itself - exit code 0 when nothing is disproved,
 exit code 1 when a published proof is false - is proved by
 `tests/verify_all_contract.py`. It breaks a published proof on purpose in a
@@ -703,8 +721,9 @@ python3 tools/contre_epreuve.py
 **Run it on a clean checkout.** The tool refuses to touch a tree that is not
 clean: it breaks the code on purpose and then restores it, so it only runs
 where there is nothing to restore. In a tree where files were written (the
-codelab leaves `corpus-quick/`, `corpus-downloaded/`, `calls.txt`, `my_code.c`
-and `state.json` behind), it prints `contre_epreuve: the repository must be
+codelab leaves `calls.txt`, `my_code.c` and `state.json` behind; the corpus
+directories it downloads are ignored by git and do not make the tree dirty),
+it prints `contre_epreuve: the repository must be
 clean (git status not empty)` and exits with code 2.
 
 | Broken rule | Test that must turn red |

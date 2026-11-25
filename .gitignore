@@ -4,6 +4,7 @@ __pycache__/
 build/
 dist/
 corpus/
+corpus-quick/
 corpus-fresh/
 corpus-downloaded/
 CONSIGNE-MERE-*.md

@@ -485,9 +485,9 @@ cd /tmp/portmap-verif && bash scripts/verify-all.sh
 ```
 
 If you run the command in the clone where you did the steps, the steps have
-written `corpus-quick/`, `corpus-downloaded/`, `calls.txt`, `my_code.c` and
-`state.json` into it, the manifest no longer matches the tree, and the command
-prints (measured on 20 November 2026, replayed on 22 November 2026):
+written `calls.txt`, `my_code.c` and `state.json` into it, the manifest no
+longer matches the tree, and the command prints (measured on 20 November 2026,
+replayed on 22 November 2026 and on 25 November 2026):
 
 ```text
 VERDICT: FAILED AND NOT CHECKED - 1 check(s) FAILED and
@@ -502,19 +502,18 @@ gives the verdict above. `git status` shows what the steps wrote, and
 `git checkout -- MANIFESTE-PUBLIE.txt` puts the published manifest back.
 
 **Do not publish a regenerated manifest.** `python3 scripts/manifeste_publie.py`
-lists *every* file of the tree, the ones the steps wrote included; it counts
-files, never a directory. In a clone where the steps were done, it lists
-**135 files instead of the 132 published ones** (measured on 24 November 2026):
-the three files the steps leave in the tree - `calls.txt`, `my_code.c` and
-`state.json` - are in it, and the directories `corpus-quick/` and
-`corpus-downloaded/` are not counted at all, only the files they contain. The
-count then grows with the snapshots the steps download: **290 files** with the
-quick snapshot of step 3 (`corpus-quick/`, 155 files - measured on 24 November
-2026) and **8 240 files** with the complete snapshot of step 5
-(`corpus-downloaded/`, 7 950 files - measured on 22 November 2026, the day the
-complete snapshot was downloaded). Use it to
-see what changed, then restore the published manifest with
-`git checkout -- MANIFESTE-PUBLIE.txt`.
+lists the *published* files of the tree, the ones the steps wrote included; it
+counts files, never a directory. In a clone where the steps were done, it lists
+**135 files instead of the 132 published ones** (measured on 24 November 2026
+and on 25 November 2026): the three files the steps leave in the tree -
+`calls.txt`, `my_code.c` and `state.json` - are in it. The corpus directories
+are **not** counted at all, not even their files: `corpus-quick/` (155 files,
+measured on 25 November 2026) and `corpus-downloaded/` hold the QNX
+documentation, which is not redistributable and is therefore not part of the
+published tree - the same rule applies to the two controls that walk the tree.
+The manifest still lists **135 files** with either snapshot (measured on
+25 November 2026). Use it to see what changed, then restore the published
+manifest with `git checkout -- MANIFESTE-PUBLIE.txt`.
 
 The eight checks are the unit test suite, the anti-leak control of the corpus,
 the published manifest, the published numbers, the parity of the README, the
@@ -573,8 +572,9 @@ And the RED counter-proof, which breaks one rule of the code at a time and
 checks that the matching test turns red. **Run it in the second clone** of the
 section above (`/tmp/portmap-verif`), not in the clone where the steps were
 done: the tool refuses to touch a tree that is not clean, and the steps leave
-`corpus-quick/`, `corpus-downloaded/`, `calls.txt`, `my_code.c` and
-`state.json` in that one.
+`calls.txt`, `my_code.c` and `state.json` in that one. The corpus directories
+the steps download are not in the way: they are ignored by git, so they do not
+make the tree dirty.
 
 ```bash
 cd /tmp/portmap-verif && python3 tools/contre_epreuve.py

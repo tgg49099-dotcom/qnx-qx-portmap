@@ -40,8 +40,16 @@ import sys
 import time
 
 IGNORED_DIRS = (".git", "__pycache__", "build", "dist", ".pylocal", ".npm",
-                "qnx_portmap.egg-info")
+                "qnx_portmap.egg-info",
+                # The corpus directories the tool itself writes are not part
+                # of the published tree: the QNX documentation is not
+                # redistributable and .gitignore ignores them.  Without this,
+                # the control would compare the corpus with itself as soon as
+                # the reader rebuilds it in the tree.
+                "corpus", "corpus-quick", "corpus-fresh", "corpus-downloaded")
 IGNORED_SUFFIX = (".pyc", ".pyo")
+# The consigne files of the owner are not published either (.gitignore).
+IGNORED_PREFIX = ("CONSIGNE-MERE-",)
 LINE_MIN = 40          # minimal length of a line kept as verbatim
 COPY_BUDGET = 4000     # maximum bytes of verbatim QNX text per file
 # Tags of the Oxygen (DITA-OT) markup of the QNX pages: a file that contains
@@ -67,6 +75,8 @@ def publishable_files(tree):
         dirnames[:] = sorted(d for d in dirnames if d not in IGNORED_DIRS)
         for fn in sorted(filenames):
             if fn.endswith(IGNORED_SUFFIX):
+                continue
+            if fn.startswith(IGNORED_PREFIX):
                 continue
             full = os.path.join(dirpath, fn)
             rel = os.path.relpath(full, tree).replace(os.sep, "/")
