@@ -1,5 +1,49 @@
 # QX PORTMAP
 
+**Porting C code to QNX 8.0? QX PORTMAP finds the QNX calls that 8.0 removed
+or moved, without a QNX SDP or a board, and quotes the official sentence that
+says so.**
+
+A real case, on public code: the input driver `devi` of the public BSP
+[varghes/Raspberry-QNX](https://github.com/varghes/Raspberry-QNX) (commit
+`043582a`, 28 `.c` and 18 `.h` files) calls `InterruptAttach()` three times.
+QNX 8.0 removed it (the same official page names the replacement,
+`InterruptAttachThread()`). QX PORTMAP reports it first, with the file and
+line of each call and the sentence of the official QNX 8.0 migration guide:
+
+```text
+P1  InterruptAttach            absent
+      https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html
+      The following functions have been removed: InterruptAttach() InterruptAttachArray()
+      InterruptHookIdle2() InterruptHookTrace()
+      cited by the migration guide: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html
+      called at: lib/ps2api.c:131, lib/ps2api.c:158, lib/ser8250.c:506
+```
+
+**Demo video (1 min 51 s):** https://youtu.be/UMmxNlxkEi0
+
+**Replay that case yourself** - three commands, about five minutes, no QNX
+SDP, no board, no account, Python 3.8+ only:
+
+```bash
+git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git && cd qnx-qx-portmap
+git clone https://github.com/varghes/Raspberry-QNX ../Raspberry-QNX && git -C ../Raspberry-QNX checkout 043582a
+python3 -m qnx_portmap --quick --scan-dir ../Raspberry-QNX/Bsp_Rasp/src/hardware/devi --worklist
+```
+
+The block above is the start of that output (exit code `1`: at least one
+symbol needs work). The quick mode downloaded 242 official pages in 303 s
+on 26 November 2026, at one request per second.
+
+| Measured | Where the proof is |
+|---|---|
+| **95 %** of the 100 QNX symbols really called by five public QNX repositories resolved and quoted | [`docs/mesure-J5.md`](docs/mesure-J5.md) |
+| **246 tests** (33 skipped without the QNX corpus), and **11 / 11** rules broken on purpose and caught | [Tests](#tests), [RED counter-proof](#red-counter-proof) |
+| every published proof replayed by **one command** | [`bash scripts/verify-all.sh`](#one-command-to-replay-every-published-proof) |
+
+The full record of that run, with the exact commands, is in
+[`docs/demo-projets-reels.md`](docs/demo-projets-reels.md#7-a-second-real-project-a-qnx-input-driver-26112026).
+
 > **This README is entirely in English.** The console output of the tool is
 > in English by default; add **`--lang fr`** to get the same output in French.
 > The French output is shown **verbatim** where it is the subject of a test,

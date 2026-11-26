@@ -169,3 +169,53 @@ out.
 - **The extraction of the symbols is a prototype.** A real port would use a C
   preprocessor (`gcc -E`) or a parser; the command of section 2 also takes
   the words of the comments, which feeds the noise measured in section 5.
+
+## 7. A second real project: a QNX input driver (26/11/2026)
+
+This is the case shown on the first screen of the README.
+
+| Element | Value |
+|---|---|
+| Repository | <https://github.com/varghes/Raspberry-QNX> (also one of the five repositories of the J5 measurement) |
+| Commit | `043582a94ac94e8311ff7c845beb450a9a718f04` |
+| Directory read | `Bsp_Rasp/src/hardware/devi` (input driver): 28 `.c` and 18 `.h` files |
+| QX PORTMAP | commit `594dcf1`, quick mode, Linux, Python 3.13 |
+
+Exact commands, from a fresh clone of this repository:
+
+```bash
+git clone https://github.com/varghes/Raspberry-QNX ../Raspberry-QNX && git -C ../Raspberry-QNX checkout 043582a
+python3 -m qnx_portmap --quick --scan-dir ../Raspberry-QNX/Bsp_Rasp/src/hardware/devi --worklist
+```
+
+Real output (start of the standard output; the second line prints the local
+path of the clone and is shown here as `<clone>`; the other entries of the
+work list, all `described elsewhere`, are elided):
+
+```text
+QX PORTMAP - status of QNX symbols in the 8.0 documentation
+quick-mode small corpus: <clone>/corpus-quick
+pages: 242 (7.1: 26, 8.0: 216) - downloaded on 2026-11-26 - quick mode (A-Z indexes and migration guide only; "absent" only when the guide announces the removal)
+
+--- Upgrade worklist (8 symbol(s)) ---
+P1  InterruptAttach            absent
+      https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html
+      The following functions have been removed: InterruptAttach() InterruptAttachArray()
+      InterruptHookIdle2() InterruptHookTrace()
+      cited by the migration guide: https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html
+      called at: lib/ps2api.c:131, lib/ps2api.c:158, lib/ser8250.c:506
+...
+```
+
+Last line of the standard error: `qnx-portmap: small corpus ready: 242 pages in 303.3 s`.
+Exit code: **1** (at least one symbol needs work).
+
+The three call lines were checked in the clone: lines 131 and 158 of
+`lib/ps2api.c` and line 506 of `lib/ser8250.c` each call `InterruptAttach`.
+The same official page says that "Interrupt Service Routines (ISRs) are no
+longer supported" and that "the new InterruptAttachThread() function allows
+you to attach a thread to an interrupt source": that is where the port starts.
+
+What this case does **not** prove: the quick mode reads the A-Z indexes and the
+migration guide only, so its `unknown` entries are decided by the full corpus,
+and nothing here compiles or runs the driver on QNX 8.0.
