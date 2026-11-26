@@ -201,7 +201,10 @@ class TestVerifyAllContract(unittest.TestCase):
             copy_tree(tree)
             # the corpus of the quick mode, as the tool writes it
             cache = os.path.join(tree, "corpus-quick", "cache")
-            os.makedirs(cache)
+            # the directory can already be there: when the judge runs the
+            # quick start before this test, the copy of the tree already
+            # holds the corpus of the quick start
+            os.makedirs(cache, exist_ok=True)
             with open(os.path.join(cache, "page.html"), "w",
                       encoding="utf-8") as handle:
                 handle.write("<html>the QNX documentation, not published</html>\n")

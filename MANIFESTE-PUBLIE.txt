@@ -1,9 +1,9 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
 Tree            : /work/qnx-portmap
-Generated on    : 2026-11-26 05:33:23
+Generated on    : 2026-11-26 05:45:14
 Files           : 132
-Total size      : 4121331 bytes
+Total size      : 4121543 bytes
 
 The 3 biggest files:
     1832957 bytes  media/qx-portmap-demo-final.mp4
@@ -131,7 +131,7 @@ tests/test_readme_en.py	3627	7ef0905579c4eca9b35e5b085d33345d433cf998a7a73c3fc57
 tests/test_symbol_paths.py	1687	44c4ee333dd9c82eded6292c6835f861f8f7db02657e98187be745e4f4c9b723
 tests/test_target_check.py	4491	da0f7a4800c92a5e81ce701982b8ff5f419490d48526584813367919c4a2794b
 tests/test_worklist_unknown.py	2980	f2cb691b76ca55ce4289fd9e01124a1ab66e8eefa7b5e355dee1e3c3f816db2a
-tests/verify_all_contract.py	17421	30293a1379315047ed9f4160c6ead74b8b43ab375e2b514a1146f2a3ebe8f620
+tests/verify_all_contract.py	17633	def6ee1067e22ce50fd82a8223bce893580e8adb813d6d78ded68f55cab6186d
 tools/LISEZMOI.md	1090	7f21c4296c82a29b58863e174298b236733d3dce2c9ca0d442f2cb0122701bc0
 tools/build_corpus.py	7676	ba789a3f4be97c24d1994b6d307ce73732a1fad47d18e705dd22c9c35a88946e
 tools/contre_epreuve.py	9913	462ae10eb941a80c7f5d8aa4e0b4c1a8a3c1eb5bbfac04bf3786ad210571de73
