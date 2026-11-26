@@ -179,7 +179,7 @@ This is the case shown on the first screen of the README.
 | Repository | <https://github.com/varghes/Raspberry-QNX> (also one of the five repositories of the J5 measurement) |
 | Commit | `043582a94ac94e8311ff7c845beb450a9a718f04` |
 | Directory read | `Bsp_Rasp/src/hardware/devi` (input driver): 28 `.c` and 18 `.h` files |
-| QX PORTMAP | commit `594dcf1`, quick mode, Linux, Python 3.13 |
+| QX PORTMAP | commit `39de65c` (the tool code is not changed by the commit that follows), quick mode, Linux, Python 3.13 |
 
 Exact commands, from a fresh clone of this repository:
 
@@ -197,7 +197,7 @@ QX PORTMAP - status of QNX symbols in the 8.0 documentation
 quick-mode small corpus: <clone>/corpus-quick
 pages: 242 (7.1: 26, 8.0: 216) - downloaded on 2026-11-26 - quick mode (A-Z indexes and migration guide only; "absent" only when the guide announces the removal)
 
---- Upgrade worklist (8 symbol(s)) ---
+--- Upgrade worklist (7 symbol(s)) ---
 P1  InterruptAttach            absent
       https://www.qnx.com/developers/docs/8.0/com.qnx.doc.qnxsdp.migration/topic/kernel.html
       The following functions have been removed: InterruptAttach() InterruptAttachArray()
@@ -207,8 +207,25 @@ P1  InterruptAttach            absent
 ...
 ```
 
-Last line of the standard error: `qnx-portmap: small corpus ready: 242 pages in 303.3 s`.
+Last line of the standard error: `qnx-portmap: small corpus ready: 242 pages in 491.7 s`
+(the same command, on the machine that recorded the first version of this
+run, took 303.3 s the same day: the rate depends on the machine and the
+network).
 Exit code: **1** (at least one symbol needs work).
+
+The work list holds **7** symbols. A first version of this record was
+measured on commit `594dcf1`, before the `--scan-dir` correction of
+`bf8ecbc` (an operand followed by an operator and `(` is not a call): it
+listed **8** symbols, one of them a false positive. Both numbers are
+replayable, and the corpus is downloaded only once:
+
+```bash
+git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git && cd qnx-qx-portmap
+git checkout 39de65c   # the commit measured above; the tool is not changed after it
+python3 -m qnx_portmap --quick --scan-dir ../Raspberry-QNX/Bsp_Rasp/src/hardware/devi --worklist
+git checkout 594dcf1   # the same command on the commit of the first record
+python3 -m qnx_portmap --quick --scan-dir ../Raspberry-QNX/Bsp_Rasp/src/hardware/devi --worklist
+```
 
 The three call lines were checked in the clone: lines 131 and 158 of
 `lib/ps2api.c` and line 506 of `lib/ser8250.c` each call `InterruptAttach`.

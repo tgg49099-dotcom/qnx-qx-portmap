@@ -31,9 +31,12 @@ git clone https://github.com/varghes/Raspberry-QNX ../Raspberry-QNX && git -C ..
 python3 -m qnx_portmap --quick --scan-dir ../Raspberry-QNX/Bsp_Rasp/src/hardware/devi --worklist
 ```
 
-The block above is the start of that output (exit code `1`: at least one
-symbol needs work). The quick mode downloaded 242 official pages in 303 s
-on 26 November 2026, at one request per second.
+The block above is the first entry of that output: the work list holds **7**
+symbols, the first one is `InterruptAttach` (exit code `1`: at least one
+symbol needs work). The quick mode downloaded the 242 official pages on
+26 November 2026 in 491.7 s on the machine that replayed the case, and in
+303.3 s on the machine that recorded it: the rate depends on the machine
+and the network.
 
 | Measured | Where the proof is |
 |---|---|
