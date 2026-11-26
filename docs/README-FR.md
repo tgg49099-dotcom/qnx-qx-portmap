@@ -325,6 +325,9 @@ qnx-portmap --file symbols.txt
 # liste sur l'entree standard
 grep -o '[A-Za-z_][A-Za-z0-9_]*' mon_code.c | sort -u | qnx-portmap --stdin --format json
 
+# parcourir un repertoire de sources C : les API appelees, avec leur statut 8.0
+qnx-portmap --scan-dir chemin/vers/le/pilote --corpus ./corpus
+
 # formats de sortie
 qnx-portmap --format markdown abort accept bzero > etat.md
 qnx-portmap --format json abort > etat.json
@@ -410,6 +413,59 @@ inconnu du corpus - l'outil le dit au lieu d'inventer une reponse.
 (`QX_PORTMAP_CORPUS=...`) : le chemin depend de la machine. Ce bloc est
 compare ligne a ligne a la sortie reelle par `tests/test_readme.py`, qui
 echoue si l'outil change.
+
+### Analyser un vrai pilote QNX (`--scan-dir`)
+
+La liste des symboles n'a pas besoin d'etre ecrite a la main. `--scan-dir`
+parcourt un repertoire de fichiers `.c` et `.h`, trouve toutes les fonctions
+appelees, **ignore les fonctions que le projet definit lui-meme**, et repond a
+la meme question pour les autres - avec le site d'appel (`fichier:ligne`) de
+chaque appel :
+
+```bash
+qnx-portmap --scan-dir chemin/vers/le/pilote --corpus ./corpus
+```
+
+Mesure du **26 novembre 2026** sur un vrai pilote QNX public -
+[`varghes/Raspberry-QNX`](https://github.com/varghes/Raspberry-QNX) au commit
+`043582a`, repertoire `Bsp_Rasp/src/hardware/devi`, **46** fichiers C et
+d'en-tetes - sur le corpus fige du 14 novembre 2026 (3 426 pages) :
+
+```json
+ "counts": {
+  "symbols": 248,
+  "documented": 168,
+  "described_elsewhere": 7,
+  "absent": 2,
+  "unknown": 71
+ }
+```
+
+**168** des API appelees par le pilote sont documentees en QNX 8.0, avec leur
+page officielle et leur citation. Les **2** `absent` sont les symboles
+disparus de la 8.0, `InterruptAttach` et `fcfgopen` : `InterruptAttach`, appele
+a `lib/ps2api.c:131`, `lib/ps2api.c:158` et `lib/ser8250.c:506`, est signale
+**supprime en 8.0** avec la phrase du guide de migration officiel citee. Les
+**71** `unknown` sont les macros et les noms apportes par le projet
+(`LIST_HEAD`, `GF_DEVICE_INDEX`) et les API que l'instantane fige ne contient
+pas (`PhOpen` appartient a la documentation Photon, qui ne fait pas partie des
+3 426 pages) : l'outil dit `unknown` au lieu d'inventer une reponse.
+
+Le tokenizer de `--scan-dir` a ete corrige le 26 novembre 2026 : un operande
+suivi d'un operateur et d'une parenthese (`bits&(1<<i)`, `n && (`, `NULL != (`)
+n'est **pas** un appel. Sur le meme pilote la correction retire **33** symboles
+qui etaient lus comme des appels ; les **168** API documentees, les **2**
+`absent` et les trois sites d'appel d'`InterruptAttach` ne bougent pas. L'etat
+d'avant la correction se rejoue de la meme facon, depuis le commit qui le
+precede, `594dcf1`.
+
+Pour rejouer cette mesure :
+
+```bash
+git clone https://github.com/varghes/Raspberry-QNX.git
+cd Raspberry-QNX && git checkout 043582a
+qnx-portmap --scan-dir Bsp_Rasp/src/hardware/devi --corpus ./corpus
+```
 
 ## Tests
 

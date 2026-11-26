@@ -54,6 +54,9 @@ qnx-portmap --file symbols.txt
 # list on standard input (example: the symbols called by a project)
 grep -o '[A-Za-z_][A-Za-z0-9_]*' my_code.c | sort -u | qnx-portmap --stdin --format json
 
+# scan a directory of C sources: the APIs they call, with their 8.0 status
+qnx-portmap --scan-dir path/to/driver --corpus ./corpus
+
 # output formats
 qnx-portmap --format markdown abort accept bzero > state.md
 qnx-portmap --format json abort > state.json
@@ -75,6 +78,23 @@ qnx-portmap --fresh --fresh-only
 
 Exit code `1` is therefore **not** a failure of the tool: it is the expected
 result when a symbol has disappeared from the documentation.
+
+### Scanning a directory of sources
+
+`--scan-dir DIR` walks the `.c` and `.h` files of `DIR`, finds every function
+they call, **ignores the functions the project defines itself**, and answers
+the same four statuses for each of the others, with the call site
+(`file:line`) of every call:
+
+```bash
+qnx-portmap --scan-dir path/to/driver --corpus ./corpus
+```
+
+Measured on 26 November 2026 on a real public QNX driver
+(`varghes/Raspberry-QNX`, commit `043582a`, directory
+`Bsp_Rasp/src/hardware/devi`, 46 files): **168** of the APIs called are
+documented in QNX 8.0, **2** are `absent`, **7** are described elsewhere and
+**71** are `unknown`. The README gives the exact command to replay it.
 
 ## 4. Where the corpus is
 

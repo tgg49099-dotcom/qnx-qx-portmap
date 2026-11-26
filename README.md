@@ -378,6 +378,9 @@ qnx-portmap --file symbols.txt
 # list on standard input
 grep -o '[A-Za-z_][A-Za-z0-9_]*' my_code.c | sort -u | qnx-portmap --stdin --format json
 
+# scan a directory of C sources: the APIs they call, with their 8.0 status
+qnx-portmap --scan-dir path/to/driver --corpus ./corpus
+
 # output formats
 qnx-portmap --format markdown abort accept bzero > state.md
 qnx-portmap --format json abort > state.json
@@ -559,6 +562,60 @@ byte-identical**, next to the English one:
 
 The French files are there for the record; the published documentation is the
 English one.
+
+### Scanning a real QNX driver (`--scan-dir`)
+
+The list of symbols does not have to be written by hand. `--scan-dir` walks a
+directory of `.c` and `.h` files, finds every function that is called,
+**ignores the functions the project defines itself**, and answers the same
+question for each of the others - with the call site (`file:line`) of every
+call:
+
+```bash
+qnx-portmap --scan-dir path/to/driver --corpus ./corpus
+```
+
+Measured on **26 November 2026** on a real public QNX driver -
+[`varghes/Raspberry-QNX`](https://github.com/varghes/Raspberry-QNX) at commit
+`043582a`, directory `Bsp_Rasp/src/hardware/devi`, **46** C and header files -
+against the frozen corpus of 14 November 2026 (3 426 pages):
+
+```json
+ "counts": {
+  "symbols": 248,
+  "documented": 168,
+  "described_elsewhere": 7,
+  "absent": 2,
+  "unknown": 71
+ }
+```
+
+**168** of the APIs the driver calls are documented in QNX 8.0, with their
+official page and their quotation. The **2** `absent` ones are the symbols
+that disappeared from the 8.0 corpus, `InterruptAttach` and `fcfgopen`:
+`InterruptAttach`, called at `lib/ps2api.c:131`, `lib/ps2api.c:158` and
+`lib/ser8250.c:506`, is reported as **removed in 8.0** with the sentence of
+the official migration guide quoted. The **71** `unknown` ones are the macros
+and the names the project brings with it (`LIST_HEAD`, `GF_DEVICE_INDEX`) and
+the APIs the frozen snapshot does not contain (`PhOpen` belongs to the Photon
+documentation, which is not part of the 3 426 pages): the tool says `unknown`
+instead of inventing an answer.
+
+The tokenizer of `--scan-dir` was corrected on 26 November 2026: an operand
+followed by an operator and a parenthesis (`bits&(1<<i)`, `n && (`, `NULL != (`)
+is **not** a call. On the same driver the correction removes **33** symbols
+that used to be read as calls; the **168** documented APIs, the **2** `absent`
+ones and the three call sites of `InterruptAttach` do not move. The state
+before the correction is replayed the same way, from the commit that precedes
+it, `594dcf1`.
+
+To replay this measurement:
+
+```bash
+git clone https://github.com/varghes/Raspberry-QNX.git
+cd Raspberry-QNX && git checkout 043582a
+qnx-portmap --scan-dir Bsp_Rasp/src/hardware/devi --corpus ./corpus
+```
 
 ## One command to replay every published proof
 
