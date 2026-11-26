@@ -13,10 +13,11 @@ changed in the version of 18/11, and what changed on top of it:
 | C2 | A new block **5.8b** gives the text of the bonus field (1 176 characters). | The kit of 15/11 prepared only a URL for the "Best Codelab / Tutorial" field. The form asks for a text as well; the kit now prepares it. | § 5.8b |
 | C3 | The list of excluded countries is quoted verbatim. | The kit of 15/11 put a paraphrase between quotation marks. | § 5.2, the rules page of 18/11/2026 |
 | C4 | A table "champ par champ" with the measured length, the limit and the verdict of the 10 fields. | The owner pastes on Sunday: the table says what to paste, how long it is and whether it fits. | § 1.4 |
-| C5 | The complete story (12 263 characters, unchanged in the version of 18/11; 12 645 characters in this version after C8) stays in the kit but is **not a block to paste** any more: it is declared as documentation. | The form has no field for it: the two fields of the form get 4.1a and 4.1c, both under the declared limit. The long text is kept as the source of the codelab and of the repository documentation. | § 4.1b |
+| C5 | The complete story (12 263 characters, unchanged in the version of 18/11; 12 645 characters after C8, 12 656 after C9) stays in the kit but is **not a block to paste** any more: it is declared as documentation. | The form has no field for it: the two fields of the form get 4.1a and 4.1c, both under the declared limit. The long text is kept as the source of the codelab and of the repository documentation. | § 4.1b |
 | C6 | **Every block now declares the field it goes into** ("- Devpost field: **Description**"). | The verifier must not guess where a block goes: the official help gives two names ("Text Description", article 145, and "Project story", article 126) and the form of the contest is behind a session, so the kit says which block goes where. | § 1.4 and the output of the verifier |
-| C7 | A new block **4.1d** gives the testing instructions ready to paste (2 552 characters in the version of 18/11; 2 673 characters in this version after C8), added on 19/11/2026. | The kit of 15/11 carried the testing instructions only inside its own story, which measured 6 816 to 7 566 characters; the reference table gives the "Instructions d'installation" field a 3 000-character limit and no short block existed for it. The block is the same text, same commands, same measured numbers, shortened to fit. | § 4.1d |
+| C7 | A new block **4.1d** gives the testing instructions ready to paste (2 552 characters in the version of 18/11; 2 673 characters after C8, 2 687 after C9), added on 19/11/2026. | The kit of 15/11 carried the testing instructions only inside its own story, which measured 6 816 to 7 566 characters; the reference table gives the "Instructions d'installation" field a 3 000-character limit and no short block existed for it. The block is the same text, same commands, same measured numbers, shortened to fit. | § 4.1d |
 | **C8** | **The rate is 95 %, not 96 %: `InterruptAttach` is reported "retiré selon le guide".** The blocks that quote the J5 measurement (4.1a, 4.1b, 4.1c, 5.7) now say 95 resolved and quoted, 5 not resolved, and name `InterruptAttach` as removed in 8.0 according to the official migration guide, with the sentence of the guide quoted. | The tool was changed on 19/11/2026: it now reports a function that the official 8.0 migration guide says was removed as `absent`, priority 1, quoting the sentence of the guide - the honest answer. The rate follows it down, from 96 % to 95 %. | § 4.1a, § 4.1b, § 4.1c, § 5.7, `docs/mesure-J5.md` |
+| **C9** | **26/11/2026: the testing block can be pasted and run as written.** Block 4.1d said `cd qnx-portmap` right after `git clone .../qnx-qx-portmap.git`, so its second command failed (the folder git creates is `qnx-qx-portmap`); it is now `cd qnx-qx-portmap`. Blocks 4.1b and 4.1d ran the full answer with `qnx-portmap`, a command that exists only after the optional install the same block says can fail (PEP 668); they now run `python3 -m qnx_portmap`, like the quick start. | A judge copies the testing instructions first. `tools/mesure_kit.py --check` now also fails when a `cd` after a `git clone` does not enter the cloned folder, or when a block to paste calls the console script. | § 4.1b, § 4.1d, `tools/mesure_kit.py` |
 
 The verifier that produced this table is the author's own program (one program,
 one kit at a time); its register of facts and its measurement log are kept
@@ -27,7 +28,7 @@ by a command of this repository, which fails if one of them is wrong:
 python3 tools/mesure_kit.py --check
 ```
 
-Prepared on 15 November 2026, revised on 19 November 2026. Every block below
+Prepared on 15 November 2026, revised on 19 November 2026 and on 26 November 2026 (C9). Every block below
 is the text to paste into the Devpost submission form, in the order of the form.
 All the text to paste is in English, because the contest rules require English
 submission materials:
@@ -140,7 +141,7 @@ file; the published limits are in § 1.1 and the observations in § 1.3.
 | Tagline ("Submission tagline") | § 3.2 / 2_2 | 138 | 140 | OK |
 | Description ("Text Description") | § 4.1a / 3_1a | 1 170 | 1 200 | OK |
 | Description etendue ("Project story") | § 4.1c / 3_1c | 1 187 | 1 200 | OK |
-| Instructions d'installation (testing) | § 4.1d / 3_1d | 2 673 | 3 000 | OK |
+| Instructions d'installation (testing) | § 4.1d / 3_1d | 2 687 | 3 000 | OK |
 | Mots-cles ("Built with tags", 11 tags) | § 4.2 / 3_2 | 104 | 200 | OK |
 | Video ("Video demo link") | § 4.5 / 3_5 | 28 | 1 000 | OK |
 | Categorie ("Category") | § 5.3 / 4_3 | 30 | 120 | OK |
@@ -149,7 +150,7 @@ file; the published limits are in § 1.1 and the observations in § 1.3.
 | Liens/URL ("Try it Out links") | § 4.3 + § 5.8 / 3_3 + 4_8 | 139 | 4 000 | OK |
 
 Two blocks are not fields of the form: block 4.1b (the complete story,
-12 645 characters, kept as documentation) and block 4.7 (evidence of QNX use,
+12 656 characters, kept as documentation) and block 4.7 (evidence of QNX use,
 2 959 characters, a required attachment of the QNX contest, not a Devpost
 text field). No block exceeds the declared limit: the closest to its limit is
 the Project story block (1 187 of 1 200 characters, 99 %).
@@ -264,7 +265,7 @@ On 100 QNX symbols really called by five public QNX repositories: 95 resolved an
   and substantially different from each of the Entrant's other Submissions",
   `https://qnx.devpost.com/rules`, read 18/11/2026).
 
-### 4.1b The complete story (12 645 characters) - kept in the kit, not a block to paste
+### 4.1b The complete story (12 656 characters) - kept in the kit, not a block to paste
 
 - Devpost field: **documentation** (not a field of the form: this text is the complete story, kept for the codelab and the repository)
 
@@ -394,7 +395,7 @@ tool then runs offline:
 
 ```bash
 bash scripts/bootstrap_corpus.sh --out corpus-downloaded
-QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded python3 -m qnx_portmap abort accept bzero
 ```
 
 Real output, executed on 15 November 2026 against the 3,426-page corpus (the
@@ -493,7 +494,7 @@ tool is checked by the test suite and by the RED -> GREEN proof described
 above.
 ```
 
-- Length (measured): 12645 characters
+- Length (measured): 12656 characters
 - **This block is not pasted in the form.** It is the complete story: every
   section, with the details the two short versions leave out. The two fields
   of the form get block 4.1a (1 170 characters) and block 4.1c (1 187
@@ -565,7 +566,7 @@ On 100 QNX symbols really called by five public QNX repositories: 95 resolved an
 
 ```bash
 git clone https://github.com/tgg49099-dotcom/qnx-qx-portmap.git
-cd qnx-portmap && pip install .   # optional: the tool needs only the standard library
+cd qnx-qx-portmap && pip install .   # optional: the tool needs only the standard library
 python3 -m qnx_portmap --quick abort accept bzero zzz_fonction_inexistante
 ```
 
@@ -607,7 +608,7 @@ offline:
 
 ```bash
 bash scripts/bootstrap_corpus.sh --out corpus-downloaded
-QX_PORTMAP_CORPUS=$PWD/corpus-downloaded qnx-portmap abort accept bzero
+QX_PORTMAP_CORPUS=$PWD/corpus-downloaded python3 -m qnx_portmap abort accept bzero
 ```
 
 Real output, executed on 15 November 2026 against the 3,426-page corpus
@@ -623,7 +624,7 @@ Without a corpus the tool prints `corpus not found` and exits with code 2: it
 never invents an answer.
 ```
 
-- Length (measured): 2673 characters
+- Length (measured): 2687 characters
 - Field limit: **3 000 characters** (tableau 1.1). Devpost publishes no
   separate limit for this field: the help article 126 lists the testing
   instructions with the project story, and the form is behind a session.
@@ -631,7 +632,7 @@ never invents an answer.
   4.1b, unchanged), shortened to fit the declared limit: same commands, same
   measured numbers, shorter prose. If the form has no separate field for
   testing instructions, paste it at the end of the "Project story" field
-  (4.1a + 4.1d = 3 843 characters, far under the 48 663 characters observed
+  (4.1a + 4.1d = 3 857 characters, far under the 48 663 characters observed
   on public pages).
 
 ### 4.2 Built with tags

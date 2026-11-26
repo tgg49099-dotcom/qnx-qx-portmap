@@ -83,6 +83,53 @@ def parse_blocks(lines):
     return blocks
 
 
+CLONE = re.compile(r"git clone\s+(\S+)")
+CD = re.compile(r"(?:^|&&|;)\s*cd\s+([^\s;&]+)")
+BARE = re.compile(r"^(?:[A-Z_][A-Z0-9_]*=\S+\s+)*qnx-portmap(?:\s|$)")
+
+
+def check_commands(lines, blocks):
+    """Commands a judge copies must run as written.
+
+    1. In the whole kit, a ``cd`` that follows a ``git clone`` in the same
+       fenced block enters the directory git creates (the last part of the
+       URL, without ``.git``).  A kit once said ``cd qnx-portmap`` after
+       cloning ``qnx-qx-portmap``: the second command failed.
+    2. The blocks to paste (``3_*``: description, story, testing) never call
+       the ``qnx-portmap`` console script, which exists only after the
+       optional install: they call ``python3 -m qnx_portmap``.
+    """
+    bad = []
+    clone_dir = None
+    for no, line in enumerate(lines, 1):
+        if FENCE.match(line):
+            clone_dir = None
+            continue
+        m = CLONE.search(line)
+        if m:
+            clone_dir = m.group(1).rstrip("/").split("/")[-1]
+            if clone_dir.endswith(".git"):
+                clone_dir = clone_dir[:-4]
+            rest = line[m.end():]
+        else:
+            rest = line
+        if clone_dir:
+            for cd in CD.findall(rest):
+                if cd.split("/")[0] != clone_dir:
+                    bad.append("line %d: 'cd %s' after 'git clone' of %s"
+                               % (no, cd, clone_dir))
+    for bid, start, end, _c in blocks:
+        if not bid.startswith("3_"):
+            continue
+        for no in range(start + 1, end):
+            cmd = lines[no].strip().lstrip("$ ").strip()
+            if BARE.match(cmd):
+                bad.append("block %s, line %d: bare 'qnx-portmap' (exists only "
+                           "after the optional install): use 'python3 -m "
+                           "qnx_portmap'" % (bid, no + 1))
+    return bad
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true",
@@ -134,6 +181,7 @@ def main():
             if int(m.group(1)) != lengths[bid]:
                 bad.append("%s: file says %s, measured %d"
                            % (bid, m.group(1), lengths[bid]))
+        bad.extend(check_commands(lines, blocks))
         left = PLACEHOLDER.findall(new_text)
         if left:
             bad.append("placeholders left in the file: %s" % ", ".join(sorted(set(left))))
@@ -160,7 +208,8 @@ def main():
             for b in bad:
                 print("  - %s" % b)
             return 1
-        print("\nOK : every measured length of %s matches the text." % args.kit)
+        print("\nOK : every measured length of %s matches the text, and its "
+              "commands run as written." % args.kit)
         return 0
 
     with open(args.kit, "w", encoding="utf-8") as fh:
