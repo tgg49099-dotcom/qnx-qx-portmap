@@ -5,14 +5,30 @@ Une contre-epreuve rouge casse volontairement une regle du code, une par
 une, et verifie que le test charge echoue. Un test qui passe toujours ne
 teste rien.
 
-Ce fichier conserve la sortie reelle des deux executions du 25/11/2026 sur
-l'arbre du commit d3de5b9 (le code de ce commit est identique a celui de l'arbre
-publie : aucun commit ulterieur n'a modifie le code ni les tests, et
-`git diff --name-only d3de5b9..HEAD` ne liste que ce fichier et le manifeste) :
+Ce fichier conserve la sortie reelle des deux executions du 26/11/2026 sur
+l'arbre du commit mesure ci-dessous :
 
   1. avec le corpus fige present  -> 12 / 12 contre-epreuves concluantes
   2. sans le corpus fige          -> 11 / 11 contre-epreuves concluantes,
                                      1 regle non testable (corpus absent)
+
+Commit mesure : 5691e561386ffb87ce559aeafaf8ee713e811ca5
+
+Le code que ces 12 regles cassent n'a pas change depuis cette mesure, et
+cette condition est verifiee automatiquement par tools/published_counts.py,
+qui est un des huit controles de scripts/verify-all.sh :
+
+    git diff --name-only 5691e56 -- qnx_portmap/ 'tests/test*.py' \
+        tools/contre_epreuve.py
+    git ls-files --others --exclude-standard -- qnx_portmap/ 'tests/test*.py' \
+        tools/contre_epreuve.py
+
+ne listent aucun fichier.  Les fichiers modifies depuis le 26/11/2026 - les
+documents, le manifeste, tools/published_counts.py et
+tests/verify_all_contract.py, que la decouverte `unittest discover -s tests
+-t .` ne prend pas car elle ne prend que les fichiers nommes test*.py - ne
+changent ni le code casse ni les tests charges.  Si le code change, la
+contre-epreuve doit etre remesuree et ce fichier reecrit.
 
 Commande dans les deux cas :
     python3 tools/contre_epreuve.py
@@ -36,7 +52,7 @@ Les 12 regles cassee une par une :
 1. AVEC LE CORPUS FIGE (dans l'arbre, repertoire corpus/)
 ---------------------------------------------------------------
 
-Depot : clone neuf du depot public (meme code que le commit d3de5b9 mesure
+Depot : clone neuf du depot public (meme code que le commit 5691e56 mesure
 ci-dessus), corpus fige copie dans ./corpus. Le corpus n'est pas redistribue :
 il est reconstruit par scripts/bootstrap_corpus.sh, puis verifie page par page
 contre le SHA-256 de la page officielle (CORPUS-NON-PUBLIE.txt).
@@ -121,3 +137,9 @@ docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt (10 / 10 sans). Avant
 cela, les commits precedents portaient sur 10 regles (10 / 10 avec le corpus,
 9 / 9 sans) : la regle du taux J4 n'existait pas encore. La reference
 courante est ci-dessus.
+
+Les executions du 25/11/2026 (cycle 283, commit 738381f) portaient deja sur
+ces 12 regles, avec le meme code que le commit 5691e56 mesure ci-dessus
+(`git diff --name-only 738381f..5691e56 -- qnx_portmap/` ne liste aucun
+fichier) : 12 / 12 avec le corpus dans l'arbre, 11 / 11 sans. Elles ont ete
+remesurees le 26/11/2026 sur le commit 5691e56, meme resultat.

@@ -1,9 +1,9 @@
 PUBLISHABLE FILES MANIFEST - QX PORTMAP
 
-Tree            : /work/proofs/cycle233/clone-portmap
-Generated on    : 2026-11-25 22:09:58
+Tree            : /work/qnx-portmap
+Generated on    : 2026-11-26 05:33:23
 Files           : 132
-Total size      : 4110154 bytes
+Total size      : 4121331 bytes
 
 The 3 biggest files:
     1832957 bytes  media/qx-portmap-demo-final.mp4
@@ -20,15 +20,15 @@ LISEZMOI.md	6117	ee48f47cadfead832b7560cac9f906a79e26210292fbf810821de166c8168ee
 NOTICES-DOCS-QNX.md	2679	8d7331c75216152ee70f8811e14e27c97dfc9466a810b08d3728e7bc57d07a8a
 PROGRESSION-FR.md	76026	4c062e27efeb43a82a1bb9de683621d98dd4ce4345801dc62f0d49fa30dbb397
 PROGRESSION.md	73457	7730c9dd7ea980a7f953399418e3fcb20f8b9f3d0ce32377e5bafc7e97060908
-README.md	57935	3ad3c6474caf5a4e95ad04ee9b14bc94b796c97683325ce11fc1d7420cc00d5f
+README.md	58202	41de04a834607d8a7fc1b557a50cf89cf814abc9b41fe7ad2c89c535e02e8f98
 VIDEO-YOUTUBE-QNX-PORTMAP.md	21897	f381e766f0168128b03ea62e4ac4ca8e3dda9c71e6ce2e44521679c232d0c2b0
 docs/CODELAB-COMMUNITY-QNX.md	20333	b22c0e5de3244a6889db2ef2e24c939c42b11b0df0ae0127d38dfdcd95bf2a5c
 docs/CODELAB-FORUM-PROPOSITION.md	6058	2191292cdc025f39a8e56c8c95ff86cbbc1897579e03328f2d60e248066821ff
 docs/QNX-8.0-CIBLE.md	12178	18c20d5800ada6762cff9247cea55f0b494cd6653814a664799d62f8a0321469
-docs/README-FR.md	43699	b09cd1e7cc06f38f4ee23ab0dd7009308831954b2504b4a24363dd1a91979400
+docs/README-FR.md	43968	8c6a80b534534bf9d3c8e63055dd04b3e5ae6f1e8725094cf460bb7e13bf79f8
 docs/UTILISATION.md	7020	3a6f8cdb40f049b51b7b39e5c926e5bdd25e63a1c41e19562c991bbf314797f3
 docs/codelab/QX-PORTMAP-CODELAB.md	30195	c1a9dd23fe0bd1ca1e918393b72fa0f054cc213277c86ff1dbec886d0c77d478
-docs/contre-epreuve-rouge.txt	7709	f8cb0a3c8279050aeac399e759bc3a0c01231a26e07902d0f580d3fd35a14e26
+docs/contre-epreuve-rouge.txt	8766	1674eedc1a3e9e4affd0b524c4eb1fa71aab61de3027e3c093715b01b092f9cd
 docs/demo-projets-reels.md	8572	9c2d6cae11b65815c68785a86f01512f81e26c9147e92c736c229dcd537eaef9
 docs/mesure-J4-FR.md	30669	7946d2218fd1ade0cb80c00a9e49c09ef2e180c10afb5d22021d1fe6cc5446b5
 docs/mesure-J4.md	31420	02aacfbaf56c19d45dfbf53f6450d050dfc54308952bd2e309fc8ae8a4464bd4
@@ -131,7 +131,7 @@ tests/test_readme_en.py	3627	7ef0905579c4eca9b35e5b085d33345d433cf998a7a73c3fc57
 tests/test_symbol_paths.py	1687	44c4ee333dd9c82eded6292c6835f861f8f7db02657e98187be745e4f4c9b723
 tests/test_target_check.py	4491	da0f7a4800c92a5e81ce701982b8ff5f419490d48526584813367919c4a2794b
 tests/test_worklist_unknown.py	2980	f2cb691b76ca55ce4289fd9e01124a1ab66e8eefa7b5e355dee1e3c3f816db2a
-tests/verify_all_contract.py	11308	7199075aca73f79c0cfe7772fd6d49309edc42d06d4373aa8a7014a89ec314f8
+tests/verify_all_contract.py	17421	30293a1379315047ed9f4160c6ead74b8b43ab375e2b514a1146f2a3ebe8f620
 tools/LISEZMOI.md	1090	7f21c4296c82a29b58863e174298b236733d3dce2c9ca0d442f2cb0122701bc0
 tools/build_corpus.py	7676	ba789a3f4be97c24d1994b6d307ce73732a1fad47d18e705dd22c9c35a88946e
 tools/contre_epreuve.py	9913	462ae10eb941a80c7f5d8aa4e0b4c1a8a3c1eb5bbfac04bf3786ad210571de73
@@ -142,5 +142,5 @@ tools/mesure_j4.py	43349	041867ef1477b2afade7935e9a4f9757ad3497369459719994941fd
 tools/mesure_j5.py	41236	b46b16defd3fe4f5ea0204a8ac56cb0cce24e4399f600ffbf88e4a285057c223
 tools/mesure_kit.py	6930	e03e5fbeeaff2ead6f2113a10f1c3bb83888ece0cabdd4c1af3d3c3c28869a3c
 tools/posix-base.txt	14054	600e391015786eac7432f4a52e90fa72907d33edb6fbea5ea2c644e70d624d21
-tools/published_counts.py	8523	483821e722c355279655254eb61f19ded862d476886aa391fa2df0e03a425599
+tools/published_counts.py	11994	0af4fde5251d11b8c7f1cd24cc17fe69881e37ba390c8dc6b1860c6039d890dd
 tools/table_mesure_devpost.py	4532	35ebcf209716ed0df1dfe5793f36715748c1baae00d8e9a07ff04f895d0f351f

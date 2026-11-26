@@ -24,11 +24,24 @@ again, never silently dropped), 2 on a usage error.
 The skip counts of the README describe a tree *without* the corpus; when the
 corpus is present they cannot be measured, so they are reported
 NOT CHECKED, never OK.
+
+THE PUBLISHED RED COUNTER-PROOF
+
+``docs/contre-epreuve-rouge.txt`` keeps the real output of the two runs of
+``tools/contre_epreuve.py`` and names the commit it was measured on.  That
+claim is true only while the code the twelve rules break has not changed, so
+it is checked here instead of being trusted: the commit must exist, it must
+be an ancestor of HEAD, and nothing under ``qnx_portmap/``, no discovered test
+(``tests/test*.py``) and no ``tools/contre_epreuve.py`` may have changed
+since it was measured.  A tree without a ``.git`` directory (the ZIP of the
+repository) cannot answer that question: the claim is then reported NOT
+CHECKED, never OK.
 """
 
 import argparse
 import os
 import re
+import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -138,6 +151,62 @@ def check(root, tests, skipped, corpus_present, files):
     return rows, n_failed
 
 
+def check_counter_proof(root):
+    """Checks that the published counter-proof is still measured on this code.
+
+    Returns one row: (file, label, claim, real, state).  The claim is the
+    short commit the published file names, the real value is the code it was
+    measured on.  A tree that is not a git repository cannot answer the
+    question, and the row is then NOT CHECKED, never OK.
+    """
+    label = "the published counter-proof is still measured on this code"
+    path = os.path.join(root, "docs/contre-epreuve-rouge.txt")
+    try:
+        with open(path, encoding="utf-8") as handle:
+            text = handle.read()
+    except OSError:
+        return ("docs/contre-epreuve-rouge.txt", label, "-", "-",
+                "FAILED (file missing)")
+    match = re.search(r"^Commit mesure : ([0-9a-f]{40})$", text, re.MULTILINE)
+    if not match:
+        return ("docs/contre-epreuve-rouge.txt", label, "-", "-",
+                "FAILED (the measured commit is not named)")
+    sha = match.group(1)
+    short = sha[:7]
+    if not os.path.isdir(os.path.join(root, ".git")):
+        return ("docs/contre-epreuve-rouge.txt", label, short, "-",
+                "NOT CHECKED (not a git repository)")
+
+    def git(*args):
+        try:
+            proc = subprocess.run(["git", "-C", root] + list(args),
+                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        except OSError:
+            return 127, ""
+        return proc.returncode, proc.stdout.decode("utf-8", "replace").strip()
+
+    rc, _ = git("cat-file", "-e", sha + "^{commit}")
+    if rc != 0:
+        return ("docs/contre-epreuve-rouge.txt", label, short, "-",
+                "FAILED (the measured commit is unknown)")
+    rc, _ = git("merge-base", "--is-ancestor", sha, "HEAD")
+    if rc != 0:
+        return ("docs/contre-epreuve-rouge.txt", label, short, "-",
+                "FAILED (the measured commit is not an ancestor of HEAD)")
+    rc, out = git("diff", "--name-only", sha, "--",
+                  "qnx_portmap/", "tests/test*.py", "tools/contre_epreuve.py")
+    # a file that is not tracked yet is not seen by "git diff": it is looked
+    # for separately, or a new file could slip under the measurement
+    rc, untracked = git("ls-files", "--others", "--exclude-standard", "--",
+                        "qnx_portmap/", "tests/test*.py",
+                        "tools/contre_epreuve.py")
+    changed = " ".join((out + " " + untracked).split())
+    if changed:
+        return ("docs/contre-epreuve-rouge.txt", label, short, "-",
+                "FAILED (the measured code changed: %s)" % changed)
+    return ("docs/contre-epreuve-rouge.txt", label, short, "same code", "OK")
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--tests", type=int, required=True)
@@ -148,9 +217,11 @@ def main(argv=None):
     args = parser.parse_args(argv)
     rows, n_failed = check(args.root, args.tests, args.skipped,
                            args.corpus == "present", args.files)
+    rows.append(check_counter_proof(args.root))
     for name, label, claim, real, state in rows:
         print("%-24s %-58s published %-5s real %-5s %s"
               % (name, label, claim, real, state))
+    n_failed = len([r for r in rows if r[4].startswith("FAILED")])
     n_ok = len([r for r in rows if r[4] == "OK"])
     print("published numbers: %d OK, %d FAILED, %d NOT CHECKED"
           % (n_ok, n_failed, len(rows) - n_ok - n_failed))

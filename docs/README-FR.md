@@ -512,6 +512,11 @@ et le test correspondant est saute. Les executions archivees sont dans
 15/11/2026) et `docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt`
 (10/10, archivee le 15/11/2026).
 
+La contre-epreuve publiee nomme le commit sur lequel elle a ete mesuree
+(`docs/contre-epreuve-rouge.txt`), et cette affirmation est verifiee par la
+commande elle-meme : ni `qnx_portmap/`, ni un test decouvert, ni
+`tools/contre_epreuve.py` n'a change depuis ce commit.
+
 ## Corpus QNX : non distribue
 
 > **the QNX documentation is not redistributed; it is downloaded from the official site on demand**

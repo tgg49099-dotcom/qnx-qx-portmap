@@ -758,6 +758,11 @@ nothing to corrupt and the matching test is skipped. The archived runs are in
 15/11/2026) and `docs/preuves/c-contre-epreuve-rouge-sans-corpus.txt`
 (10/10, archived on 15/11/2026).
 
+The published counter-proof names the commit it was measured on
+(`docs/contre-epreuve-rouge.txt`), and that claim is checked by the command
+itself: nothing under `qnx_portmap/`, no discovered test and no
+`tools/contre_epreuve.py` may have changed since that commit.
+
 ## QNX corpus: not redistributed
 
 > **the QNX documentation is not redistributed; it is downloaded from the official site on demand**

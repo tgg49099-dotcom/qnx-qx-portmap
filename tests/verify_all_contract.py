@@ -230,5 +230,122 @@ class TestVerifyAllContract(unittest.TestCase):
             self.assertEqual((ok, total, not_checked), (6, 8, 2), out)
 
 
+    def test_the_published_counter_proof_is_still_measured_on_this_code(self):
+        """The published counter-proof names the commit it was measured on.
+
+        That claim is true only while the code the twelve rules break has not
+        changed.  ``tools/published_counts.py`` checks it, and this test proves
+        that the check catches a change of that code, that it accepts a
+        change that cannot touch the measurement, and that it never reports a
+        tree without a git repository as a success.
+        """
+        from tools.published_counts import check_counter_proof
+
+        # 1. the real tree: the published file names a commit that exists, and
+        #    the code it was measured on has not changed
+        row = check_counter_proof(ROOT)
+        self.assertEqual(row[4], "OK", row)
+        self.assertEqual(row[3], "same code", row)
+
+        # 2. a tree that is not a git repository cannot answer the question:
+        #    it is reported NOT CHECKED, never OK
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = os.path.join(tmp, "nogit")
+            os.makedirs(os.path.join(tree, "docs"))
+            shutil.copy(os.path.join(ROOT, "docs", "contre-epreuve-rouge.txt"),
+                        os.path.join(tree, "docs"))
+            row = check_counter_proof(tree)
+            self.assertTrue(row[4].startswith("NOT CHECKED"), row)
+            self.assertNotEqual(row[4], "OK", row)
+
+        # 3. a measured tree, then the three ways the claim can break
+        def measured_tree(tmp, name):
+            """A tiny git repository with the published file and a code file."""
+            tree = os.path.join(tmp, name)
+            os.makedirs(os.path.join(tree, "docs"))
+            os.makedirs(os.path.join(tree, "qnx_portmap"))
+            os.makedirs(os.path.join(tree, "tests"))
+            shutil.copy(os.path.join(ROOT, "docs", "contre-epreuve-rouge.txt"),
+                        os.path.join(tree, "docs"))
+            with open(os.path.join(tree, "qnx_portmap", "code.py"), "w",
+                      encoding="utf-8") as handle:
+                handle.write("# the code the rules break\n")
+            git = ["git", "-c", "user.email=t@example.org",
+                   "-c", "user.name=test"]
+            subprocess.run(["git", "init", "-q"], cwd=tree, check=True)
+            subprocess.run(git + ["add", "-A"], cwd=tree, check=True,
+                           capture_output=True)
+            subprocess.run(git + ["commit", "-q", "-m", "measured"], cwd=tree,
+                           check=True, capture_output=True)
+            sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=tree,
+                                 capture_output=True, text=True,
+                                 check=True).stdout.strip()
+            path = os.path.join(tree, "docs", "contre-epreuve-rouge.txt")
+            with open(path, encoding="utf-8") as handle:
+                text = handle.read()
+            text = re.sub(r"^Commit mesure : [0-9a-f]{40}$",
+                          "Commit mesure : %s" % sha, text, flags=re.MULTILINE)
+            with open(path, "w", encoding="utf-8") as handle:
+                handle.write(text)
+            return tree
+
+        with tempfile.TemporaryDirectory() as tmp:
+            # 3a. nothing changed: the claim holds
+            tree = measured_tree(tmp, "green")
+            row = check_counter_proof(tree)
+            self.assertEqual(row[4], "OK", row)
+
+            # 3b. the code the rules break changed: the claim is false
+            tree = measured_tree(tmp, "code-changed")
+            with open(os.path.join(tree, "qnx_portmap", "code.py"), "w",
+                      encoding="utf-8") as handle:
+                handle.write("# the code changed\n")
+            row = check_counter_proof(tree)
+            self.assertTrue(row[4].startswith("FAILED"), row)
+            self.assertIn("code.py", row[4], row)
+
+            # 3c. a file that the discovery does not take changed: the claim
+            #     still holds, because it cannot change the measurement
+            tree = measured_tree(tmp, "outside-discovery")
+            with open(os.path.join(tree, "tests", "verify_all_contract.py"),
+                      "w", encoding="utf-8") as handle:
+                handle.write("# outside the discovery\n")
+            row = check_counter_proof(tree)
+            self.assertEqual(row[4], "OK", row)
+
+            # 3d. a discovered test changed: the claim is false
+            tree = measured_tree(tmp, "test-changed")
+            with open(os.path.join(tree, "tests", "test_new.py"), "w",
+                      encoding="utf-8") as handle:
+                handle.write("# a discovered test\n")
+            row = check_counter_proof(tree)
+            self.assertTrue(row[4].startswith("FAILED"), row)
+            self.assertIn("test_new.py", row[4], row)
+
+            # 3e. the tool that breaks the rules changed: the claim is false
+            tree = measured_tree(tmp, "tool-changed")
+            os.makedirs(os.path.join(tree, "tools"))
+            with open(os.path.join(tree, "tools", "contre_epreuve.py"), "w",
+                      encoding="utf-8") as handle:
+                handle.write("# the tool changed\n")
+            row = check_counter_proof(tree)
+            self.assertTrue(row[4].startswith("FAILED"), row)
+            self.assertIn("contre_epreuve.py", row[4], row)
+
+            # 4. the published file names a commit that does not exist
+            tree = measured_tree(tmp, "unknown-commit")
+            path = os.path.join(tree, "docs", "contre-epreuve-rouge.txt")
+            with open(path, encoding="utf-8") as handle:
+                text = handle.read()
+            text = re.sub(r"^Commit mesure : [0-9a-f]{40}$",
+                          "Commit mesure : %s" % ("0" * 40), text,
+                          flags=re.MULTILINE)
+            with open(path, "w", encoding="utf-8") as handle:
+                handle.write(text)
+            row = check_counter_proof(tree)
+            self.assertTrue(row[4].startswith("FAILED"), row)
+            self.assertIn("unknown", row[4], row)
+
+
 if __name__ == "__main__":
     unittest.main()
